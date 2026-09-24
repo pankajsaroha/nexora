@@ -4,6 +4,8 @@ import { prisma } from "@/lib/prisma";
 import { z } from "zod";
 import { logAuditEvent } from "@/lib/audit";
 
+export const dynamic = "force-dynamic";
+
 const createStudentSchema = z.object({
   firstName: z.string().min(1, "First name is required"),
   lastName: z.string().min(1, "Last name is required"),

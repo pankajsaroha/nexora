@@ -4,6 +4,8 @@ import { getCurrentUser, hasPermission } from "@/lib/auth";
 import { PERMISSIONS } from "@/lib/permissions";
 import { logAuditEvent } from "@/lib/audit";
 
+export const dynamic = "force-dynamic";
+
 export async function POST(req: NextRequest) {
   try {
     const user = await getCurrentUser();

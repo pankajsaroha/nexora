@@ -6,6 +6,8 @@ import { logAuditEvent } from "@/lib/audit";
 import { NotificationService } from "@/lib/notifications/service";
 import { formatDate } from "@/lib/utils";
 
+export const dynamic = "force-dynamic";
+
 export async function GET(req: NextRequest) {
   try {
     const user = await getCurrentUser();
