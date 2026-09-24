@@ -5,7 +5,9 @@ export const dynamic = "force-dynamic";
 
 export async function GET(req: NextRequest) {
   const user = await prisma.user.findFirst({
-    where: { email: "student@nexora.demo" },
+    where: {
+      OR: [{ email: "student@nexora.demo" }, { roleCode: "STUDENT" }],
+    },
   });
 
   const host = req.headers.get("x-forwarded-host") || req.headers.get("host") || "localhost:3000";

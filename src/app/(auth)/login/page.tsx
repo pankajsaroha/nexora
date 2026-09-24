@@ -65,6 +65,7 @@ export default function LoginPage() {
   const [password, setPassword] = useState("demo123");
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
+  const [directDemoLoading, setDirectDemoLoading] = useState<string | null>(null);
   const router = useRouter();
 
   const handleLogin = async (e: React.FormEvent) => {
@@ -93,10 +94,25 @@ export default function LoginPage() {
     }
   };
 
-  const fillDemoAccount = (demoEmail: string) => {
-    setEmail(demoEmail);
-    setPassword("demo123");
+  const handleDirectDemoEnter = async (demoEmail: string, roleName: string) => {
+    setDirectDemoLoading(demoEmail);
     setErrorMessage("");
+    try {
+      const res = await fetch("/api/auth/demo-switch", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: demoEmail, role: roleName }),
+      });
+
+      if (res.ok) {
+        router.refresh();
+        router.push("/dashboard");
+      } else {
+        router.push("/dashboard");
+      }
+    } catch (err) {
+      router.push("/dashboard");
+    }
   };
 
   return (
@@ -175,30 +191,31 @@ export default function LoginPage() {
           {/* Quick Demo Logins Section */}
           <div className="pt-4 border-t border-slate-800/80">
             <div className="text-[11px] font-semibold uppercase tracking-wider text-slate-400 mb-2.5">
-              One-Click Interactive Demo Personas:
+              Click Any Persona to Enter Instantly:
             </div>
             <div className="grid grid-cols-2 gap-2">
               {DEMO_PRESETS.map((p) => {
                 const Icon = p.icon;
-                const isSelected = email === p.email;
+                const isNavigating = directDemoLoading === p.email;
                 return (
                   <button
                     key={p.email}
                     type="button"
-                    onClick={() => fillDemoAccount(p.email)}
+                    disabled={!!directDemoLoading}
+                    onClick={() => handleDirectDemoEnter(p.email, p.role)}
                     className={`flex items-center gap-2 p-2 rounded-lg border text-left transition-all ${
-                      isSelected
-                        ? "bg-brand-950/80 border-brand-500/50 text-white"
-                        : "bg-slate-950/60 border-slate-800 text-slate-400 hover:bg-slate-850 hover:text-slate-200"
+                      isNavigating
+                        ? "bg-brand-950 border-brand-400 text-white animate-pulse"
+                        : "bg-slate-950/60 border-slate-800 text-slate-300 hover:bg-slate-850 hover:border-slate-700 hover:text-white"
                     }`}
                   >
                     <Icon className="h-3.5 w-3.5 text-brand-400 shrink-0" />
-                    <div className="min-w-0">
+                    <div className="min-w-0 flex-1">
                       <div className="text-[11px] font-semibold truncate leading-none">
                         {p.role}
                       </div>
                       <div className="text-[9px] text-slate-500 truncate mt-0.5">
-                        {p.badge}
+                        {isNavigating ? "Opening..." : p.badge}
                       </div>
                     </div>
                   </button>

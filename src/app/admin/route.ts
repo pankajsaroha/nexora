@@ -4,9 +4,9 @@ import { prisma } from "@/lib/prisma";
 export const dynamic = "force-dynamic";
 
 export async function GET(req: NextRequest) {
-  const user = await prisma.user.findFirst({
+  let user = await prisma.user.findFirst({
     where: {
-      OR: [{ email: "principal@nexora.demo" }, { roleCode: "PRINCIPAL" }],
+      OR: [{ email: "admin@nexora.demo" }, { roleCode: "SUPER_ADMIN" }, { roleCode: "ADMIN" }],
     },
   });
 
