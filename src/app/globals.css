@@ -1,0 +1,106 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --ink: #0F172A;
+    --ink-muted: #64748B;
+    --paper: #FAF9F5;
+    --surface: #FFFFFF;
+    --surface-subtle: #F4F3ED;
+    --line: #E8E7DF;
+    --line-focus: #0F172A;
+    --accent: #1E3A8A;
+    --accent-soft: #EFF6FF;
+
+    --background: #FAF9F5;
+    --foreground: #0F172A;
+    --card: #FFFFFF;
+    --card-foreground: #0F172A;
+    --border: #E8E7DF;
+    --primary: #0F172A;
+    --primary-foreground: #FFFFFF;
+    --muted: #64748B;
+  }
+
+  .dark {
+    --ink: #F8FAFC;
+    --ink-muted: #94A3B8;
+    --paper: #0B0E14;
+    --surface: #121620;
+    --surface-subtle: #171C28;
+    --line: #222938;
+    --line-focus: #F8FAFC;
+    --accent: #38BDF8;
+    --accent-soft: #0C213B;
+
+    --background: #0B0E14;
+    --foreground: #F8FAFC;
+    --card: #121620;
+    --card-foreground: #F8FAFC;
+    --border: #222938;
+    --primary: #F8FAFC;
+    --primary-foreground: #0F172A;
+    --muted: #94A3B8;
+  }
+}
+
+body {
+  color: var(--foreground);
+  background: var(--background);
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Custom editorial scrollbars */
+::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(148, 163, 184, 0.35);
+  border-radius: 9999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(100, 116, 139, 0.6);
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* Crisp hairline line styles */
+.hairline-border {
+  border-color: var(--line);
+}
+
+/* Smooth hover transition */
+.transition-editorial {
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Print stylesheets for Report Cards & Payslips */
+@media print {
+  body {
+    background: white !important;
+    color: black !important;
+  }
+  .no-print {
+    display: none !important;
+  }
+  .print-only {
+    display: block !important;
+  }
+}
