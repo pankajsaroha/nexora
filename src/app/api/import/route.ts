@@ -67,31 +67,65 @@ export async function POST(req: NextRequest) {
           continue;
         }
 
+        const inst = await prisma.institution.findUnique({
+          where: { id: user.institutionId },
+          select: { code: true },
+        });
+        const instCode = (inst?.code || "NEX").toUpperCase();
+        const year = new Date().getFullYear();
+        const baseCount = await prisma.student.count({
+          where: { institutionId: user.institutionId },
+        });
+
         const admNumber =
-          row.admissionNumber ||
-          `ADM-IMP-${Date.now().toString().slice(-4)}-${Math.floor(100 + Math.random() * 900)}`;
+          row.admissionNumber?.trim() ||
+          `${instCode}-${year}-${String(baseCount + importedCount + 1).padStart(4, "0")}`;
 
         try {
-          await prisma.student.create({
-            data: {
-              institutionId: user.institutionId,
-              admissionNumber: admNumber,
-              rollNumber: row.rollNumber || String(importedCount + 1).padStart(2, "0"),
-              firstName: row.firstName,
-              lastName: row.lastName,
-              fullName: `${row.firstName} ${row.lastName}`,
-              email: row.email || null,
-              phone: row.phone || null,
-              gender: (row.gender || "MALE").toUpperCase(),
-              dateOfBirth: row.dateOfBirth ? new Date(row.dateOfBirth) : new Date(2012, 0, 1),
-              currentClassId: matchedSection.classId,
-              currentSectionId: matchedSection.id,
-              academicYearId: academicYear.id,
-              status: "ACTIVE",
-              emergencyContactName: row.parentName || null,
-              emergencyContactPhone: row.parentPhone || null,
-            },
+          const student = await prisma.$transaction(async (tx) => {
+            const created = await tx.student.create({
+              data: {
+                institutionId: user.institutionId,
+                admissionNumber: admNumber,
+                rollNumber: row.rollNumber ? String(row.rollNumber).trim() : null,
+                firstName: row.firstName.trim(),
+                lastName: row.lastName.trim(),
+                fullName: `${row.firstName.trim()} ${row.lastName.trim()}`,
+                email: row.email?.trim() || null,
+                phone: row.phone?.trim() || null,
+                gender: (row.gender || "MALE").toUpperCase(),
+                dateOfBirth: row.dateOfBirth ? new Date(row.dateOfBirth) : new Date(2012, 0, 1),
+                currentClassId: matchedSection.classId,
+                currentSectionId: matchedSection.id,
+                academicYearId: academicYear.id,
+                status: "ACTIVE",
+                emergencyContactName: row.parentName?.trim() || null,
+                emergencyContactPhone: row.parentPhone?.trim() || null,
+              },
+            });
+
+            if (row.parentName && row.parentPhone) {
+              const guardian = await tx.guardian.create({
+                data: {
+                  institutionId: user.institutionId,
+                  fullName: row.parentName.trim(),
+                  phone: String(row.parentPhone).trim(),
+                  relation: "PARENT",
+                },
+              });
+
+              await tx.studentGuardian.create({
+                data: {
+                  studentId: created.id,
+                  guardianId: guardian.id,
+                  isPrimary: true,
+                },
+              });
+            }
+
+            return created;
           });
+
           importedCount++;
         } catch (dbErr: any) {
           errors.push(`Row ${rowNum}: Database error (${dbErr?.message || "duplicate admission number"}).`);

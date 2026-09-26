@@ -6,19 +6,18 @@ import {
   Search,
   Users,
   GraduationCap,
-  Layers,
   CheckSquare,
   ArrowRight,
-  Sparkles,
   Command,
   X,
   BookOpen,
   Calendar,
   CreditCard,
-  Building,
   Loader2,
+  Receipt,
+  Clock,
+  School,
 } from "lucide-react";
-import { Badge } from "@/components/ui/badge";
 
 export function CommandPalette() {
   const [isOpen, setIsOpen] = useState(false);
@@ -106,41 +105,41 @@ export function CommandPalette() {
       <button
         type="button"
         onClick={() => setIsOpen(true)}
-        className="hidden sm:flex items-center justify-between w-full max-w-sm rounded-lg border border-slate-200 dark:border-slate-800 bg-slate-50/80 dark:bg-slate-800/80 py-1.5 px-3 text-xs text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 hover:border-slate-300 dark:hover:border-slate-700 transition-all shadow-xs"
+        className="hidden sm:flex items-center justify-between w-full max-w-sm rounded-xl border border-[#DCD7CB] bg-[#FAF8F3] py-2 px-3.5 text-xs text-[#7A756B] hover:text-[#171614] hover:border-[#B89B62] transition-all shadow-2xs"
       >
         <span className="flex items-center gap-2">
-          <Search className="h-3.5 w-3.5 text-slate-400" />
-          <span>Search students, staff, classes, tasks...</span>
+          <Search className="h-3.5 w-3.5 text-[#7A756B]" />
+          <span>Search students, faculty, classes, tasks...</span>
         </span>
-        <kbd className="hidden sm:inline-flex items-center gap-0.5 rounded border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 px-1.5 py-0.5 text-[10px] font-mono font-medium text-slate-400">
+        <kbd className="hidden sm:inline-flex items-center gap-0.5 rounded-md border border-[#DCD7CB] bg-white px-1.5 py-0.5 text-[10px] font-mono font-bold text-[#7A756B]">
           <Command className="w-2.5 h-2.5" /> K
         </kbd>
       </button>
 
       {/* Modal Overlay */}
       {isOpen && (
-        <div className="fixed inset-0 z-50 flex items-start justify-center pt-20 sm:pt-24 px-4">
+        <div className="fixed inset-0 z-50 flex items-start justify-center pt-20 sm:pt-24 px-4 animate-in fade-in duration-150">
           <div
-            className="fixed inset-0 bg-slate-950/50 backdrop-blur-sm transition-opacity animate-in fade-in duration-150"
+            className="fixed inset-0 bg-[#171614]/70 backdrop-blur-xs transition-opacity"
             onClick={() => setIsOpen(false)}
           />
 
-          <div className="relative w-full max-w-2xl rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-2xl overflow-hidden z-10 animate-in fade-in zoom-in-95 duration-150">
+          <div className="relative w-full max-w-2xl rounded-2xl border border-[#E5E0D5] bg-white shadow-2xl overflow-hidden z-10 animate-in zoom-in-95 duration-150">
             {/* Search Input */}
-            <div className="flex items-center px-4 border-b border-slate-100 dark:border-slate-800 bg-white dark:bg-slate-900">
-              <Search className="w-4 h-4 text-slate-400 shrink-0" />
+            <div className="flex items-center px-4 border-b border-[#EFECE3] bg-[#FAF8F3]">
+              <Search className="w-4 h-4 text-[#7A756B] shrink-0" />
               <input
                 ref={inputRef}
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
-                placeholder="Type a student name, roll number, teacher, class code, or task..."
-                className="w-full py-3.5 px-3 text-xs text-slate-900 dark:text-slate-100 bg-transparent placeholder-slate-400 focus:outline-none"
+                placeholder="Type student name, admission #, teacher, subject, or task..."
+                className="w-full py-4 px-3 text-xs text-[#171614] bg-transparent placeholder-[#7A756B] focus:outline-none"
               />
-              {loading && <Loader2 className="w-4 h-4 text-indigo-500 animate-spin shrink-0" />}
+              {loading && <Loader2 className="w-4 h-4 text-[#B89B62] animate-spin shrink-0" />}
               {query && !loading && (
                 <button
                   onClick={() => setQuery("")}
-                  className="p-1 rounded text-slate-400 hover:text-slate-600 dark:hover:text-slate-200"
+                  className="p-1 rounded-lg text-[#7A756B] hover:text-[#171614] hover:bg-[#EFECE3]"
                 >
                   <X className="w-3.5 h-3.5" />
                 </button>
@@ -148,30 +147,32 @@ export function CommandPalette() {
             </div>
 
             {/* Content Area */}
-            <div className="max-h-96 overflow-y-auto p-2 space-y-3">
+            <div className="max-h-96 overflow-y-auto p-3 space-y-3 bg-white">
               {/* If no query, show quick navigation */}
               {!query.trim() && (
                 <div className="p-2">
-                  <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 px-2 block mb-1.5">
+                  <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-[#7A756B] px-2 block mb-2">
                     Quick Jump Navigation
                   </span>
-                  <div className="grid grid-cols-2 gap-1.5">
+                  <div className="grid grid-cols-2 gap-2">
                     {[
                       { title: "Students Directory", icon: Users, url: "/students" },
                       { title: "Faculty & Staff", icon: GraduationCap, url: "/teachers" },
-                      { title: "Attendance Roster", icon: Calendar, url: "/attendance/student" },
-                      { title: "Timetable Grid", icon: BookOpen, url: "/timetable" },
-                      { title: "Fee Ledger & Invoices", icon: CreditCard, url: "/fees" },
+                      { title: "Daily Attendance", icon: Calendar, url: "/attendance" },
+                      { title: "Timetable Grid", icon: Clock, url: "/academics/timetable" },
+                      { title: "Classes & Sections", icon: School, url: "/academics/classes" },
+                      { title: "Fee Ledger & Invoices", icon: Receipt, url: "/finance/fees" },
                       { title: "Operational Tasks", icon: CheckSquare, url: "/tasks" },
+                      { title: "Academic Assignments", icon: BookOpen, url: "/academics/assignments" },
                     ].map((item, i) => {
                       const Icon = item.icon;
                       return (
                         <button
                           key={i}
                           onClick={() => handleSelect(item.url)}
-                          className="flex items-center gap-2.5 p-2 rounded-lg text-left text-xs font-medium text-slate-700 dark:text-slate-300 hover:bg-indigo-50/70 dark:hover:bg-indigo-950/40 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors"
+                          className="flex items-center gap-2.5 p-2.5 rounded-xl text-left text-xs font-semibold text-[#35322C] hover:bg-[#FAF8F3] hover:text-[#171614] border border-transparent hover:border-[#DCD7CB] transition-all"
                         >
-                          <Icon className="w-3.5 h-3.5 text-slate-400" />
+                          <Icon className="w-3.5 h-3.5 text-[#7A756B]" />
                           <span className="truncate">{item.title}</span>
                         </button>
                       );
@@ -182,9 +183,9 @@ export function CommandPalette() {
 
               {/* Dynamic Results */}
               {query.trim() && !loading && !hasResults && (
-                <div className="py-12 text-center text-slate-400 text-xs">
-                  <p className="font-semibold text-slate-600 dark:text-slate-300">No records found</p>
-                  <p className="text-[11px] mt-0.5">
+                <div className="py-12 text-center text-[#7A756B] text-xs space-y-1">
+                  <p className="font-bold text-[#171614]">No records found</p>
+                  <p className="text-[11px]">
                     No students, faculty, classes, or tasks matched &quot;{query}&quot;.
                   </p>
                 </div>
@@ -193,7 +194,7 @@ export function CommandPalette() {
               {/* Students Results */}
               {results.students.length > 0 && (
                 <div>
-                  <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 px-2 block mb-1">
+                  <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-[#7A756B] px-2 block mb-1">
                     Students ({results.students.length})
                   </span>
                   <div className="space-y-1">
@@ -201,22 +202,22 @@ export function CommandPalette() {
                       <button
                         key={st.id}
                         onClick={() => handleSelect(`/students?search=${encodeURIComponent(st.fullName)}`)}
-                        className="w-full flex items-center justify-between p-2 rounded-lg text-left hover:bg-indigo-50/70 dark:hover:bg-indigo-950/40 transition-colors group"
+                        className="w-full flex items-center justify-between p-2.5 rounded-xl text-left hover:bg-[#FAF8F3] transition-colors group border border-transparent hover:border-[#DCD7CB]"
                       >
                         <div className="flex items-center gap-2.5">
-                          <div className="w-7 h-7 rounded-md bg-indigo-100 dark:bg-indigo-900/50 flex items-center justify-center text-indigo-700 dark:text-indigo-300 font-bold text-[11px]">
+                          <div className="w-7 h-7 rounded-lg bg-[#FAF6ED] border border-[#D4B87C]/50 flex items-center justify-center text-[#856D3B] font-bold text-[11px]">
                             {st.fullName[0]}
                           </div>
                           <div>
-                            <p className="text-xs font-bold text-slate-800 dark:text-slate-200 group-hover:text-indigo-600 dark:group-hover:text-indigo-400">
+                            <p className="text-xs font-bold text-[#171614] group-hover:text-[#856D3B]">
                               {st.fullName}
                             </p>
-                            <p className="text-[11px] text-slate-400">
+                            <p className="text-[11px] text-[#7A756B] font-mono">
                               {st.currentClass?.name} - {st.currentSection?.name} • Roll #{st.rollNumber || "—"} • {st.admissionNumber}
                             </p>
                           </div>
                         </div>
-                        <ArrowRight className="w-3.5 h-3.5 text-slate-300 group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors" />
+                        <ArrowRight className="w-3.5 h-3.5 text-[#7A756B] group-hover:text-[#171614] transition-colors" />
                       </button>
                     ))}
                   </div>
@@ -226,7 +227,7 @@ export function CommandPalette() {
               {/* Teachers Results */}
               {results.teachers.length > 0 && (
                 <div>
-                  <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 px-2 block mb-1">
+                  <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-[#7A756B] px-2 block mb-1">
                     Faculty & Staff ({results.teachers.length})
                   </span>
                   <div className="space-y-1">
@@ -234,22 +235,22 @@ export function CommandPalette() {
                       <button
                         key={t.id}
                         onClick={() => handleSelect(`/teachers?search=${encodeURIComponent(t.fullName)}`)}
-                        className="w-full flex items-center justify-between p-2 rounded-lg text-left hover:bg-indigo-50/70 dark:hover:bg-indigo-950/40 transition-colors group"
+                        className="w-full flex items-center justify-between p-2.5 rounded-xl text-left hover:bg-[#FAF8F3] transition-colors group border border-transparent hover:border-[#DCD7CB]"
                       >
                         <div className="flex items-center gap-2.5">
-                          <div className="w-7 h-7 rounded-md bg-emerald-100 dark:bg-emerald-900/50 flex items-center justify-center text-emerald-700 dark:text-emerald-300 font-bold text-[11px]">
+                          <div className="w-7 h-7 rounded-lg bg-[#F4F6F1] border border-[#65705B]/30 flex items-center justify-center text-[#525E4B] font-bold text-[11px]">
                             {t.fullName[0]}
                           </div>
                           <div>
-                            <p className="text-xs font-bold text-slate-800 dark:text-slate-200 group-hover:text-indigo-600 dark:group-hover:text-indigo-400">
+                            <p className="text-xs font-bold text-[#171614] group-hover:text-[#525E4B]">
                               {t.fullName}
                             </p>
-                            <p className="text-[11px] text-slate-400">
+                            <p className="text-[11px] text-[#7A756B] font-mono">
                               {t.designation} • {t.employeeId}
                             </p>
                           </div>
                         </div>
-                        <ArrowRight className="w-3.5 h-3.5 text-slate-300 group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors" />
+                        <ArrowRight className="w-3.5 h-3.5 text-[#7A756B] group-hover:text-[#171614] transition-colors" />
                       </button>
                     ))}
                   </div>
@@ -259,30 +260,30 @@ export function CommandPalette() {
               {/* Classes Results */}
               {results.classes.length > 0 && (
                 <div>
-                  <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 px-2 block mb-1">
+                  <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-[#7A756B] px-2 block mb-1">
                     Classes & Cohorts ({results.classes.length})
                   </span>
                   <div className="space-y-1">
                     {results.classes.map((cls) => (
                       <button
                         key={cls.id}
-                        onClick={() => handleSelect(`/timetable?class=${cls.id}`)}
-                        className="w-full flex items-center justify-between p-2 rounded-lg text-left hover:bg-indigo-50/70 dark:hover:bg-indigo-950/40 transition-colors group"
+                        onClick={() => handleSelect("/academics/classes")}
+                        className="w-full flex items-center justify-between p-2.5 rounded-xl text-left hover:bg-[#FAF8F3] transition-colors group border border-transparent hover:border-[#DCD7CB]"
                       >
                         <div className="flex items-center gap-2.5">
-                          <div className="w-7 h-7 rounded-md bg-amber-100 dark:bg-amber-900/50 flex items-center justify-center text-amber-700 dark:text-amber-300 font-bold text-[11px]">
-                            <Layers className="w-3.5 h-3.5" />
+                          <div className="w-7 h-7 rounded-lg bg-[#FAF8F3] border border-[#E5E0D5] flex items-center justify-center text-[#171614] font-bold text-[11px]">
+                            {cls.name[0]}
                           </div>
                           <div>
-                            <p className="text-xs font-bold text-slate-800 dark:text-slate-200 group-hover:text-indigo-600 dark:group-hover:text-indigo-400">
+                            <p className="text-xs font-bold text-[#171614]">
                               {cls.name}
                             </p>
-                            <p className="text-[11px] text-slate-400">
-                              Code: {cls.code} • {cls.sections?.length || 0} Sections
+                            <p className="text-[11px] text-[#7A756B] font-mono">
+                              {cls.sections?.length || 0} Sections Active
                             </p>
                           </div>
                         </div>
-                        <ArrowRight className="w-3.5 h-3.5 text-slate-300 group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors" />
+                        <ArrowRight className="w-3.5 h-3.5 text-[#7A756B] group-hover:text-[#171614] transition-colors" />
                       </button>
                     ))}
                   </div>
@@ -292,44 +293,33 @@ export function CommandPalette() {
               {/* Tasks Results */}
               {results.tasks.length > 0 && (
                 <div>
-                  <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 px-2 block mb-1">
-                    Operational Tasks ({results.tasks.length})
+                  <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-[#7A756B] px-2 block mb-1">
+                    Tasks ({results.tasks.length})
                   </span>
                   <div className="space-y-1">
                     {results.tasks.map((task) => (
                       <button
                         key={task.id}
-                        onClick={() => handleSelect(`/tasks`)}
-                        className="w-full flex items-center justify-between p-2 rounded-lg text-left hover:bg-indigo-50/70 dark:hover:bg-indigo-950/40 transition-colors group"
+                        onClick={() => handleSelect("/tasks")}
+                        className="w-full flex items-center justify-between p-2.5 rounded-xl text-left hover:bg-[#FAF8F3] transition-colors group border border-transparent hover:border-[#DCD7CB]"
                       >
                         <div className="flex items-center gap-2.5">
-                          <CheckSquare className="w-4 h-4 text-slate-400" />
+                          <CheckSquare className="w-4 h-4 text-[#856D3B]" />
                           <div>
-                            <p className="text-xs font-bold text-slate-800 dark:text-slate-200 group-hover:text-indigo-600 dark:group-hover:text-indigo-400">
+                            <p className="text-xs font-bold text-[#171614]">
                               {task.title}
                             </p>
-                            <p className="text-[11px] text-slate-400">
-                              Status: {task.status} • Priority: {task.priority}
+                            <p className="text-[11px] text-[#7A756B] font-mono">
+                              Priority: {task.priority} • Status: {task.status}
                             </p>
                           </div>
                         </div>
-                        <Badge variant="outline" className="text-[10px]">
-                          {task.status}
-                        </Badge>
+                        <ArrowRight className="w-3.5 h-3.5 text-[#7A756B] group-hover:text-[#171614] transition-colors" />
                       </button>
                     ))}
                   </div>
                 </div>
               )}
-            </div>
-
-            {/* Footer */}
-            <div className="px-4 py-2 border-t border-slate-100 dark:border-slate-800 bg-slate-50/70 dark:bg-slate-900/70 flex items-center justify-between text-[11px] text-slate-400">
-              <span className="flex items-center gap-1.5">
-                <Sparkles className="w-3 h-3 text-indigo-500" />
-                <span>NEXORA Instant Index Query</span>
-              </span>
-              <span className="font-mono">ESC to close</span>
             </div>
           </div>
         </div>

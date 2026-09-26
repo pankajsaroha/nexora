@@ -2,15 +2,20 @@
 
 import React, { useEffect } from "react";
 import { X } from "lucide-react";
+import { cn } from "@/lib/utils";
 
-interface DrawerProps {
+export interface DrawerProps {
   isOpen: boolean;
   onClose: () => void;
   title: string;
   subtitle?: string;
+  description?: string;
   children: React.ReactNode;
-  width?: "md" | "lg" | "xl" | "2xl";
+  position?: "left" | "right";
+  size?: "sm" | "md" | "lg" | "xl";
+  width?: "sm" | "md" | "lg" | "xl" | string;
   footer?: React.ReactNode;
+  className?: string;
 }
 
 export function Drawer({
@@ -18,9 +23,13 @@ export function Drawer({
   onClose,
   title,
   subtitle,
+  description,
   children,
-  width = "lg",
+  position = "right",
+  size = "md",
+  width,
   footer,
+  className,
 }: DrawerProps) {
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -31,8 +40,6 @@ export function Drawer({
     if (isOpen) {
       document.body.style.overflow = "hidden";
       window.addEventListener("keydown", handleKeyDown);
-    } else {
-      document.body.style.overflow = "unset";
     }
     return () => {
       document.body.style.overflow = "unset";
@@ -42,45 +49,65 @@ export function Drawer({
 
   if (!isOpen) return null;
 
-  const widthClasses = {
+  const effectiveSize = width || size;
+  const sizeClasses: Record<string, string> = {
+    sm: "max-w-sm",
     md: "max-w-md",
-    lg: "max-w-xl",
-    xl: "max-w-2xl",
-    "2xl": "max-w-3xl",
-  }[width];
+    lg: "max-w-lg",
+    xl: "max-w-xl",
+  };
+
+  const positionClasses = {
+    right: "inset-y-0 right-0 animate-in slide-in-from-right duration-200",
+    left: "inset-y-0 left-0 animate-in slide-in-from-left duration-200",
+  };
+
+  const desc = subtitle || description;
 
   return (
-    <div className="fixed inset-0 z-50 flex justify-end overflow-hidden">
+    <div className="fixed inset-0 z-50 overflow-hidden">
       {/* Backdrop */}
       <div
-        className="fixed inset-0 bg-slate-950/40 backdrop-blur-sm transition-opacity animate-in fade-in duration-200"
+        className="fixed inset-0 bg-[#171614]/70 backdrop-blur-xs transition-opacity animate-in fade-in"
         onClick={onClose}
       />
 
-      {/* Slide-over Container */}
+      {/* Drawer Container */}
       <div
-        className={`relative w-full ${widthClasses} bg-white dark:bg-slate-900 border-l border-slate-200 dark:border-slate-800 shadow-2xl flex flex-col h-full z-10 transform transition-transform duration-300 ease-out animate-in slide-in-from-right`}
+        className={cn(
+          "fixed flex w-full flex-col bg-white shadow-2xl border-l border-[#E5E0D5]",
+          positionClasses[position],
+          sizeClasses[effectiveSize] || "max-w-md",
+          className
+        )}
       >
         {/* Header */}
-        <div className="px-6 py-4 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between shrink-0 bg-slate-50/50 dark:bg-slate-900/50">
+        <div className="flex items-center justify-between border-b border-[#EFECE3] bg-[#FAF8F3] px-6 py-4">
           <div>
-            <h3 className="text-base font-bold text-slate-900 dark:text-slate-100">{title}</h3>
-            {subtitle && <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">{subtitle}</p>}
+            <h2 className="text-base font-extrabold text-[#171614] tracking-tight">
+              {title}
+            </h2>
+            {desc && (
+              <p className="mt-0.5 text-xs text-[#7A756B]">
+                {desc}
+              </p>
+            )}
           </div>
           <button
+            type="button"
             onClick={onClose}
-            className="p-1.5 rounded-lg text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+            className="rounded-lg p-1.5 text-[#7A756B] hover:bg-[#EFECE3] hover:text-[#171614] transition-colors"
           >
-            <X className="w-5 h-5" />
+            <X className="h-4 w-4" />
           </button>
         </div>
 
-        {/* Scrollable Content */}
-        <div className="flex-1 overflow-y-auto p-6 space-y-6">{children}</div>
+        {/* Content Body */}
+        <div className="flex-1 overflow-y-auto p-6 bg-white">{children}</div>
 
         {/* Footer if provided */}
         {footer && (
-          <div className="px-6 py-3.5 border-t border-slate-100 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-900/50 shrink-0 flex items-center justify-end gap-2">
+          <div className="border-t border-[#EFECE3] bg-[#FAF8F3] px-6 py-3 flex items-center justify-end gap-2">
             {footer}
           </div>
         )}

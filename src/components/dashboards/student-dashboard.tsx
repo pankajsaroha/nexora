@@ -66,24 +66,24 @@ export function StudentDashboard({
   return (
     <div className="space-y-10 max-w-6xl mx-auto py-2">
       {/* Editorial Page Header */}
-      <div className="flex flex-col md:flex-row md:items-baseline justify-between gap-4 border-b border-[#E8E7DF] pb-6">
+      <div className="flex flex-col md:flex-row md:items-baseline justify-between gap-4 border-b border-[#E5E0D5] pb-6">
         <div>
           <div className="flex items-center gap-2 mb-1">
-            <span className="text-[11px] font-mono uppercase tracking-widest text-slate-400 font-bold">
+            <span className="text-[11px] font-mono uppercase tracking-widest text-[#7A756B] font-bold">
               STUDENT ACADEMIC DESK
             </span>
-            <span className="text-slate-300">·</span>
-            <span className="text-[11px] font-mono uppercase tracking-wider text-[#1E3A8A] font-bold">
-              {student.className} ({student.sectionName}) · Roll #{student.rollNumber || "14"}
+            <span className="text-[#DCD7CB]">·</span>
+            <span className="text-[11px] font-mono uppercase tracking-wider text-[#856D3B] font-bold">
+              {student.className} ({student.sectionName}) · Roll #{student.rollNumber || "12"}
             </span>
           </div>
-          <h1 className="text-3xl font-extrabold tracking-tight text-[#0F172A]">
+          <h1 className="text-3xl font-extrabold tracking-tight text-[#171614]">
             Good morning, {student.fullName}.
           </h1>
-          <p className="text-xs text-slate-500 mt-1">
+          <p className="text-xs text-[#555047] mt-1">
             Class Teacher:{" "}
-            <span className="font-semibold text-slate-700">
-              {student.classTeacherName || "Mrs. Sunita Sharma"}
+            <span className="font-semibold text-[#171614]">
+              {student.classTeacherName || "Mrs. Ananya Sharma"}
             </span>
             . You have {todaySchedule.length} classes scheduled for today.
           </p>
@@ -92,16 +92,16 @@ export function StudentDashboard({
         <div className="flex items-center gap-3">
           <Link
             href="/academics/timetable"
-            className="inline-flex items-center gap-2 px-3.5 py-2 rounded-lg text-xs font-semibold border border-[#E8E7DF] bg-white text-slate-700 hover:bg-[#FAF9F5] hover:border-slate-400 transition-editorial"
+            className="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-bold uppercase tracking-wider border border-[#DCD7CB] bg-[#FAF8F3] text-[#171614] hover:bg-[#EFECE3] hover:border-[#B89B62] transition-all shadow-2xs"
           >
-            <Clock className="w-3.5 h-3.5 text-slate-400" />
+            <Clock className="w-3.5 h-3.5 text-[#7A756B]" />
             <span>Timetable</span>
           </Link>
           <Link
             href="/academics/assignments"
-            className="inline-flex items-center gap-2 px-3.5 py-2 rounded-lg text-xs font-semibold bg-[#0F172A] text-white hover:bg-slate-800 transition-editorial shadow-xs"
+            className="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-bold uppercase tracking-wider bg-[#1B1916] text-[#FAF8F3] hover:bg-[#2A2722] hover:border-[#B89B62] border border-[#1B1916] transition-all shadow-xs"
           >
-            <BookOpen className="w-3.5 h-3.5" />
+            <BookOpen className="w-3.5 h-3.5 text-[#D4B87C]" />
             <span>My Homework</span>
           </Link>
         </div>
@@ -109,191 +109,139 @@ export function StudentDashboard({
 
       {/* Key Metrics Strip (Hairline Blocks) */}
       <section className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-        <div className="p-5 rounded-xl border border-[#E8E7DF] bg-white space-y-1 shadow-2xs">
-          <span className="text-[11px] font-mono uppercase tracking-wider text-slate-400 font-bold block">
+        <div className="p-5 rounded-2xl border border-[#E5E0D5] bg-white space-y-1 shadow-2xs hover:border-[#B89B62] transition-all">
+          <span className="text-[11px] font-mono uppercase tracking-wider text-[#7A756B] font-bold block">
             01 / ATTENDANCE RATE
           </span>
-          <div className="text-2xl sm:text-3xl font-bold text-[#0F172A] tracking-tight">
+          <div className="text-2xl sm:text-3xl font-extrabold text-[#171614] tracking-tight">
             {attendanceSummary.percentage}%
           </div>
-          <span className="text-[11px] text-slate-500 block font-medium">
-            {attendanceSummary.presentCount} of {attendanceSummary.totalDays} Days Present
+          <span className="text-[11px] text-[#525E4B] block font-bold">
+            {attendanceSummary.presentCount} / {attendanceSummary.totalDays} Days Present
           </span>
         </div>
 
-        <div className="p-5 rounded-xl border border-[#E8E7DF] bg-white space-y-1 shadow-2xs">
-          <span className="text-[11px] font-mono uppercase tracking-wider text-slate-400 font-bold block">
-            02 / TODAY&apos;S CLASSES
+        <div className="p-5 rounded-2xl border border-[#E5E0D5] bg-white space-y-1 shadow-2xs hover:border-[#B89B62] transition-all">
+          <span className="text-[11px] font-mono uppercase tracking-wider text-[#7A756B] font-bold block">
+            02 / PENDING HOMEWORK
           </span>
-          <div className="text-2xl sm:text-3xl font-bold text-[#0F172A] tracking-tight">
+          <div className="text-2xl sm:text-3xl font-extrabold text-[#171614] tracking-tight">
+            {pendingAssignments.length} Tasks
+          </div>
+          <span className="text-[11px] text-[#856D3B] block font-bold">
+            Due this academic week
+          </span>
+        </div>
+
+        <div className="p-5 rounded-2xl border border-[#E5E0D5] bg-white space-y-1 shadow-2xs hover:border-[#B89B62] transition-all">
+          <span className="text-[11px] font-mono uppercase tracking-wider text-[#7A756B] font-bold block">
+            03 / TODAY&apos;S SCHEDULE
+          </span>
+          <div className="text-2xl sm:text-3xl font-extrabold text-[#171614] tracking-tight">
             {todaySchedule.length} Periods
           </div>
-          <span className="text-[11px] text-slate-500 block font-medium">
-            First: {todaySchedule[0]?.subjectName || "Assembly"} (08:30 AM)
+          <span className="text-[11px] text-[#555047] block font-medium">
+            Room 104 • Secondary Block
           </span>
         </div>
 
-        <div className="p-5 rounded-xl border border-[#E8E7DF] bg-white space-y-1 shadow-2xs">
-          <span className="text-[11px] font-mono uppercase tracking-wider text-slate-400 font-bold block">
-            03 / ACTIVE HOMEWORK
+        <div className="p-5 rounded-2xl border border-[#E5E0D5] bg-white space-y-1 shadow-2xs hover:border-[#B89B62] transition-all">
+          <span className="text-[11px] font-mono uppercase tracking-wider text-[#7A756B] font-bold block">
+            04 / TERM 1 FEE
           </span>
-          <div className="text-2xl sm:text-3xl font-bold text-[#0F172A] tracking-tight">
-            {pendingAssignments.length} Due
+          <div className="text-2xl sm:text-3xl font-extrabold text-[#525E4B] tracking-tight">
+            {feeStatus.status}
           </div>
-          <span className="text-[11px] text-slate-500 block font-medium">
-            Due in next 7 days
-          </span>
-        </div>
-
-        <div className="p-5 rounded-xl border border-[#E8E7DF] bg-white space-y-1 shadow-2xs">
-          <span className="text-[11px] font-mono uppercase tracking-wider text-slate-400 font-bold block">
-            04 / FEE INVOICE STATUS
-          </span>
-          <div className="text-2xl sm:text-3xl font-bold text-[#0F172A] tracking-tight">
-            {feeStatus.pending === 0 ? "Fully Paid" : formatCurrency(feeStatus.pending)}
-          </div>
-          <span className="text-[11px] text-slate-500 block font-medium">
-            {feeStatus.pending === 0 ? "Term 1 Cleared" : "Outstanding Dues"}
+          <span className="text-[11px] text-[#7A756B] block font-mono">
+            Receipt: REC-2026-0891
           </span>
         </div>
       </section>
 
-      {/* Main Grid: Today's Classes & Homework */}
+      {/* Main Grid: Today's Timetable & Pending Homework */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        {/* Left 2 Columns: Today's Classes */}
+        {/* Left 2 Columns: Lecture Schedule */}
         <div className="lg:col-span-2 space-y-8">
           <section className="space-y-3">
             <div className="flex items-center justify-between">
               <div>
-                <h2 className="text-sm font-bold uppercase tracking-wider text-[#0F172A]">
-                  Today&apos;s Class Schedule
+                <h2 className="text-sm font-extrabold uppercase tracking-wider text-[#171614]">
+                  Today&apos;s Class Timetable
                 </h2>
-                <p className="text-xs text-slate-500">Class periods, teachers, and assigned rooms</p>
+                <p className="text-xs text-[#7A756B]">Scheduled lecture periods and subject teachers</p>
               </div>
-              <span className="text-[11px] font-mono text-slate-400">
-                {student.className} {student.sectionName}
-              </span>
+              <Link href="/academics/timetable" className="text-[11px] font-mono font-bold text-[#856D3B] hover:text-[#171614]">
+                Full Week →
+              </Link>
             </div>
 
-            <div className="divide-y divide-[#E8E7DF] border border-[#E8E7DF] rounded-xl bg-white overflow-hidden shadow-2xs">
+            <div className="divide-y divide-[#EFECE3] border border-[#E5E0D5] rounded-2xl bg-white overflow-hidden shadow-2xs">
               {todaySchedule.length === 0 ? (
-                <div className="p-6 text-center text-xs text-slate-400">
-                  No classes scheduled for today.
-                </div>
+                <div className="p-6 text-center text-xs text-[#7A756B]">No classes scheduled for today.</div>
               ) : (
-                todaySchedule.map((s) => (
+                todaySchedule.map((slot) => (
                   <div
-                    key={s.period}
-                    className="p-4 flex items-center justify-between hover:bg-[#FAF9F5] transition-editorial"
+                    key={slot.period}
+                    className="p-4 flex items-center justify-between hover:bg-[#FAF8F3] transition-colors"
                   >
                     <div className="flex items-center gap-4">
-                      <div className="w-9 h-9 rounded-lg bg-[#FAF9F5] border border-[#E8E7DF] flex items-center justify-center font-mono font-bold text-xs text-[#0F172A] shrink-0">
-                        P{s.period}
+                      <div className="w-9 h-9 rounded-xl bg-[#FAF8F3] border border-[#E5E0D5] flex items-center justify-center font-mono font-bold text-xs text-[#171614] shrink-0">
+                        P{slot.period}
                       </div>
                       <div>
-                        <p className="text-xs font-bold text-[#0F172A]">{s.subjectName}</p>
-                        <p className="text-[11px] text-slate-500 mt-0.5">
-                          {s.startTime} – {s.endTime} · Taught by {s.teacherName}
+                        <p className="text-xs font-bold text-[#171614]">{slot.subjectName}</p>
+                        <p className="text-[11px] text-[#7A756B] mt-0.5 font-mono">
+                          {slot.startTime} – {slot.endTime} · {slot.teacherName} · Room {slot.roomNumber}
                         </p>
                       </div>
                     </div>
 
-                    <span className="text-[11px] font-mono text-slate-600 font-semibold px-2.5 py-1 rounded bg-[#FAF9F5] border border-[#E8E7DF]">
-                      {s.roomNumber}
-                    </span>
+                    <span className="text-[11px] font-mono text-[#7A756B] font-medium">Lecture</span>
                   </div>
                 ))
               )}
-            </div>
-          </section>
-
-          {/* Academic Snapshot & Continuous Evaluation */}
-          <section className="p-5 rounded-xl border border-[#E8E7DF] bg-white space-y-3 shadow-2xs">
-            <div className="flex items-center justify-between">
-              <span className="text-xs font-bold text-[#0F172A]">Term 1 Academic Overview</span>
-              <span className="text-[11px] font-mono font-bold text-emerald-700">Grade A (86%)</span>
-            </div>
-            <p className="text-xs text-slate-500 leading-relaxed">
-              Your overall attendance is {attendanceSummary.percentage}%, exceeding the required 75% CBSE/ICSE benchmark. Keep up consistent participation in classroom assignments.
-            </p>
-            <div className="grid grid-cols-3 gap-2 pt-2 border-t border-[#E8E7DF] text-center">
-              <div className="p-2 rounded-lg bg-[#FAF9F5] border border-[#E8E7DF]">
-                <span className="text-[10px] text-slate-400 block">Present</span>
-                <span className="text-xs font-bold text-[#0F172A]">{attendanceSummary.presentCount} Days</span>
-              </div>
-              <div className="p-2 rounded-lg bg-[#FAF9F5] border border-[#E8E7DF]">
-                <span className="text-[10px] text-slate-400 block">Absent</span>
-                <span className="text-xs font-bold text-slate-600">{attendanceSummary.absentCount} Days</span>
-              </div>
-              <div className="p-2 rounded-lg bg-[#FAF9F5] border border-[#E8E7DF]">
-                <span className="text-[10px] text-slate-400 block">Late</span>
-                <span className="text-xs font-bold text-slate-600">{attendanceSummary.lateCount} Days</span>
-              </div>
             </div>
           </section>
         </div>
 
-        {/* Right Column: Homework & Deadlines */}
+        {/* Right Col: Homework Queue */}
         <div className="space-y-8">
           <section className="space-y-3">
             <div className="flex items-center justify-between">
-              <h2 className="text-sm font-bold uppercase tracking-wider text-[#0F172A]">
-                Assignments Due
+              <h2 className="text-sm font-extrabold uppercase tracking-wider text-[#171614]">
+                Pending Homework
               </h2>
-              <Link
-                href="/academics/assignments"
-                className="text-[11px] font-semibold text-slate-600 hover:text-[#0F172A]"
-              >
-                View all →
+              <Link href="/academics/assignments" className="text-[11px] font-mono font-bold text-[#856D3B] hover:text-[#171614]">
+                All Tasks →
               </Link>
             </div>
 
-            <div className="divide-y divide-[#E8E7DF] border border-[#E8E7DF] rounded-xl bg-white overflow-hidden shadow-2xs">
+            <div className="divide-y divide-[#EFECE3] border border-[#E5E0D5] rounded-2xl bg-white overflow-hidden shadow-2xs">
               {pendingAssignments.length === 0 ? (
-                <div className="p-6 text-center text-xs text-slate-400">
-                  <CheckCircle2 className="w-5 h-5 text-emerald-500 mx-auto mb-1" />
-                  <span>No homework tasks pending. Great work!</span>
+                <div className="p-6 text-center text-xs text-[#7A756B]">
+                  No pending assignments in your queue.
                 </div>
               ) : (
                 pendingAssignments.map((a) => (
-                  <div key={a.id} className="p-4 space-y-2 hover:bg-[#FAF9F5] transition-editorial">
+                  <div key={a.id} className="p-4 space-y-1.5 hover:bg-[#FAF8F3] transition-colors">
                     <div className="flex items-center justify-between">
-                      <span className="text-[10px] font-mono uppercase tracking-wider text-[#1E3A8A] font-bold">
-                        {a.subjectName}
-                      </span>
-                      <span className="text-[10px] font-mono text-slate-400">
-                        Due {formatDate(a.dueDate, "dd MMM")}
+                      <p className="text-xs font-bold text-[#171614]">{a.title}</p>
+                      <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded-md bg-[#FAF6ED] border border-[#D4B87C]/50 text-[#856D3B]">
+                        {a.maxMarks} Marks
                       </span>
                     </div>
-                    <p className="text-xs font-bold text-[#0F172A] leading-snug">{a.title}</p>
-                    <div className="flex items-center justify-between text-[11px] pt-1 border-t border-[#E8E7DF]/60">
-                      <span className="text-slate-500">Max Marks: {a.maxMarks}</span>
-                      <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-emerald-50 text-emerald-700 font-semibold border border-emerald-200">
-                        {a.submissionStatus || "Submitted"}
-                      </span>
+
+                    <div className="flex items-center justify-between text-[11px] font-mono text-[#7A756B]">
+                      <span>{a.subjectName}</span>
+                      <span className="text-[#6F3D3A] font-bold">Due {formatDate(a.dueDate)}</span>
                     </div>
                   </div>
                 ))
               )}
             </div>
-          </section>
-
-          {/* Student Identity Card */}
-          <section className="p-5 rounded-xl border border-[#E8E7DF] bg-white space-y-2 shadow-2xs">
-            <span className="text-[11px] font-mono uppercase tracking-wider text-slate-400 font-bold block">
-              INSTITUTIONAL RECORD
-            </span>
-            <p className="text-xs font-bold text-[#0F172A]">{student.fullName}</p>
-            <p className="text-[11px] text-slate-500">
-              Admission #{student.admissionNumber} · Roll #{student.rollNumber || "14"}
-            </p>
-            <p className="text-[11px] text-slate-500">
-              Class {student.className} - Section {student.sectionName}
-            </p>
           </section>
         </div>
       </div>
     </div>
   );
 }
-

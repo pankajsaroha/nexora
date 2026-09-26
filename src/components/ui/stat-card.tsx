@@ -26,30 +26,30 @@ export function StatCard({
   return (
     <div
       className={cn(
-        "relative overflow-hidden rounded-xl border border-[#E8E7DF] bg-white p-5 shadow-2xs transition-editorial hover:border-slate-400 space-y-2",
+        "relative overflow-hidden rounded-2xl border border-[#E5E0D5] bg-white p-5 shadow-2xs transition-all hover:border-[#B89B62] space-y-2",
         className
       )}
     >
       <div className="flex items-center justify-between">
-        <span className="text-[11px] font-mono font-bold uppercase tracking-wider text-slate-400 block">
+        <span className="text-[11px] font-mono font-bold uppercase tracking-wider text-[#7A756B] block">
           {title}
         </span>
         {Icon && (
-          <div className="w-7 h-7 rounded-md bg-[#FAF9F5] border border-[#E8E7DF] flex items-center justify-center text-slate-600 shrink-0">
+          <div className="w-7 h-7 rounded-lg bg-[#FAF8F3] border border-[#E5E0D5] flex items-center justify-center text-[#171614] shrink-0 shadow-2xs">
             <Icon className="h-3.5 w-3.5" />
           </div>
         )}
       </div>
 
       <div className="flex items-baseline gap-2">
-        <div className="text-2xl sm:text-3xl font-bold tracking-tight text-[#0F172A]">
+        <div className="text-2xl sm:text-3xl font-extrabold tracking-tight text-[#171614]">
           {value}
         </div>
         {change && (
           <span
             className={cn(
-              "inline-flex items-center text-[11px] font-mono font-semibold",
-              isPositive ? "text-emerald-700" : "text-rose-600"
+              "inline-flex items-center text-[11px] font-mono font-bold",
+              isPositive ? "text-[#525E4B]" : "text-[#6F3D3A]"
             )}
           >
             {isPositive ? "↑" : "↓"} {change}
@@ -58,7 +58,7 @@ export function StatCard({
       </div>
 
       {description && (
-        <p className="text-[11px] text-slate-500 font-medium">
+        <p className="text-[11px] text-[#7A756B] font-medium">
           {description}
         </p>
       )}

@@ -172,8 +172,24 @@ export function OnboardingWizard() {
         }),
       });
 
-      const data = await res.json();
-      if (!res.ok) {
+      const contentType = res.headers.get("content-type") || "";
+      let data: any = {};
+
+      if (contentType.includes("application/json")) {
+        data = await res.json();
+      } else {
+        const text = await res.text();
+        console.error("Expected JSON response but received:", {
+          status: res.status,
+          contentType,
+          bodySnippet: text.slice(0, 500),
+        });
+        throw new Error(
+          `Server returned an unexpected response format (${res.status}). Please try again.`
+        );
+      }
+
+      if (!res.ok || data.success === false) {
         throw new Error(data.error || "Provisioning failed.");
       }
 

@@ -1,6 +1,6 @@
 import React from "react";
 import { cn } from "@/lib/utils";
-import { LucideIcon, FolderSearch } from "lucide-react";
+import { LucideIcon, Inbox } from "lucide-react";
 import { Button } from "./button";
 
 export interface EmptyStateProps {
@@ -13,7 +13,7 @@ export interface EmptyStateProps {
 }
 
 export function EmptyState({
-  icon: Icon = FolderSearch,
+  icon: Icon = Inbox,
   title,
   description,
   actionLabel,
@@ -23,25 +23,23 @@ export function EmptyState({
   return (
     <div
       className={cn(
-        "flex flex-col items-center justify-center rounded-xl border border-dashed border-slate-300 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-900/40 p-8 text-center",
+        "flex flex-col items-center justify-center p-8 sm:p-12 text-center rounded-2xl border border-dashed border-[#DCD7CB] bg-[#FAF8F3] space-y-4",
         className
       )}
     >
-      <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400">
+      <div className="w-12 h-12 rounded-2xl bg-white border border-[#E5E0D5] flex items-center justify-center text-[#856D3B] shadow-2xs">
         <Icon className="h-6 w-6" />
       </div>
-      <h3 className="mt-3 text-sm font-semibold text-slate-900 dark:text-white">
-        {title}
-      </h3>
-      <p className="mt-1 text-xs text-slate-500 dark:text-slate-400 max-w-sm">
-        {description}
-      </p>
+
+      <div className="max-w-sm space-y-1">
+        <h3 className="text-sm font-extrabold text-[#171614] tracking-tight">{title}</h3>
+        <p className="text-xs text-[#7A756B] leading-relaxed">{description}</p>
+      </div>
+
       {actionLabel && onAction && (
-        <div className="mt-4">
-          <Button size="sm" onClick={onAction}>
-            {actionLabel}
-          </Button>
-        </div>
+        <Button size="sm" onClick={onAction}>
+          {actionLabel}
+        </Button>
       )}
     </div>
   );

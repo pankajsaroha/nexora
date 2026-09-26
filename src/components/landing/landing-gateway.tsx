@@ -40,20 +40,9 @@ export function LandingGateway({ stats }: LandingGatewayProps) {
   const router = useRouter();
   const [navigatingRole, setNavigatingRole] = useState<string | null>(null);
 
-  const handleRoleClick = async (roleKey: string, targetPath: string, email: string) => {
+  const handleRoleClick = (roleKey: string) => {
     setNavigatingRole(roleKey);
-    try {
-      await fetch("/api/auth/demo-switch", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email }),
-      });
-      router.push("/dashboard");
-      router.refresh();
-    } catch (e) {
-      console.error("Navigation error:", e);
-      router.push("/dashboard");
-    }
+    router.push(`/demo/${roleKey}/dashboard`);
   };
 
   return (
@@ -154,7 +143,7 @@ export function LandingGateway({ stats }: LandingGatewayProps) {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {/* 1. PRINCIPAL GATEWAY */}
             <div
-              onClick={() => handleRoleClick("principal", "/principal", "principal@nexora.demo")}
+              onClick={() => handleRoleClick("principal")}
               className="group relative cursor-pointer p-6 sm:p-7 rounded-2xl border border-stone-200 dark:border-stone-800 bg-white dark:bg-stone-900/90 hover:border-indigo-600/50 dark:hover:border-indigo-500/40 transition-all duration-200 shadow-xs hover:shadow-md hover:-translate-y-0.5 flex flex-col justify-between"
             >
               <div>
@@ -207,7 +196,7 @@ export function LandingGateway({ stats }: LandingGatewayProps) {
 
             {/* 2. TEACHER GATEWAY */}
             <div
-              onClick={() => handleRoleClick("teacher", "/teacher", "teacher@nexora.demo")}
+              onClick={() => handleRoleClick("teacher")}
               className="group relative cursor-pointer p-6 sm:p-7 rounded-2xl border border-stone-200 dark:border-stone-800 bg-white dark:bg-stone-900/90 hover:border-emerald-600/50 dark:hover:border-emerald-500/40 transition-all duration-200 shadow-xs hover:shadow-md hover:-translate-y-0.5 flex flex-col justify-between"
             >
               <div>
@@ -260,7 +249,7 @@ export function LandingGateway({ stats }: LandingGatewayProps) {
 
             {/* 3. STUDENT GATEWAY */}
             <div
-              onClick={() => handleRoleClick("student", "/student", "student@nexora.demo")}
+              onClick={() => handleRoleClick("student")}
               className="group relative cursor-pointer p-6 sm:p-7 rounded-2xl border border-stone-200 dark:border-stone-800 bg-white dark:bg-stone-900/90 hover:border-sky-600/50 dark:hover:border-sky-500/40 transition-all duration-200 shadow-xs hover:shadow-md hover:-translate-y-0.5 flex flex-col justify-between"
             >
               <div>
@@ -313,7 +302,7 @@ export function LandingGateway({ stats }: LandingGatewayProps) {
 
             {/* 4. PARENT GATEWAY */}
             <div
-              onClick={() => handleRoleClick("parent", "/parent", "parent@nexora.demo")}
+              onClick={() => handleRoleClick("parent")}
               className="group relative cursor-pointer p-6 sm:p-7 rounded-2xl border border-stone-200 dark:border-stone-800 bg-white dark:bg-stone-900/90 hover:border-amber-600/50 dark:hover:border-amber-500/40 transition-all duration-200 shadow-xs hover:shadow-md hover:-translate-y-0.5 flex flex-col justify-between"
             >
               <div>

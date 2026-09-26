@@ -19,12 +19,7 @@ export interface TabsProps {
 
 export function Tabs({ tabs, activeTab, onChange, className }: TabsProps) {
   return (
-    <div
-      className={cn(
-        "flex space-x-1 border-b border-[#E8E7DF] overflow-x-auto no-scrollbar",
-        className
-      )}
-    >
+    <div className={cn("flex flex-wrap items-center gap-1.5 p-1 rounded-2xl bg-[#FAF8F3] border border-[#E5E0D5] w-fit shadow-2xs", className)}>
       {tabs.map((tab) => {
         const isActive = activeTab === tab.id;
         return (
@@ -33,21 +28,21 @@ export function Tabs({ tabs, activeTab, onChange, className }: TabsProps) {
             type="button"
             onClick={() => onChange(tab.id)}
             className={cn(
-              "flex items-center gap-2 border-b-2 px-4 py-2.5 text-xs font-semibold transition-editorial whitespace-nowrap",
+              "flex items-center gap-2 rounded-xl px-3.5 py-1.5 text-xs font-bold uppercase tracking-wider transition-all select-none",
               isActive
-                ? "border-[#0F172A] text-[#0F172A]"
-                : "border-transparent text-slate-500 hover:border-slate-300 hover:text-slate-800"
+                ? "bg-[#1B1916] text-[#FAF8F3] shadow-xs"
+                : "text-[#555047] hover:bg-white hover:text-[#171614]"
             )}
           >
-            {tab.icon && <span className="h-4 w-4 shrink-0">{tab.icon}</span>}
+            {tab.icon && <span className="shrink-0">{tab.icon}</span>}
             <span>{tab.label}</span>
             {tab.count !== undefined && (
               <span
                 className={cn(
-                  "rounded px-1.5 py-0.5 text-[10px] font-mono font-bold",
+                  "rounded-md px-1.5 py-0.2 text-[10px] font-mono",
                   isActive
-                    ? "bg-[#0F172A] text-white"
-                    : "bg-[#FAF9F5] border border-[#E8E7DF] text-slate-600"
+                    ? "bg-[#2E2B25] text-[#D4B87C]"
+                    : "bg-[#EFECE3] text-[#7A756B]"
                 )}
               >
                 {tab.count}
@@ -59,4 +54,3 @@ export function Tabs({ tabs, activeTab, onChange, className }: TabsProps) {
     </div>
   );
 }
-

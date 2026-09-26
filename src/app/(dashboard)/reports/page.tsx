@@ -29,6 +29,7 @@ export default async function ReportsPage() {
     prisma.student.count({ where: { institutionId: user.institutionId } }),
     prisma.teacher.count({ where: { institutionId: user.institutionId } }),
     prisma.studentFee.aggregate({
+      where: { student: { institutionId: user.institutionId } },
       _sum: { paidAmount: true, pendingAmount: true, totalAmount: true },
     }),
   ]);

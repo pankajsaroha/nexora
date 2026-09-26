@@ -30,20 +30,9 @@ export function EditorialEntry({ stats }: EditorialEntryProps) {
   const router = useRouter();
   const [navigatingRole, setNavigatingRole] = useState<string | null>(null);
 
-  const handleRoleClick = async (roleKey: string, email: string) => {
+  const handleRoleClick = (roleKey: string) => {
     setNavigatingRole(roleKey);
-    try {
-      await fetch("/api/auth/demo-switch", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email }),
-      });
-      router.push("/dashboard");
-      router.refresh();
-    } catch (e) {
-      console.error("Navigation error:", e);
-      router.push("/dashboard");
-    }
+    router.push(`/demo/${roleKey}/dashboard`);
   };
 
   const personas = [
@@ -211,7 +200,7 @@ export function EditorialEntry({ stats }: EditorialEntryProps) {
               return (
                 <div
                   key={p.key}
-                  onClick={() => handleRoleClick(p.key, p.email)}
+                  onClick={() => handleRoleClick(p.key)}
                   className="group relative cursor-pointer p-7 rounded-xl border border-[#E8E7DF] bg-white hover:border-[#0F172A] transition-editorial flex flex-col justify-between shadow-2xs hover:shadow-md"
                 >
                   <div className="space-y-4">

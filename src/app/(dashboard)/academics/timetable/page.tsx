@@ -14,6 +14,7 @@ export default async function TimetablePage() {
 
   const [slots, sections, teachers] = await Promise.all([
     prisma.timetableSlot.findMany({
+      where: { section: { class: { institutionId: user.institutionId } } },
       include: {
         subject: true,
         teacher: true,
@@ -22,6 +23,7 @@ export default async function TimetablePage() {
       orderBy: [{ dayOfWeek: "asc" }, { periodNumber: "asc" }],
     }),
     prisma.section.findMany({
+      where: { class: { institutionId: user.institutionId } },
       include: { class: true },
       orderBy: [{ class: { orderIndex: "asc" } }, { name: "asc" }],
     }),

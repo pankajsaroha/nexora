@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { UploadCloud, CheckCircle2, AlertTriangle, FileSpreadsheet, Sparkles, Download } from "lucide-react";
+import { UploadCloud, CheckCircle2, AlertTriangle, FileSpreadsheet, Sparkles, Download, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { PageHeader } from "@/components/ui/page-header";
@@ -74,7 +74,7 @@ Karthik,Subramanian,karthik.s@northstar.edu.in,+91 98100 22002,Mathematics Facul
               variant="outline"
               size="sm"
               onClick={handleLoadSample}
-              leftIcon={<Download className="h-3.5 w-3.5" />}
+              leftIcon={<Download className="h-3.5 w-3.5 text-[#B89B62]" />}
             >
               Load Sample Template
             </Button>
@@ -84,114 +84,108 @@ Karthik,Subramanian,karthik.s@northstar.edu.in,+91 98100 22002,Mathematics Facul
 
       {/* Metrics / Info Row */}
       <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
-        <div className="rounded-xl border border-[#E8E7DF] bg-white p-4 shadow-2xs">
-          <div className="text-[11px] font-mono uppercase tracking-wider text-slate-400">Target Schema</div>
-          <div className="mt-1 text-base font-bold text-slate-900 font-mono">
+        <div className="rounded-xl border border-[#E5E0D5] bg-white p-4 shadow-xs">
+          <div className="text-[11px] font-mono uppercase tracking-wider text-[#65705B]">Target Schema</div>
+          <div className="mt-1 text-base font-bold text-[#171614] font-mono">
             {entityType === "STUDENTS" ? "Student Registry (v2)" : "Faculty & Staff (v1)"}
           </div>
-          <div className="mt-0.5 text-[11px] text-slate-500">Auto-validates admission & roll #</div>
+          <div className="mt-0.5 text-[11px] text-[#65705B]">Auto-validates admission & roll #</div>
         </div>
-        <div className="rounded-xl border border-[#E8E7DF] bg-white p-4 shadow-2xs">
-          <div className="text-[11px] font-mono uppercase tracking-wider text-slate-400">Duplicate Prevention</div>
-          <div className="mt-1 text-base font-bold text-slate-900 font-mono">Unique Key Matching</div>
-          <div className="mt-0.5 text-[11px] text-slate-500">Prevents email & admission collisions</div>
+        <div className="rounded-xl border border-[#E5E0D5] bg-white p-4 shadow-xs">
+          <div className="text-[11px] font-mono uppercase tracking-wider text-[#65705B]">Duplicate Prevention</div>
+          <div className="mt-1 text-base font-bold text-[#171614] font-mono">Unique Key Matching</div>
+          <div className="mt-0.5 text-[11px] text-[#65705B]">Prevents email & admission collisions</div>
         </div>
-        <div className="rounded-xl border border-[#E8E7DF] bg-white p-4 shadow-2xs">
-          <div className="text-[11px] font-mono uppercase tracking-wider text-slate-400">Audit & Rollback</div>
-          <div className="mt-1 text-base font-bold text-emerald-700 font-mono">Atomic Transaction</div>
-          <div className="mt-0.5 text-[11px] text-slate-500">All-or-nothing database commitment</div>
+        <div className="rounded-xl border border-[#E5E0D5] bg-white p-4 shadow-xs">
+          <div className="text-[11px] font-mono uppercase tracking-wider text-[#65705B]">Audit & Rollback</div>
+          <div className="mt-1 text-base font-bold text-[#65705B] font-mono">Transaction Safe</div>
+          <div className="mt-0.5 text-[11px] text-[#65705B]">Rolls back batch on unhandled format</div>
         </div>
       </div>
 
-      {/* Main Import Panel */}
-      <div className="rounded-xl border border-[#E8E7DF] bg-white p-5 shadow-2xs space-y-4">
-        <div className="flex flex-wrap items-center justify-between gap-3 border-b border-[#E8E7DF] pb-3">
-          <div className="flex items-center gap-2">
-            <span className="text-xs font-mono uppercase tracking-wider text-slate-400">
-              Import Registry:
-            </span>
-            <div className="flex items-center gap-1">
-              <button
-                type="button"
-                onClick={() => {
-                  setEntityType("STUDENTS");
-                  setRawText("");
-                  setResult(null);
-                }}
-                className={`px-2.5 py-1 text-xs font-mono uppercase rounded-md transition-colors ${
-                  entityType === "STUDENTS"
-                    ? "bg-slate-900 text-white font-semibold"
-                    : "bg-slate-100 text-slate-600 hover:bg-slate-200"
-                }`}
-              >
-                Students Registry
-              </button>
-              <button
-                type="button"
-                onClick={() => {
-                  setEntityType("TEACHERS");
-                  setRawText("");
-                  setResult(null);
-                }}
-                className={`px-2.5 py-1 text-xs font-mono uppercase rounded-md transition-colors ${
-                  entityType === "TEACHERS"
-                    ? "bg-slate-900 text-white font-semibold"
-                    : "bg-slate-100 text-slate-600 hover:bg-slate-200"
-                }`}
-              >
-                Faculty & Staff
-              </button>
-            </div>
+      {/* Entity Selector Tabs */}
+      <div className="flex items-center gap-2 border-b border-[#E5E0D5] pb-3">
+        <button
+          onClick={() => {
+            setEntityType("STUDENTS");
+            setResult(null);
+          }}
+          className={`px-4 py-2 text-xs font-mono uppercase font-bold rounded-lg transition-colors ${
+            entityType === "STUDENTS"
+              ? "bg-[#171614] text-white shadow-xs"
+              : "bg-[#FAF8F3] border border-[#E5E0D5] text-[#171614] hover:bg-[#F3F0E8]"
+          }`}
+        >
+          Import Students Roster
+        </button>
+        <button
+          onClick={() => {
+            setEntityType("TEACHERS");
+            setResult(null);
+          }}
+          className={`px-4 py-2 text-xs font-mono uppercase font-bold rounded-lg transition-colors ${
+            entityType === "TEACHERS"
+              ? "bg-[#171614] text-white shadow-xs"
+              : "bg-[#FAF8F3] border border-[#E5E0D5] text-[#171614] hover:bg-[#F3F0E8]"
+          }`}
+        >
+          Import Faculty & Staff
+        </button>
+      </div>
+
+      {/* Ingestion Console */}
+      <div className="rounded-xl border border-[#E5E0D5] bg-white p-6 shadow-xs space-y-4">
+        <div className="flex items-center justify-between">
+          <div>
+            <h3 className="text-sm font-bold text-[#171614]">
+              CSV Payload Input
+            </h3>
+            <p className="text-xs text-[#65705B]">
+              Paste raw CSV rows with headers. You may click &quot;Load Sample Template&quot; to test.
+            </p>
           </div>
-
-          <Button variant="ghost" size="sm" onClick={handleLoadSample}>
-            Fill Example Records →
-          </Button>
-        </div>
-
-        <div>
-          <label className="block text-xs font-mono uppercase tracking-wider text-slate-400 mb-1.5">
-            Raw CSV Payload (including header row):
-          </label>
-          <textarea
-            rows={8}
-            value={rawText}
-            onChange={(e) => setRawText(e.target.value)}
-            placeholder="Paste your CSV content here (e.g. firstName,lastName,gender,dateOfBirth,class,section...)"
-            className="w-full rounded-lg border border-[#E8E7DF] bg-[#FAF9F5] p-3 font-mono text-xs text-slate-900 placeholder-slate-400 focus:bg-white focus:outline-none focus:ring-1 focus:ring-slate-900 transition-colors"
-          />
-        </div>
-
-        <div className="flex items-center justify-between pt-2 border-t border-[#E8E7DF]">
-          <span className="text-[11px] font-mono text-slate-400">
-            {rawText.trim() ? `${rawText.trim().split("\n").length - 1} data records detected` : "No records loaded"}
-          </span>
           <Button
             size="sm"
             onClick={handleImport}
-            disabled={!rawText.trim()}
             isLoading={isProcessing}
+            disabled={!rawText.trim()}
             leftIcon={<UploadCloud className="h-3.5 w-3.5" />}
           >
-            Validate & Execute Ingestion
+            Execute Ingestion Engine
           </Button>
         </div>
 
+        <textarea
+          rows={10}
+          value={rawText}
+          onChange={(e) => setRawText(e.target.value)}
+          placeholder="firstName,lastName,gender,dateOfBirth,class,section,parentName,parentPhone,email..."
+          className="w-full rounded-lg border border-[#E5E0D5] bg-[#FAF8F3] p-4 text-xs font-mono text-[#171614] focus:outline-none focus:ring-1 focus:ring-[#171614] leading-relaxed"
+        />
+
+        {/* Results Banner */}
         {result && (
           <div
             className={`p-4 rounded-xl border text-xs space-y-2 ${
-              result.success
-                ? "bg-emerald-50 border-emerald-200 text-emerald-900"
-                : "bg-rose-50 border-rose-200 text-rose-900"
+              result.error
+                ? "bg-[#8B3A3A]/5 border-[#8B3A3A]/20 text-[#8B3A3A]"
+                : "bg-[#65705B]/10 border-[#65705B]/20 text-[#525E4B]"
             }`}
           >
-            <div className="font-mono font-bold">{result.message || result.error}</div>
-            {result.errors && result.errors.length > 0 && (
-              <ul className="list-disc list-inside space-y-1 font-mono text-[11px] opacity-90">
-                {result.errors.map((err: string, idx: number) => (
-                  <li key={idx}>{err}</li>
-                ))}
-              </ul>
+            <div className="flex items-center gap-2 font-bold">
+              {result.error ? (
+                <AlertTriangle className="h-4 w-4" />
+              ) : (
+                <CheckCircle2 className="h-4 w-4 text-[#65705B]" />
+              )}
+              <span>{result.error ? "Ingestion Failed" : "Batch Successfully Processed"}</span>
+            </div>
+            {result.error && <p>{result.error}</p>}
+            {result.message && <p>{result.message}</p>}
+            {result.importedCount !== undefined && (
+              <p className="font-mono">
+                Total records created: <span className="font-bold">{result.importedCount}</span>
+              </p>
             )}
           </div>
         )}

@@ -12,9 +12,11 @@
 
 # Environment variables (Sensitive credentials)
 .env
+.env*
 .env*.local
 .env.production
 .env.staging
+.env.example
 
 # Prisma & Local Databases
 /prisma/*.db
@@ -44,3 +46,6 @@ Thumbs.db
 .idea/
 *.swp
 *.swo
+
+certificates
+scratch/

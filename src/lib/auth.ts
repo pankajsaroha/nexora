@@ -39,32 +39,6 @@ export async function getCurrentUser(): Promise<SessionUser | null> {
       });
     }
 
-    // Default fallback to Principal or first active user if no session cookie is present
-    if (!user) {
-      user = await prisma.user.findFirst({
-        where: {
-          OR: [{ roleCode: "PRINCIPAL" }, { email: "principal@nexora.demo" }],
-        },
-        include: {
-          institution: true,
-          teacher: true,
-          student: true,
-          guardian: true,
-        },
-      });
-    }
-
-    if (!user) {
-      user = await prisma.user.findFirst({
-        include: {
-          institution: true,
-          teacher: true,
-          student: true,
-          guardian: true,
-        },
-      });
-    }
-
     if (!user) {
       return null;
     }

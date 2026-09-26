@@ -13,20 +13,18 @@ export default async function FeesPage() {
     redirect("/login");
   }
 
-  let whereClause: any = {};
+  let whereClause: any = {
+    student: {
+      institutionId: user.institutionId,
+    },
+  };
 
   if (user.roleCode === "PARENT" && user.guardianId) {
-    whereClause = {
-      student: {
-        guardians: {
-          some: { guardianId: user.guardianId },
-        },
-      },
+    whereClause.student.guardians = {
+      some: { guardianId: user.guardianId },
     };
   } else if (user.roleCode === "STUDENT" && user.studentId) {
-    whereClause = {
-      studentId: user.studentId,
-    };
+    whereClause.studentId = user.studentId;
   }
 
   const fees = await prisma.studentFee.findMany({

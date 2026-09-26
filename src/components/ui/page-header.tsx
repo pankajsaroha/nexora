@@ -2,46 +2,53 @@ import React from "react";
 import { cn } from "@/lib/utils";
 
 export interface PageHeaderProps {
-  category?: string;
   title: string;
   description?: string;
+  eyebrow?: string;
+  category?: string;
   actions?: React.ReactNode;
+  children?: React.ReactNode;
   className?: string;
 }
 
 export function PageHeader({
-  category,
   title,
   description,
+  eyebrow,
+  category,
   actions,
+  children,
   className,
 }: PageHeaderProps) {
+  const label = eyebrow || category;
+
   return (
     <div
       className={cn(
-        "flex flex-col md:flex-row md:items-baseline justify-between gap-4 border-b border-[#E8E7DF] pb-6 mb-8",
+        "flex flex-col md:flex-row md:items-baseline justify-between gap-4 border-b border-[#E5E0D5] pb-6 mb-8",
         className
       )}
     >
       <div>
-        {category && (
-          <span className="text-[11px] font-mono uppercase tracking-widest text-slate-400 font-bold block mb-1">
-            {category}
+        {label && (
+          <span className="text-[11px] font-mono uppercase tracking-widest text-[#7A756B] font-bold block mb-1">
+            {label}
           </span>
         )}
-        <h1 className="text-3xl font-extrabold tracking-tight text-[#0F172A]">
+        <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-[#171614]">
           {title}
         </h1>
         {description && (
-          <p className="text-xs text-slate-500 mt-1 max-w-2xl leading-relaxed">
+          <p className="text-xs text-[#555047] mt-1 max-w-2xl leading-relaxed">
             {description}
           </p>
         )}
       </div>
 
-      {actions && (
-        <div className="flex flex-wrap items-center gap-2.5 shrink-0 self-start md:self-auto">
+      {(actions || children) && (
+        <div className="flex flex-wrap items-center gap-2.5 shrink-0">
           {actions}
+          {children}
         </div>
       )}
     </div>

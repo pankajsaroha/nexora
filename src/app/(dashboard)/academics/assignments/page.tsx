@@ -27,6 +27,7 @@ export default async function AssignmentsPage() {
       orderBy: { dueDate: "asc" },
     }),
     prisma.section.findMany({
+      where: { class: { institutionId: user.institutionId } },
       include: { class: true },
       orderBy: [{ class: { orderIndex: "asc" } }, { name: "asc" }],
     }),

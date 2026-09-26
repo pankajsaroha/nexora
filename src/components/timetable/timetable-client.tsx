@@ -1,9 +1,8 @@
 "use client";
 
 import React, { useState } from "react";
-import { Clock, Calendar, Printer, Filter, Building, User, Users } from "lucide-react";
+import { Clock, Calendar, Printer, Building, User, Users } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
 import { PageHeader } from "@/components/ui/page-header";
 
 export interface TimetableSlotData {
@@ -75,71 +74,72 @@ export function TimetableClient({
     <div className="space-y-8 max-w-7xl mx-auto py-2">
       {/* Editorial Page Header */}
       <PageHeader
-        category="ACADEMIC SCHEDULE & ROOM ALLOCATION"
-        title="Institutional Master Timetable"
+        eyebrow="ACADEMIC SCHEDULE & ROOM ALLOCATION"
+        title="Master Timetable Grid"
         description="Visual matrix of lecture periods, faculty room allocations, and clash-free academic scheduling."
-        actions={
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => window.print()}
-            leftIcon={<Printer className="h-3.5 w-3.5" />}
-            className="no-print"
-          >
-            Print Schedule
-          </Button>
-        }
-      />
+      >
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={() => window.print()}
+          leftIcon={<Printer className="h-3.5 w-3.5 text-[#7A756B]" />}
+          className="no-print"
+        >
+          Print Schedule
+        </Button>
+      </PageHeader>
 
       {/* Selector and Filter Controls */}
-      <div className="flex flex-col sm:flex-row items-center justify-between gap-4 rounded-xl bg-white p-4 border border-[#E8E7DF] shadow-2xs no-print">
+      <div className="flex flex-col sm:flex-row items-center justify-between gap-4 rounded-2xl bg-white p-4 border border-[#E5E0D5] shadow-2xs no-print">
         <div className="flex items-center gap-2">
-          <div className="flex rounded-lg bg-[#FAF9F5] border border-[#E8E7DF] p-1">
+          <div className="flex rounded-xl bg-[#FAF8F3] border border-[#DCD7CB] p-1">
             <button
               type="button"
               onClick={() => setViewMode("CLASS")}
-              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-semibold transition-editorial ${
+              className={`px-3 py-1.5 rounded-lg text-xs font-bold uppercase tracking-wider transition-all ${
                 viewMode === "CLASS"
-                  ? "bg-[#0F172A] text-white shadow-2xs"
-                  : "text-slate-500 hover:text-[#0F172A]"
+                  ? "bg-[#1B1916] text-[#FAF8F3] shadow-xs"
+                  : "text-[#555047] hover:text-[#171614]"
               }`}
             >
-              <Users className="h-3.5 w-3.5" />
-              Class View
+              Class Timetable
             </button>
             <button
               type="button"
               onClick={() => setViewMode("TEACHER")}
-              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-semibold transition-editorial ${
+              className={`px-3 py-1.5 rounded-lg text-xs font-bold uppercase tracking-wider transition-all ${
                 viewMode === "TEACHER"
-                  ? "bg-[#0F172A] text-white shadow-2xs"
-                  : "text-slate-500 hover:text-[#0F172A]"
+                  ? "bg-[#1B1916] text-[#FAF8F3] shadow-xs"
+                  : "text-[#555047] hover:text-[#171614]"
               }`}
             >
-              <User className="h-3.5 w-3.5" />
-              Teacher View
+              Faculty Timetable
             </button>
           </div>
         </div>
 
-        <div>
-          {viewMode === "CLASS" ? (
+        {viewMode === "CLASS" ? (
+          <div className="flex items-center gap-2">
+            <span className="text-xs text-[#7A756B] font-mono">Select Cohort:</span>
             <select
               value={selectedSectionId}
               onChange={(e) => setSelectedSectionId(e.target.value)}
-              className="rounded-lg border border-[#E8E7DF] bg-[#FAF9F5] px-3 py-2 text-xs font-semibold text-[#0F172A] focus:outline-none"
+              className="rounded-xl border border-[#DCD7CB] bg-[#FAF8F3] px-3.5 py-2 text-xs font-bold text-[#171614] focus:outline-none focus:ring-2 focus:ring-[#B89B62]"
             >
-              {sections.map((sec) => (
-                <option key={sec.id} value={sec.id}>
-                  {sec.className} — Section {sec.sectionName}
+              {sections.map((s) => (
+                <option key={s.id} value={s.id}>
+                  {s.className} - Section {s.sectionName}
                 </option>
               ))}
             </select>
-          ) : (
+          </div>
+        ) : (
+          <div className="flex items-center gap-2">
+            <span className="text-xs text-[#7A756B] font-mono">Select Faculty:</span>
             <select
               value={selectedTeacherId}
               onChange={(e) => setSelectedTeacherId(e.target.value)}
-              className="rounded-lg border border-[#E8E7DF] bg-[#FAF9F5] px-3 py-2 text-xs font-semibold text-[#0F172A] focus:outline-none"
+              className="rounded-xl border border-[#DCD7CB] bg-[#FAF8F3] px-3.5 py-2 text-xs font-bold text-[#171614] focus:outline-none focus:ring-2 focus:ring-[#B89B62]"
             >
               {teachers.map((t) => (
                 <option key={t.id} value={t.id}>
@@ -147,60 +147,53 @@ export function TimetableClient({
                 </option>
               ))}
             </select>
-          )}
-        </div>
+          </div>
+        )}
       </div>
 
-      {/* Timetable Visual Grid */}
-      <div className="overflow-hidden rounded-xl border border-[#E8E7DF] bg-white shadow-2xs">
+      {/* Grid Matrix Table */}
+      <div className="overflow-hidden rounded-2xl border border-[#E5E0D5] bg-white shadow-2xs">
         <div className="overflow-x-auto">
-          <table className="w-full text-center border-collapse text-xs">
-            <thead>
-              <tr className="border-b border-[#E8E7DF] bg-[#FAF9F5]">
-                <th className="py-3 px-4 text-left font-mono text-[11px] uppercase tracking-wider font-bold text-slate-500 w-28">
-                  Day / Period
-                </th>
+          <table className="w-full text-left text-xs border-collapse min-w-[750px]">
+            <thead className="border-b border-[#EFECE3] bg-[#FAF8F3] text-[#7A756B] font-mono text-[11px] uppercase tracking-wider">
+              <tr>
+                <th className="py-3.5 px-4 font-bold border-r border-[#EFECE3] w-24">Day</th>
                 {periods.map((p) => (
-                  <th
-                    key={p.period}
-                    className="py-3 px-2 font-mono text-[11px] uppercase tracking-wider font-bold text-slate-700 border-l border-[#E8E7DF] min-w-[130px]"
-                  >
+                  <th key={p.period} className="py-3.5 px-3 font-bold border-r border-[#EFECE3] last:border-r-0">
                     <div>P{p.period}</div>
-                    <div className="text-[10px] text-slate-400 font-normal font-sans">
-                      {p.start} – {p.end}
+                    <div className="text-[9px] font-normal text-[#7A756B]">
+                      {p.start}–{p.end}
                     </div>
                   </th>
                 ))}
               </tr>
             </thead>
-            <tbody className="divide-y divide-[#E8E7DF]">
+            <tbody className="divide-y divide-[#EFECE3]">
               {days.map((day) => (
-                <tr key={day} className="hover:bg-[#FAF9F5]/40 transition-colors">
-                  <td className="py-4 px-4 text-left font-mono font-bold text-[#0F172A] bg-[#FAF9F5]/80">
-                    {day.substring(0, 3)}
+                <tr key={day} className="hover:bg-[#FAF8F3]/50 transition-colors">
+                  <td className="py-4 px-4 font-mono font-bold text-[#171614] border-r border-[#EFECE3] bg-[#FAF8F3]/40">
+                    {day.slice(0, 3)}
                   </td>
                   {periods.map((p) => {
                     const slot = getSlot(day, p.period);
                     return (
                       <td
                         key={p.period}
-                        className="py-3 px-2 border-l border-[#E8E7DF] align-top"
+                        className="py-2.5 px-2.5 border-r border-[#EFECE3] last:border-r-0 align-top"
                       >
                         {slot ? (
-                          <div className="rounded-lg bg-white border border-[#E8E7DF] p-2.5 text-left space-y-1 shadow-2xs hover:border-slate-400 transition-editorial">
-                            <div className="font-bold text-[#0F172A] truncate">
-                              {slot.subjectName}
-                            </div>
-                            <div className="text-[10px] text-slate-500 truncate">
+                          <div className="p-2.5 rounded-xl bg-[#FAF8F3] border border-[#E5E0D5] space-y-1 hover:border-[#B89B62] transition-all">
+                            <p className="font-bold text-xs text-[#171614] truncate">{slot.subjectName}</p>
+                            <p className="text-[10px] text-[#7A756B] truncate font-mono">
                               {viewMode === "CLASS" ? slot.teacherName : `${slot.className} (${slot.sectionName})`}
-                            </div>
-                            <div className="text-[9px] font-mono text-slate-400 font-medium">
+                            </p>
+                            <span className="text-[9px] font-mono px-1.5 py-0.5 rounded bg-[#FAF6ED] border border-[#D4B87C]/50 text-[#856D3B] font-bold inline-block">
                               {slot.roomNumber || "Room 104"}
-                            </div>
+                            </span>
                           </div>
                         ) : (
-                          <div className="h-14 rounded-lg border border-dashed border-[#E8E7DF] flex items-center justify-center font-mono text-[10px] text-slate-400">
-                            Free
+                          <div className="h-16 flex items-center justify-center text-[10px] text-[#A8A398] font-mono">
+                            —
                           </div>
                         )}
                       </td>

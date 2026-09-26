@@ -1,25 +1,42 @@
-import * as React from "react";
+import React, { InputHTMLAttributes, forwardRef } from "react";
 import { cn } from "@/lib/utils";
 
-export interface InputProps
-  extends React.InputHTMLAttributes<HTMLInputElement> {}
+export interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
+  error?: string;
+  leftIcon?: React.ReactNode;
+  rightIcon?: React.ReactNode;
+}
 
-const Input = React.forwardRef<HTMLInputElement, InputProps>(
-  ({ className, type, ...props }, ref) => {
+export const Input = forwardRef<HTMLInputElement, InputProps>(
+  ({ className, type = "text", error, leftIcon, rightIcon, ...props }, ref) => {
     return (
-      <input
-        type={type}
-        className={cn(
-          "flex h-9 w-full rounded-lg border border-[#E8E7DF] bg-white px-3 py-1.5 text-xs text-[#0F172A] shadow-2xs transition-editorial file:border-0 file:bg-transparent file:text-xs file:font-medium placeholder:text-slate-400 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-[#0F172A] focus-visible:border-[#0F172A] disabled:cursor-not-allowed disabled:opacity-50",
-          className
+      <div className="relative w-full">
+        {leftIcon && (
+          <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none text-[#7A756B]">
+            {leftIcon}
+          </div>
         )}
-        ref={ref}
-        {...props}
-      />
+        <input
+          type={type}
+          ref={ref}
+          className={cn(
+            "w-full rounded-xl border border-[#DCD7CB] bg-[#FAF8F3] px-3.5 py-2.5 text-xs text-[#171614] placeholder:text-[#7A756B] focus:bg-white focus:border-[#B89B62] focus:outline-none focus:ring-2 focus:ring-[#B89B62] transition-all disabled:cursor-not-allowed disabled:opacity-50",
+            leftIcon && "pl-9",
+            rightIcon && "pr-9",
+            error && "border-[#8C4A47] focus:ring-[#8C4A47]",
+            className
+          )}
+          {...props}
+        />
+        {rightIcon && (
+          <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none text-[#7A756B]">
+            {rightIcon}
+          </div>
+        )}
+        {error && <p className="mt-1 text-[11px] text-[#6F3D3A]">{error}</p>}
+      </div>
     );
   }
 );
+
 Input.displayName = "Input";
-
-export { Input };
-

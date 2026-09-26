@@ -1,4 +1,5 @@
 import React from "react";
+import Link from "next/link";
 import { getCurrentUser } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { redirect } from "next/navigation";
@@ -31,6 +32,15 @@ export default async function SettingsPage() {
         description="Core institutional identity, academic governance rules, messaging relays, and security credentials."
         actions={
           <div className="flex items-center gap-2">
+            <Link href="/settings/student-fields">
+              <Button
+                size="sm"
+                variant="outline"
+                leftIcon={<Sparkles className="h-3.5 w-3.5 text-[#856D3B]" />}
+              >
+                Configure Student Fields
+              </Button>
+            </Link>
             <Button
               size="sm"
               leftIcon={<Save className="h-3.5 w-3.5" />}
@@ -40,6 +50,24 @@ export default async function SettingsPage() {
           </div>
         }
       />
+
+      {/* Schema Extensions Quick Link Banner */}
+      <div className="rounded-2xl border border-[#E5E0D5] bg-[#FAF8F3] p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-2xs">
+        <div className="flex items-center gap-3">
+          <div className="h-9 w-9 rounded-xl bg-[#171614] text-[#FAF8F3] flex items-center justify-center font-bold">
+            <Sparkles className="h-4 w-4 text-[#D4B87C]" />
+          </div>
+          <div>
+            <h3 className="text-xs font-bold text-[#171614]">Institutional Student Schema & Custom Attributes</h3>
+            <p className="text-[11px] text-[#7A756B]">Define custom fields (APAAR ID, Hostel, Transport, Category) that automatically appear in Student Admission.</p>
+          </div>
+        </div>
+        <Link href="/settings/student-fields">
+          <Button size="sm" variant="outline">
+            Manage Custom Fields →
+          </Button>
+        </Link>
+      </div>
 
       <div className="rounded-xl border border-[#E8E7DF] bg-white p-6 shadow-2xs space-y-6">
         <div className="flex items-center justify-between border-b border-[#E8E7DF] pb-4">

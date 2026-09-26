@@ -56,6 +56,7 @@ model Institution {
   exams               Exam[]
   leaveRequests       LeaveRequest[]
   assignments         Assignment[]
+  studentCustomFields StudentCustomField[]
 }
 
 model Campus {
@@ -145,6 +146,7 @@ model User {
   createdTasks  Task[]       @relation("TaskCreator")
   assignedTasks Task[]       @relation("TaskAssignee")
   taskComments  TaskComment[]
+  taskActivities TaskActivity[]
   announcements Announcement[]
   auditLogs     AuditLog[]
   markedAttendance StudentAttendance[]
@@ -193,6 +195,7 @@ model Student {
   admissionNumber      String              @unique
   rollNumber           String?
   firstName            String
+  middleName           String?
   lastName             String
   fullName             String
   email                String?
@@ -200,22 +203,39 @@ model Student {
   dateOfBirth          DateTime
   gender               String              // MALE, FEMALE, OTHER
   bloodGroup           String?
+  nationality          String?             @default("Indian")
+  category             String?             // GENERAL, OBC, SC, ST, EWS
+  aadhaarNumber        String?
   photoUrl             String?
   address              String?
+  addressLine1         String?
+  addressLine2         String?
   city                 String?
   state                String?
   pincode              String?
+  country              String?             @default("India")
   admissionDate        DateTime            @default(now())
+  admissionType        String?             @default("REGULAR") // REGULAR, LATERAL_ENTRY, TRANSFER, SCHOLARSHIP
+  previousSchool       String?
+  previousQualification String?
+  universityRegNumber  String?
+  batch                String?
+  semester             String?
   currentClassId       String
   currentClass         Class               @relation(fields: [currentClassId], references: [id])
   currentSectionId     String
   currentSection       Section             @relation(fields: [currentSectionId], references: [id])
   academicYearId       String
   academicYear         AcademicYear        @relation(fields: [academicYearId], references: [id])
-  status               String              @default("ACTIVE") // ACTIVE, INACTIVE, ALUMNI, SUSPENDED
+  status               String              @default("ACTIVE") // ACTIVE, INACTIVE, DEACTIVATED, ARCHIVED, ALUMNI, SUSPENDED
   emergencyContactName String?
   emergencyContactPhone String?
   notes                String?
+  deactivatedAt        DateTime?
+  deactivatedByUserId  String?
+  deactivationReason   String?
+  restoredAt           DateTime?
+  restoredByUserId     String?
   createdAt            DateTime            @default(now())
   updatedAt            DateTime            @updatedAt
 
@@ -228,6 +248,7 @@ model Student {
   bookIssues           BookIssue[]
   transportAllocation  StudentTransport?
   hostelAllocation     HostelAllocation?
+  customFieldValues    StudentCustomFieldValue[]
 }
 
 model Guardian {
@@ -236,6 +257,8 @@ model Guardian {
   institution   Institution       @relation(fields: [institutionId], references: [id], onDelete: Cascade)
   userId        String?           @unique
   user          User?             @relation(fields: [userId], references: [id])
+  firstName     String?
+  lastName      String?
   fullName      String
   relation      String            @default("PARENT") // FATHER, MOTHER, GUARDIAN
   phone         String
@@ -309,9 +332,12 @@ model Class {
   department    Department?    @relation(fields: [departmentId], references: [id])
   academicYearId String
   academicYear  AcademicYear   @relation(fields: [academicYearId], references: [id])
-  name          String         // "Grade 8", "Grade 9", "BCA Semester 1"
-  code          String         // "G8", "G9", "BCA-1"
-  level         String         @default("SECONDARY") // PRIMARY, MIDDLE, SECONDARY, HIGHER_SECONDARY, UNDERGRADUATE
+  name          String         // "Grade 8", "Grade 9", "B.Tech Computer Science"
+  code          String         // "G8", "G9", "BTECH-CSE"
+  level         String         @default("SECONDARY") // PRIMARY, MIDDLE, SECONDARY, HIGHER_SECONDARY, UNDERGRADUATE, POSTGRADUATE
+  durationYears Int?           @default(1)
+  type          String?        @default("ANNUAL") // SEMESTER, ANNUAL
+  isActive      Boolean        @default(true)
   orderIndex    Int            @default(1)
   createdAt     DateTime       @default(now())
 
@@ -645,10 +671,13 @@ model Task {
   priority        String        @default("MEDIUM") // LOW, MEDIUM, HIGH, URGENT
   dueDate         DateTime?
   status          String        @default("TODO") // TODO, IN_PROGRESS, BLOCKED, COMPLETED
+  completedAt     DateTime?
+  reopenedAt      DateTime?
   createdAt       DateTime      @default(now())
   updatedAt       DateTime      @updatedAt
 
   comments        TaskComment[]
+  activities      TaskActivity[]
 }
 
 model TaskComment {
@@ -857,10 +886,63 @@ model AuditLog {
   user          User?       @relation(fields: [userId], references: [id])
   userEmail     String?
   userName      String?
-  action        String      // CREATE, UPDATE, DELETE, LOGIN, APPROVE, COLLECT_PAYMENT, PUBLISH
-  entity        String      // Student, FeePayment, Payroll, Attendance, Assignment, Task, User
+  action        String      // CREATE, UPDATE, DELETE, LOGIN, APPROVE, COLLECT_PAYMENT, PUBLISH, DEACTIVATE, RESTORE, REASSIGN
+  entity        String      // Student, FeePayment, Payroll, Attendance, Assignment, Task, User, StudentCustomField
   entityId      String?
   details       String?     // JSON string or summary
   ipAddress     String?     @default("127.0.0.1")
   createdAt     DateTime    @default(now())
 }
+
+model TaskActivity {
+  id         String   @id @default(uuid())
+  taskId     String
+  task       Task     @relation(fields: [taskId], references: [id], onDelete: Cascade)
+  userId     String
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  actionType String   // CREATED, ASSIGNED, REASSIGNED, STATUS_CHANGED, PRIORITY_CHANGED, DUE_DATE_CHANGED, COMMENT_ADDED, COMPLETED, REOPENED
+  details    String
+  fromValue  String?
+  toValue    String?
+  createdAt  DateTime @default(now())
+}
+
+model StudentCustomField {
+  id               String   @id @default(uuid())
+  institutionId    String
+  institution      Institution @relation(fields: [institutionId], references: [id], onDelete: Cascade)
+  name             String   // e.g. "APAAR ID", "Hostel Required", "Scholarship Category"
+  key              String   // e.g. "apaar_id", "hostel_required"
+  fieldType        String   // TEXT, TEXTAREA, NUMBER, DATE, DROPDOWN, MULTI_SELECT, BOOLEAN, PHONE, EMAIL
+  options          String?  // JSON string array e.g. '["Day Scholar", "Hostel", "Transport Only"]'
+  placeholder      String?
+  helpText         String?
+  isRequired       Boolean  @default(false)
+  isVisibleToAdmin Boolean  @default(true)
+  isVisibleToTeacher Boolean @default(true)
+  isVisibleToParent  Boolean @default(false)
+  isVisibleToStudent Boolean @default(false)
+  orderIndex       Int      @default(0)
+  isActive         Boolean  @default(true)
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  values           StudentCustomFieldValue[]
+
+  @@unique([institutionId, key])
+}
+
+model StudentCustomFieldValue {
+  id            String             @id @default(uuid())
+  studentId     String
+  student       Student            @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  customFieldId String
+  customField   StudentCustomField @relation(fields: [customFieldId], references: [id], onDelete: Cascade)
+  value         String?            // Stringified value or JSON string
+  createdAt     DateTime           @default(now())
+  updatedAt     DateTime           @updatedAt
+
+  @@unique([studentId, customFieldId])
+}
+
+

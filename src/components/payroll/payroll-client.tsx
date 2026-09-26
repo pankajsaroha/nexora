@@ -11,6 +11,7 @@ import {
   Sparkles,
   Download,
   ArrowRight,
+  Search,
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -44,79 +45,112 @@ export function PayrollClient({
   canManage: boolean;
 }) {
   const [selectedMonth, setSelectedMonth] = useState("9");
+  const [searchQuery, setSearchQuery] = useState("");
   const [selectedPayslip, setSelectedPayslip] = useState<PayrollItemRecord | null>(null);
 
-  const totalPayroll = payrolls.reduce((sum, p) => sum + p.netSalary, 0);
-  const paidCount = payrolls.filter((p) => p.status === "PAID").length;
+  const filteredPayrolls = payrolls.filter((p) => {
+    return (
+      p.teacherName.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      p.employeeId.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      p.designation.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+  });
+
+  const totalPayroll = filteredPayrolls.reduce((sum, p) => sum + p.netSalary, 0);
+  const paidCount = filteredPayrolls.filter((p) => p.status === "PAID").length;
 
   return (
-    <div className="space-y-8 max-w-7xl mx-auto py-2">
+    <div className="space-y-6">
       {/* Editorial Page Header */}
       <PageHeader
-        category="COMPENSATION & PAYROLL DISBURSEMENT"
+        category="Compensation & Payroll Disbursement"
         title="Staff Payroll & Compensation"
         description="Monthly faculty compensation schedules, statutory PF & tax deductions, approval workflows, and digital payslips."
       />
 
       {/* Metrics Strip */}
       <section className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-        <div className="p-5 rounded-xl border border-[#E8E7DF] bg-white space-y-1 shadow-2xs">
-          <span className="text-[11px] font-mono uppercase tracking-wider text-slate-400 font-bold block">
+        <div className="p-5 rounded-xl border border-[#E5E0D5] bg-white space-y-1 shadow-xs">
+          <span className="text-[11px] font-mono uppercase tracking-wider text-[#65705B] font-bold block">
             01 / TOTAL MONTHLY OUTFLOW
           </span>
-          <div className="text-2xl sm:text-3xl font-bold text-[#0F172A] tracking-tight">
+          <div className="text-2xl sm:text-3xl font-bold text-[#171614] tracking-tight">
             {formatCurrency(totalPayroll)}
           </div>
-          <span className="text-[11px] text-slate-500 block font-medium">
+          <span className="text-[11px] text-[#65705B] block font-medium">
             35 Faculty & staff members
           </span>
         </div>
 
-        <div className="p-5 rounded-xl border border-[#E8E7DF] bg-white space-y-1 shadow-2xs">
-          <span className="text-[11px] font-mono uppercase tracking-wider text-slate-400 font-bold block">
+        <div className="p-5 rounded-xl border border-[#E5E0D5] bg-white space-y-1 shadow-xs">
+          <span className="text-[11px] font-mono uppercase tracking-wider text-[#65705B] font-bold block">
             02 / DISBURSED VOUCHERS
           </span>
-          <div className="text-2xl sm:text-3xl font-bold text-emerald-700 tracking-tight">
+          <div className="text-2xl sm:text-3xl font-bold text-[#65705B] tracking-tight">
             {paidCount} / {payrolls.length}
           </div>
-          <span className="text-[11px] text-slate-500 block font-medium">
+          <span className="text-[11px] text-[#65705B] block font-medium">
             Direct bank transfer settled
           </span>
         </div>
 
-        <div className="p-5 rounded-xl border border-[#E8E7DF] bg-white space-y-1 shadow-2xs">
-          <span className="text-[11px] font-mono uppercase tracking-wider text-slate-400 font-bold block">
+        <div className="p-5 rounded-xl border border-[#E5E0D5] bg-white space-y-1 shadow-xs">
+          <span className="text-[11px] font-mono uppercase tracking-wider text-[#65705B] font-bold block">
             03 / CYCLE PERIOD
           </span>
-          <div className="text-2xl sm:text-3xl font-bold text-[#0F172A] tracking-tight">
+          <div className="text-2xl sm:text-3xl font-bold text-[#171614] tracking-tight">
             September 2026
           </div>
-          <span className="text-[11px] text-slate-500 block font-medium">
+          <span className="text-[11px] text-[#65705B] block font-medium">
             AY 2026-27 · Term 1
           </span>
         </div>
 
-        <div className="p-5 rounded-xl border border-[#E8E7DF] bg-white space-y-1 shadow-2xs">
-          <span className="text-[11px] font-mono uppercase tracking-wider text-slate-400 font-bold block">
+        <div className="p-5 rounded-xl border border-[#E5E0D5] bg-white space-y-1 shadow-xs">
+          <span className="text-[11px] font-mono uppercase tracking-wider text-[#65705B] font-bold block">
             04 / COMPLIANCE STATUS
           </span>
-          <div className="text-2xl sm:text-3xl font-bold text-[#0F172A] tracking-tight">
+          <div className="text-2xl sm:text-3xl font-bold text-[#65705B] tracking-tight">
             100%
           </div>
-          <span className="text-[11px] text-slate-500 block font-medium">
-            PF & TDS calculated
+          <span className="text-[11px] text-[#65705B] block font-medium">
+            Statutory PF & Tax verified
           </span>
         </div>
       </section>
 
+      {/* Filter and Search Bar */}
+      <div className="flex flex-col sm:flex-row items-center gap-3 bg-white p-3 rounded-xl border border-[#E5E0D5] shadow-xs">
+        <div className="relative flex-1 w-full">
+          <Search className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-[#65705B]" />
+          <input
+            type="search"
+            placeholder="Search faculty name, employee ID, or department..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="w-full rounded-lg border border-[#E5E0D5] bg-[#FAF8F3] py-2 pl-9 pr-3 text-xs text-[#171614] placeholder:text-[#65705B] focus:outline-none focus:ring-1 focus:ring-[#171614]"
+          />
+        </div>
+
+        <select
+          value={selectedMonth}
+          onChange={(e) => setSelectedMonth(e.target.value)}
+          className="rounded-lg border border-[#E5E0D5] bg-white px-3 py-2 text-xs font-semibold text-[#171614] focus:outline-none w-full sm:w-auto"
+        >
+          <option value="9">September 2026 (Current)</option>
+          <option value="8">August 2026</option>
+          <option value="7">July 2026</option>
+        </select>
+      </div>
+
       {/* Payroll Table */}
-      <div className="overflow-hidden rounded-xl border border-[#E8E7DF] bg-white shadow-2xs">
+      <div className="overflow-hidden rounded-xl border border-[#E5E0D5] bg-white shadow-xs">
         <div className="overflow-x-auto">
           <table className="w-full text-left text-xs">
-            <thead className="border-b border-[#E8E7DF] bg-[#FAF9F5] text-slate-500 font-mono text-[11px] uppercase tracking-wider">
+            <thead className="border-b border-[#E5E0D5] bg-[#FAF8F3] text-[#65705B] font-mono text-[11px] uppercase tracking-wider">
               <tr>
                 <th className="py-3 px-4 font-bold">Faculty Member</th>
-                <th className="py-3 px-4 font-bold">Department & Role</th>
+                <th className="py-3 px-4 font-bold">Designation & Dept</th>
                 <th className="py-3 px-4 font-bold">Basic Pay</th>
                 <th className="py-3 px-4 font-bold">Allowances</th>
                 <th className="py-3 px-4 font-bold">Deductions</th>
@@ -125,58 +159,60 @@ export function PayrollClient({
                 <th className="py-3 px-4 font-bold text-right">Actions</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-[#E8E7DF]">
-              {payrolls.map((p) => (
+            <tbody className="divide-y divide-[#E5E0D5]">
+              {filteredPayrolls.map((p) => (
                 <tr
                   key={p.id}
-                  className="hover:bg-[#FAF9F5] transition-editorial"
+                  className="hover:bg-[#FAF8F3] transition-colors"
                 >
                   <td className="py-3.5 px-4">
-                    <div className="font-bold text-[#0F172A]">
+                    <div className="font-bold text-[#171614]">
                       {p.teacherName}
                     </div>
-                    <div className="text-[11px] text-slate-400 font-mono mt-0.5">{p.employeeId}</div>
+                    <div className="text-[11px] text-[#65705B] font-mono mt-0.5">
+                      Emp ID: {p.employeeId}
+                    </div>
                   </td>
                   <td className="py-3.5 px-4">
-                    <div className="font-semibold text-slate-800">
-                      {p.designation}
+                    <div className="text-[#171614] font-medium">{p.designation}</div>
+                    <div className="text-[11px] text-[#65705B] font-mono">
+                      {p.departmentName || "General Faculty"}
                     </div>
-                    <div className="text-[10px] text-slate-400 font-mono">{p.departmentName || "Science"}</div>
                   </td>
-                  <td className="py-3.5 px-4 font-mono font-medium text-slate-700">
+                  <td className="py-3.5 px-4 font-mono text-[#171614]">
                     {formatCurrency(p.basicSalary)}
                   </td>
-                  <td className="py-3.5 px-4 font-mono font-bold text-emerald-700">
+                  <td className="py-3.5 px-4 font-mono text-[#65705B]">
                     +{formatCurrency(p.allowances)}
                   </td>
-                  <td className="py-3.5 px-4 font-mono font-bold text-rose-600">
+                  <td className="py-3.5 px-4 font-mono text-[#8B3A3A]">
                     -{formatCurrency(p.deductions)}
                   </td>
-                  <td className="py-3.5 px-4 font-mono font-bold text-[#0F172A]">
+                  <td className="py-3.5 px-4 font-mono font-bold text-[#171614] text-sm">
                     {formatCurrency(p.netSalary)}
                   </td>
                   <td className="py-3.5 px-4">
                     <span
                       className={`text-[10px] font-mono uppercase tracking-wider px-2 py-0.5 rounded font-bold ${
                         p.status === "PAID"
-                          ? "bg-emerald-50 text-emerald-800 border border-emerald-200"
+                          ? "bg-[#65705B]/10 text-[#65705B] border border-[#65705B]/20"
                           : p.status === "APPROVED"
-                          ? "bg-sky-50 text-sky-800 border border-sky-200"
-                          : "bg-slate-100 text-slate-700 border border-slate-200"
+                          ? "bg-[#B89B62]/10 text-[#B89B62] border border-[#B89B62]/20"
+                          : "bg-[#FAF8F3] text-[#65705B] border border-[#E5E0D5]"
                       }`}
                     >
                       {p.status}
                     </span>
                   </td>
                   <td className="py-3.5 px-4 text-right">
-                    <button
-                      type="button"
+                    <Button
+                      size="xs"
+                      variant="outline"
                       onClick={() => setSelectedPayslip(p)}
-                      className="inline-flex items-center gap-1 text-[11px] font-semibold text-slate-600 hover:text-[#0F172A] px-2 py-1 rounded hover:bg-slate-100"
+                      leftIcon={<Printer className="h-3 w-3" />}
                     >
-                      <Printer className="w-3 h-3" />
-                      <span>Payslip</span>
-                    </button>
+                      Payslip
+                    </Button>
                   </td>
                 </tr>
               ))}
@@ -185,83 +221,115 @@ export function PayrollClient({
         </div>
       </div>
 
-      {/* Official Payslip Modal */}
+      {/* Payslip Modal */}
       {selectedPayslip && (
         <Modal
           isOpen={!!selectedPayslip}
           onClose={() => setSelectedPayslip(null)}
-          title="Staff Salary Voucher & Payslip"
-          description={`Payslip for Month ${selectedPayslip.month}, ${selectedPayslip.year} • ${selectedPayslip.teacherName}`}
+          title="Staff Salary Payslip Dossier"
+          description={`Cycle: September 2026 • Employee: ${selectedPayslip.teacherName} (${selectedPayslip.employeeId})`}
           size="lg"
         >
-          <div className="space-y-6 text-xs">
-            <div className="p-6 rounded-xl border border-[#E8E7DF] bg-[#FAF9F5] space-y-4">
-              <div className="flex justify-between items-start border-b border-[#E8E7DF] pb-4">
+          <div className="space-y-6">
+            <div className="p-6 rounded-xl border border-[#E5E0D5] bg-white space-y-6 text-xs">
+              {/* Header */}
+              <div className="text-center border-b border-[#171614] pb-4 space-y-1">
+                <div className="text-base font-extrabold tracking-tight text-[#171614] uppercase">
+                  Northstar International Academy
+                </div>
+                <div className="text-xs text-[#65705B]">
+                  Affiliated to CBSE • Institutional Accounts Wing • Knowledge Park III, Greater Noida
+                </div>
+                <div className="text-xs font-mono font-bold text-[#171614] uppercase tracking-widest pt-1">
+                  Salary Slip & Compensation Certificate (September 2026)
+                </div>
+              </div>
+
+              {/* Employee Info */}
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 bg-[#FAF8F3] p-3.5 rounded-lg border border-[#E5E0D5]">
                 <div>
-                  <div className="font-extrabold text-base text-[#0F172A] uppercase tracking-tight">
-                    Northstar International Academy
-                  </div>
-                  <p className="text-slate-500 text-[11px] mt-0.5">Salary Advice & Monthly Payslip</p>
+                  <span className="text-[10px] font-mono uppercase text-[#65705B]">Faculty Name</span>
+                  <div className="font-bold text-[#171614]">{selectedPayslip.teacherName}</div>
                 </div>
-                <div className="text-right">
-                  <span className="font-mono text-[10px] uppercase font-bold text-slate-400 block">VOUCHER STATUS</span>
-                  <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-emerald-50 text-emerald-800 border border-emerald-200 font-bold">
-                    {selectedPayslip.status}
-                  </span>
-                </div>
-              </div>
-
-              <div className="grid grid-cols-2 gap-4 py-2 border-b border-[#E8E7DF]">
                 <div>
-                  <span className="text-slate-400 block font-mono text-[10px]">EMPLOYEE NAME</span>
-                  <p className="font-bold text-sm text-[#0F172A]">{selectedPayslip.teacherName}</p>
-                  <p className="text-slate-500">{selectedPayslip.designation} · {selectedPayslip.departmentName || "Science"}</p>
+                  <span className="text-[10px] font-mono uppercase text-[#65705B]">Employee Code</span>
+                  <div className="font-mono font-bold text-[#171614]">{selectedPayslip.employeeId}</div>
                 </div>
-                <div className="text-right">
-                  <span className="text-slate-400 block font-mono text-[10px]">EMPLOYEE ID & PERIOD</span>
-                  <p className="font-mono font-bold text-[#0F172A]">{selectedPayslip.employeeId}</p>
-                  <p className="text-slate-500">September 2026</p>
+                <div>
+                  <span className="text-[10px] font-mono uppercase text-[#65705B]">Designation</span>
+                  <div className="font-bold text-[#171614]">{selectedPayslip.designation}</div>
                 </div>
-              </div>
-
-              <div className="grid grid-cols-2 gap-6 pt-2">
-                <div className="space-y-2">
-                  <span className="font-mono font-bold uppercase tracking-wider text-slate-400 block text-[10px]">Earnings (₹)</span>
-                  <div className="flex justify-between p-2 rounded bg-white border border-[#E8E7DF]">
-                    <span className="text-slate-600">Basic Pay:</span>
-                    <span className="font-mono font-bold text-[#0F172A]">{formatCurrency(selectedPayslip.basicSalary)}</span>
-                  </div>
-                  <div className="flex justify-between p-2 rounded bg-white border border-[#E8E7DF]">
-                    <span className="text-slate-600">HRA & Allowances:</span>
-                    <span className="font-mono font-bold text-emerald-700">+{formatCurrency(selectedPayslip.allowances)}</span>
-                  </div>
-                </div>
-
-                <div className="space-y-2">
-                  <span className="font-mono font-bold uppercase tracking-wider text-slate-400 block text-[10px]">Deductions (₹)</span>
-                  <div className="flex justify-between p-2 rounded bg-white border border-[#E8E7DF]">
-                    <span className="text-slate-600">Provident Fund (PF):</span>
-                    <span className="font-mono font-bold text-rose-600">-{formatCurrency(selectedPayslip.deductions * 0.6)}</span>
-                  </div>
-                  <div className="flex justify-between p-2 rounded bg-white border border-[#E8E7DF]">
-                    <span className="text-slate-600">TDS / Income Tax:</span>
-                    <span className="font-mono font-bold text-rose-600">-{formatCurrency(selectedPayslip.deductions * 0.4)}</span>
-                  </div>
+                <div>
+                  <span className="text-[10px] font-mono uppercase text-[#65705B]">Department</span>
+                  <div className="font-bold text-[#171614]">{selectedPayslip.departmentName || "Science & Tech"}</div>
                 </div>
               </div>
 
-              <div className="flex justify-between items-center p-3 rounded-lg bg-white border border-[#E8E7DF] pt-3 text-sm font-bold">
-                <span className="text-[#0F172A]">Net Disbursed Compensation:</span>
-                <span className="font-mono text-emerald-700 text-base">{formatCurrency(selectedPayslip.netSalary)}</span>
+              {/* Compensation Breakdown */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div className="border border-[#E5E0D5] rounded-lg overflow-hidden">
+                  <div className="bg-[#FAF8F3] p-2.5 font-mono text-[11px] uppercase font-bold text-[#171614] border-b border-[#E5E0D5]">
+                    Earnings & Allowances
+                  </div>
+                  <div className="p-3 space-y-2">
+                    <div className="flex justify-between">
+                      <span className="text-[#65705B]">Basic Pay</span>
+                      <span className="font-mono font-semibold text-[#171614]">{formatCurrency(selectedPayslip.basicSalary)}</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-[#65705B]">House Rent Allowance (HRA)</span>
+                      <span className="font-mono font-semibold text-[#171614]">{formatCurrency(selectedPayslip.allowances * 0.6)}</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-[#65705B]">Dearness Allowance (DA)</span>
+                      <span className="font-mono font-semibold text-[#171614]">{formatCurrency(selectedPayslip.allowances * 0.4)}</span>
+                    </div>
+                    <div className="flex justify-between border-t border-[#E5E0D5] pt-2 font-bold">
+                      <span className="text-[#171614]">Gross Earnings</span>
+                      <span className="font-mono text-[#65705B]">
+                        {formatCurrency(selectedPayslip.basicSalary + selectedPayslip.allowances)}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="border border-[#E5E0D5] rounded-lg overflow-hidden">
+                  <div className="bg-[#FAF8F3] p-2.5 font-mono text-[11px] uppercase font-bold text-[#171614] border-b border-[#E5E0D5]">
+                    Statutory Deductions
+                  </div>
+                  <div className="p-3 space-y-2">
+                    <div className="flex justify-between">
+                      <span className="text-[#65705B]">Provident Fund (PF)</span>
+                      <span className="font-mono font-semibold text-[#8B3A3A]">-{formatCurrency(selectedPayslip.deductions * 0.7)}</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-[#65705B]">Professional Tax (PT)</span>
+                      <span className="font-mono font-semibold text-[#8B3A3A]">-{formatCurrency(selectedPayslip.deductions * 0.3)}</span>
+                    </div>
+                    <div className="flex justify-between border-t border-[#E5E0D5] pt-2 font-bold">
+                      <span className="text-[#171614]">Total Deductions</span>
+                      <span className="font-mono text-[#8B3A3A]">-{formatCurrency(selectedPayslip.deductions)}</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Net Disbursed Strip */}
+              <div className="p-4 rounded-xl bg-[#FAF8F3] border border-[#E5E0D5] flex justify-between items-center">
+                <div>
+                  <span className="text-[10px] font-mono uppercase text-[#65705B]">Net Salary Disbursed</span>
+                  <div className="text-xl font-bold text-[#171614] font-mono">{formatCurrency(selectedPayslip.netSalary)}</div>
+                </div>
+                <div className="text-right text-[11px] font-mono text-[#65705B]">
+                  <div>Disbursed via HDFC NEFT Transfer</div>
+                  <div className="text-[#171614] font-bold">Ref: #TXN-90281-HDFC</div>
+                </div>
               </div>
             </div>
 
+            {/* Actions */}
             <div className="flex justify-end gap-2">
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => setSelectedPayslip(null)}
-              >
+              <Button variant="outline" size="sm" onClick={() => setSelectedPayslip(null)}>
                 Close
               </Button>
               <Button

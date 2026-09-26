@@ -4,45 +4,69 @@
 
 @layer base {
   :root {
-    --ink: #0F172A;
-    --ink-muted: #64748B;
-    --paper: #FAF9F5;
+    --ink: #171614;
+    --ink-muted: #5C5850;
+    --paper: #F7F4ED;
+    --paper-light: #FAF8F3;
+    --paper-soft: #EFECE3;
     --surface: #FFFFFF;
-    --surface-subtle: #F4F3ED;
-    --line: #E8E7DF;
-    --line-focus: #0F172A;
-    --accent: #1E3A8A;
-    --accent-soft: #EFF6FF;
+    --surface-elevated: #FFFFFF;
+    --surface-champagne: #FAF6ED;
+    --surface-olive: #F4F6F1;
+    --surface-burgundy: #FBF4F4;
+    --line: #E5E0D5;
+    --line-subtle: #EDE8DC;
+    --line-focus: #B89B62;
+    
+    --brand-espresso: #171614;
+    --brand-espresso-light: #262420;
+    --brand-champagne: #B89B62;
+    --brand-champagne-light: #C4AA76;
+    --brand-olive: #65705B;
+    --brand-olive-light: #7A8068;
+    --brand-burgundy: #6F3D3A;
 
-    --background: #FAF9F5;
-    --foreground: #0F172A;
+    --background: #F7F4ED;
+    --foreground: #171614;
     --card: #FFFFFF;
-    --card-foreground: #0F172A;
-    --border: #E8E7DF;
-    --primary: #0F172A;
-    --primary-foreground: #FFFFFF;
-    --muted: #64748B;
+    --card-foreground: #171614;
+    --border: #E5E0D5;
+    --primary: #171614;
+    --primary-foreground: #F7F4ED;
+    --muted: #5C5850;
   }
 
   .dark {
-    --ink: #F8FAFC;
-    --ink-muted: #94A3B8;
-    --paper: #0B0E14;
-    --surface: #121620;
-    --surface-subtle: #171C28;
-    --line: #222938;
-    --line-focus: #F8FAFC;
-    --accent: #38BDF8;
-    --accent-soft: #0C213B;
+    --ink: #F7F4ED;
+    --ink-muted: #A8A398;
+    --paper: #171614;
+    --paper-light: #201E1A;
+    --paper-soft: #262420;
+    --surface: #201E1A;
+    --surface-elevated: #282521;
+    --surface-champagne: #2D271D;
+    --surface-olive: #222620;
+    --surface-burgundy: #2B1E1E;
+    --line: #35322C;
+    --line-subtle: #2A2722;
+    --line-focus: #C4AA76;
 
-    --background: #0B0E14;
-    --foreground: #F8FAFC;
-    --card: #121620;
-    --card-foreground: #F8FAFC;
-    --border: #222938;
-    --primary: #F8FAFC;
-    --primary-foreground: #0F172A;
-    --muted: #94A3B8;
+    --brand-espresso: #F7F4ED;
+    --brand-espresso-light: #EFECE3;
+    --brand-champagne: #C4AA76;
+    --brand-champagne-light: #D4B87C;
+    --brand-olive: #7A8068;
+    --brand-olive-light: #8E967D;
+    --brand-burgundy: #9E5B57;
+
+    --background: #171614;
+    --foreground: #F7F4ED;
+    --card: #201E1A;
+    --card-foreground: #F7F4ED;
+    --border: #35322C;
+    --primary: #F7F4ED;
+    --primary-foreground: #171614;
+    --muted: #A8A398;
   }
 }
 

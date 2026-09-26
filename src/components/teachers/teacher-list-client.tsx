@@ -20,6 +20,7 @@ import { Button } from "@/components/ui/button";
 import { Modal } from "@/components/ui/modal";
 import { Drawer } from "@/components/ui/drawer";
 import { PageHeader } from "@/components/ui/page-header";
+import { PremiumPagination } from "@/components/ui/premium-pagination";
 import { formatCurrency, formatDate } from "@/lib/utils";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -60,6 +61,8 @@ export function TeacherListClient({
   const [drawerTab, setDrawerTab] = useState<"overview" | "academic" | "leave">("overview");
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const pageSize = 15;
   const router = useRouter();
 
   const [formData, setFormData] = useState({
@@ -84,6 +87,9 @@ export function TeacherListClient({
 
     return matchQuery && matchDept;
   });
+
+  const totalPages = Math.ceil(filteredTeachers.length / pageSize) || 1;
+  const paginatedTeachers = filteredTeachers.slice((currentPage - 1) * pageSize, currentPage * pageSize);
 
   const handleCreateTeacher = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -124,421 +130,366 @@ export function TeacherListClient({
     <div className="space-y-8 max-w-7xl mx-auto py-2">
       {/* Editorial Page Header */}
       <PageHeader
-        category="ACADEMIC FACULTY & STAFF"
+        eyebrow="FACULTY & ACADEMIC STAFF DOSSIERS"
         title="Teachers & Staff"
-        description="Faculty directory, class incharge allocations, departmental affiliations, and leave quotas."
-        actions={
-          <div className="flex items-center gap-2.5">
-            <Link href="/import">
-              <Button variant="outline" size="sm" leftIcon={<Upload className="h-3.5 w-3.5" />}>
-                Import CSV
-              </Button>
-            </Link>
-            {canManage && (
-              <Button
-                size="sm"
-                onClick={() => setIsAddModalOpen(true)}
-                leftIcon={<UserPlus className="h-3.5 w-3.5" />}
-              >
-                Add Faculty Member
-              </Button>
-            )}
-          </div>
-        }
-      />
+        description="Comprehensive directory of institutional faculty, department leads, homeroom incharge allocations, and leave ledgers."
+      >
+        <Link href="/import">
+          <Button variant="outline" size="sm" leftIcon={<Upload className="h-3.5 w-3.5 text-[#7A756B]" />}>
+            Import CSV
+          </Button>
+        </Link>
+        {canManage && (
+          <Button
+            size="sm"
+            onClick={() => setIsAddModalOpen(true)}
+            leftIcon={<UserPlus className="h-3.5 w-3.5 text-[#D4B87C]" />}
+          >
+            Onboard Faculty
+          </Button>
+        )}
+      </PageHeader>
 
-      {/* Filter bar */}
-      <div className="flex flex-col sm:flex-row items-center gap-3 bg-white p-3 rounded-xl border border-[#E8E7DF] shadow-2xs">
+      {/* Filter Bar */}
+      <div className="flex flex-col sm:flex-row items-center gap-3 bg-white p-3 rounded-2xl border border-[#E5E0D5] shadow-2xs">
         <div className="relative flex-1 w-full">
-          <Search className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-slate-400" />
+          <Search className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-[#7A756B]" />
           <input
             type="search"
-            placeholder="Search by teacher name, employee ID, or designation..."
+            placeholder="Search by faculty name, designation, or employee code..."
             value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            className="w-full rounded-lg border border-[#E8E7DF] bg-[#FAF9F5] py-2 pl-9 pr-3 text-xs text-[#0F172A] placeholder:text-slate-400 focus:outline-none focus:ring-1 focus:ring-[#0F172A]"
+            onChange={(e) => {
+              setSearch(e.target.value);
+              setCurrentPage(1);
+            }}
+            className="w-full rounded-xl border border-[#DCD7CB] bg-[#FAF8F3] py-2 pl-9 pr-3 text-xs text-[#171614] placeholder:text-[#7A756B] focus:outline-none focus:ring-2 focus:ring-[#B89B62]"
           />
         </div>
 
-        <select
-          value={selectedDept}
-          onChange={(e) => setSelectedDept(e.target.value)}
-          className="rounded-lg border border-[#E8E7DF] bg-white px-3 py-2 text-xs font-medium text-slate-700 focus:outline-none w-full sm:w-auto"
-        >
-          <option value="ALL">All Departments</option>
-          {departments.map((d) => (
-            <option key={d.id} value={d.name}>
-              {d.name}
-            </option>
-          ))}
-        </select>
+        <div className="flex items-center gap-2 w-full sm:w-auto">
+          <select
+            value={selectedDept}
+            onChange={(e) => {
+              setSelectedDept(e.target.value);
+              setCurrentPage(1);
+            }}
+            className="rounded-xl border border-[#DCD7CB] bg-[#FAF8F3] px-3 py-2 text-xs font-semibold text-[#171614] focus:outline-none focus:ring-2 focus:ring-[#B89B62]"
+          >
+            <option value="ALL">All Departments</option>
+            {departments.map((d) => (
+              <option key={d.id} value={d.name}>
+                {d.name}
+              </option>
+            ))}
+          </select>
+        </div>
       </div>
 
-      {/* Table */}
-      <div className="overflow-hidden rounded-xl border border-[#E8E7DF] bg-white shadow-2xs">
+      {/* Teacher Registry Table */}
+      <div className="overflow-hidden rounded-2xl border border-[#E5E0D5] bg-white shadow-2xs">
         <div className="overflow-x-auto">
           <table className="w-full text-left text-xs">
-            <thead className="border-b border-[#E8E7DF] bg-[#FAF9F5] text-slate-500 font-mono text-[11px] uppercase tracking-wider">
+            <thead className="border-b border-[#EFECE3] bg-[#FAF8F3] text-[#7A756B] font-mono text-[11px] uppercase tracking-wider">
               <tr>
-                <th className="py-3 px-4 font-bold">Faculty Member</th>
-                <th className="py-3 px-4 font-bold">Department & Role</th>
-                <th className="py-3 px-4 font-bold">Class Incharge</th>
-                <th className="py-3 px-4 font-bold">Contact</th>
-                {canViewSalary && <th className="py-3 px-4 font-bold">Monthly Compensation</th>}
-                <th className="py-3 px-4 font-bold">Leave Balance</th>
-                <th className="py-3 px-4 font-bold text-right">Actions</th>
+                <th className="py-3.5 px-4 font-bold">Faculty Member</th>
+                <th className="py-3.5 px-4 font-bold">Designation & Department</th>
+                <th className="py-3.5 px-4 font-bold">Homeroom Incharge</th>
+                <th className="py-3.5 px-4 font-bold">Contact Credentials</th>
+                <th className="py-3.5 px-4 font-bold">Employment Status</th>
+                <th className="py-3.5 px-4 font-bold text-right">Actions</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-[#E8E7DF]">
-              {filteredTeachers.map((t) => (
-                <tr
-                  key={t.id}
-                  className="hover:bg-[#FAF9F5] transition-editorial"
-                >
-                  <td className="py-3.5 px-4">
-                    <div className="font-bold text-[#0F172A]">
-                      {t.fullName}
-                    </div>
-                    <div className="text-[11px] text-slate-400 font-mono mt-0.5">{t.employeeId}</div>
-                  </td>
-                  <td className="py-3.5 px-4">
-                    <div className="font-semibold text-slate-800">
-                      {t.designation}
-                    </div>
-                    <div className="text-[11px] text-slate-400 font-mono">
-                      {t.departmentName || "General Faculty"}
-                    </div>
-                  </td>
-                  <td className="py-3.5 px-4">
-                    {t.classTeacherOf ? (
-                      <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-slate-100 text-[#1E3A8A] font-bold border border-blue-200">
-                        {t.classTeacherOf}
-                      </span>
-                    ) : (
-                      <span className="text-slate-400 font-mono">-</span>
-                    )}
-                  </td>
-                  <td className="py-3.5 px-4 text-slate-500">
-                    <div>{t.email}</div>
-                    <div className="text-[10px] text-slate-400 font-mono">{t.phone}</div>
-                  </td>
-                  {canViewSalary && (
-                    <td className="py-3.5 px-4 font-mono font-bold text-[#0F172A]">
-                      {formatCurrency(t.basicSalary)}
-                    </td>
-                  )}
-                  <td className="py-3.5 px-4 text-slate-600">
-                    <span className="font-mono font-bold text-emerald-700">
-                      {t.casualLeaveBalance + t.sickLeaveBalance}
-                    </span>{" "}
-                    days
-                  </td>
-                  <td className="py-3.5 px-4 text-right">
-                    <button
-                      type="button"
-                      onClick={() => setSelectedTeacher(t)}
-                      className="inline-flex items-center gap-1 text-[11px] font-semibold text-slate-600 hover:text-[#0F172A] transition-colors"
-                    >
-                      <span>Profile</span>
-                      <ArrowRight className="w-3 h-3" />
-                    </button>
+            <tbody className="divide-y divide-[#EFECE3]">
+              {paginatedTeachers.length === 0 ? (
+                <tr>
+                  <td colSpan={6} className="py-12 text-center text-[#7A756B] font-mono text-xs">
+                    No faculty records match your filter criteria.
                   </td>
                 </tr>
-              ))}
+              ) : (
+                paginatedTeachers.map((t) => (
+                  <tr
+                    key={t.id}
+                    className="hover:bg-[#FAF8F3] transition-colors"
+                  >
+                    <td className="py-3.5 px-4">
+                      <div className="font-bold text-[#171614]">
+                        {t.fullName}
+                      </div>
+                      <div className="text-[11px] text-[#7A756B] font-mono mt-0.5">
+                        Code: {t.employeeId}
+                      </div>
+                    </td>
+                    <td className="py-3.5 px-4">
+                      <p className="font-semibold text-[#171614]">{t.designation}</p>
+                      <p className="text-[11px] text-[#7A756B] font-mono">{t.departmentName || "General Faculty"}</p>
+                    </td>
+                    <td className="py-3.5 px-4">
+                      {t.classTeacherOf ? (
+                        <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded-md bg-[#FAF6ED] text-[#856D3B] border border-[#D4B87C]/50">
+                          {t.classTeacherOf}
+                        </span>
+                      ) : (
+                        <span className="text-[#7A756B] font-mono text-[11px]">—</span>
+                      )}
+                    </td>
+                    <td className="py-3.5 px-4 font-mono text-[11px] text-[#7A756B]">
+                      <p className="text-[#171614]">{t.email}</p>
+                      <p className="text-[#7A756B] mt-0.5">{t.phone}</p>
+                    </td>
+                    <td className="py-3.5 px-4">
+                      <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded-md bg-[#F4F6F1] text-[#525E4B] border border-[#65705B]/30">
+                        {t.employmentStatus}
+                      </span>
+                    </td>
+                    <td className="py-3.5 px-4 text-right">
+                      <button
+                        type="button"
+                        onClick={() => setSelectedTeacher(t)}
+                        className="inline-flex items-center gap-1 text-[11px] font-bold text-[#856D3B] hover:text-[#171614] transition-colors"
+                      >
+                        <span>Dossier</span>
+                        <ArrowRight className="w-3 h-3" />
+                      </button>
+                    </td>
+                  </tr>
+                ))
+              )}
             </tbody>
           </table>
         </div>
 
-        <div className="p-3.5 border-t border-[#E8E7DF] text-xs text-slate-500 flex items-center justify-between bg-[#FAF9F5]/40">
-          <span className="font-mono text-[11px]">
-            Showing {filteredTeachers.length} Faculty Members
-          </span>
-          <span className="text-[11px] text-slate-400">
-            Northstar International Academy · Biometric Sync Active
-          </span>
+        {/* Pagination Footer */}
+        <div className="p-2 bg-[#FAF8F3]/50">
+          <PremiumPagination
+            currentPage={currentPage}
+            totalPages={totalPages}
+            totalItems={filteredTeachers.length}
+            itemsPerPage={pageSize}
+            onPageChange={setCurrentPage}
+          />
         </div>
       </div>
 
-      {/* Faculty Profile Drawer */}
+      {/* Teacher Profile Right-Side Slide-Over Drawer */}
       {selectedTeacher && (
         <Drawer
           isOpen={!!selectedTeacher}
           onClose={() => setSelectedTeacher(null)}
           title={selectedTeacher.fullName}
-          subtitle={`Employee ID: ${selectedTeacher.employeeId} • ${selectedTeacher.designation}`}
-          width="xl"
-          footer={
-            <div className="flex items-center justify-between w-full">
-              <span className="text-[11px] text-slate-400 font-mono">Institutional Faculty Dossier</span>
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => setSelectedTeacher(null)}
-              >
-                Close Drawer
-              </Button>
-            </div>
-          }
+          description={`Employee Code: ${selectedTeacher.employeeId} • ${selectedTeacher.designation}`}
+          size="lg"
         >
-          {/* Drawer Tab Navigation */}
-          <div className="flex border-b border-[#E8E7DF] pb-2 gap-2">
-            {[
-              { id: "overview", label: "Profile & Identity" },
-              { id: "academic", label: "Classes & Timetable" },
-              { id: "leave", label: "Leave & Payroll" },
-            ].map((tab) => (
-              <button
-                key={tab.id}
-                onClick={() => setDrawerTab(tab.id as any)}
-                className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-editorial ${
-                  drawerTab === tab.id
-                    ? "bg-[#0F172A] text-white shadow-2xs"
-                    : "text-slate-500 hover:text-[#0F172A] hover:bg-[#FAF9F5]"
-                }`}
-              >
-                {tab.label}
-              </button>
-            ))}
-          </div>
-
-          {/* TAB 1: OVERVIEW */}
-          {drawerTab === "overview" && (
-            <div className="space-y-6">
-              {/* Profile Card Header */}
-              <div className="flex items-center gap-4 p-4 rounded-xl bg-white border border-[#E8E7DF] shadow-2xs">
-                <div className="w-12 h-12 rounded-lg bg-[#0F172A] text-white flex items-center justify-center font-bold text-lg shadow-xs">
-                  {selectedTeacher.fullName[0]}
-                </div>
-                <div>
-                  <div className="flex items-center gap-2">
-                    <h4 className="text-sm font-bold text-[#0F172A]">{selectedTeacher.fullName}</h4>
-                    <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-emerald-50 text-emerald-800 border border-emerald-200 font-bold">
-                      {selectedTeacher.employmentStatus}
-                    </span>
-                  </div>
-                  <p className="text-xs font-semibold text-[#1E3A8A] mt-0.5">
-                    {selectedTeacher.designation}
-                  </p>
-                  <p className="text-[11px] text-slate-500 mt-0.5">Department of {selectedTeacher.departmentName || "Science"}</p>
-                </div>
-              </div>
-
-              {/* Contact and Service Info */}
-              <div className="space-y-2">
-                <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-slate-400 block">
-                  Professional Credentials & Contact
-                </span>
-                <div className="grid grid-cols-2 gap-3 p-4 rounded-xl border border-[#E8E7DF] bg-white text-xs shadow-2xs">
-                  <div>
-                    <span className="text-slate-400 text-[11px]">Official Email:</span>
-                    <p className="font-mono text-[#0F172A] truncate mt-0.5">{selectedTeacher.email}</p>
-                  </div>
-                  <div>
-                    <span className="text-slate-400 text-[11px]">Direct Phone:</span>
-                    <p className="font-mono text-[#0F172A] mt-0.5">{selectedTeacher.phone}</p>
-                  </div>
-                  <div>
-                    <span className="text-slate-400 text-[11px]">Joining Date:</span>
-                    <p className="font-semibold text-[#0F172A] mt-0.5">{formatDate(selectedTeacher.joiningDate)}</p>
-                  </div>
-                  <div>
-                    <span className="text-slate-400 text-[11px]">Academic Qualification:</span>
-                    <p className="font-semibold text-[#0F172A] mt-0.5">M.Sc., B.Ed., NET Certified</p>
-                  </div>
-                </div>
-              </div>
+          <div className="space-y-6">
+            {/* Drawer Tab Navigation */}
+            <div className="flex border-b border-[#EFECE3] pb-2 gap-2">
+              {[
+                { id: "overview", label: "Overview" },
+                { id: "academic", label: "Lecture Allocations" },
+                { id: "leave", label: "Leave & Compensation" },
+              ].map((tab) => (
+                <button
+                  key={tab.id}
+                  onClick={() => setDrawerTab(tab.id as any)}
+                  className={`px-3 py-1.5 rounded-xl text-xs font-bold uppercase tracking-wider transition-all ${
+                    drawerTab === tab.id
+                      ? "bg-[#1B1916] text-[#FAF8F3] shadow-xs"
+                      : "text-[#7A756B] hover:text-[#171614] hover:bg-[#FAF8F3]"
+                  }`}
+                >
+                  {tab.label}
+                </button>
+              ))}
             </div>
-          )}
 
-          {/* TAB 2: ACADEMIC & CLASSES */}
-          {drawerTab === "academic" && (
-            <div className="space-y-6">
-              {/* Class Teacher Allocation */}
-              <div className="p-4 rounded-xl bg-white border border-[#E8E7DF] shadow-2xs space-y-1">
-                <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-slate-400">Class Incharge Responsibility</span>
-                <div className="text-lg font-bold text-[#0F172A]">
-                  {selectedTeacher.classTeacherOf || "Grade 8A"}
-                </div>
-                <p className="text-[11px] text-slate-500">35 Enrolled Students • Room 104 • Term 1 Attendance Custodian</p>
-              </div>
-
-              {/* Today's Timetable Preview */}
-              <div className="space-y-2">
-                <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-slate-400 block">
-                  Assigned Lecture Schedule
-                </span>
-                <div className="space-y-2 text-xs">
-                  {[
-                    { period: "Period 1 (08:30 - 09:15)", subject: "Mathematics", class: "Grade 8A", room: "Room 104" },
-                    { period: "Period 3 (10:15 - 11:00)", subject: "Advanced Algebra", class: "Grade 10B", room: "Room 201" },
-                    { period: "Period 5 (12:30 - 01:15)", subject: "Applied Mathematics", class: "Grade 11 Science", room: "Lab 2" },
-                    { period: "Period 6 (01:15 - 02:00)", subject: "Doubt Clearance", class: "Grade 8A", room: "Room 104" },
-                  ].map((slot, i) => (
-                    <div key={i} className="flex items-center justify-between p-3 rounded-lg border border-[#E8E7DF] bg-white shadow-2xs">
-                      <div>
-                        <p className="font-bold text-[#0F172A]">{slot.subject}</p>
-                        <p className="text-[11px] text-slate-400">{slot.period}</p>
-                      </div>
-                      <div className="text-right">
-                        <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-slate-100 text-slate-700 font-bold">{slot.class}</span>
-                        <p className="text-[10px] text-slate-400 font-mono mt-0.5">{slot.room}</p>
-                      </div>
+            {/* TAB 1: OVERVIEW */}
+            {drawerTab === "overview" && (
+              <div className="space-y-6">
+                <div className="flex items-center gap-4 p-4 rounded-2xl bg-white border border-[#E5E0D5] shadow-2xs">
+                  <div className="w-12 h-12 rounded-xl bg-[#1B1916] text-[#FAF8F3] flex items-center justify-center font-bold text-lg shadow-xs">
+                    {selectedTeacher.fullName[0]}
+                  </div>
+                  <div>
+                    <div className="flex items-center gap-2">
+                      <h4 className="text-sm font-bold text-[#171614]">{selectedTeacher.fullName}</h4>
+                      <span className="text-[10px] font-mono px-2 py-0.5 rounded-md bg-[#F4F6F1] text-[#525E4B] border border-[#65705B]/30 font-bold">
+                        {selectedTeacher.employmentStatus}
+                      </span>
                     </div>
-                  ))}
+                    <p className="text-xs text-[#7A756B] mt-0.5">
+                      {selectedTeacher.designation} • {selectedTeacher.departmentName || "General Faculty"}
+                    </p>
+                    <p className="text-[11px] text-[#7A756B] font-mono mt-0.5">{selectedTeacher.email}</p>
+                  </div>
                 </div>
-              </div>
-            </div>
-          )}
 
-          {/* TAB 3: LEAVE & PAYROLL */}
-          {drawerTab === "leave" && (
-            <div className="space-y-6">
-              {/* Salary KPI */}
-              {canViewSalary && (
-                <div className="p-4 rounded-xl bg-white border border-[#E8E7DF] shadow-2xs space-y-1">
-                  <div className="flex items-center justify-between">
-                    <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-slate-400">Monthly Compensation</span>
-                    <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-emerald-50 text-emerald-800 border border-emerald-200 font-bold">Disbursed via HDFC</span>
-                  </div>
-                  <div className="text-2xl font-bold text-[#0F172A]">
-                    {formatCurrency(selectedTeacher.basicSalary)}
-                  </div>
-                  <p className="text-[11px] text-slate-500">Basic Pay + Academic Allowance + PF Contribution</p>
-                </div>
-              )}
-
-              {/* Leave Quota Matrix */}
-              <div className="space-y-2">
-                <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-slate-400 block">
-                  Institutional Leave Balances
-                </span>
-                <div className="grid grid-cols-3 gap-2 text-center">
-                  <div className="p-3 rounded-xl border border-[#E8E7DF] bg-white shadow-2xs">
-                    <span className="text-[10px] font-mono font-bold text-slate-400 uppercase">Casual Leave</span>
-                    <div className="text-xl font-bold text-[#0F172A] mt-1">{selectedTeacher.casualLeaveBalance}</div>
-                    <span className="text-[10px] text-slate-400 font-mono">Days Left</span>
-                  </div>
-                  <div className="p-3 rounded-xl border border-[#E8E7DF] bg-white shadow-2xs">
-                    <span className="text-[10px] font-mono font-bold text-slate-400 uppercase">Sick Leave</span>
-                    <div className="text-xl font-bold text-[#0F172A] mt-1">{selectedTeacher.sickLeaveBalance}</div>
-                    <span className="text-[10px] text-slate-400 font-mono">Days Left</span>
-                  </div>
-                  <div className="p-3 rounded-xl border border-[#E8E7DF] bg-white shadow-2xs">
-                    <span className="text-[10px] font-mono font-bold text-slate-400 uppercase">Earned Leave</span>
-                    <div className="text-xl font-bold text-[#0F172A] mt-1">{selectedTeacher.earnedLeaveBalance}</div>
-                    <span className="text-[10px] text-slate-400 font-mono">Days Left</span>
+                <div className="space-y-2">
+                  <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-[#7A756B] block">
+                    Institutional Record
+                  </span>
+                  <div className="grid grid-cols-2 gap-3 p-4 rounded-2xl border border-[#E5E0D5] bg-white text-xs shadow-2xs">
+                    <div>
+                      <span className="text-[#7A756B] text-[11px]">Employee ID:</span>
+                      <p className="font-bold text-[#171614] font-mono mt-0.5">{selectedTeacher.employeeId}</p>
+                    </div>
+                    <div>
+                      <span className="text-[#7A756B] text-[11px]">Date of Joining:</span>
+                      <p className="font-bold text-[#171614] mt-0.5">{formatDate(selectedTeacher.joiningDate)}</p>
+                    </div>
+                    <div>
+                      <span className="text-[#7A756B] text-[11px]">Contact Telephone:</span>
+                      <p className="font-bold text-[#171614] font-mono mt-0.5">{selectedTeacher.phone}</p>
+                    </div>
+                    <div>
+                      <span className="text-[#7A756B] text-[11px]">Homeroom Charge:</span>
+                      <p className="font-bold text-[#171614] mt-0.5">{selectedTeacher.classTeacherOf || "None Allocated"}</p>
+                    </div>
                   </div>
                 </div>
               </div>
+            )}
 
-              <div className="pt-2">
-                <Link href="/attendance/leaves" className="block">
-                  <Button className="w-full">
-                    Manage Leave Records & Applications
-                  </Button>
-                </Link>
+            {/* TAB 3: LEAVE & COMPENSATION */}
+            {drawerTab === "leave" && (
+              <div className="space-y-6">
+                <div className="grid grid-cols-3 gap-3 text-center">
+                  <div className="p-4 rounded-2xl bg-white border border-[#E5E0D5] shadow-2xs">
+                    <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-[#7A756B] block">Casual</span>
+                    <div className="text-xl font-extrabold text-[#171614] mt-1">{selectedTeacher.casualLeaveBalance} Days</div>
+                  </div>
+                  <div className="p-4 rounded-2xl bg-white border border-[#E5E0D5] shadow-2xs">
+                    <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-[#7A756B] block">Sick</span>
+                    <div className="text-xl font-extrabold text-[#171614] mt-1">{selectedTeacher.sickLeaveBalance} Days</div>
+                  </div>
+                  <div className="p-4 rounded-2xl bg-white border border-[#E5E0D5] shadow-2xs">
+                    <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-[#7A756B] block">Earned</span>
+                    <div className="text-xl font-extrabold text-[#171614] mt-1">{selectedTeacher.earnedLeaveBalance} Days</div>
+                  </div>
+                </div>
+
+                {canViewSalary && (
+                  <div className="p-4 rounded-2xl border border-[#E5E0D5] bg-white space-y-2 shadow-2xs">
+                    <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-[#7A756B] block">Monthly Gross Remuneration</span>
+                    <div className="text-2xl font-extrabold text-[#171614]">{formatCurrency(selectedTeacher.basicSalary)}</div>
+                    <p className="text-[11px] text-[#7A756B]">Includes statutory Provident Fund (PF) and House Rent Allowance (HRA) provisions.</p>
+                  </div>
+                )}
               </div>
-            </div>
-          )}
+            )}
+          </div>
         </Drawer>
       )}
 
-      {/* Add Teacher Modal */}
+      {/* New Teacher Onboarding Modal */}
       {isAddModalOpen && (
         <Modal
           isOpen={isAddModalOpen}
           onClose={() => setIsAddModalOpen(false)}
-          title="Add New Faculty Member"
-          description="Create employee profile and system credentials for a new educator."
-          size="md"
+          title="Onboard Faculty Member"
+          description="Create a dedicated educator profile with institutional email, subject portfolio, and system credentials."
+          size="lg"
         >
           <form onSubmit={handleCreateTeacher} className="space-y-4 text-xs">
-            <div className="grid grid-cols-2 gap-3">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
-                <label className="block font-semibold text-slate-700 mb-1">First Name *</label>
+                <label className="block font-bold text-[#171614] mb-1">
+                  First Name *
+                </label>
                 <input
                   type="text"
                   required
                   value={formData.firstName}
                   onChange={(e) => setFormData({ ...formData, firstName: e.target.value })}
-                  className="w-full rounded-lg border border-[#E8E7DF] bg-white p-2.5 text-xs text-[#0F172A] focus:outline-none focus:ring-1 focus:ring-[#0F172A]"
+                  placeholder="e.g. Ananya"
+                  className="w-full rounded-xl border border-[#DCD7CB] bg-[#FAF8F3] p-2.5 text-xs text-[#171614] focus:outline-none focus:ring-2 focus:ring-[#B89B62]"
                 />
               </div>
+
               <div>
-                <label className="block font-semibold text-slate-700 mb-1">Last Name *</label>
+                <label className="block font-bold text-[#171614] mb-1">
+                  Last Name *
+                </label>
                 <input
                   type="text"
                   required
                   value={formData.lastName}
                   onChange={(e) => setFormData({ ...formData, lastName: e.target.value })}
-                  className="w-full rounded-lg border border-[#E8E7DF] bg-white p-2.5 text-xs text-[#0F172A] focus:outline-none focus:ring-1 focus:ring-[#0F172A]"
+                  placeholder="e.g. Sharma"
+                  className="w-full rounded-xl border border-[#DCD7CB] bg-[#FAF8F3] p-2.5 text-xs text-[#171614] focus:outline-none focus:ring-2 focus:ring-[#B89B62]"
                 />
               </div>
-            </div>
 
-            <div>
-              <label className="block font-semibold text-slate-700 mb-1">Official Email *</label>
-              <input
-                type="email"
-                required
-                value={formData.email}
-                onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                placeholder="name@northstar.edu.in"
-                className="w-full rounded-lg border border-[#E8E7DF] bg-white p-2.5 text-xs text-[#0F172A] focus:outline-none focus:ring-1 focus:ring-[#0F172A]"
-              />
-            </div>
-
-            <div className="grid grid-cols-2 gap-3">
               <div>
-                <label className="block font-semibold text-slate-700 mb-1">Phone *</label>
+                <label className="block font-bold text-[#171614] mb-1">
+                  Department *
+                </label>
+                <select
+                  value={formData.departmentId}
+                  onChange={(e) => setFormData({ ...formData, departmentId: e.target.value })}
+                  className="w-full rounded-xl border border-[#DCD7CB] bg-[#FAF8F3] p-2.5 text-xs text-[#171614] font-semibold"
+                >
+                  {departments.map((d) => (
+                    <option key={d.id} value={d.id}>
+                      {d.name} ({d.code})
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              <div>
+                <label className="block font-bold text-[#171614] mb-1">
+                  Designation *
+                </label>
+                <input
+                  type="text"
+                  required
+                  value={formData.designation}
+                  onChange={(e) => setFormData({ ...formData, designation: e.target.value })}
+                  placeholder="e.g. Mathematics Lead"
+                  className="w-full rounded-xl border border-[#DCD7CB] bg-[#FAF8F3] p-2.5 text-xs text-[#171614] focus:outline-none focus:ring-2 focus:ring-[#B89B62]"
+                />
+              </div>
+
+              <div>
+                <label className="block font-bold text-[#171614] mb-1">
+                  Official Email *
+                </label>
+                <input
+                  type="email"
+                  required
+                  value={formData.email}
+                  onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                  placeholder="teacher@northstar.edu.in"
+                  className="w-full rounded-xl border border-[#DCD7CB] bg-[#FAF8F3] p-2.5 text-xs text-[#171614] focus:outline-none focus:ring-2 focus:ring-[#B89B62]"
+                />
+              </div>
+
+              <div>
+                <label className="block font-bold text-[#171614] mb-1">
+                  Phone *
+                </label>
                 <input
                   type="tel"
                   required
                   value={formData.phone}
                   onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
                   placeholder="+91 98100 00000"
-                  className="w-full rounded-lg border border-[#E8E7DF] bg-white p-2.5 text-xs text-[#0F172A] focus:outline-none focus:ring-1 focus:ring-[#0F172A]"
+                  className="w-full rounded-xl border border-[#DCD7CB] bg-[#FAF8F3] p-2.5 text-xs text-[#171614] focus:outline-none focus:ring-2 focus:ring-[#B89B62]"
                 />
               </div>
-              <div>
-                <label className="block font-semibold text-slate-700 mb-1">Department *</label>
-                <select
-                  value={formData.departmentId}
-                  onChange={(e) => setFormData({ ...formData, departmentId: e.target.value })}
-                  className="w-full rounded-lg border border-[#E8E7DF] bg-white p-2.5 text-xs text-[#0F172A]"
-                >
-                  {departments.map((d) => (
-                    <option key={d.id} value={d.id}>
-                      {d.name}
-                    </option>
-                  ))}
-                </select>
-              </div>
             </div>
 
-            <div>
-              <label className="block font-semibold text-slate-700 mb-1">Designation *</label>
-              <input
-                type="text"
-                required
-                value={formData.designation}
-                onChange={(e) => setFormData({ ...formData, designation: e.target.value })}
-                placeholder="e.g. Senior Faculty - Mathematics"
-                className="w-full rounded-lg border border-[#E8E7DF] bg-white p-2.5 text-xs text-[#0F172A] focus:outline-none focus:ring-1 focus:ring-[#0F172A]"
-              />
-            </div>
-
-            <div className="flex justify-end gap-2 pt-4 border-t border-[#E8E7DF]">
+            <div className="flex justify-end gap-2.5 pt-4 border-t border-[#EFECE3]">
               <Button
                 type="button"
-                variant="outline"
+                variant="secondary"
                 size="sm"
                 onClick={() => setIsAddModalOpen(false)}
               >
                 Cancel
               </Button>
               <Button type="submit" size="sm" isLoading={isSubmitting}>
-                Save Faculty Record
+                Onboard Faculty
               </Button>
             </div>
           </form>

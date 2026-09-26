@@ -19,6 +19,7 @@ export default async function AttendancePage({
 
   // Fetch sections in institution
   const sections = await prisma.section.findMany({
+    where: { class: { institutionId: user.institutionId } },
     include: { class: true },
     orderBy: [{ class: { orderIndex: "asc" } }, { name: "asc" }],
   });

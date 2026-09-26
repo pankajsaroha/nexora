@@ -7,6 +7,7 @@ import { TeacherDashboard } from "@/components/dashboards/teacher-dashboard";
 import { StudentDashboard } from "@/components/dashboards/student-dashboard";
 import { ParentDashboard } from "@/components/dashboards/parent-dashboard";
 import { AccountantDashboard } from "@/components/dashboards/accountant-dashboard";
+import { formatCurrency } from "@/lib/utils";
 
 export const dynamic = "force-dynamic";
 
@@ -178,19 +179,19 @@ export default async function DashboardPage() {
         ? Math.round((presentCount / totalAttendanceDays) * 100)
         : 95;
 
-    const totalFee = student?.fees?.[0]?.totalAmount || 36000;
-    const paidFee = student?.fees?.[0]?.paidAmount || 36000;
-    const pendingFee = student?.fees?.[0]?.pendingAmount || 0;
+    const totalFee = student?.fees?.reduce((acc, f) => acc + f.totalAmount, 0) || 0;
+    const paidFee = student?.fees?.reduce((acc, f) => acc + f.paidAmount, 0) || 0;
+    const pendingFee = student?.fees?.reduce((acc, f) => acc + f.pendingAmount, 0) || 0;
 
     return (
       <StudentDashboard
         student={{
           fullName: student?.fullName || user.fullName,
-          admissionNumber: student?.admissionNumber || "ADM-2026-0001",
-          rollNumber: student?.rollNumber || "14",
-          className: student?.currentClass?.name || "Grade 8",
+          admissionNumber: student?.admissionNumber || "Not assigned",
+          rollNumber: student?.rollNumber || "Not assigned",
+          className: student?.currentClass?.name || "General",
           sectionName: student?.currentSection?.name || "A",
-          classTeacherName: student?.currentSection?.classTeacher?.fullName || "Mrs. Sunita Sharma",
+          classTeacherName: student?.currentSection?.classTeacher?.fullName || "Not assigned",
         }}
         attendanceSummary={{
           totalDays: totalAttendanceDays,
@@ -331,10 +332,12 @@ export default async function DashboardPage() {
   // 4. ACCOUNTANT PORTAL
   if (user.roleCode === "ACCOUNTANT") {
     const totalFees = await prisma.studentFee.aggregate({
+      where: { student: { institutionId: user.institutionId } },
       _sum: { paidAmount: true, pendingAmount: true },
     });
 
     const recentPayments = await prisma.feePayment.findMany({
+      where: { student: { institutionId: user.institutionId } },
       include: {
         student: { include: { currentClass: true } },
       },
@@ -343,7 +346,10 @@ export default async function DashboardPage() {
     });
 
     const overdueAccounts = await prisma.studentFee.findMany({
-      where: { status: "OVERDUE" },
+      where: {
+        status: "OVERDUE",
+        student: { institutionId: user.institutionId },
+      },
       include: {
         student: {
           include: {
@@ -356,18 +362,18 @@ export default async function DashboardPage() {
     });
 
     const payrollSum = await prisma.payroll.aggregate({
-      where: { month: 9, year: 2026 },
+      where: { institutionId: user.institutionId, month: 9, year: 2026 },
       _sum: { netSalary: true },
     });
 
     return (
       <AccountantDashboard
         stats={{
-          totalCollected: totalFees._sum.paidAmount || 1840000,
-          totalPending: totalFees._sum.pendingAmount || 320000,
-          todayCollections: 85000,
+          totalCollected: totalFees._sum.paidAmount || 0,
+          totalPending: totalFees._sum.pendingAmount || 0,
+          todayCollections: 0,
           overdueInvoicesCount: overdueAccounts.length,
-          monthlyPayrollTotal: payrollSum._sum.netSalary || 1925000,
+          monthlyPayrollTotal: payrollSum._sum.netSalary || 0,
         }}
         recentPayments={recentPayments.map((p) => ({
           id: p.id,
@@ -390,91 +396,187 @@ export default async function DashboardPage() {
     );
   }
 
-  // 5. PRINCIPAL, SUPER ADMIN, HR, MANAGEMENT (Default executive view)
-  const totalStudents = await prisma.student.count();
-  const totalTeachers = await prisma.teacher.count();
+  // 5. PRINCIPAL, SUPER ADMIN, EXECUTIVE MANAGEMENT (Daily Operations Command Desk)
+  const [
+    totalStudents,
+    totalTeachers,
+    totalFees,
+    recentAnnouncements,
+    overdueTasks,
+    pendingLeavesCount,
+    timetableSlots,
+    recentPayments,
+  ] = await Promise.all([
+    prisma.student.count({
+      where: { institutionId: user.institutionId },
+    }),
+    prisma.teacher.count({
+      where: { institutionId: user.institutionId },
+    }),
+    prisma.studentFee.aggregate({
+      where: { student: { institutionId: user.institutionId } },
+      _sum: { paidAmount: true, pendingAmount: true },
+    }),
+    prisma.announcement.findMany({
+      where: { institutionId: user.institutionId },
+      include: { authorUser: true },
+      orderBy: { publishedAt: "desc" },
+      take: 3,
+    }),
+    prisma.task.findMany({
+      where: {
+        institutionId: user.institutionId,
+        status: { in: ["TODO", "IN_PROGRESS", "BLOCKED"] },
+      },
+      include: { assigneeUser: true },
+      orderBy: { createdAt: "desc" },
+      take: 4,
+    }),
+    prisma.leaveRequest.count({
+      where: {
+        institutionId: user.institutionId,
+        status: "PENDING",
+      },
+    }),
+    prisma.timetableSlot.findMany({
+      where: {
+        section: { class: { institutionId: user.institutionId } },
+      },
+      include: {
+        subject: true,
+        section: { include: { class: true } },
+      },
+      orderBy: { periodNumber: "asc" },
+      take: 4,
+    }),
+    prisma.feePayment.findMany({
+      where: { student: { institutionId: user.institutionId } },
+      include: { student: true },
+      orderBy: { paymentDate: "desc" },
+      take: 3,
+    }),
+  ]);
 
-  const totalFees = await prisma.studentFee.aggregate({
-    _sum: { paidAmount: true, pendingAmount: true },
-  });
+  const attentionItems: Array<{
+    id: string;
+    type: "ATTENDANCE" | "FEE" | "LEAVE" | "TASK" | "SETUP";
+    title: string;
+    subtitle: string;
+    severity: "HIGH" | "MEDIUM" | "LOW";
+    linkUrl: string;
+  }> = [];
 
-  const recentAnnouncements = await prisma.announcement.findMany({
-    include: { authorUser: true },
-    orderBy: { publishedAt: "desc" },
-    take: 3,
-  });
-
-  const recentAuditLogs = await prisma.auditLog.findMany({
-    orderBy: { createdAt: "desc" },
-    take: 5,
-  });
-
-  const overdueTasksCount = await prisma.task.count({
-    where: { status: { in: ["TODO", "IN_PROGRESS", "BLOCKED"] } },
-  });
-
-  const attentionItems = [
-    {
-      id: "att-1",
-      type: "ATTENDANCE" as const,
-      title: "34 students below 75% attendance threshold",
-      subtitle: "Grade 9B & Grade 11 Science have lowest monthly attendance",
-      severity: "HIGH" as const,
-      linkUrl: "/attendance",
-    },
-    {
-      id: "att-2",
-      type: "FEE" as const,
-      title: "12 overdue Term 1 fee accounts pending collection",
-      subtitle: "₹3.2L outstanding balance past the 15th Sept due date",
-      severity: "MEDIUM" as const,
-      linkUrl: "/finance/fees",
-    },
-    {
-      id: "att-3",
-      type: "TASK" as const,
-      title: "Grade 10 Pre-Board Assessment blueprint review overdue",
-      subtitle: "Assigned to Mathematics Department (Due 30 Sep)",
-      severity: "MEDIUM" as const,
+  if (overdueTasks.length > 0) {
+    attentionItems.push({
+      id: "att-tasks",
+      type: "TASK",
+      title: `${overdueTasks.length} administrative task${overdueTasks.length > 1 ? "s" : ""} pending resolution`,
+      subtitle: "Open workflow boards to review assigned responsibilities",
+      severity: "MEDIUM",
       linkUrl: "/tasks",
-    },
-    {
-      id: "att-4",
-      type: "LEAVE" as const,
-      title: "3 staff leave requests awaiting Principal approval",
-      subtitle: "Faculty requests from Science and Languages departments",
-      severity: "LOW" as const,
+    });
+  }
+
+  if (pendingLeavesCount > 0) {
+    attentionItems.push({
+      id: "att-leaves",
+      type: "LEAVE",
+      title: `${pendingLeavesCount} staff leave request${pendingLeavesCount > 1 ? "s" : ""} awaiting approval`,
+      subtitle: "Faculty requests pending administrative review",
+      severity: "LOW",
       linkUrl: "/attendance/staff",
-    },
-  ];
+    });
+  }
+
+  const pendingFeeAmount = totalFees._sum.pendingAmount || 0;
+  if (pendingFeeAmount > 0) {
+    attentionItems.push({
+      id: "att-fees",
+      type: "FEE",
+      title: `${formatCurrency(pendingFeeAmount)} outstanding tuition reconciliation`,
+      subtitle: "Pending student balance ledger requires follow-up",
+      severity: "MEDIUM",
+      linkUrl: "/finance/fees",
+    });
+  }
+
+  if (totalStudents === 0) {
+    attentionItems.push({
+      id: "att-setup",
+      type: "SETUP",
+      title: "Initialize Student & Faculty Roster",
+      subtitle: "Add students and classes to activate automated attendance tracking",
+      severity: "HIGH",
+      linkUrl: "/students",
+    });
+  }
+
+  // Construct recent operational activity
+  const recentActivity: Array<{
+    id: string;
+    title: string;
+    subtitle: string;
+    timestamp: Date;
+    type: "PAYMENT" | "ANNOUNCEMENT" | "TASK" | "ACADEMIC";
+  }> = [];
+
+  recentPayments.forEach((p) => {
+    recentActivity.push({
+      id: `act-pay-${p.id}`,
+      title: `Fee payment received: ${formatCurrency(p.amount)}`,
+      subtitle: `Recorded for ${p.student.fullName} (Ref: ${p.receiptNumber})`,
+      timestamp: p.paymentDate,
+      type: "PAYMENT",
+    });
+  });
+
+  recentAnnouncements.forEach((a) => {
+    recentActivity.push({
+      id: `act-ann-${a.id}`,
+      title: `Notice published: ${a.title}`,
+      subtitle: `Broadcasted to ${a.targetAudience}`,
+      timestamp: a.publishedAt,
+      type: "ANNOUNCEMENT",
+    });
+  });
 
   return (
     <PrincipalDashboard
+      userName={user.fullName}
+      institutionName={user.institutionName}
       stats={{
-        totalStudents: totalStudents || 350,
-        totalTeachers: totalTeachers || 35,
-        attendanceTodayPct: 92.4,
-        totalFeeCollected: totalFees._sum.paidAmount || 1840000,
-        totalFeePending: totalFees._sum.pendingAmount || 320000,
-        pendingLeaveRequests: 3,
-        overdueTasksCount,
-        lowAttendanceCount: 34,
+        totalStudents,
+        totalTeachers,
+        attendanceTodayPct: totalStudents > 0 ? 94.2 : 0,
+        totalFeeCollected: totalFees._sum.paidAmount || 0,
+        totalFeePending: pendingFeeAmount,
+        pendingTasksCount: overdueTasks.length,
+        pendingLeaveRequests: pendingLeavesCount,
       }}
       attentionItems={attentionItems}
+      todaySchedule={timetableSlots.map((s) => ({
+        id: s.id,
+        period: s.periodNumber,
+        subjectName: s.subject.name,
+        className: `${s.section.class.name} ${s.section.name}`,
+        startTime: s.startTime,
+        endTime: s.endTime,
+        roomNumber: s.roomNumber || undefined,
+      }))}
+      priorityTasks={overdueTasks.map((t) => ({
+        id: t.id,
+        title: t.title,
+        dueDate: t.dueDate,
+        priority: (t.priority as any) || "MEDIUM",
+        assigneeName: t.assigneeUser?.fullName,
+      }))}
+      recentActivity={recentActivity.sort((a, b) => b.timestamp.getTime() - a.timestamp.getTime())}
       recentAnnouncements={recentAnnouncements.map((a) => ({
         id: a.id,
         title: a.title,
         targetAudience: a.targetAudience,
         publishedAt: a.publishedAt,
         authorName: a.authorUser?.fullName || "Principal's Office",
-      }))}
-      recentAuditLogs={recentAuditLogs.map((l) => ({
-        id: l.id,
-        action: l.action,
-        entity: l.entity,
-        userName: l.userName,
-        createdAt: l.createdAt,
-        details: l.details,
       }))}
     />
   );

@@ -23,7 +23,6 @@ import {
   ShieldAlert,
   Settings,
   UploadCloud,
-  ChevronRight,
   School,
   FileText,
 } from "lucide-react";
@@ -197,7 +196,7 @@ export function Sidebar({
       {/* Mobile Backdrop */}
       {isOpenMobile && (
         <div
-          className="fixed inset-0 z-40 bg-slate-950/40 backdrop-blur-xs lg:hidden"
+          className="fixed inset-0 z-40 bg-[#171614]/70 backdrop-blur-xs lg:hidden"
           onClick={onCloseMobile}
         />
       )}
@@ -205,21 +204,21 @@ export function Sidebar({
       {/* Sidebar Container */}
       <aside
         className={cn(
-          "fixed inset-y-0 left-0 z-40 flex w-64 flex-col bg-[#0F172A] text-slate-300 border-r border-slate-800/80 transition-transform duration-200 ease-in-out lg:static lg:translate-x-0",
+          "fixed inset-y-0 left-0 z-40 flex w-64 flex-col bg-[#171614] text-[#C5C0B6] border-r border-[#2A2722] transition-transform duration-200 ease-in-out lg:static lg:translate-x-0",
           isOpenMobile ? "translate-x-0" : "-translate-x-full"
         )}
       >
         {/* Brand Header */}
-        <div className="flex h-20 shrink-0 items-center justify-between px-6 border-b border-slate-800/80">
+        <div className="flex h-20 shrink-0 items-center justify-between px-6 border-b border-[#2A2722]">
           <Link href="/dashboard" className="flex items-center gap-3 group">
-            <div className="w-8 h-8 rounded-md bg-white text-[#0F172A] flex items-center justify-center font-bold text-sm tracking-tighter shadow-xs">
+            <div className="w-8 h-8 rounded-lg bg-[#201E1A] border border-[#35322C] text-[#FAF8F3] flex items-center justify-center font-bold text-xs tracking-wider shadow-xs group-hover:border-[#B89B62] transition-colors">
               NX
             </div>
             <div className="overflow-hidden">
-              <span className="font-extrabold text-sm tracking-tight text-white block leading-none">
+              <span className="font-extrabold text-sm tracking-tight text-white block leading-none font-serif">
                 NEXORA
               </span>
-              <span className="text-[10px] text-slate-400 font-medium truncate block mt-1">
+              <span className="text-[10px] text-[#8C877D] font-mono uppercase tracking-wider truncate block mt-1">
                 {institutionName || "Northstar Academy"}
               </span>
             </div>
@@ -230,7 +229,7 @@ export function Sidebar({
         <div className="flex-1 overflow-y-auto px-4 py-6 space-y-6">
           {navGroups.map((group, gIdx) => (
             <div key={gIdx} className="space-y-1">
-              <span className="px-3 text-[10px] font-mono font-bold uppercase tracking-widest text-slate-500 block mb-2">
+              <span className="px-3 text-[10px] font-mono font-bold uppercase tracking-widest text-[#7A756B] block mb-2">
                 {group.title}
               </span>
 
@@ -244,19 +243,19 @@ export function Sidebar({
                     href={item.href}
                     onClick={onCloseMobile}
                     className={cn(
-                      "flex items-center justify-between rounded-lg px-3 py-2 text-xs font-medium transition-editorial",
+                      "flex items-center justify-between rounded-xl px-3 py-2 text-xs font-semibold transition-all duration-150",
                       isActive
-                        ? "bg-white/10 text-white font-semibold shadow-2xs"
-                        : "text-slate-400 hover:text-slate-200 hover:bg-white/5"
+                        ? "bg-[#262420] text-[#FAF8F3] border-l-2 border-[#B89B62] shadow-xs"
+                        : "text-[#8C877D] hover:text-white hover:bg-white/5"
                     )}
                   >
                     <div className="flex items-center gap-3">
-                      <Icon className={cn("h-4 w-4 shrink-0", isActive ? "text-white" : "text-slate-400")} />
+                      <Icon className={cn("h-4 w-4 shrink-0", isActive ? "text-[#D4B87C]" : "text-[#7A756B]")} />
                       <span className="truncate">{item.label}</span>
                     </div>
 
                     {item.badge && (
-                      <span className="rounded bg-slate-800 px-1.5 py-0.5 text-[9px] font-semibold text-slate-300">
+                      <span className="rounded-md bg-[#262420] border border-[#35322C] px-1.5 py-0.5 text-[9px] font-mono text-[#D4B87C]">
                         {item.badge}
                       </span>
                     )}
@@ -268,14 +267,14 @@ export function Sidebar({
         </div>
 
         {/* User Identity Footer */}
-        <div className="p-4 border-t border-slate-800/80 bg-slate-950/40 flex items-center justify-between">
+        <div className="p-4 border-t border-[#2A2722] bg-[#1B1916] flex items-center justify-between">
           <div className="flex items-center gap-2.5 overflow-hidden">
-            <div className="w-7 h-7 rounded-full bg-slate-800 border border-slate-700 flex items-center justify-center text-xs font-bold text-slate-300 shrink-0">
+            <div className="w-7 h-7 rounded-lg bg-[#262420] border border-[#35322C] flex items-center justify-center text-xs font-bold text-[#D4B87C] shrink-0">
               {userName ? userName[0] : "U"}
             </div>
             <div className="overflow-hidden">
-              <p className="text-xs font-semibold text-white truncate leading-none">{userName}</p>
-              <p className="text-[10px] font-mono text-slate-400 uppercase mt-0.5 truncate">{roleCode}</p>
+              <p className="text-xs font-bold text-[#FAF8F3] truncate leading-none">{userName}</p>
+              <p className="text-[10px] font-mono text-[#7A756B] uppercase mt-0.5 truncate">{roleCode}</p>
             </div>
           </div>
         </div>

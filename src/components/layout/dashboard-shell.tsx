@@ -27,7 +27,7 @@ export function DashboardShell({ user, notifications, children }: DashboardShell
   const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false);
 
   return (
-    <div className="flex min-h-screen bg-[#FAF9F5] text-[#0F172A] font-sans antialiased selection:bg-[#0F172A] selection:text-white">
+    <div className="flex min-h-screen bg-[#F7F4ED] text-[#171614] font-sans antialiased selection:bg-[#171614] selection:text-[#F7F4ED]">
       {/* Sidebar */}
       <Sidebar
         roleCode={user.roleCode}
@@ -51,4 +51,3 @@ export function DashboardShell({ user, notifications, children }: DashboardShell
     </div>
   );
 }
-

@@ -3,17 +3,17 @@
 import React from "react";
 import { Modal } from "./modal";
 import { Button } from "./button";
-import { AlertTriangle } from "lucide-react";
+import { AlertTriangle, Info, CheckCircle2 } from "lucide-react";
 
 export interface ConfirmationDialogProps {
   isOpen: boolean;
   onClose: () => void;
-  onConfirm: () => void;
+  onConfirm: () => void | Promise<void>;
   title: string;
   message: string;
-  confirmLabel?: string;
-  cancelLabel?: string;
-  isDestructive?: boolean;
+  confirmText?: string;
+  cancelText?: string;
+  variant?: "danger" | "warning" | "info";
   isLoading?: boolean;
 }
 
@@ -23,36 +23,67 @@ export function ConfirmationDialog({
   onConfirm,
   title,
   message,
-  confirmLabel = "Confirm",
-  cancelLabel = "Cancel",
-  isDestructive = false,
+  confirmText = "Confirm",
+  cancelText = "Cancel",
+  variant = "danger",
   isLoading = false,
 }: ConfirmationDialogProps) {
+  const getIcon = () => {
+    switch (variant) {
+      case "danger":
+        return <AlertTriangle className="h-6 w-6 text-[#6F3D3A]" />;
+      case "warning":
+        return <AlertTriangle className="h-6 w-6 text-[#856D3B]" />;
+      case "info":
+        return <Info className="h-6 w-6 text-[#856D3B]" />;
+      default:
+        return <CheckCircle2 className="h-6 w-6 text-[#525E4B]" />;
+    }
+  };
+
+  const getButtonVariant = () => {
+    switch (variant) {
+      case "danger":
+        return "danger";
+      case "warning":
+        return "champagne";
+      default:
+        return "primary";
+    }
+  };
+
   return (
     <Modal isOpen={isOpen} onClose={onClose} title={title} size="sm">
-      <div className="flex items-start gap-3">
-        {isDestructive && (
-          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-rose-100 dark:bg-rose-950 text-rose-600 dark:text-rose-400">
-            <AlertTriangle className="h-5 w-5" />
+      <div className="space-y-5">
+        <div className="flex items-start gap-4">
+          <div className="rounded-xl bg-[#FAF8F3] border border-[#E5E0D5] p-2.5 shrink-0">
+            {getIcon()}
           </div>
-        )}
-        <div className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
-          {message}
+          <p className="text-xs text-[#555047] leading-relaxed pt-1">
+            {message}
+          </p>
         </div>
-      </div>
 
-      <div className="mt-6 flex items-center justify-end gap-2">
-        <Button variant="outline" size="sm" onClick={onClose} disabled={isLoading}>
-          {cancelLabel}
-        </Button>
-        <Button
-          variant={isDestructive ? "danger" : "primary"}
-          size="sm"
-          onClick={onConfirm}
-          isLoading={isLoading}
-        >
-          {confirmLabel}
-        </Button>
+        <div className="flex items-center justify-end gap-3 pt-3 border-t border-[#EFECE3]">
+          <Button
+            type="button"
+            variant="secondary"
+            size="sm"
+            onClick={onClose}
+            disabled={isLoading}
+          >
+            {cancelText}
+          </Button>
+          <Button
+            type="button"
+            variant={getButtonVariant()}
+            size="sm"
+            onClick={onConfirm}
+            isLoading={isLoading}
+          >
+            {confirmText}
+          </Button>
+        </div>
       </div>
     </Modal>
   );

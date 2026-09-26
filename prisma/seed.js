@@ -8,28 +8,28 @@ async function main() {
 
   // 1. Institution: Northstar International Academy
   const institution = await prisma.institution.upsert({
-    where: { code: "NORTHSTAR" },
+    where: { code: "NORTHSTAR-2026" },
     update: {
       name: "Northstar International Academy",
-      brandingColor: "#4f46e5",
+      brandingColor: "#0F172A",
     },
     create: {
       name: "Northstar International Academy",
-      code: "NORTHSTAR",
+      code: "NORTHSTAR-2026",
       type: "SCHOOL",
       address: "Plot 12, Knowledge Park III",
       city: "Greater Noida",
       state: "Uttar Pradesh",
       pincode: "201306",
-      phone: "+91 120 4567890",
-      email: "contact@northstar.edu.in",
+      phone: "+91 98100 11000",
+      email: "admissions@northstar.edu.in",
       website: "https://northstar.edu.in",
       timezone: "Asia/Kolkata",
       currency: "INR",
       currencySymbol: "₹",
       workingDays: "Mon,Tue,Wed,Thu,Fri,Sat",
       workingHours: "08:00 - 15:30",
-      brandingColor: "#4f46e5",
+      brandingColor: "#0F172A",
     },
   });
 
@@ -90,13 +90,11 @@ async function main() {
 
   const departments = {};
   for (const d of deptData) {
-    const existingDept = await prisma.department.findFirst({
+    let existingDept = await prisma.department.findFirst({
       where: { institutionId: institution.id, code: d.code },
     });
-    if (existingDept) {
-      departments[d.code] = existingDept;
-    } else {
-      departments[d.code] = await prisma.department.create({
+    if (!existingDept) {
+      existingDept = await prisma.department.create({
         data: {
           institutionId: institution.id,
           name: d.name,
@@ -104,13 +102,13 @@ async function main() {
         },
       });
     }
+    departments[d.code] = existingDept;
   }
 
   // Common password hash for demo accounts: "demo123"
   const passwordHash = await bcrypt.hash("demo123", 10);
 
   // 5. Create Core Connected Demo Users
-  // Principal: Dr. Arvind Menon
   const userPrincipal = await prisma.user.upsert({
     where: { email: "principal@nexora.demo" },
     update: { fullName: "Dr. Arvind Menon", roleCode: "PRINCIPAL" },
@@ -124,7 +122,6 @@ async function main() {
     },
   });
 
-  // Admin
   const userAdmin = await prisma.user.upsert({
     where: { email: "admin@nexora.demo" },
     update: { fullName: "System Super Admin", roleCode: "SUPER_ADMIN" },
@@ -138,7 +135,6 @@ async function main() {
     },
   });
 
-  // Teacher: Mrs. Ananya Sharma (Maths Lead & Class Teacher of Grade 8A)
   const userTeacher = await prisma.user.upsert({
     where: { email: "teacher@nexora.demo" },
     update: { fullName: "Mrs. Ananya Sharma", roleCode: "TEACHER" },
@@ -152,7 +148,6 @@ async function main() {
     },
   });
 
-  // Accountant: Mrs. Neha Kapoor
   const userAccountant = await prisma.user.upsert({
     where: { email: "accountant@nexora.demo" },
     update: { fullName: "Mrs. Neha Kapoor", roleCode: "ACCOUNTANT" },
@@ -166,7 +161,6 @@ async function main() {
     },
   });
 
-  // Parent: Mr. Rahul Sharma (Father of Aarav & Meera)
   const userParent = await prisma.user.upsert({
     where: { email: "parent@nexora.demo" },
     update: { fullName: "Mr. Rahul Sharma", roleCode: "PARENT" },
@@ -180,7 +174,6 @@ async function main() {
     },
   });
 
-  // Student: Aarav Sharma (Grade 8A, Roll #12)
   const userStudent = await prisma.user.upsert({
     where: { email: "student@nexora.demo" },
     update: { fullName: "Aarav Sharma", roleCode: "STUDENT" },
@@ -232,10 +225,7 @@ async function main() {
 
     let t = await prisma.teacher.findFirst({
       where: {
-        OR: [
-          { email: tp.email },
-          { employeeId: empId },
-        ],
+        OR: [{ email: tp.email }, { employeeId: empId }],
       },
     });
 
@@ -283,7 +273,7 @@ async function main() {
 
   console.log(`✅ ${createdTeachers.length} Teachers verified.`);
 
-  // 7. Classes & Sections: Grade 8A assigned to Mrs. Ananya Sharma
+  // 7. Classes & Sections
   const classConfigs = [
     { name: "Grade 5", code: "G5", level: "PRIMARY", sections: ["A", "B"] },
     { name: "Grade 6", code: "G6", level: "MIDDLE", sections: ["A", "B", "C"] },
@@ -316,7 +306,6 @@ async function main() {
     }
 
     for (const sName of cc.sections) {
-      // Grade 8A has Mrs. Ananya Sharma (Teacher 0)
       const is8A = cc.code === "G8" && sName === "A";
       const teacherAssigned = is8A ? createdTeachers[0] : createdTeachers[(secIdx + 1) % createdTeachers.length];
 
@@ -346,7 +335,37 @@ async function main() {
     }
   }
 
-  // 8. Guardian: Mr. Rahul Sharma
+  // 8. Subjects
+  const subjectList = [
+    { name: "Mathematics", code: "MATH-801", dept: "MATH" },
+    { name: "General Science & Physics", code: "SCI-801", dept: "SCI" },
+    { name: "English Literature & Grammar", code: "ENG-801", dept: "LANG" },
+    { name: "Social Science & History", code: "SOC-801", dept: "SOC" },
+    { name: "Computer Science & Python", code: "CS-801", dept: "SCI" },
+    { name: "Hindi Language & Sahitya", code: "HIN-801", dept: "LANG" },
+  ];
+
+  const createdSubjects = {};
+  for (const s of subjectList) {
+    let sub = await prisma.subject.findFirst({
+      where: { institutionId: institution.id, code: s.code },
+    });
+    if (!sub) {
+      sub = await prisma.subject.create({
+        data: {
+          institutionId: institution.id,
+          name: s.name,
+          code: s.code,
+          departmentId: departments[s.dept]?.id || null,
+          credits: 4,
+          type: "THEORY",
+        },
+      });
+    }
+    createdSubjects[s.code] = sub;
+  }
+
+  // 9. Guardian: Mr. Rahul Sharma
   let guardianSharma = await prisma.guardian.findFirst({
     where: { institutionId: institution.id, email: "parent@nexora.demo" },
   });
@@ -372,69 +391,372 @@ async function main() {
     });
   }
 
-  // 9. Aarav Sharma (Grade 8A, Roll 12) & Meera Sharma (Grade 5B, Roll 08)
+  // 10. Students: Aarav Sharma (Grade 8A) & Meera Sharma (Grade 5B) & Classmates
   const sec8A = createdSections.find((s) => s.classCode === "G8" && s.name === "A");
   const sec5B = createdSections.find((s) => s.classCode === "G5" && s.name === "B") || createdSections[0];
 
-  // Aarav
+  // Aarav Sharma
   let aarav = await prisma.student.findFirst({
     where: { admissionNumber: "ADM-2026-0001" },
   });
-  if (aarav) {
-    await prisma.student.update({
-      where: { id: aarav.id },
+  if (!aarav) {
+    aarav = await prisma.student.create({
       data: {
-        fullName: "Aarav Sharma",
-        firstName: "Aarav",
-        lastName: "Sharma",
-        rollNumber: "12",
+        institutionId: institution.id,
+        campusId: campusMain.id,
+        academicYearId: academicYear.id,
         currentClassId: sec8A.classId,
         currentSectionId: sec8A.id,
         userId: userStudent.id,
+        admissionNumber: "ADM-2026-0001",
+        rollNumber: "12",
+        firstName: "Aarav",
+        lastName: "Sharma",
+        fullName: "Aarav Sharma",
+        email: "student@nexora.demo",
+        phone: "+91 98100 11006",
+        dateOfBirth: new Date("2012-05-14"),
+        gender: "MALE",
+        bloodGroup: "B+",
+        address: "Tower B-402, Sector 137, Noida",
         emergencyContactName: "Mr. Rahul Sharma",
         emergencyContactPhone: "+91 98100 11005",
+        status: "ACTIVE",
+      },
+    });
+  } else {
+    await prisma.student.update({
+      where: { id: aarav.id },
+      data: {
+        userId: userStudent.id,
+        currentClassId: sec8A.classId,
+        currentSectionId: sec8A.id,
       },
     });
   }
 
-  // Meera (Sibling)
+  // Meera Sharma (Sibling)
   let meera = await prisma.student.findFirst({
     where: { admissionNumber: "ADM-2026-0002" },
   });
-  if (meera) {
-    await prisma.student.update({
-      where: { id: meera.id },
+  if (!meera) {
+    meera = await prisma.student.create({
       data: {
-        fullName: "Meera Sharma",
-        firstName: "Meera",
-        lastName: "Sharma",
-        rollNumber: "08",
+        institutionId: institution.id,
+        campusId: campusMain.id,
+        academicYearId: academicYear.id,
         currentClassId: sec5B.classId,
         currentSectionId: sec5B.id,
+        admissionNumber: "ADM-2026-0002",
+        rollNumber: "08",
+        firstName: "Meera",
+        lastName: "Sharma",
+        fullName: "Meera Sharma",
+        email: "meera.sharma@northstar.edu.in",
+        phone: "+91 98100 11005",
+        dateOfBirth: new Date("2015-08-22"),
+        gender: "FEMALE",
+        bloodGroup: "O+",
+        address: "Tower B-402, Sector 137, Noida",
         emergencyContactName: "Mr. Rahul Sharma",
         emergencyContactPhone: "+91 98100 11005",
+        status: "ACTIVE",
       },
     });
   }
 
-  // Ensure Guardianship junction is linked
-  if (aarav && guardianSharma) {
-    await prisma.studentGuardian.upsert({
-      where: { studentId_guardianId: { studentId: aarav.id, guardianId: guardianSharma.id } },
-      update: { isPrimary: true },
-      create: { studentId: aarav.id, guardianId: guardianSharma.id, isPrimary: true },
+  // Link Guardianship
+  await prisma.studentGuardian.upsert({
+    where: { studentId_guardianId: { studentId: aarav.id, guardianId: guardianSharma.id } },
+    update: { isPrimary: true },
+    create: { studentId: aarav.id, guardianId: guardianSharma.id, isPrimary: true },
+  });
+
+  await prisma.studentGuardian.upsert({
+    where: { studentId_guardianId: { studentId: meera.id, guardianId: guardianSharma.id } },
+    update: { isPrimary: true },
+    create: { studentId: meera.id, guardianId: guardianSharma.id, isPrimary: true },
+  });
+
+  // Seed Classmates for Grade 8A so Mrs. Ananya Sharma has a full roster
+  const classmates = [
+    { fn: "Rohan", ln: "Verma", roll: "01", gender: "MALE" },
+    { fn: "Ananya", ln: "Iyer", roll: "02", gender: "FEMALE" },
+    { fn: "Kabir", ln: "Kapoor", roll: "03", gender: "MALE" },
+    { fn: "Diya", ln: "Mehta", roll: "04", gender: "FEMALE" },
+    { fn: "Ishaan", ln: "Gupta", roll: "05", gender: "MALE" },
+    { fn: "Sanya", ln: "Malhotra", roll: "06", gender: "FEMALE" },
+    { fn: "Arjun", ln: "Patel", roll: "07", gender: "MALE" },
+    { fn: "Rhea", ln: "Chopra", roll: "08", gender: "FEMALE" },
+    { fn: "Aditya", ln: "Rao", roll: "09", gender: "MALE" },
+    { fn: "Tanvi", ln: "Bansal", roll: "10", gender: "FEMALE" },
+    { fn: "Vivaan", ln: "Reddy", roll: "11", gender: "MALE" },
+  ];
+
+  for (const cm of classmates) {
+    const adm = `ADM-2026-00${cm.roll}`;
+    let s = await prisma.student.findFirst({ where: { admissionNumber: adm } });
+    if (!s) {
+      await prisma.student.create({
+        data: {
+          institutionId: institution.id,
+          campusId: campusMain.id,
+          academicYearId: academicYear.id,
+          currentClassId: sec8A.classId,
+          currentSectionId: sec8A.id,
+          admissionNumber: adm,
+          rollNumber: cm.roll,
+          firstName: cm.fn,
+          lastName: cm.ln,
+          fullName: `${cm.fn} ${cm.ln}`,
+          email: `${cm.fn.toLowerCase()}.${cm.ln.toLowerCase()}@northstar.edu.in`,
+          dateOfBirth: new Date("2012-03-10"),
+          gender: cm.gender,
+          bloodGroup: "A+",
+          status: "ACTIVE",
+        },
+      });
+    }
+  }
+
+  // 11. Timetable Slots for Grade 8A (Mrs. Ananya Sharma)
+  const mathSub = createdSubjects["MATH-801"];
+  const sciSub = createdSubjects["SCI-801"];
+  const engSub = createdSubjects["ENG-801"];
+  const socSub = createdSubjects["SOC-801"];
+  const csSub = createdSubjects["CS-801"];
+  const teacherAnanya = createdTeachers[0]; // Mrs. Ananya Sharma
+
+  const scheduleSlots = [
+    { period: 1, day: "MONDAY", sub: mathSub, teacher: teacherAnanya, start: "08:30", end: "09:15", room: "Room-104" },
+    { period: 2, day: "MONDAY", sub: sciSub, teacher: createdTeachers[1] || teacherAnanya, start: "09:15", end: "10:00", room: "Room-104" },
+    { period: 3, day: "MONDAY", sub: engSub, teacher: createdTeachers[3] || teacherAnanya, start: "10:15", end: "11:00", room: "Room-104" },
+    { period: 4, day: "MONDAY", sub: socSub, teacher: createdTeachers[4] || teacherAnanya, start: "11:00", end: "11:45", room: "Room-104" },
+    { period: 5, day: "MONDAY", sub: csSub, teacher: createdTeachers[2] || teacherAnanya, start: "12:30", end: "01:15", room: "Computer Lab 2" },
+  ];
+
+  for (const sl of scheduleSlots) {
+    await prisma.timetableSlot.upsert({
+      where: {
+        sectionId_dayOfWeek_periodNumber: {
+          sectionId: sec8A.id,
+          dayOfWeek: sl.day,
+          periodNumber: sl.period,
+        },
+      },
+      update: {
+        subjectId: sl.sub.id,
+        teacherId: sl.teacher.id,
+        startTime: sl.start,
+        endTime: sl.end,
+        roomNumber: sl.room,
+      },
+      create: {
+        sectionId: sec8A.id,
+        subjectId: sl.sub.id,
+        teacherId: sl.teacher.id,
+        dayOfWeek: sl.day,
+        periodNumber: sl.period,
+        startTime: sl.start,
+        endTime: sl.end,
+        roomNumber: sl.room,
+      },
     });
   }
 
-  if (meera && guardianSharma) {
-    await prisma.studentGuardian.upsert({
-      where: { studentId_guardianId: { studentId: meera.id, guardianId: guardianSharma.id } },
-      update: { isPrimary: true },
-      create: { studentId: meera.id, guardianId: guardianSharma.id, isPrimary: true },
+  // 12. Active Assignments for Mrs. Ananya Sharma
+  let assign1 = await prisma.assignment.findFirst({
+    where: { sectionId: sec8A.id, title: "Polynomial Factorization Practice Set" },
+  });
+  if (!assign1) {
+    assign1 = await prisma.assignment.create({
+      data: {
+        institutionId: institution.id,
+        sectionId: sec8A.id,
+        subjectId: mathSub.id,
+        teacherId: teacherAnanya.id,
+        title: "Polynomial Factorization Practice Set",
+        description: "Complete Exercise 4.2 Problems 1-15 from NCERT Mathematics Textbook. Show complete working steps.",
+        dueDate: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000), // in 3 days
+        priority: "HIGH",
+        status: "PUBLISHED",
+        maxMarks: 25,
+      },
     });
   }
 
-  console.log("🎉 NEXORA institutional connected personas seed completed successfully!");
+  let assign2 = await prisma.assignment.findFirst({
+    where: { sectionId: sec8A.id, title: "Linear Equations in One Variable - Real World Problems" },
+  });
+  if (!assign2) {
+    assign2 = await prisma.assignment.create({
+      data: {
+        institutionId: institution.id,
+        sectionId: sec8A.id,
+        subjectId: mathSub.id,
+        teacherId: teacherAnanya.id,
+        title: "Linear Equations in One Variable - Real World Problems",
+        description: "Submit word problem application worksheet for Chapter 2.",
+        dueDate: new Date(Date.now() + 6 * 24 * 60 * 60 * 1000), // in 6 days
+        priority: "MEDIUM",
+        status: "PUBLISHED",
+        maxMarks: 50,
+      },
+    });
+  }
+
+  // 13. Tasks for Teacher
+  await prisma.task.createMany({
+    data: [
+      {
+        institutionId: institution.id,
+        createdById: userPrincipal.id,
+        assigneeUserId: userTeacher.id,
+        title: "Submit Grade 8 Mid-Term Question Paper Blueprint",
+        description: "Prepare standard CBSE blueprint for Grade 8 Mathematics mid-term evaluation.",
+        priority: "HIGH",
+        status: "IN_PROGRESS",
+        dueDate: new Date(Date.now() + 4 * 24 * 60 * 60 * 1000),
+      },
+      {
+        institutionId: institution.id,
+        createdById: userPrincipal.id,
+        assigneeUserId: userTeacher.id,
+        title: "Parent-Teacher Conference Slot Allocation",
+        description: "Finalize meeting schedule slots for Grade 8A parents on Saturday.",
+        priority: "MEDIUM",
+        status: "TODO",
+        dueDate: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
+      },
+    ],
+    skipDuplicates: true,
+  });
+
+  // 14. Fee Structure & Student Fees for Aarav & Meera
+  let feeCat = await prisma.feeCategory.findFirst({
+    where: { institutionId: institution.id, name: "Tuition & Academic Term Fee" },
+  });
+  if (!feeCat) {
+    feeCat = await prisma.feeCategory.create({
+      data: {
+        institutionId: institution.id,
+        name: "Tuition & Academic Term Fee",
+        description: "Regular term tuition, lab charges and library services",
+      },
+    });
+  }
+
+  let feeStruct8 = await prisma.feeStructure.findFirst({
+    where: { classId: sec8A.classId, academicYearId: academicYear.id },
+  });
+  if (!feeStruct8) {
+    feeStruct8 = await prisma.feeStructure.create({
+      data: {
+        institutionId: institution.id,
+        feeCategoryId: feeCat.id,
+        classId: sec8A.classId,
+        academicYearId: academicYear.id,
+        amount: 38000,
+        dueDate: new Date("2026-10-15"),
+        frequency: "TERM",
+      },
+    });
+  }
+
+  let feeStruct5 = await prisma.feeStructure.findFirst({
+    where: { classId: sec5B.classId, academicYearId: academicYear.id },
+  });
+  if (!feeStruct5) {
+    feeStruct5 = await prisma.feeStructure.create({
+      data: {
+        institutionId: institution.id,
+        feeCategoryId: feeCat.id,
+        classId: sec5B.classId,
+        academicYearId: academicYear.id,
+        amount: 32000,
+        dueDate: new Date("2026-10-15"),
+        frequency: "TERM",
+      },
+    });
+  }
+
+  // Aarav's Fee (Paid)
+  let aaravFee = await prisma.studentFee.findFirst({ where: { studentId: aarav.id } });
+  if (!aaravFee) {
+    aaravFee = await prisma.studentFee.create({
+      data: {
+        studentId: aarav.id,
+        feeStructureId: feeStruct8.id,
+        academicYearId: academicYear.id,
+        totalAmount: 38000,
+        paidAmount: 38000,
+        pendingAmount: 0,
+        dueDate: new Date("2026-10-15"),
+        status: "PAID",
+        remarks: "Term 1 fee paid in full via Net Banking",
+      },
+    });
+
+    await prisma.feePayment.create({
+      data: {
+        studentFeeId: aaravFee.id,
+        studentId: aarav.id,
+        receiptNumber: "REC-2026-0891",
+        amount: 38000,
+        paymentMethod: "ONLINE",
+        paymentDate: new Date(),
+        notes: "Full payment received",
+      },
+    });
+  }
+
+  // Meera's Fee (Paid)
+  let meeraFee = await prisma.studentFee.findFirst({ where: { studentId: meera.id } });
+  if (!meeraFee) {
+    meeraFee = await prisma.studentFee.create({
+      data: {
+        studentId: meera.id,
+        feeStructureId: feeStruct5.id,
+        academicYearId: academicYear.id,
+        totalAmount: 32000,
+        paidAmount: 32000,
+        pendingAmount: 0,
+        dueDate: new Date("2026-10-15"),
+        status: "PAID",
+        remarks: "Term 1 fee paid in full via UPI",
+      },
+    });
+
+    await prisma.feePayment.create({
+      data: {
+        studentFeeId: meeraFee.id,
+        studentId: meera.id,
+        receiptNumber: "REC-2026-0892",
+        amount: 32000,
+        paymentMethod: "UPI",
+        paymentDate: new Date(),
+        notes: "Full payment received",
+      },
+    });
+  }
+
+  // 15. Student Attendance History for Aarav & Grade 8A
+  for (let d = 1; d <= 15; d++) {
+    const attDate = new Date(`2026-09-${String(d).padStart(2, "0")}T00:00:00.000Z`);
+    await prisma.studentAttendance.upsert({
+      where: { studentId_date: { studentId: aarav.id, date: attDate } },
+      update: { status: d === 7 ? "ABSENT" : "PRESENT" },
+      create: {
+        studentId: aarav.id,
+        sectionId: sec8A.id,
+        date: attDate,
+        status: d === 7 ? "ABSENT" : "PRESENT",
+        remarks: d === 7 ? "Medical leave submitted" : "Regular attendance",
+      },
+    });
+  }
+
+  console.log("🎉 Complete institutional connected personas seed finished successfully!");
 }
 
 main()

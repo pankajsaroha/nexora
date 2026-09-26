@@ -24,6 +24,10 @@ export default async function TasksPage() {
           include: { user: true },
           orderBy: { createdAt: "asc" },
         },
+        activities: {
+          include: { user: true },
+          orderBy: { createdAt: "desc" },
+        },
       },
       orderBy: { createdAt: "desc" },
     }),
@@ -41,6 +45,7 @@ export default async function TasksPage() {
   ]);
 
   const canCreate = hasPermission(user, PERMISSIONS.TASKS_CREATE);
+  const canReassign = hasPermission(user, PERMISSIONS.TASKS_REASSIGN) || hasPermission(user, PERMISSIONS.TASKS_MANAGE);
 
   const formattedTasks = tasks.map((t) => ({
     id: t.id,
@@ -49,15 +54,28 @@ export default async function TasksPage() {
     priority: t.priority as any,
     status: t.status as any,
     dueDate: t.dueDate,
+    assigneeUserId: t.assigneeUserId,
     assigneeName: t.assigneeUser?.fullName,
     assigneeRole: t.assigneeUser?.roleCode,
     creatorName: t.createdByUser.fullName,
     departmentName: t.department?.name,
+    createdAt: t.createdAt,
+    completedAt: t.completedAt,
+    reopenedAt: t.reopenedAt,
     comments: t.comments.map((c) => ({
       id: c.id,
       userName: c.user.fullName,
       comment: c.comment,
       createdAt: c.createdAt,
+    })),
+    activities: t.activities.map((a) => ({
+      id: a.id,
+      userName: a.user.fullName,
+      actionType: a.actionType,
+      details: a.details,
+      fromValue: a.fromValue,
+      toValue: a.toValue,
+      createdAt: a.createdAt,
     })),
   }));
 
@@ -67,6 +85,7 @@ export default async function TasksPage() {
       staffList={staffUsers.map((u) => ({ id: u.id, fullName: u.fullName, roleCode: u.roleCode }))}
       departments={departments.map((d) => ({ id: d.id, name: d.name }))}
       canCreate={canCreate}
+      canReassign={canReassign}
     />
   );
 }
