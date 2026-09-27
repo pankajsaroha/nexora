@@ -63,19 +63,19 @@ const DEMO_PERSONAS = [
 
 export default function DemoHubPage() {
   return (
-    <div className="min-h-screen bg-[#F7F4ED] text-[#171614] font-sans flex flex-col justify-between selection:bg-[#171614] selection:text-[#F7F4ED]">
+    <div className="min-h-screen bg-background text-foreground font-sans flex flex-col justify-between selection:bg-primary selection:text-primary-foreground">
       {/* Header */}
-      <header className="border-b border-[#E5E0D5] bg-[#F7F4ED]/90 backdrop-blur-md px-6 sm:px-10 py-4">
+      <header className="border-b border-border bg-background/90 backdrop-blur-md px-6 sm:px-10 py-4">
         <div className="max-w-7xl mx-auto flex items-center justify-between">
           <Link href="/" className="flex items-center gap-3 group">
-            <div className="w-8 h-8 rounded-lg bg-[#171614] text-[#F7F4ED] border border-[#35322C] flex items-center justify-center font-bold text-xs tracking-wider shadow-2xs group-hover:border-[#B89B62] transition-colors">
+            <div className="w-8 h-8 rounded-lg bg-primary text-primary-foreground border border-border flex items-center justify-center font-bold text-xs tracking-wider shadow-2xs group-hover:border-primary transition-colors">
               NX
             </div>
             <div>
-              <span className="font-extrabold text-sm tracking-tight text-[#171614] block leading-none font-serif">
+              <span className="font-extrabold text-sm tracking-tight text-foreground block leading-none font-serif">
                 NEXORA
               </span>
-              <span className="text-[10px] font-mono uppercase tracking-widest text-[#7A756B] block mt-0.5">
+              <span className="text-[10px] font-mono uppercase tracking-widest text-muted-foreground block mt-0.5">
                 Interactive Sandbox Demos
               </span>
             </div>
@@ -84,16 +84,16 @@ export default function DemoHubPage() {
           <div className="flex items-center gap-3">
             <Link
               href="/login"
-              className="text-xs font-semibold text-[#35322C] hover:text-[#171614] px-3 py-1.5 rounded-lg hover:bg-black/5 transition-colors"
+              className="text-xs font-semibold text-foreground hover:text-foreground px-3 py-1.5 rounded-lg hover:bg-black/5 transition-colors"
             >
               Sign In
             </Link>
             <Link
               href="/onboarding"
-              className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-bold uppercase tracking-wider bg-[#1B1916] text-[#F7F4ED] hover:bg-[#2A2722] hover:border-[#B89B62] border border-[#35322C] transition-all shadow-2xs"
+              className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-bold uppercase tracking-wider bg-primary text-primary-foreground hover:bg-primary-hover hover:border-primary border border-border transition-all shadow-2xs"
             >
               <span>Start Real Institution</span>
-              <ArrowRight className="w-3 h-3 text-[#D4B87C]" />
+              <ArrowRight className="w-3 h-3 text-primary" />
             </Link>
           </div>
         </div>
@@ -102,16 +102,16 @@ export default function DemoHubPage() {
       {/* Main Content */}
       <main className="flex-1 max-w-6xl w-full mx-auto px-6 py-12 space-y-10">
         <div className="text-center max-w-2xl mx-auto space-y-3">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#FAF8F3] border border-[#DCD7CB] text-[11px] font-mono font-semibold text-[#856D3B] shadow-2xs">
-            <Sparkles className="w-3.5 h-3.5 text-[#856D3B]" />
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-card border border-border text-[11px] font-mono font-semibold text-primary shadow-2xs">
+            <Sparkles className="w-3.5 h-3.5 text-primary" />
             <span>INTERACTIVE PRODUCT SANDBOX</span>
           </div>
 
-          <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-[#171614] font-serif">
+          <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-foreground font-serif">
             Experience Nexora by Persona
           </h1>
 
-          <p className="text-xs sm:text-sm text-[#555047] leading-relaxed">
+          <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed">
             Select any simulated role below to explore live workflows in Northstar International Academy without creating an account or affecting real institutional databases.
           </p>
         </div>
@@ -124,28 +124,28 @@ export default function DemoHubPage() {
               <Link
                 key={p.role}
                 href={p.href}
-                className="group rounded-3xl border border-[#E5E0D5] bg-white p-6 shadow-sm hover:shadow-md hover:border-[#B89B62] transition-all flex flex-col justify-between"
+                className="group rounded-3xl border border-border bg-white p-6 shadow-sm hover:shadow-md hover:border-primary transition-all flex flex-col justify-between"
               >
                 <div className="space-y-4">
                   <div className="flex items-center justify-between">
-                    <div className="w-10 h-10 rounded-2xl bg-[#FAF8F3] border border-[#E5E0D5] flex items-center justify-center text-[#171614] group-hover:border-[#B89B62] transition-colors">
+                    <div className="w-10 h-10 rounded-2xl bg-card border border-border flex items-center justify-center text-foreground group-hover:border-primary transition-colors">
                       <Icon className="w-5 h-5" />
                     </div>
-                    <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-[#7A756B] bg-[#FAF8F3] px-2 py-0.5 rounded-md border border-[#E5E0D5]">
+                    <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-muted-foreground bg-card px-2 py-0.5 rounded-md border border-border">
                       {p.badge}
                     </span>
                   </div>
 
                   <div>
-                    <h2 className="text-lg font-bold text-[#171614] font-serif group-hover:text-[#856D3B] transition-colors">
+                    <h2 className="text-lg font-bold text-foreground font-serif group-hover:text-primary transition-colors">
                       {p.role}
                     </h2>
-                    <p className="text-xs font-semibold text-[#555047] mt-0.5">{p.name}</p>
-                    <p className="text-xs text-[#7A756B] mt-2 leading-relaxed">{p.desc}</p>
+                    <p className="text-xs font-semibold text-muted-foreground mt-0.5">{p.name}</p>
+                    <p className="text-xs text-muted-foreground mt-2 leading-relaxed">{p.desc}</p>
                   </div>
                 </div>
 
-                <div className="pt-4 mt-6 border-t border-[#EFECE3] flex items-center justify-between text-xs font-bold text-[#171614] group-hover:text-[#856D3B]">
+                <div className="pt-4 mt-6 border-t border-border flex items-center justify-between text-xs font-bold text-foreground group-hover:text-primary">
                   <span>Launch {p.role} Sandbox</span>
                   <ArrowRight className="w-4 h-4 transform group-hover:translate-x-1 transition-transform" />
                 </div>
@@ -156,7 +156,7 @@ export default function DemoHubPage() {
       </main>
 
       {/* Footer */}
-      <footer className="border-t border-[#E5E0D5] py-6 px-6 text-center text-[11px] text-[#7A756B] font-mono">
+      <footer className="border-t border-border py-6 px-6 text-center text-[11px] text-muted-foreground font-mono">
         <p>© 2026 NEXORA Operating System • Dedicated Sandbox Environment</p>
       </footer>
     </div>

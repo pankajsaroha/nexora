@@ -153,74 +153,74 @@ export function FeesClient({
 
       {/* Key Financial Metrics Strip */}
       <section className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-        <div className="p-5 rounded-xl border border-[#E5E0D5] bg-white space-y-1 shadow-xs">
-          <span className="text-[11px] font-mono uppercase tracking-wider text-[#65705B] font-bold block">
+        <div className="p-5 rounded-xl border border-border bg-white space-y-1 shadow-xs">
+          <span className="text-[11px] font-mono uppercase tracking-wider text-accent font-bold block">
             01 / TOTAL REALIZATION
           </span>
-          <div className="text-2xl sm:text-3xl font-bold text-[#171614] tracking-tight">
+          <div className="text-2xl sm:text-3xl font-bold text-foreground tracking-tight">
             {formatCurrency(totalCollected)}
           </div>
-          <span className="text-[11px] text-[#65705B] block font-medium">
+          <span className="text-[11px] text-accent block font-medium">
             Term 1 settled collections
           </span>
         </div>
 
-        <div className="p-5 rounded-xl border border-[#E5E0D5] bg-white space-y-1 shadow-xs">
-          <span className="text-[11px] font-mono uppercase tracking-wider text-[#65705B] font-bold block">
+        <div className="p-5 rounded-xl border border-border bg-white space-y-1 shadow-xs">
+          <span className="text-[11px] font-mono uppercase tracking-wider text-accent font-bold block">
             02 / PENDING RECEIVABLES
           </span>
-          <div className="text-2xl sm:text-3xl font-bold text-[#171614] tracking-tight">
+          <div className="text-2xl sm:text-3xl font-bold text-foreground tracking-tight">
             {formatCurrency(totalPending)}
           </div>
-          <span className="text-[11px] text-[#65705B] block font-medium">
+          <span className="text-[11px] text-accent block font-medium">
             {overdueAccountsCount} Accounts past due date
           </span>
         </div>
 
-        <div className="p-5 rounded-xl border border-[#E5E0D5] bg-white space-y-1 shadow-xs">
-          <span className="text-[11px] font-mono uppercase tracking-wider text-[#65705B] font-bold block">
+        <div className="p-5 rounded-xl border border-border bg-white space-y-1 shadow-xs">
+          <span className="text-[11px] font-mono uppercase tracking-wider text-accent font-bold block">
             03 / COLLECTION EFFICIENCY
           </span>
-          <div className="text-2xl sm:text-3xl font-bold text-[#65705B] tracking-tight">
+          <div className="text-2xl sm:text-3xl font-bold text-accent tracking-tight">
             {totalCollected + totalPending > 0
               ? `${Math.round((totalCollected / (totalCollected + totalPending)) * 100)}%`
               : "100%"}
           </div>
-          <span className="text-[11px] text-[#65705B] block font-medium">
+          <span className="text-[11px] text-accent block font-medium">
             Bursar target: 85% by Term 1
           </span>
         </div>
 
-        <div className="p-5 rounded-xl border border-[#E5E0D5] bg-white space-y-1 shadow-xs">
-          <span className="text-[11px] font-mono uppercase tracking-wider text-[#65705B] font-bold block">
+        <div className="p-5 rounded-xl border border-border bg-white space-y-1 shadow-xs">
+          <span className="text-[11px] font-mono uppercase tracking-wider text-accent font-bold block">
             04 / ACTIVE INVOICES
           </span>
-          <div className="text-2xl sm:text-3xl font-bold text-[#171614] tracking-tight">
+          <div className="text-2xl sm:text-3xl font-bold text-foreground tracking-tight">
             {fees.length} Total
           </div>
-          <span className="text-[11px] text-[#65705B] block font-medium">
+          <span className="text-[11px] text-accent block font-medium">
             Synchronized with student roster
           </span>
         </div>
       </section>
 
       {/* Filter and Search Bar */}
-      <div className="flex flex-col sm:flex-row items-center gap-3 bg-white p-3 rounded-xl border border-[#E5E0D5] shadow-xs">
+      <div className="flex flex-col sm:flex-row items-center gap-3 bg-white p-3 rounded-xl border border-border shadow-xs">
         <div className="relative flex-1 w-full">
-          <Search className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-[#65705B]" />
+          <Search className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-accent" />
           <input
             type="search"
             placeholder="Search by student name, admission number, or class..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="w-full rounded-lg border border-[#E5E0D5] bg-[#FAF8F3] py-2 pl-9 pr-3 text-xs text-[#171614] placeholder:text-[#65705B] focus:outline-none focus:ring-1 focus:ring-[#171614]"
+            className="w-full rounded-lg border border-border bg-card py-2 pl-9 pr-3 text-xs text-foreground placeholder:text-accent focus:outline-none focus:ring-1 focus:ring-[#171614]"
           />
         </div>
 
         <select
           value={selectedStatus}
           onChange={(e) => setSelectedStatus(e.target.value)}
-          className="rounded-lg border border-[#E5E0D5] bg-white px-3 py-2 text-xs font-semibold text-[#171614] focus:outline-none w-full sm:w-auto"
+          className="rounded-lg border border-border bg-white px-3 py-2 text-xs font-semibold text-foreground focus:outline-none w-full sm:w-auto"
         >
           <option value="ALL">All Statuses</option>
           <option value="PAID">Paid</option>
@@ -231,10 +231,10 @@ export function FeesClient({
       </div>
 
       {/* Fee Table */}
-      <div className="overflow-hidden rounded-xl border border-[#E5E0D5] bg-white shadow-xs">
+      <div className="overflow-hidden rounded-xl border border-border bg-white shadow-xs">
         <div className="overflow-x-auto">
           <table className="w-full text-left text-xs">
-            <thead className="border-b border-[#E5E0D5] bg-[#FAF8F3] text-[#65705B] font-mono text-[11px] uppercase tracking-wider">
+            <thead className="border-b border-border bg-card text-accent font-mono text-[11px] uppercase tracking-wider">
               <tr>
                 <th className="py-3 px-4 font-bold">Student & Cohort</th>
                 <th className="py-3 px-4 font-bold">Total Invoiced</th>
@@ -249,38 +249,38 @@ export function FeesClient({
               {filteredFees.map((f) => (
                 <tr
                   key={f.id}
-                  className="hover:bg-[#FAF8F3] transition-colors"
+                  className="hover:bg-card transition-colors"
                 >
                   <td className="py-3.5 px-4">
-                    <div className="font-bold text-[#171614]">
+                    <div className="font-bold text-foreground">
                       {f.studentName}
                     </div>
-                    <div className="text-[11px] text-[#65705B] font-mono mt-0.5">
+                    <div className="text-[11px] text-accent font-mono mt-0.5">
                       {f.className} ({f.sectionName}) · {f.admissionNumber}
                     </div>
                   </td>
-                  <td className="py-3.5 px-4 font-mono font-semibold text-[#171614]">
+                  <td className="py-3.5 px-4 font-mono font-semibold text-foreground">
                     {formatCurrency(f.totalAmount)}
                   </td>
-                  <td className="py-3.5 px-4 font-mono font-bold text-[#65705B]">
+                  <td className="py-3.5 px-4 font-mono font-bold text-accent">
                     {formatCurrency(f.paidAmount)}
                   </td>
-                  <td className="py-3.5 px-4 font-mono font-bold text-[#171614]">
+                  <td className="py-3.5 px-4 font-mono font-bold text-foreground">
                     {f.pendingAmount === 0 ? "₹0" : formatCurrency(f.pendingAmount)}
                   </td>
-                  <td className="py-3.5 px-4 text-[#65705B] font-mono">
+                  <td className="py-3.5 px-4 text-accent font-mono">
                     {formatDate(f.dueDate)}
                   </td>
                   <td className="py-3.5 px-4">
                     <span
                       className={`text-[10px] font-mono uppercase tracking-wider px-2 py-0.5 rounded font-bold ${
                         f.status === "PAID"
-                          ? "bg-[#65705B]/10 text-[#65705B] border border-[#65705B]/20"
+                          ? "bg-accent/10 text-accent border border-success/30/20"
                           : f.status === "PARTIAL"
-                          ? "bg-[#B89B62]/10 text-[#B89B62] border border-[#B89B62]/20"
+                          ? "bg-[#B89B62]/10 text-primary border border-primary/20"
                           : f.status === "OVERDUE"
-                          ? "bg-[#8B3A3A]/10 text-[#8B3A3A] border border-[#8B3A3A]/20"
-                          : "bg-[#FAF8F3] text-[#65705B] border border-[#E5E0D5]"
+                          ? "bg-destructive/10 text-destructive border border-destructive/20"
+                          : "bg-card text-accent border border-border"
                       }`}
                     >
                       {f.status}
@@ -301,9 +301,9 @@ export function FeesClient({
                         <button
                           type="button"
                           onClick={() => triggerReminder(f)}
-                          className="inline-flex items-center gap-1 text-[11px] font-semibold text-[#65705B] hover:text-[#171614] px-2 py-1 rounded hover:bg-[#FAF8F3]"
+                          className="inline-flex items-center gap-1 text-[11px] font-semibold text-accent hover:text-foreground px-2 py-1 rounded hover:bg-card"
                         >
-                          <MessageCircle className="h-3 w-3 text-[#65705B]" />
+                          <MessageCircle className="h-3 w-3 text-accent" />
                           <span>Remind</span>
                         </button>
                       )}
@@ -323,7 +323,7 @@ export function FeesClient({
                               remainingBalance: f.pendingAmount,
                             });
                           }}
-                          className="inline-flex items-center gap-1 text-[11px] font-semibold text-[#65705B] hover:text-[#171614] px-2 py-1 rounded hover:bg-[#FAF8F3]"
+                          className="inline-flex items-center gap-1 text-[11px] font-semibold text-accent hover:text-foreground px-2 py-1 rounded hover:bg-card"
                         >
                           <Receipt className="h-3 w-3" />
                           <span>Receipt</span>
@@ -351,7 +351,7 @@ export function FeesClient({
         >
           <form onSubmit={handleRecordPayment} className="space-y-4 text-xs">
             <div>
-              <label className="block font-semibold text-[#171614] mb-1">Amount to Collect (₹) *</label>
+              <label className="block font-semibold text-foreground mb-1">Amount to Collect (₹) *</label>
               <input
                 type="number"
                 required
@@ -359,16 +359,16 @@ export function FeesClient({
                 min={1}
                 value={paymentAmount}
                 onChange={(e) => setPaymentAmount(e.target.value)}
-                className="w-full rounded-lg border border-[#E5E0D5] bg-[#FAF8F3] p-2.5 text-base font-mono font-bold text-[#171614] focus:outline-none focus:ring-1 focus:ring-[#171614]"
+                className="w-full rounded-lg border border-border bg-card p-2.5 text-base font-mono font-bold text-foreground focus:outline-none focus:ring-1 focus:ring-[#171614]"
               />
             </div>
 
             <div>
-              <label className="block font-semibold text-[#171614] mb-1">Payment Method *</label>
+              <label className="block font-semibold text-foreground mb-1">Payment Method *</label>
               <select
                 value={paymentMethod}
                 onChange={(e) => setPaymentMethod(e.target.value)}
-                className="w-full rounded-lg border border-[#E5E0D5] bg-[#FAF8F3] p-2.5 text-xs text-[#171614]"
+                className="w-full rounded-lg border border-border bg-card p-2.5 text-xs text-foreground"
               >
                 <option value="UPI">UPI / QR Code</option>
                 <option value="ONLINE">Net Banking / Debit Card</option>
@@ -378,17 +378,17 @@ export function FeesClient({
             </div>
 
             <div>
-              <label className="block font-semibold text-[#171614] mb-1">Receipt Remarks / Notes</label>
+              <label className="block font-semibold text-foreground mb-1">Receipt Remarks / Notes</label>
               <input
                 type="text"
                 value={notes}
                 onChange={(e) => setNotes(e.target.value)}
                 placeholder="e.g. Term 1 Tuition + Transport Fee"
-                className="w-full rounded-lg border border-[#E5E0D5] bg-[#FAF8F3] p-2.5 text-xs text-[#171614] focus:outline-none focus:ring-1 focus:ring-[#171614]"
+                className="w-full rounded-lg border border-border bg-card p-2.5 text-xs text-foreground focus:outline-none focus:ring-1 focus:ring-[#171614]"
               />
             </div>
 
-            <div className="flex justify-end gap-2 pt-4 border-t border-[#E5E0D5]">
+            <div className="flex justify-end gap-2 pt-4 border-t border-border">
               <Button
                 type="button"
                 variant="outline"
@@ -415,52 +415,52 @@ export function FeesClient({
           size="md"
         >
           <div className="space-y-4">
-            <div className="p-6 rounded-xl border border-[#E5E0D5] bg-[#FAF8F3] space-y-4 text-xs">
-              <div className="text-center border-b border-[#E5E0D5] pb-3">
-                <div className="font-extrabold text-sm text-[#171614] uppercase tracking-wider">
+            <div className="p-6 rounded-xl border border-border bg-card space-y-4 text-xs">
+              <div className="text-center border-b border-border pb-3">
+                <div className="font-extrabold text-sm text-foreground uppercase tracking-wider">
                   Northstar International Academy
                 </div>
-                <div className="text-[11px] text-[#65705B] mt-0.5">
+                <div className="text-[11px] text-accent mt-0.5">
                   Knowledge Park III, Greater Noida, UP • Digital Payment Voucher
                 </div>
               </div>
 
               <div className="space-y-2 text-xs">
                 <div className="flex justify-between">
-                  <span className="text-[#65705B]">Receipt No:</span>
-                  <span className="font-mono font-bold text-[#171614]">
+                  <span className="text-accent">Receipt No:</span>
+                  <span className="font-mono font-bold text-foreground">
                     {selectedReceipt.receiptNumber}
                   </span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-[#65705B]">Student Name:</span>
-                  <span className="font-bold text-[#171614]">
+                  <span className="text-accent">Student Name:</span>
+                  <span className="font-bold text-foreground">
                     {selectedReceipt.studentName}
                   </span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-[#65705B]">Admission / Class:</span>
-                  <span className="text-[#171614]">
+                  <span className="text-accent">Admission / Class:</span>
+                  <span className="text-foreground">
                     {selectedReceipt.admissionNumber} ({selectedReceipt.className})
                   </span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-[#65705B]">Payment Date:</span>
-                  <span className="font-mono text-[#171614]">{formatDate(selectedReceipt.paymentDate, "dd MMM yyyy, HH:mm")}</span>
+                  <span className="text-accent">Payment Date:</span>
+                  <span className="font-mono text-foreground">{formatDate(selectedReceipt.paymentDate, "dd MMM yyyy, HH:mm")}</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-[#65705B]">Payment Mode:</span>
-                  <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-white border border-[#E5E0D5] font-bold text-[#171614]">
+                  <span className="text-accent">Payment Mode:</span>
+                  <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-white border border-border font-bold text-foreground">
                     {selectedReceipt.paymentMethod}
                   </span>
                 </div>
-                <div className="flex justify-between border-t border-[#E5E0D5] pt-3 text-sm font-bold">
-                  <span className="text-[#171614]">Amount Paid:</span>
-                  <span className="font-mono text-[#65705B]">
+                <div className="flex justify-between border-t border-border pt-3 text-sm font-bold">
+                  <span className="text-foreground">Amount Paid:</span>
+                  <span className="font-mono text-accent">
                     {formatCurrency(selectedReceipt.amount)}
                   </span>
                 </div>
-                <div className="flex justify-between text-[11px] text-[#65705B]">
+                <div className="flex justify-between text-[11px] text-accent">
                   <span>Remaining Due:</span>
                   <span className="font-mono font-semibold">{formatCurrency(selectedReceipt.remainingBalance)}</span>
                 </div>

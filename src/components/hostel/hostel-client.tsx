@@ -104,7 +104,7 @@ export function HostelClient({ hostels }: { hostels: HostelItem[] }) {
               variant="outline"
               size="sm"
               onClick={handleExportRoster}
-              leftIcon={<Download className="h-3.5 w-3.5 text-[#B89B62]" />}
+              leftIcon={<Download className="h-3.5 w-3.5 text-primary" />}
             >
               Export Roster
             </Button>
@@ -121,40 +121,40 @@ export function HostelClient({ hostels }: { hostels: HostelItem[] }) {
 
       {/* Metrics Row */}
       <div className="grid grid-cols-1 gap-3 sm:grid-cols-4">
-        <div className="rounded-xl border border-[#E5E0D5] bg-white p-4 shadow-xs">
-          <div className="text-[11px] font-mono uppercase tracking-wider text-[#65705B]">Residency Wings</div>
-          <div className="mt-1 text-2xl font-bold text-[#171614]">{hostels.length}</div>
-          <div className="mt-0.5 text-[11px] text-[#65705B]">Active campus blocks</div>
+        <div className="rounded-xl border border-border bg-white p-4 shadow-xs">
+          <div className="text-[11px] font-mono uppercase tracking-wider text-accent">Residency Wings</div>
+          <div className="mt-1 text-2xl font-bold text-foreground">{hostels.length}</div>
+          <div className="mt-0.5 text-[11px] text-accent">Active campus blocks</div>
         </div>
-        <div className="rounded-xl border border-[#E5E0D5] bg-white p-4 shadow-xs">
-          <div className="text-[11px] font-mono uppercase tracking-wider text-[#65705B]">Configured Rooms</div>
-          <div className="mt-1 text-2xl font-bold text-[#171614]">{totalRooms}</div>
-          <div className="mt-0.5 text-[11px] text-[#65705B]">Across all floors</div>
+        <div className="rounded-xl border border-border bg-white p-4 shadow-xs">
+          <div className="text-[11px] font-mono uppercase tracking-wider text-accent">Configured Rooms</div>
+          <div className="mt-1 text-2xl font-bold text-foreground">{totalRooms}</div>
+          <div className="mt-0.5 text-[11px] text-accent">Across all floors</div>
         </div>
-        <div className="rounded-xl border border-[#E5E0D5] bg-white p-4 shadow-xs">
-          <div className="text-[11px] font-mono uppercase tracking-wider text-[#65705B]">Total Bed Capacity</div>
-          <div className="mt-1 text-2xl font-bold text-[#171614]">{totalBeds}</div>
-          <div className="mt-0.5 text-[11px] text-[#65705B]">Total residential capacity</div>
+        <div className="rounded-xl border border-border bg-white p-4 shadow-xs">
+          <div className="text-[11px] font-mono uppercase tracking-wider text-accent">Total Bed Capacity</div>
+          <div className="mt-1 text-2xl font-bold text-foreground">{totalBeds}</div>
+          <div className="mt-0.5 text-[11px] text-accent">Total residential capacity</div>
         </div>
-        <div className="rounded-xl border border-[#E5E0D5] bg-white p-4 shadow-xs">
-          <div className="text-[11px] font-mono uppercase tracking-wider text-[#65705B]">Occupancy Rate</div>
-          <div className="mt-1 text-2xl font-bold text-[#65705B]">
+        <div className="rounded-xl border border-border bg-white p-4 shadow-xs">
+          <div className="text-[11px] font-mono uppercase tracking-wider text-accent">Occupancy Rate</div>
+          <div className="mt-1 text-2xl font-bold text-accent">
             {totalBeds > 0 ? Math.round((totalOccupied / totalBeds) * 100) : 0}%
           </div>
-          <div className="mt-0.5 text-[11px] text-[#65705B]">{totalOccupied} / {totalBeds} beds assigned</div>
+          <div className="mt-0.5 text-[11px] text-accent">{totalOccupied} / {totalBeds} beds assigned</div>
         </div>
       </div>
 
       {/* Search Bar */}
-      <div className="flex flex-col sm:flex-row items-center gap-3 bg-white p-3 rounded-xl border border-[#E5E0D5] shadow-xs">
+      <div className="flex flex-col sm:flex-row items-center gap-3 bg-white p-3 rounded-xl border border-border shadow-xs">
         <div className="relative flex-1 w-full">
-          <Search className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-[#65705B]" />
+          <Search className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-accent" />
           <input
             type="search"
             placeholder="Search wing name, type, or warden..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full rounded-lg border border-[#E5E0D5] bg-[#FAF8F3] py-2 pl-9 pr-3 text-xs text-[#171614] placeholder:text-[#65705B] focus:outline-none focus:ring-1 focus:ring-[#171614] transition-colors"
+            className="w-full rounded-lg border border-border bg-card py-2 pl-9 pr-3 text-xs text-foreground placeholder:text-accent focus:outline-none focus:ring-1 focus:ring-[#171614] transition-colors"
           />
         </div>
       </div>
@@ -162,7 +162,7 @@ export function HostelClient({ hostels }: { hostels: HostelItem[] }) {
       {/* Hostel Wings Grid */}
       <div className="space-y-4">
         {filteredHostels.length === 0 ? (
-          <div className="p-8 text-center rounded-xl border border-dashed border-[#E5E0D5] bg-[#FAF8F3] text-xs text-[#65705B]">
+          <div className="p-8 text-center rounded-xl border border-dashed border-border bg-card text-xs text-accent">
             No residential wings found matching search.
           </div>
         ) : (
@@ -173,33 +173,33 @@ export function HostelClient({ hostels }: { hostels: HostelItem[] }) {
             return (
               <div
                 key={hostel.id}
-                className="rounded-xl border border-[#E5E0D5] bg-white p-5 shadow-xs space-y-4 hover:border-[#171614] transition-colors"
+                className="rounded-xl border border-border bg-white p-5 shadow-xs space-y-4 hover:border-[#171614] transition-colors"
               >
-                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 border-b border-[#E5E0D5] pb-3">
+                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 border-b border-border pb-3">
                   <div className="flex items-center gap-3">
-                    <div className="p-2.5 rounded-lg bg-[#FAF8F3] border border-[#E5E0D5] text-[#171614]">
+                    <div className="p-2.5 rounded-lg bg-card border border-border text-foreground">
                       <Building2 className="h-5 w-5" />
                     </div>
                     <div>
                       <div className="flex items-center gap-2">
-                        <h3 className="text-sm font-bold text-[#171614]">
+                        <h3 className="text-sm font-bold text-foreground">
                           {hostel.name}
                         </h3>
                         <Badge variant="outline" size="sm">
                           {hostel.type}
                         </Badge>
                       </div>
-                      <div className="text-[11px] font-mono text-[#65705B] mt-0.5">
-                        Occupancy: <span className="font-semibold text-[#171614]">{hOcc} / {hBeds} Beds</span> ({hBeds > 0 ? Math.round((hOcc / hBeds) * 100) : 0}%)
+                      <div className="text-[11px] font-mono text-accent mt-0.5">
+                        Occupancy: <span className="font-semibold text-foreground">{hOcc} / {hBeds} Beds</span> ({hBeds > 0 ? Math.round((hOcc / hBeds) * 100) : 0}%)
                       </div>
                     </div>
                   </div>
 
                   <div className="text-xs space-y-0.5 sm:text-right">
-                    <div className="font-semibold text-[#171614]">
+                    <div className="font-semibold text-foreground">
                       {hostel.wardenName} (Warden)
                     </div>
-                    <div className="text-[11px] font-mono text-[#65705B]">
+                    <div className="text-[11px] font-mono text-accent">
                       {hostel.wardenPhone}
                     </div>
                   </div>
@@ -207,22 +207,22 @@ export function HostelClient({ hostels }: { hostels: HostelItem[] }) {
 
                 {/* Rooms Matrix */}
                 <div className="space-y-2">
-                  <div className="text-[10px] font-mono uppercase tracking-wider text-[#65705B] font-bold">
+                  <div className="text-[10px] font-mono uppercase tracking-wider text-accent font-bold">
                     Room Inventory & Allocations ({hostel.rooms.length} Rooms)
                   </div>
                   <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-2.5">
                     {hostel.rooms.map((room) => (
                       <div
                         key={room.id}
-                        className="rounded-lg bg-[#FAF8F3] border border-[#E5E0D5] p-2.5 text-xs space-y-1 text-center hover:bg-white transition-colors"
+                        className="rounded-lg bg-card border border-border p-2.5 text-xs space-y-1 text-center hover:bg-white transition-colors"
                       >
-                        <div className="font-mono font-bold text-[#171614]">
+                        <div className="font-mono font-bold text-foreground">
                           Room {room.roomNumber}
                         </div>
-                        <div className="text-[10px] font-mono text-[#65705B]">
+                        <div className="text-[10px] font-mono text-accent">
                           Floor {room.floor}
                         </div>
-                        <div className="text-[11px] font-mono font-semibold pt-1 border-t border-[#E5E0D5] text-[#171614]">
+                        <div className="text-[11px] font-mono font-semibold pt-1 border-t border-border text-foreground">
                           {room.occupiedBeds} / {room.totalBeds} Beds
                         </div>
                       </div>
@@ -246,35 +246,35 @@ export function HostelClient({ hostels }: { hostels: HostelItem[] }) {
         >
           {addSuccess ? (
             <div className="p-6 text-center space-y-3">
-              <div className="w-12 h-12 rounded-full bg-[#FAF8F3] border border-[#B89B62] text-[#B89B62] flex items-center justify-center mx-auto">
+              <div className="w-12 h-12 rounded-full bg-card border border-primary text-primary flex items-center justify-center mx-auto">
                 <CheckCircle2 className="w-6 h-6" />
               </div>
-              <h4 className="text-sm font-bold text-[#171614]">Hostel Block Initialized</h4>
-              <p className="text-xs text-[#65705B]">
+              <h4 className="text-sm font-bold text-foreground">Hostel Block Initialized</h4>
+              <p className="text-xs text-accent">
                 New residential wing configured and ready for student room allotments.
               </p>
             </div>
           ) : (
             <form onSubmit={handleAddWing} className="space-y-4 text-xs">
               <div>
-                <label className="block font-semibold text-[#171614] mb-1">Hostel Block Name *</label>
+                <label className="block font-semibold text-foreground mb-1">Hostel Block Name *</label>
                 <input
                   type="text"
                   required
                   placeholder="e.g. Nalanda Scholars Residency"
                   value={formData.name}
                   onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                  className="w-full rounded-lg border border-[#E5E0D5] bg-[#FAF8F3] p-2.5 text-xs text-[#171614] focus:outline-none focus:ring-1 focus:ring-[#171614]"
+                  className="w-full rounded-lg border border-border bg-card p-2.5 text-xs text-foreground focus:outline-none focus:ring-1 focus:ring-[#171614]"
                 />
               </div>
 
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block font-semibold text-[#171614] mb-1">Residency Type *</label>
+                  <label className="block font-semibold text-foreground mb-1">Residency Type *</label>
                   <select
                     value={formData.type}
                     onChange={(e) => setFormData({ ...formData, type: e.target.value })}
-                    className="w-full rounded-lg border border-[#E5E0D5] bg-[#FAF8F3] p-2.5 text-xs text-[#171614]"
+                    className="w-full rounded-lg border border-border bg-card p-2.5 text-xs text-foreground"
                   >
                     <option value="BOYS">Boys Hostel</option>
                     <option value="GIRLS">Girls Hostel</option>
@@ -282,7 +282,7 @@ export function HostelClient({ hostels }: { hostels: HostelItem[] }) {
                   </select>
                 </div>
                 <div>
-                  <label className="block font-semibold text-[#171614] mb-1">Initial Room Count *</label>
+                  <label className="block font-semibold text-foreground mb-1">Initial Room Count *</label>
                   <input
                     type="number"
                     required
@@ -290,37 +290,37 @@ export function HostelClient({ hostels }: { hostels: HostelItem[] }) {
                     max={100}
                     value={formData.initialRooms}
                     onChange={(e) => setFormData({ ...formData, initialRooms: Number(e.target.value) })}
-                    className="w-full rounded-lg border border-[#E5E0D5] bg-[#FAF8F3] p-2.5 text-xs text-[#171614]"
+                    className="w-full rounded-lg border border-border bg-card p-2.5 text-xs text-foreground"
                   />
                 </div>
               </div>
 
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block font-semibold text-[#171614] mb-1">Warden Name *</label>
+                  <label className="block font-semibold text-foreground mb-1">Warden Name *</label>
                   <input
                     type="text"
                     required
                     placeholder="e.g. Mr. Alok Pandey"
                     value={formData.wardenName}
                     onChange={(e) => setFormData({ ...formData, wardenName: e.target.value })}
-                    className="w-full rounded-lg border border-[#E5E0D5] bg-[#FAF8F3] p-2.5 text-xs text-[#171614]"
+                    className="w-full rounded-lg border border-border bg-card p-2.5 text-xs text-foreground"
                   />
                 </div>
                 <div>
-                  <label className="block font-semibold text-[#171614] mb-1">Warden Contact Phone *</label>
+                  <label className="block font-semibold text-foreground mb-1">Warden Contact Phone *</label>
                   <input
                     type="tel"
                     required
                     placeholder="+91 98100 88776"
                     value={formData.wardenPhone}
                     onChange={(e) => setFormData({ ...formData, wardenPhone: e.target.value })}
-                    className="w-full rounded-lg border border-[#E5E0D5] bg-[#FAF8F3] p-2.5 text-xs text-[#171614]"
+                    className="w-full rounded-lg border border-border bg-card p-2.5 text-xs text-foreground"
                   />
                 </div>
               </div>
 
-              <div className="flex justify-end gap-2 pt-4 border-t border-[#E5E0D5]">
+              <div className="flex justify-end gap-2 pt-4 border-t border-border">
                 <Button
                   type="button"
                   variant="outline"

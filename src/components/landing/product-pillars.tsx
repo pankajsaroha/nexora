@@ -85,20 +85,20 @@ export function ProductPillars() {
   ];
 
   return (
-    <section id="features" className="py-20 sm:py-28 bg-[#F7F4ED] border-b border-[#E5E0D5]">
+    <section id="features" className="py-20 sm:py-28 bg-background border-b border-border">
       <div className="max-w-7xl mx-auto px-6 sm:px-8 space-y-14">
         {/* Section Heading */}
         <div className="max-w-3xl space-y-4">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-[#B89B62]/40 bg-[#FAF6ED] text-[11px] font-mono uppercase tracking-widest text-[#856D3B] shadow-2xs">
-            <Sparkles className="w-3.5 h-3.5 text-[#B89B62]" />
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-primary/40 bg-warm/15 text-[11px] font-mono uppercase tracking-widest text-primary shadow-2xs">
+            <Sparkles className="w-3.5 h-3.5 text-primary" />
             <span>Core Product Capabilities</span>
           </div>
 
-          <h2 className="text-3xl sm:text-4xl font-extrabold text-[#171614] tracking-tight">
+          <h2 className="text-3xl sm:text-4xl font-extrabold text-foreground tracking-tight">
             Everything your institution needs. Grouped with precision.
           </h2>
 
-          <p className="text-sm sm:text-base text-[#555047] leading-relaxed">
+          <p className="text-sm sm:text-base text-muted-foreground leading-relaxed">
             Instead of stitching together disconnected tools, Nexora delivers purpose-built modules designed specifically for school and college operations.
           </p>
         </div>
@@ -108,31 +108,31 @@ export function ProductPillars() {
           {pillars.map((p, idx) => (
             <div
               key={idx}
-              className="rounded-3xl border border-[#E5E0D5] bg-white p-6 sm:p-8 space-y-6 hover:border-[#B89B62] transition-all shadow-2xs flex flex-col justify-between"
+              className="rounded-3xl border border-border bg-white p-6 sm:p-8 space-y-6 hover:border-primary transition-all shadow-2xs flex flex-col justify-between"
             >
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
-                  <span className="text-xs font-mono font-bold uppercase tracking-widest text-[#7A756B]">
+                  <span className="text-xs font-mono font-bold uppercase tracking-widest text-muted-foreground">
                     0{idx + 1} / {p.title}
                   </span>
-                  <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded-md bg-[#FAF6ED] border border-[#D4B87C]/50 text-[#856D3B]">
+                  <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded-md bg-warm/15 border border-warm/30 text-primary">
                     {p.previewSnippet.badge}
                   </span>
                 </div>
                 
                 <div>
-                  <h3 className="text-xl font-bold text-[#171614]">{p.tagline}</h3>
-                  <p className="text-xs text-[#555047] mt-1 leading-relaxed">{p.description}</p>
+                  <h3 className="text-xl font-bold text-foreground">{p.tagline}</h3>
+                  <p className="text-xs text-muted-foreground mt-1 leading-relaxed">{p.description}</p>
                 </div>
 
                 {/* Visual Metric Snippet Card */}
-                <div className="p-3.5 rounded-2xl bg-[#FAF8F3] border border-[#E5E0D5] flex items-center justify-between">
+                <div className="p-3.5 rounded-2xl bg-card border border-border flex items-center justify-between">
                   <div className="space-y-0.5">
-                    <span className="text-[10px] font-mono uppercase text-[#7A756B] font-semibold">Live Operational Status</span>
-                    <div className="text-sm font-extrabold text-[#171614]">{p.previewSnippet.metric}</div>
+                    <span className="text-[10px] font-mono uppercase text-muted-foreground font-semibold">Live Operational Status</span>
+                    <div className="text-sm font-extrabold text-foreground">{p.previewSnippet.metric}</div>
                   </div>
                   <div className="text-right">
-                    <span className="text-[11px] font-bold text-[#525E4B] bg-[#F4F6F1] px-2.5 py-1 rounded-md border border-[#65705B]/30">
+                    <span className="text-[11px] font-bold text-success bg-success/15 px-2.5 py-1 rounded-md border border-success/30">
                       {p.previewSnippet.subtext}
                     </span>
                   </div>
@@ -146,13 +146,13 @@ export function ProductPillars() {
                   return (
                     <div
                       key={itemIdx}
-                      className="p-3.5 rounded-2xl bg-[#FAF8F3] border border-[#E5E0D5] space-y-1 hover:border-[#B89B62] hover:bg-white transition-all"
+                      className="p-3.5 rounded-2xl bg-card border border-border space-y-1 hover:border-primary hover:bg-white transition-all"
                     >
-                      <div className="flex items-center gap-2 font-bold text-xs text-[#171614]">
+                      <div className="flex items-center gap-2 font-bold text-xs text-foreground">
                         <Icon className="w-3.5 h-3.5 text-[#1B1916] shrink-0" />
                         <span className="truncate">{item.label}</span>
                       </div>
-                      <p className="text-[10px] font-mono text-[#7A756B] leading-tight">
+                      <p className="text-[10px] font-mono text-muted-foreground leading-tight">
                         {item.note}
                       </p>
                     </div>

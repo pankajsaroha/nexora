@@ -25,21 +25,21 @@ export function PageHeader({
   return (
     <div
       className={cn(
-        "flex flex-col md:flex-row md:items-baseline justify-between gap-4 border-b border-[#E5E0D5] pb-6 mb-8",
+        "flex flex-col md:flex-row md:items-baseline justify-between gap-4 border-b border-border pb-6 mb-8",
         className
       )}
     >
       <div>
         {label && (
-          <span className="text-[11px] font-mono uppercase tracking-widest text-[#7A756B] font-bold block mb-1">
+          <span className="text-[11px] font-mono uppercase tracking-widest text-muted-foreground font-bold block mb-1">
             {label}
           </span>
         )}
-        <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-[#171614]">
+        <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-foreground">
           {title}
         </h1>
         {description && (
-          <p className="text-xs text-[#555047] mt-1 max-w-2xl leading-relaxed">
+          <p className="text-xs text-muted-foreground mt-1 max-w-2xl leading-relaxed">
             {description}
           </p>
         )}

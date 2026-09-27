@@ -241,7 +241,7 @@ export function StudentCustomFieldsClient({
       <div>
         <Link
           href="/settings"
-          className="inline-flex items-center gap-1.5 text-xs font-bold text-[#7A756B] hover:text-[#171614] mb-3 transition-colors"
+          className="inline-flex items-center gap-1.5 text-xs font-bold text-muted-foreground hover:text-foreground mb-3 transition-colors"
         >
           <ArrowLeft className="h-3.5 w-3.5" />
           <span>Back to Global Settings</span>
@@ -255,7 +255,7 @@ export function StudentCustomFieldsClient({
           <Button
             size="sm"
             onClick={handleOpenAddModal}
-            leftIcon={<Plus className="h-3.5 w-3.5 text-[#D4B87C]" />}
+            leftIcon={<Plus className="h-3.5 w-3.5 text-primary" />}
           >
             Create Custom Field
           </Button>
@@ -263,29 +263,29 @@ export function StudentCustomFieldsClient({
       </div>
 
       {/* Core vs Custom Fields Explanation Card */}
-      <div className="rounded-3xl border border-[#E5E0D5] bg-white p-5 shadow-2xs space-y-3">
+      <div className="rounded-3xl border border-border bg-white p-5 shadow-2xs space-y-3">
         <div className="flex items-center gap-2">
-          <Sparkles className="h-4 w-4 text-[#856D3B]" />
-          <h3 className="text-sm font-bold text-[#171614]">Hybrid Field Architecture</h3>
+          <Sparkles className="h-4 w-4 text-primary" />
+          <h3 className="text-sm font-bold text-foreground">Hybrid Field Architecture</h3>
         </div>
-        <p className="text-xs text-[#7A756B] leading-relaxed">
+        <p className="text-xs text-muted-foreground leading-relaxed">
           Nexora combines <strong>Fixed Strongly-Typed Core Fields</strong> (Names, DOB, Gender, Guardians, Cohorts, Roll Numbers) with <strong>Institution-Specific Custom Attributes</strong> (e.g. APAAR ID, Scholarship Tier, Transport Stop, Hostel Needs). Configured fields appear seamlessly in the New Student Admission workflow and student dossiers.
         </p>
       </div>
 
       {/* Custom Fields List */}
-      <div className="rounded-3xl border border-[#E5E0D5] bg-white overflow-hidden shadow-2xs">
-        <div className="p-4 border-b border-[#EFECE3] bg-[#FAF8F3] flex items-center justify-between">
-          <span className="text-[11px] font-mono font-bold uppercase tracking-wider text-[#7A756B]">
+      <div className="rounded-3xl border border-border bg-white overflow-hidden shadow-2xs">
+        <div className="p-4 border-b border-border bg-card flex items-center justify-between">
+          <span className="text-[11px] font-mono font-bold uppercase tracking-wider text-muted-foreground">
             Configured Fields ({fields.length})
           </span>
-          <span className="text-[11px] text-[#7A756B]">
+          <span className="text-[11px] text-muted-foreground">
             Tenant Isolated • Scope: Active Institution
           </span>
         </div>
 
         {fields.length === 0 ? (
-          <div className="p-12 text-center text-xs text-[#7A756B] font-mono space-y-3">
+          <div className="p-12 text-center text-xs text-muted-foreground font-mono space-y-3">
             <p>No custom fields configured yet for this institution.</p>
             <Button size="sm" variant="outline" onClick={handleOpenAddModal}>
               + Define First Custom Field
@@ -296,12 +296,12 @@ export function StudentCustomFieldsClient({
             {fields.map((field) => (
               <div
                 key={field.id}
-                className="p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4 hover:bg-[#FAF8F3] transition-colors"
+                className="p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4 hover:bg-card transition-colors"
               >
                 <div className="space-y-1">
                   <div className="flex items-center gap-2.5">
-                    <h4 className="text-sm font-bold text-[#171614]">{field.name}</h4>
-                    <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-[#FAF6ED] text-[#856D3B] border border-[#D4B87C]/30 font-bold">
+                    <h4 className="text-sm font-bold text-foreground">{field.name}</h4>
+                    <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-warm/15 text-primary border border-warm/30 font-bold">
                       {FIELD_TYPE_LABELS[field.fieldType] || field.fieldType}
                     </span>
                     {field.isRequired ? (
@@ -309,7 +309,7 @@ export function StudentCustomFieldsClient({
                         Required
                       </span>
                     ) : (
-                      <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-[#FAF8F3] text-[#7A756B] border border-[#DCD7CB]">
+                      <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-card text-muted-foreground border border-border">
                         Optional
                       </span>
                     )}
@@ -319,8 +319,8 @@ export function StudentCustomFieldsClient({
                       </span>
                     )}
                   </div>
-                  <p className="text-xs text-[#7A756B] font-mono">
-                    Key: <strong className="text-[#171614]">{field.key}</strong>
+                  <p className="text-xs text-muted-foreground font-mono">
+                    Key: <strong className="text-foreground">{field.key}</strong>
                     {field.placeholder ? ` · Placeholder: "${field.placeholder}"` : ""}
                   </p>
                   {field.options && field.options.length > 0 && (
@@ -328,7 +328,7 @@ export function StudentCustomFieldsClient({
                       {field.options.map((opt, i) => (
                         <span
                           key={i}
-                          className="text-[10px] font-mono bg-white px-2 py-0.5 rounded border border-[#E5E0D5] text-[#35322C]"
+                          className="text-[10px] font-mono bg-white px-2 py-0.5 rounded border border-border text-foreground"
                         >
                           {opt}
                         </span>
@@ -343,7 +343,7 @@ export function StudentCustomFieldsClient({
                     onClick={() => handleToggleActive(field)}
                     className={`px-2.5 py-1 rounded-xl text-xs font-bold border transition-colors ${
                       field.isActive
-                        ? "bg-[#F4F6F1] text-[#525E4B] border-[#65705B]/30"
+                        ? "bg-success/15 text-success border-success/30"
                         : "bg-gray-100 text-gray-600 border-gray-300"
                     }`}
                   >
@@ -389,7 +389,7 @@ export function StudentCustomFieldsClient({
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
-                <label className="block font-bold text-[#171614] mb-1">
+                <label className="block font-bold text-foreground mb-1">
                   Field Display Name *
                 </label>
                 <input
@@ -405,12 +405,12 @@ export function StudentCustomFieldsClient({
                     });
                   }}
                   placeholder="e.g. APAAR ID or Hostel Required"
-                  className="w-full rounded-xl border border-[#DCD7CB] bg-[#FAF8F3] p-2.5 text-xs text-[#171614] focus:outline-none focus:ring-2 focus:ring-[#B89B62]"
+                  className="w-full rounded-xl border border-border bg-card p-2.5 text-xs text-foreground focus:outline-none focus:ring-2 focus:ring-primary/20"
                 />
               </div>
 
               <div>
-                <label className="block font-bold text-[#171614] mb-1">
+                <label className="block font-bold text-foreground mb-1">
                   Field Database Key *
                 </label>
                 <input
@@ -420,20 +420,20 @@ export function StudentCustomFieldsClient({
                   value={formData.key}
                   onChange={(e) => setFormData({ ...formData, key: e.target.value })}
                   placeholder="e.g. apaar_id"
-                  className="w-full rounded-xl border border-[#DCD7CB] bg-[#FAF8F3] p-2.5 text-xs font-mono text-[#171614] disabled:opacity-60 focus:outline-none focus:ring-2 focus:ring-[#B89B62]"
+                  className="w-full rounded-xl border border-border bg-card p-2.5 text-xs font-mono text-foreground disabled:opacity-60 focus:outline-none focus:ring-2 focus:ring-primary/20"
                 />
               </div>
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
-                <label className="block font-bold text-[#171614] mb-1">
+                <label className="block font-bold text-foreground mb-1">
                   Field Input Type *
                 </label>
                 <select
                   value={formData.fieldType}
                   onChange={(e) => setFormData({ ...formData, fieldType: e.target.value })}
-                  className="w-full rounded-xl border border-[#DCD7CB] bg-[#FAF8F3] p-2.5 text-xs font-semibold text-[#171614]"
+                  className="w-full rounded-xl border border-border bg-card p-2.5 text-xs font-semibold text-foreground"
                 >
                   <option value="TEXT">Short Text</option>
                   <option value="TEXTAREA">Long Text / Paragraph</option>
@@ -448,7 +448,7 @@ export function StudentCustomFieldsClient({
               </div>
 
               <div>
-                <label className="block font-bold text-[#171614] mb-1">
+                <label className="block font-bold text-foreground mb-1">
                   Input Placeholder
                 </label>
                 <input
@@ -456,14 +456,14 @@ export function StudentCustomFieldsClient({
                   value={formData.placeholder}
                   onChange={(e) => setFormData({ ...formData, placeholder: e.target.value })}
                   placeholder="e.g. Enter 12-digit ID"
-                  className="w-full rounded-xl border border-[#DCD7CB] bg-[#FAF8F3] p-2.5 text-xs text-[#171614]"
+                  className="w-full rounded-xl border border-border bg-card p-2.5 text-xs text-foreground"
                 />
               </div>
             </div>
 
             {(formData.fieldType === "DROPDOWN" || formData.fieldType === "MULTI_SELECT") && (
               <div>
-                <label className="block font-bold text-[#171614] mb-1">
+                <label className="block font-bold text-foreground mb-1">
                   Dropdown Choices (Comma-separated) *
                 </label>
                 <input
@@ -472,13 +472,13 @@ export function StudentCustomFieldsClient({
                   value={formData.optionsText}
                   onChange={(e) => setFormData({ ...formData, optionsText: e.target.value })}
                   placeholder="e.g. Day Scholar, Hostel Resident, Transport Route A"
-                  className="w-full rounded-xl border border-[#DCD7CB] bg-[#FAF8F3] p-2.5 text-xs text-[#171614]"
+                  className="w-full rounded-xl border border-border bg-card p-2.5 text-xs text-foreground"
                 />
               </div>
             )}
 
             <div>
-              <label className="block font-bold text-[#171614] mb-1">
+              <label className="block font-bold text-foreground mb-1">
                 Help / Context Subtext
               </label>
               <input
@@ -486,28 +486,28 @@ export function StudentCustomFieldsClient({
                 value={formData.helpText}
                 onChange={(e) => setFormData({ ...formData, helpText: e.target.value })}
                 placeholder="e.g. Issued by Ministry of Education"
-                className="w-full rounded-xl border border-[#DCD7CB] bg-[#FAF8F3] p-2.5 text-xs text-[#171614]"
+                className="w-full rounded-xl border border-border bg-card p-2.5 text-xs text-foreground"
               />
             </div>
 
-            <div className="pt-2 border-t border-[#EFECE3] space-y-2">
-              <label className="flex items-center gap-2 cursor-pointer text-xs font-bold text-[#171614]">
+            <div className="pt-2 border-t border-border space-y-2">
+              <label className="flex items-center gap-2 cursor-pointer text-xs font-bold text-foreground">
                 <input
                   type="checkbox"
                   checked={formData.isRequired}
                   onChange={(e) => setFormData({ ...formData, isRequired: e.target.checked })}
-                  className="rounded border-[#DCD7CB] text-[#171614] focus:ring-[#B89B62]"
+                  className="rounded border-border text-foreground focus:ring-primary/20"
                 />
                 Mandatory Field (Required for Admission Completion)
               </label>
 
-              <div className="grid grid-cols-2 gap-2 text-xs pt-1 text-[#555047]">
+              <div className="grid grid-cols-2 gap-2 text-xs pt-1 text-muted-foreground">
                 <label className="flex items-center gap-2 cursor-pointer">
                   <input
                     type="checkbox"
                     checked={formData.isVisibleToTeacher}
                     onChange={(e) => setFormData({ ...formData, isVisibleToTeacher: e.target.checked })}
-                    className="rounded border-[#DCD7CB] text-[#171614]"
+                    className="rounded border-border text-foreground"
                   />
                   Visible to Faculty & Teachers
                 </label>
@@ -516,14 +516,14 @@ export function StudentCustomFieldsClient({
                     type="checkbox"
                     checked={formData.isVisibleToParent}
                     onChange={(e) => setFormData({ ...formData, isVisibleToParent: e.target.checked })}
-                    className="rounded border-[#DCD7CB] text-[#171614]"
+                    className="rounded border-border text-foreground"
                   />
                   Visible in Parent Portal
                 </label>
               </div>
             </div>
 
-            <div className="flex justify-end gap-2.5 pt-4 border-t border-[#EFECE3]">
+            <div className="flex justify-end gap-2.5 pt-4 border-t border-border">
               <Button type="button" variant="secondary" size="sm" onClick={() => setIsModalOpen(false)}>
                 Cancel
               </Button>

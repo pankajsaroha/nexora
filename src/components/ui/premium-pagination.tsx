@@ -29,20 +29,20 @@ export function PremiumPagination({
   return (
     <div
       className={cn(
-        "flex flex-col sm:flex-row items-center justify-between gap-4 py-4 px-2 border-t border-[#EFECE3] text-xs font-mono",
+        "flex flex-col sm:flex-row items-center justify-between gap-4 py-4 px-2 border-t border-border text-xs font-mono",
         className
       )}
     >
-      <div className="text-[#7A756B]">
+      <div className="text-muted-foreground">
         {totalItems !== undefined ? (
           <span>
-            Showing <strong className="text-[#171614]">{startItem}–{endItem}</strong> of{" "}
-            <strong className="text-[#171614]">{totalItems}</strong> records
+            Showing <strong className="text-foreground">{startItem}–{endItem}</strong> of{" "}
+            <strong className="text-foreground">{totalItems}</strong> records
           </span>
         ) : (
           <span>
-            Page <strong className="text-[#171614]">{currentPage}</strong> of{" "}
-            <strong className="text-[#171614]">{totalPages}</strong>
+            Page <strong className="text-foreground">{currentPage}</strong> of{" "}
+            <strong className="text-foreground">{totalPages}</strong>
           </span>
         )}
       </div>
@@ -52,7 +52,7 @@ export function PremiumPagination({
           type="button"
           onClick={() => onPageChange(currentPage - 1)}
           disabled={currentPage <= 1}
-          className="inline-flex items-center gap-1 px-3 py-1.5 rounded-xl border border-[#DCD7CB] bg-[#FAF8F3] text-[#171614] hover:bg-[#EFECE3] disabled:opacity-40 disabled:pointer-events-none transition-all font-bold text-xs"
+          className="inline-flex items-center gap-1 px-3 py-1.5 rounded-xl border border-border bg-card text-foreground hover:bg-muted disabled:opacity-40 disabled:pointer-events-none transition-all font-bold text-xs"
         >
           <ChevronLeft className="w-3.5 h-3.5" />
           <span>Previous</span>
@@ -71,15 +71,15 @@ export function PremiumPagination({
 
             return (
               <React.Fragment key={page}>
-                {showEllipsis && <span className="px-1 text-[#7A756B]">...</span>}
+                {showEllipsis && <span className="px-1 text-muted-foreground">...</span>}
                 <button
                   type="button"
                   onClick={() => onPageChange(page)}
                   className={cn(
                     "w-8 h-8 rounded-xl font-bold text-xs transition-all",
                     currentPage === page
-                      ? "bg-[#1B1916] text-[#FAF8F3] shadow-2xs"
-                      : "bg-[#FAF8F3] text-[#555047] hover:bg-[#EFECE3] hover:text-[#171614] border border-[#DCD7CB]"
+                      ? "bg-primary text-primary-foreground shadow-2xs font-semibold"
+                      : "bg-card text-muted-foreground hover:bg-muted hover:text-foreground border border-border"
                   )}
                 >
                   {page}
@@ -92,7 +92,7 @@ export function PremiumPagination({
           type="button"
           onClick={() => onPageChange(currentPage + 1)}
           disabled={currentPage >= totalPages}
-          className="inline-flex items-center gap-1 px-3 py-1.5 rounded-xl border border-[#DCD7CB] bg-[#FAF8F3] text-[#171614] hover:bg-[#EFECE3] disabled:opacity-40 disabled:pointer-events-none transition-all font-bold text-xs"
+          className="inline-flex items-center gap-1 px-3 py-1.5 rounded-xl border border-border bg-card text-foreground hover:bg-muted disabled:opacity-40 disabled:pointer-events-none transition-all font-bold text-xs"
         >
           <span>Next</span>
           <ChevronRight className="w-3.5 h-3.5" />

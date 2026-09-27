@@ -30,21 +30,21 @@ export function LandingNavbar() {
       <header
         className={`sticky top-0 z-50 transition-all duration-200 ${
           isScrolled
-            ? "border-b border-[#E5E0D5] bg-[#F7F4ED]/95 backdrop-blur-md shadow-xs py-3.5"
-            : "border-b border-transparent bg-[#F7F4ED] py-5"
+            ? "border-b border-border bg-background/95 backdrop-blur-md shadow-xs py-3.5"
+            : "border-b border-transparent bg-background py-5"
         }`}
       >
         <div className="max-w-7xl mx-auto px-6 sm:px-8 flex items-center justify-between">
           {/* Brand Logo */}
           <Link href="/" className="flex items-center gap-3 group">
-            <div className="w-8 h-8 rounded-lg bg-[#171614] border border-[#35322C] text-[#F7F4ED] flex items-center justify-center font-bold text-xs tracking-wider shadow-2xs group-hover:border-[#B89B62] transition-colors">
+            <div className="w-8 h-8 rounded-lg bg-primary border border-border text-primary-foreground flex items-center justify-center font-bold text-xs tracking-wider shadow-2xs group-hover:border-primary transition-colors">
               NX
             </div>
             <div>
-              <span className="font-extrabold text-base tracking-tight text-[#171614] block leading-none font-serif">
+              <span className="font-extrabold text-base tracking-tight text-foreground block leading-none font-serif">
                 NEXORA
               </span>
-              <span className="text-[10px] font-mono uppercase tracking-widest text-[#7A756B] font-medium mt-0.5 block">
+              <span className="text-[10px] font-mono uppercase tracking-widest text-muted-foreground font-medium mt-0.5 block">
                 Institutional OS
               </span>
             </div>
@@ -56,7 +56,7 @@ export function LandingNavbar() {
               <a
                 key={link.href}
                 href={link.href}
-                className="hover:text-[#171614] transition-colors py-1 relative tracking-wide"
+                className="hover:text-foreground transition-colors py-1 relative tracking-wide"
               >
                 {link.label}
               </a>
@@ -67,13 +67,13 @@ export function LandingNavbar() {
           <div className="hidden sm:flex items-center gap-3">
             <Link
               href="/login"
-              className="text-xs font-semibold text-[#35322C] hover:text-[#171614] px-3.5 py-2 rounded-lg hover:bg-black/5 transition-colors"
+              className="text-xs font-semibold text-foreground hover:text-foreground px-3.5 py-2 rounded-lg hover:bg-black/5 transition-colors"
             >
               Sign In
             </Link>
             <Link
               href="/onboarding"
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold uppercase tracking-wider bg-[#1B1916] text-[#F7F4ED] border border-[#35322C] hover:bg-[#2A2722] hover:border-[#B89B62] transition-all shadow-xs"
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold uppercase tracking-wider bg-primary text-primary-foreground border border-border hover:bg-primary-hover hover:border-primary transition-all shadow-xs"
             >
               <span>Start your institution</span>
               <ArrowRight className="w-3.5 h-3.5 text-[#C4AA76]" />
@@ -84,7 +84,7 @@ export function LandingNavbar() {
           <button
             type="button"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="lg:hidden p-2 rounded-lg text-[#171614] hover:bg-black/5"
+            className="lg:hidden p-2 rounded-lg text-foreground hover:bg-black/5"
             aria-label="Toggle Menu"
           >
             {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
@@ -95,14 +95,14 @@ export function LandingNavbar() {
       {/* Mobile Drawer Navigation */}
       {mobileMenuOpen && (
         <div className="fixed inset-0 z-40 lg:hidden bg-black/50 backdrop-blur-xs flex justify-end animate-in fade-in">
-          <div className="w-full max-w-sm bg-[#F7F4ED] h-full shadow-2xl p-6 flex flex-col justify-between border-l border-[#E5E0D5] animate-in slide-in-from-right">
+          <div className="w-full max-w-sm bg-background h-full shadow-2xl p-6 flex flex-col justify-between border-l border-border animate-in slide-in-from-right">
             <div>
-              <div className="flex items-center justify-between pb-6 border-b border-[#E5E0D5]">
+              <div className="flex items-center justify-between pb-6 border-b border-border">
                 <div className="flex items-center gap-2.5">
-                  <div className="w-7 h-7 rounded-lg bg-[#171614] text-[#F7F4ED] flex items-center justify-center font-bold text-xs border border-[#35322C]">
+                  <div className="w-7 h-7 rounded-lg bg-primary text-primary-foreground flex items-center justify-center font-bold text-xs border border-border">
                     NX
                   </div>
-                  <span className="font-extrabold text-sm tracking-tight text-[#171614] font-serif">
+                  <span className="font-extrabold text-sm tracking-tight text-foreground font-serif">
                     NEXORA
                   </span>
                 </div>
@@ -121,27 +121,27 @@ export function LandingNavbar() {
                     key={link.href}
                     href={link.href}
                     onClick={() => setMobileMenuOpen(false)}
-                    className="flex items-center justify-between py-2.5 px-3 rounded-lg text-sm font-semibold text-[#171614] hover:bg-black/5 transition-colors"
+                    className="flex items-center justify-between py-2.5 px-3 rounded-lg text-sm font-semibold text-foreground hover:bg-black/5 transition-colors"
                   >
                     <span>{link.label}</span>
-                    <ChevronRight className="w-4 h-4 text-[#A8A398]" />
+                    <ChevronRight className="w-4 h-4 text-muted-foreground" />
                   </a>
                 ))}
               </div>
             </div>
 
-            <div className="pt-6 border-t border-[#E5E0D5] space-y-3">
+            <div className="pt-6 border-t border-border space-y-3">
               <Link
                 href="/login"
                 onClick={() => setMobileMenuOpen(false)}
-                className="w-full flex items-center justify-center py-2.5 rounded-xl text-xs font-semibold border border-[#E5E0D5] bg-white text-[#171614] hover:bg-[#FAF8F3]"
+                className="w-full flex items-center justify-center py-2.5 rounded-xl text-xs font-semibold border border-border bg-white text-foreground hover:bg-card"
               >
                 Sign In to Portal
               </Link>
               <Link
                 href="/onboarding"
                 onClick={() => setMobileMenuOpen(false)}
-                className="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl text-xs font-bold uppercase tracking-wider bg-[#1B1916] text-[#F7F4ED] hover:bg-[#2A2722] border border-[#35322C]"
+                className="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl text-xs font-bold uppercase tracking-wider bg-primary text-primary-foreground hover:bg-primary-hover border border-border"
               >
                 <span>Start your institution</span>
                 <ArrowRight className="w-3.5 h-3.5 text-[#C4AA76]" />

@@ -108,7 +108,7 @@ export default function ResetPasswordPage() {
       case 3:
         return { score: 75, label: "Good", color: "bg-[#856D3B]" };
       case 4:
-        return { score: 100, label: "Strong", color: "bg-[#525E4B]" };
+        return { score: 100, label: "Strong", color: "bg-success" };
       default:
         return { score: 0, label: "Weak", color: "bg-[#C45B5B]" };
     }
@@ -171,19 +171,19 @@ export default function ResetPasswordPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#F7F4ED] text-[#171614] font-sans flex flex-col justify-between selection:bg-[#171614] selection:text-[#F7F4ED]">
+    <div className="min-h-screen bg-background text-foreground font-sans flex flex-col justify-between selection:bg-primary selection:text-primary-foreground">
       {/* Header */}
-      <header className="border-b border-[#E5E0D5] bg-[#F7F4ED]/90 backdrop-blur-md px-6 sm:px-10 py-4">
+      <header className="border-b border-border bg-background/90 backdrop-blur-md px-6 sm:px-10 py-4">
         <div className="max-w-7xl mx-auto flex items-center justify-between">
           <Link href="/" className="flex items-center gap-3 group">
-            <div className="w-8 h-8 rounded-lg bg-[#171614] text-[#F7F4ED] border border-[#35322C] flex items-center justify-center font-bold text-xs tracking-wider shadow-2xs group-hover:border-[#B89B62] transition-colors">
+            <div className="w-8 h-8 rounded-lg bg-primary text-primary-foreground border border-border flex items-center justify-center font-bold text-xs tracking-wider shadow-2xs group-hover:border-primary transition-colors">
               NX
             </div>
             <div>
-              <span className="font-extrabold text-sm tracking-tight text-[#171614] block leading-none font-serif">
+              <span className="font-extrabold text-sm tracking-tight text-foreground block leading-none font-serif">
                 NEXORA
               </span>
-              <span className="text-[10px] font-mono uppercase tracking-widest text-[#7A756B] block mt-0.5">
+              <span className="text-[10px] font-mono uppercase tracking-widest text-muted-foreground block mt-0.5">
                 Institutional OS
               </span>
             </div>
@@ -192,10 +192,10 @@ export default function ResetPasswordPage() {
           <div className="flex items-center gap-3 text-xs">
             <Link
               href="/login"
-              className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-bold uppercase tracking-wider text-[#171614] hover:bg-[#EAE4D7] border border-[#DCD7CB] transition-all shadow-2xs"
+              className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-bold uppercase tracking-wider text-foreground hover:bg-[#EAE4D7] border border-border transition-all shadow-2xs"
             >
               <span>Sign In</span>
-              <ArrowRight className="w-3 h-3 text-[#7A756B]" />
+              <ArrowRight className="w-3 h-3 text-muted-foreground" />
             </Link>
           </div>
         </div>
@@ -205,27 +205,27 @@ export default function ResetPasswordPage() {
       <main className="flex-1 max-w-6xl w-full mx-auto px-6 py-10 sm:py-16 grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16 items-center">
         {/* Left Column */}
         <div className="lg:col-span-6 space-y-6">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#FAF8F3] border border-[#DCD7CB] text-[11px] font-mono font-semibold text-[#856D3B] shadow-2xs">
-            <ShieldCheck className="w-3.5 h-3.5 text-[#856D3B]" />
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-card border border-border text-[11px] font-mono font-semibold text-primary shadow-2xs">
+            <ShieldCheck className="w-3.5 h-3.5 text-primary" />
             <span>CREDENTIAL ROTATION</span>
           </div>
 
-          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-[#171614] font-serif leading-[1.15]">
+          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-foreground font-serif leading-[1.15]">
             Set your new master password.
           </h1>
 
-          <p className="text-xs sm:text-sm text-[#555047] leading-relaxed max-w-lg">
+          <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed max-w-lg">
             Choose a strong, confidential password to protect your institutional databases, student dossiers, fee collection records, and administrative controls.
           </p>
 
-          <div className="pt-4 border-t border-[#E5E0D5] space-y-3">
+          <div className="pt-4 border-t border-border space-y-3">
             {[
               "Encrypted with standard bcrypt key-derivation algorithms.",
               "Instantly synchronizes across Supabase Auth and database clusters.",
               "Requires clean re-authentication on all active sessions upon update.",
             ].map((text, idx) => (
-              <div key={idx} className="flex items-start gap-2.5 text-xs text-[#555047]">
-                <CheckCircle2 className="w-4 h-4 text-[#525E4B] shrink-0 mt-0.5" />
+              <div key={idx} className="flex items-start gap-2.5 text-xs text-muted-foreground">
+                <CheckCircle2 className="w-4 h-4 text-success shrink-0 mt-0.5" />
                 <span>{text}</span>
               </div>
             ))}
@@ -234,29 +234,29 @@ export default function ResetPasswordPage() {
 
         {/* Right Column */}
         <div className="lg:col-span-6">
-          <div className="rounded-3xl border border-[#E5E0D5] bg-white p-8 sm:p-10 shadow-xl space-y-6">
+          <div className="rounded-3xl border border-border bg-white p-8 sm:p-10 shadow-xl space-y-6">
             {isVerifyingSession ? (
               <div className="py-12 text-center space-y-3">
-                <Loader2 className="w-8 h-8 animate-spin text-[#856D3B] mx-auto" />
-                <p className="text-xs font-mono text-[#7A756B]">
+                <Loader2 className="w-8 h-8 animate-spin text-primary mx-auto" />
+                <p className="text-xs font-mono text-muted-foreground">
                   Verifying recovery session...
                 </p>
               </div>
             ) : isInvalidLink ? (
               /* Invalid or Expired State */
               <div className="space-y-6 text-center py-4">
-                <div className="w-14 h-14 rounded-2xl bg-[#FBF4F4] border border-[#ECCECE] text-[#6F3D3A] flex items-center justify-center mx-auto">
+                <div className="w-14 h-14 rounded-2xl bg-destructive/15 border border-[#ECCECE] text-destructive flex items-center justify-center mx-auto">
                   <AlertTriangle className="w-7 h-7" />
                 </div>
 
                 <div className="space-y-1.5">
-                  <span className="text-[10px] font-mono uppercase tracking-widest text-[#7A756B] font-bold block">
+                  <span className="text-[10px] font-mono uppercase tracking-widest text-muted-foreground font-bold block">
                     LINK EXPIRED OR INVALID
                   </span>
-                  <h2 className="text-2xl font-bold tracking-tight text-[#171614] font-serif">
+                  <h2 className="text-2xl font-bold tracking-tight text-foreground font-serif">
                     Reset link expired
                   </h2>
-                  <p className="text-xs text-[#555047] max-w-sm mx-auto">
+                  <p className="text-xs text-muted-foreground max-w-sm mx-auto">
                     This password reset link is no longer valid or has already been used. Please request a new link.
                   </p>
                 </div>
@@ -264,13 +264,13 @@ export default function ResetPasswordPage() {
                 <div className="pt-2 flex flex-col gap-2.5">
                   <Link
                     href="/forgot-password"
-                    className="w-full py-3 rounded-xl bg-[#1B1916] hover:bg-[#2A2722] text-[#F7F4ED] border border-[#35322C] font-bold text-xs uppercase tracking-wider shadow-sm transition-all text-center"
+                    className="w-full py-3 rounded-xl bg-primary hover:bg-primary-hover text-primary-foreground border border-border font-bold text-xs uppercase tracking-wider shadow-sm transition-all text-center"
                   >
                     Request a New Link
                   </Link>
                   <Link
                     href="/login"
-                    className="w-full py-2.5 rounded-xl bg-[#FAF8F3] hover:bg-[#EAE4D7] text-[#171614] border border-[#DCD7CB] font-bold text-xs uppercase tracking-wider transition-all text-center"
+                    className="w-full py-2.5 rounded-xl bg-card hover:bg-[#EAE4D7] text-foreground border border-border font-bold text-xs uppercase tracking-wider transition-all text-center"
                   >
                     Back to Sign In
                   </Link>
@@ -284,13 +284,13 @@ export default function ResetPasswordPage() {
                 </div>
 
                 <div className="space-y-1.5">
-                  <span className="text-[10px] font-mono uppercase tracking-widest text-[#525E4B] font-bold block">
+                  <span className="text-[10px] font-mono uppercase tracking-widest text-success font-bold block">
                     PASSWORD UPDATED
                   </span>
-                  <h2 className="text-2xl font-bold tracking-tight text-[#171614] font-serif">
+                  <h2 className="text-2xl font-bold tracking-tight text-foreground font-serif">
                     Password updated successfully
                   </h2>
-                  <p className="text-xs text-[#555047] max-w-sm mx-auto">
+                  <p className="text-xs text-muted-foreground max-w-sm mx-auto">
                     Your password has been changed. Please continue to sign in with your new password.
                   </p>
                 </div>
@@ -298,10 +298,10 @@ export default function ResetPasswordPage() {
                 <div className="pt-4">
                   <Button
                     onClick={() => router.push("/login")}
-                    className="w-full py-3 rounded-xl bg-[#1B1916] hover:bg-[#2A2722] text-[#F7F4ED] border border-[#35322C] font-bold text-xs uppercase tracking-wider shadow-sm transition-all flex items-center justify-center gap-2"
+                    className="w-full py-3 rounded-xl bg-primary hover:bg-primary-hover text-primary-foreground border border-border font-bold text-xs uppercase tracking-wider shadow-sm transition-all flex items-center justify-center gap-2"
                   >
                     <span>CONTINUE TO SIGN IN</span>
-                    <ArrowRight className="w-3.5 h-3.5 text-[#D4B87C]" />
+                    <ArrowRight className="w-3.5 h-3.5 text-primary" />
                   </Button>
                 </div>
               </div>
@@ -309,22 +309,22 @@ export default function ResetPasswordPage() {
               /* Reset Password Form */
               <>
                 <div>
-                  <span className="text-[10px] font-mono uppercase tracking-widest text-[#7A756B] font-bold block mb-1">
+                  <span className="text-[10px] font-mono uppercase tracking-widest text-muted-foreground font-bold block mb-1">
                     NEW PASSWORD
                   </span>
-                  <h2 className="text-2xl font-bold tracking-tight text-[#171614] font-serif">
+                  <h2 className="text-2xl font-bold tracking-tight text-foreground font-serif">
                     Reset your password
                   </h2>
                   {targetEmail && (
-                    <p className="text-xs text-[#7A756B] mt-1 font-mono">
-                      Account: <strong className="text-[#171614]">{targetEmail}</strong>
+                    <p className="text-xs text-muted-foreground mt-1 font-mono">
+                      Account: <strong className="text-foreground">{targetEmail}</strong>
                     </p>
                   )}
                 </div>
 
                 {errorMessage && (
-                  <div className="p-3.5 rounded-2xl bg-[#FBF4F4] border border-[#ECCECE] text-xs text-[#6F3D3A] flex items-start gap-2.5">
-                    <AlertCircle className="w-4 h-4 text-[#6F3D3A] shrink-0 mt-0.5" />
+                  <div className="p-3.5 rounded-2xl bg-destructive/15 border border-[#ECCECE] text-xs text-destructive flex items-start gap-2.5">
+                    <AlertCircle className="w-4 h-4 text-destructive shrink-0 mt-0.5" />
                     <span className="leading-snug">{errorMessage}</span>
                   </div>
                 )}
@@ -332,18 +332,18 @@ export default function ResetPasswordPage() {
                 <form onSubmit={handleSubmit} className="space-y-4">
                   {/* New Password */}
                   <div>
-                    <label className="block text-xs font-bold text-[#171614] uppercase tracking-wider mb-1.5 font-mono text-[11px]">
+                    <label className="block text-xs font-bold text-foreground uppercase tracking-wider mb-1.5 font-mono text-[11px]">
                       New Password
                     </label>
                     <div className="relative">
-                      <Lock className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-[#7A756B]" />
+                      <Lock className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                       <input
                         type={showPassword ? "text" : "password"}
                         required
                         disabled={isLoading}
                         value={newPassword}
                         onChange={(e) => setNewPassword(e.target.value)}
-                        className="w-full rounded-xl border border-[#DCD7CB] bg-[#FAF8F3] py-2.5 pl-10 pr-10 text-xs text-[#171614] placeholder-[#A8A398] focus:border-[#B89B62] focus:bg-white focus:outline-none transition-colors font-mono"
+                        className="w-full rounded-xl border border-border bg-card py-2.5 pl-10 pr-10 text-xs text-foreground placeholder-[#A8A398] focus:border-primary focus:bg-white focus:outline-none transition-colors font-mono"
                         placeholder="Enter new password (min 6 characters)"
                         autoComplete="new-password"
                       />
@@ -352,7 +352,7 @@ export default function ResetPasswordPage() {
                         onClick={() => setShowPassword(!showPassword)}
                         tabIndex={-1}
                         aria-label={showPassword ? "Hide password" : "Show password"}
-                        className="absolute right-3.5 top-1/2 -translate-y-1/2 text-[#7A756B] hover:text-[#171614] transition-colors p-0.5 focus:outline-none"
+                        className="absolute right-3.5 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors p-0.5 focus:outline-none"
                       >
                         {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                       </button>
@@ -362,8 +362,8 @@ export default function ResetPasswordPage() {
                     {newPassword.length > 0 && (
                       <div className="mt-2 space-y-1">
                         <div className="flex items-center justify-between text-[10px] font-mono">
-                          <span className="text-[#7A756B]">Strength</span>
-                          <span className="font-bold text-[#171614]">{strength.label}</span>
+                          <span className="text-muted-foreground">Strength</span>
+                          <span className="font-bold text-foreground">{strength.label}</span>
                         </div>
                         <div className="h-1.5 w-full bg-[#E5E0D5] rounded-full overflow-hidden">
                           <div
@@ -377,18 +377,18 @@ export default function ResetPasswordPage() {
 
                   {/* Confirm Password */}
                   <div>
-                    <label className="block text-xs font-bold text-[#171614] uppercase tracking-wider mb-1.5 font-mono text-[11px]">
+                    <label className="block text-xs font-bold text-foreground uppercase tracking-wider mb-1.5 font-mono text-[11px]">
                       Confirm Password
                     </label>
                     <div className="relative">
-                      <Lock className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-[#7A756B]" />
+                      <Lock className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                       <input
                         type={showConfirmPassword ? "text" : "password"}
                         required
                         disabled={isLoading}
                         value={confirmPassword}
                         onChange={(e) => setConfirmPassword(e.target.value)}
-                        className="w-full rounded-xl border border-[#DCD7CB] bg-[#FAF8F3] py-2.5 pl-10 pr-10 text-xs text-[#171614] placeholder-[#A8A398] focus:border-[#B89B62] focus:bg-white focus:outline-none transition-colors font-mono"
+                        className="w-full rounded-xl border border-border bg-card py-2.5 pl-10 pr-10 text-xs text-foreground placeholder-[#A8A398] focus:border-primary focus:bg-white focus:outline-none transition-colors font-mono"
                         placeholder="Re-enter new password"
                         autoComplete="new-password"
                       />
@@ -397,7 +397,7 @@ export default function ResetPasswordPage() {
                         onClick={() => setShowConfirmPassword(!showConfirmPassword)}
                         tabIndex={-1}
                         aria-label={showConfirmPassword ? "Hide password" : "Show password"}
-                        className="absolute right-3.5 top-1/2 -translate-y-1/2 text-[#7A756B] hover:text-[#171614] transition-colors p-0.5 focus:outline-none"
+                        className="absolute right-3.5 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors p-0.5 focus:outline-none"
                       >
                         {showConfirmPassword ? (
                           <EyeOff className="w-4 h-4" />
@@ -412,17 +412,17 @@ export default function ResetPasswordPage() {
                     <Button
                       type="submit"
                       disabled={isLoading}
-                      className="w-full py-3 rounded-xl bg-[#1B1916] hover:bg-[#2A2722] text-[#F7F4ED] border border-[#35322C] font-bold text-xs uppercase tracking-wider shadow-sm transition-all flex items-center justify-center gap-2"
+                      className="w-full py-3 rounded-xl bg-primary hover:bg-primary-hover text-primary-foreground border border-border font-bold text-xs uppercase tracking-wider shadow-sm transition-all flex items-center justify-center gap-2"
                     >
                       {isLoading ? (
                         <>
-                          <Loader2 className="w-4 h-4 animate-spin text-[#D4B87C]" />
+                          <Loader2 className="w-4 h-4 animate-spin text-primary" />
                           <span>UPDATING PASSWORD...</span>
                         </>
                       ) : (
                         <>
                           <span>UPDATE PASSWORD</span>
-                          <ArrowRight className="w-3.5 h-3.5 text-[#D4B87C]" />
+                          <ArrowRight className="w-3.5 h-3.5 text-primary" />
                         </>
                       )}
                     </Button>
@@ -432,7 +432,7 @@ export default function ResetPasswordPage() {
                 <div className="pt-2 text-center">
                   <Link
                     href="/login"
-                    className="text-xs text-[#7A756B] hover:text-[#171614] font-medium transition-colors"
+                    className="text-xs text-muted-foreground hover:text-foreground font-medium transition-colors"
                   >
                     ← Back to Sign In
                   </Link>
@@ -444,12 +444,12 @@ export default function ResetPasswordPage() {
       </main>
 
       {/* Footer */}
-      <footer className="border-t border-[#E5E0D5] px-6 sm:px-10 py-6 text-center text-xs text-[#7A756B]">
+      <footer className="border-t border-border px-6 sm:px-10 py-6 text-center text-xs text-muted-foreground">
         <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-3">
           <p>© {new Date().getFullYear()} NEXORA Institutional OS. All rights reserved.</p>
           <div className="flex items-center gap-6">
-            <Link href="/" className="hover:text-[#171614] transition-colors">Platform Overview</Link>
-            <Link href="/login" className="hover:text-[#171614] transition-colors">Sign In</Link>
+            <Link href="/" className="hover:text-foreground transition-colors">Platform Overview</Link>
+            <Link href="/login" className="hover:text-foreground transition-colors">Sign In</Link>
           </div>
         </div>
       </footer>

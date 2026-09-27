@@ -31,13 +31,13 @@ export function ConfirmationDialog({
   const getIcon = () => {
     switch (variant) {
       case "danger":
-        return <AlertTriangle className="h-6 w-6 text-[#6F3D3A]" />;
+        return <AlertTriangle className="h-6 w-6 text-destructive" />;
       case "warning":
-        return <AlertTriangle className="h-6 w-6 text-[#856D3B]" />;
+        return <AlertTriangle className="h-6 w-6 text-warning" />;
       case "info":
-        return <Info className="h-6 w-6 text-[#856D3B]" />;
+        return <Info className="h-6 w-6 text-primary" />;
       default:
-        return <CheckCircle2 className="h-6 w-6 text-[#525E4B]" />;
+        return <CheckCircle2 className="h-6 w-6 text-success" />;
     }
   };
 
@@ -56,15 +56,15 @@ export function ConfirmationDialog({
     <Modal isOpen={isOpen} onClose={onClose} title={title} size="sm">
       <div className="space-y-5">
         <div className="flex items-start gap-4">
-          <div className="rounded-xl bg-[#FAF8F3] border border-[#E5E0D5] p-2.5 shrink-0">
+          <div className="rounded-xl bg-muted border border-border p-2.5 shrink-0">
             {getIcon()}
           </div>
-          <p className="text-xs text-[#555047] leading-relaxed pt-1">
+          <p className="text-xs text-muted-foreground leading-relaxed pt-1">
             {message}
           </p>
         </div>
 
-        <div className="flex items-center justify-end gap-3 pt-3 border-t border-[#EFECE3]">
+        <div className="flex items-center justify-end gap-3 pt-3 border-t border-border">
           <Button
             type="button"
             variant="secondary"

@@ -19,7 +19,7 @@ export interface TabsProps {
 
 export function Tabs({ tabs, activeTab, onChange, className }: TabsProps) {
   return (
-    <div className={cn("flex flex-wrap items-center gap-1.5 p-1 rounded-2xl bg-[#FAF8F3] border border-[#E5E0D5] w-fit shadow-2xs", className)}>
+    <div className={cn("flex flex-wrap items-center gap-1.5 p-1 rounded-2xl bg-muted/50 border border-border w-fit shadow-2xs", className)}>
       {tabs.map((tab) => {
         const isActive = activeTab === tab.id;
         return (
@@ -30,8 +30,8 @@ export function Tabs({ tabs, activeTab, onChange, className }: TabsProps) {
             className={cn(
               "flex items-center gap-2 rounded-xl px-3.5 py-1.5 text-xs font-bold uppercase tracking-wider transition-all select-none",
               isActive
-                ? "bg-[#1B1916] text-[#FAF8F3] shadow-xs"
-                : "text-[#555047] hover:bg-white hover:text-[#171614]"
+                ? "bg-primary text-primary-foreground shadow-2xs font-semibold"
+                : "text-muted-foreground hover:bg-card hover:text-foreground"
             )}
           >
             {tab.icon && <span className="shrink-0">{tab.icon}</span>}
@@ -41,8 +41,8 @@ export function Tabs({ tabs, activeTab, onChange, className }: TabsProps) {
                 className={cn(
                   "rounded-md px-1.5 py-0.2 text-[10px] font-mono",
                   isActive
-                    ? "bg-[#2E2B25] text-[#D4B87C]"
-                    : "bg-[#EFECE3] text-[#7A756B]"
+                    ? "bg-primary-hover text-primary-foreground font-semibold"
+                    : "bg-muted text-muted-foreground"
                 )}
               >
                 {tab.count}

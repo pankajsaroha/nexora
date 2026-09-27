@@ -26,9 +26,27 @@ export interface TeacherDashboardProps {
       sectionName: string;
       studentsCount: number;
     } | null;
-    casualLeaveBalance: number;
-    sickLeaveBalance: number;
-    earnedLeaveBalance: number;
+    casualLeaveBalance?: number;
+    sickLeaveBalance?: number;
+    earnedLeaveBalance?: number;
+  };
+  leaveSummary?: {
+    totalEntitledDays: number;
+    totalAccruedDays: number;
+    totalUsedDays: number;
+    totalPendingDays: number;
+    totalAvailableDays: number;
+    categories: Array<{
+      leaveTypeId: string;
+      leaveTypeName: string;
+      leaveTypeCode: string;
+      isPaid: boolean;
+      entitledDays: number;
+      accruedDays: number;
+      usedDays: number;
+      pendingDays: number;
+      availableDays: number;
+    }>;
   };
   todaySchedule: Array<{
     period: number;
@@ -58,54 +76,64 @@ export interface TeacherDashboardProps {
 
 export function TeacherDashboard({
   teacher,
+  leaveSummary,
   todaySchedule,
   activeAssignments,
   assignedTasks,
 }: TeacherDashboardProps) {
   const pendingTasks = assignedTasks.filter((t) => t.status !== "COMPLETED");
 
+  const currentHour = new Date().getHours();
+  const greeting =
+    currentHour < 12 ? "Good morning" : currentHour < 17 ? "Good afternoon" : "Good evening";
+
+  const firstName = teacher.fullName ? teacher.fullName.split(" ")[0] : "Faculty";
+
+  // Derive leave numbers from single source of truth (leaveSummary)
+  const totalAvailable = leaveSummary
+    ? leaveSummary.totalAvailableDays
+    : (teacher.casualLeaveBalance || 0) + (teacher.sickLeaveBalance || 0);
+
+  const categoriesBreakdown = leaveSummary?.categories && leaveSummary.categories.length > 0
+    ? leaveSummary.categories.slice(0, 3).map((c) => `${c.leaveTypeCode}: ${c.availableDays}`).join(" · ")
+    : "No policy allocated";
+
   return (
-    <div className="space-y-10 max-w-6xl mx-auto py-2">
-      {/* Editorial Page Header */}
-      <div className="flex flex-col md:flex-row md:items-baseline justify-between gap-4 border-b border-[#E5E0D5] pb-6">
+    <div className="space-y-8 max-w-6xl mx-auto font-sans">
+      {/* Header */}
+      <div className="flex flex-col sm:flex-row sm:items-baseline justify-between gap-4 border-b border-border/80 pb-5">
         <div>
-          <div className="flex items-center gap-2 mb-1">
-            <span className="text-[11px] font-mono uppercase tracking-widest text-[#7A756B] font-bold">
-              FACULTY WORKSPACE
-            </span>
-            {teacher.classTeacherSection && (
-              <>
-                <span className="text-[#DCD7CB]">·</span>
-                <span className="text-[11px] font-mono uppercase tracking-wider text-[#856D3B] font-bold">
-                  Class Incharge: {teacher.classTeacherSection.className} {teacher.classTeacherSection.sectionName}
-                </span>
-              </>
-            )}
-          </div>
-          <h1 className="text-3xl font-extrabold tracking-tight text-[#171614]">
-            Good morning, {teacher.fullName}.
+          {teacher.classTeacherSection && (
+            <div className="flex items-center gap-2 mb-1">
+              <span className="text-xs font-medium text-primary">
+                Class Teacher: {teacher.classTeacherSection.className} {teacher.classTeacherSection.sectionName}
+              </span>
+            </div>
+          )}
+          <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-foreground">
+            {greeting}, {firstName}.
           </h1>
-          <p className="text-xs text-[#555047] mt-1">
-            You have {todaySchedule.length} lecture periods scheduled for today.{" "}
+          <p className="text-xs text-muted-foreground mt-1">
+            You have {todaySchedule.length} lecture period{todaySchedule.length === 1 ? "" : "s"} scheduled for today.{" "}
             {teacher.classTeacherSection
               ? `Daily roll-call for ${teacher.classTeacherSection.className} ${teacher.classTeacherSection.sectionName} is awaiting submission.`
-              : "All academic parameters are up to date."}
+              : "All academic records are up to date."}
           </p>
         </div>
 
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2.5">
           <Link
             href="/academics/assignments"
-            className="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-bold uppercase tracking-wider border border-[#DCD7CB] bg-[#FAF8F3] text-[#171614] hover:bg-[#EFECE3] hover:border-[#B89B62] transition-all shadow-2xs"
+            className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-medium border border-border bg-card hover:bg-muted text-foreground transition-all shadow-2xs"
           >
-            <PlusCircle className="w-3.5 h-3.5 text-[#7A756B]" />
+            <PlusCircle className="w-3.5 h-3.5 text-muted-foreground" />
             <span>Post Assignment</span>
           </Link>
           <Link
             href="/attendance"
-            className="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-bold uppercase tracking-wider bg-[#1B1916] text-[#FAF8F3] hover:bg-[#2A2722] hover:border-[#B89B62] border border-[#1B1916] transition-all shadow-xs"
+            className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-semibold bg-primary text-primary-foreground hover:bg-primary-hover transition-all shadow-xs"
           >
-            <CalendarCheck className="w-3.5 h-3.5 text-[#D4B87C]" />
+            <CalendarCheck className="w-3.5 h-3.5" />
             <span>Take Roll Call</span>
           </Link>
         </div>
@@ -113,53 +141,56 @@ export function TeacherDashboard({
 
       {/* Key Metrics Strip (Hairline Blocks) */}
       <section className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-        <div className="p-5 rounded-2xl border border-[#E5E0D5] bg-white space-y-1 shadow-2xs hover:border-[#B89B62] transition-all">
-          <span className="text-[11px] font-mono uppercase tracking-wider text-[#7A756B] font-bold block">
+        <div className="p-5 rounded-2xl border border-border bg-card space-y-1 shadow-2xs hover:border-primary/40 transition-all">
+          <span className="text-[11px] font-mono uppercase tracking-wider text-muted-foreground font-bold block">
             01 / TODAY&apos;S LECTURES
           </span>
-          <div className="text-2xl sm:text-3xl font-extrabold text-[#171614] tracking-tight">
+          <div className="text-2xl sm:text-3xl font-extrabold text-foreground tracking-tight">
             {todaySchedule.length} Periods
           </div>
-          <span className="text-[11px] text-[#555047] block font-medium">
+          <span className="text-[11px] text-muted-foreground block font-medium">
             Next: {todaySchedule[0]?.subjectName || "Planning Period"}
           </span>
         </div>
 
-        <div className="p-5 rounded-2xl border border-[#E5E0D5] bg-white space-y-1 shadow-2xs hover:border-[#B89B62] transition-all">
-          <span className="text-[11px] font-mono uppercase tracking-wider text-[#7A756B] font-bold block">
+        <div className="p-5 rounded-2xl border border-border bg-card space-y-1 shadow-2xs hover:border-primary/40 transition-all">
+          <span className="text-[11px] font-mono uppercase tracking-wider text-muted-foreground font-bold block">
             02 / SECTION ROSTER
           </span>
-          <div className="text-2xl sm:text-3xl font-extrabold text-[#171614] tracking-tight">
+          <div className="text-2xl sm:text-3xl font-extrabold text-foreground tracking-tight">
             {teacher.classTeacherSection?.studentsCount || 35} Students
           </div>
-          <span className="text-[11px] text-[#555047] block font-medium">
+          <span className="text-[11px] text-muted-foreground block font-medium">
             {teacher.classTeacherSection?.className || "Grade 8"} ({teacher.classTeacherSection?.sectionName || "A"})
           </span>
         </div>
 
-        <div className="p-5 rounded-2xl border border-[#E5E0D5] bg-white space-y-1 shadow-2xs hover:border-[#B89B62] transition-all">
-          <span className="text-[11px] font-mono uppercase tracking-wider text-[#7A756B] font-bold block">
+        <div className="p-5 rounded-2xl border border-border bg-card space-y-1 shadow-2xs hover:border-primary/40 transition-all">
+          <span className="text-[11px] font-mono uppercase tracking-wider text-muted-foreground font-bold block">
             03 / PENDING TASKS
           </span>
-          <div className="text-2xl sm:text-3xl font-extrabold text-[#171614] tracking-tight">
+          <div className="text-2xl sm:text-3xl font-extrabold text-foreground tracking-tight">
             {pendingTasks.length} Active
           </div>
-          <span className="text-[11px] text-[#856D3B] block font-bold">
+          <span className="text-[11px] text-warning block font-bold">
             Assigned by Principal
           </span>
         </div>
 
-        <div className="p-5 rounded-2xl border border-[#E5E0D5] bg-white space-y-1 shadow-2xs hover:border-[#B89B62] transition-all">
-          <span className="text-[11px] font-mono uppercase tracking-wider text-[#7A756B] font-bold block">
+        <Link
+          href="/attendance/leaves"
+          className="p-5 rounded-2xl border border-border bg-card space-y-1 shadow-2xs hover:border-primary/40 transition-all group block"
+        >
+          <span className="text-[11px] font-mono uppercase tracking-wider text-muted-foreground font-bold block">
             04 / LEAVE BALANCE
           </span>
-          <div className="text-2xl sm:text-3xl font-extrabold text-[#171614] tracking-tight">
-            {teacher.casualLeaveBalance + teacher.sickLeaveBalance} Days
+          <div className="text-2xl sm:text-3xl font-extrabold text-foreground tracking-tight group-hover:text-primary transition-colors">
+            {totalAvailable} Days
           </div>
-          <span className="text-[11px] text-[#525E4B] block font-bold">
-            Casual: {teacher.casualLeaveBalance} · Sick: {teacher.sickLeaveBalance}
+          <span className="text-[11px] text-emerald-600 block font-bold truncate">
+            {categoriesBreakdown}
           </span>
-        </div>
+        </Link>
       </section>
 
       {/* Main Grid: Daily Lecture Schedule & Homework Grading */}
@@ -169,50 +200,50 @@ export function TeacherDashboard({
           <section className="space-y-3">
             <div className="flex items-center justify-between">
               <div>
-                <h2 className="text-sm font-extrabold uppercase tracking-wider text-[#171614]">
+                <h2 className="text-sm font-extrabold uppercase tracking-wider text-foreground">
                   Today&apos;s Lecture Schedule
                 </h2>
-                <p className="text-xs text-[#7A756B]">Timetable slots and room allocations</p>
+                <p className="text-xs text-muted-foreground">Timetable slots and room allocations</p>
               </div>
               <Link
                 href="/academics/timetable"
-                className="text-[11px] font-bold font-mono text-[#856D3B] hover:text-[#171614]"
+                className="text-[11px] font-bold font-mono text-primary hover:underline"
               >
                 Full Matrix →
               </Link>
             </div>
 
-            <div className="divide-y divide-[#EFECE3] border border-[#E5E0D5] rounded-2xl bg-white overflow-hidden shadow-2xs">
+            <div className="divide-y divide-border border border-border rounded-2xl bg-card overflow-hidden shadow-2xs">
               {todaySchedule.length === 0 ? (
-                <div className="p-6 text-center text-xs text-[#7A756B]">
+                <div className="p-6 text-center text-xs text-muted-foreground">
                   No lecture slots scheduled for today.
                 </div>
               ) : (
                 todaySchedule.map((slot) => (
                   <div
                     key={slot.period}
-                    className="p-4 flex items-center justify-between hover:bg-[#FAF8F3] transition-colors"
+                    className="p-4 flex items-center justify-between hover:bg-muted/40 transition-colors"
                   >
                     <div className="flex items-center gap-4">
-                      <div className="w-9 h-9 rounded-xl bg-[#FAF8F3] border border-[#E5E0D5] flex items-center justify-center font-mono font-bold text-xs text-[#171614] shrink-0">
+                      <div className="w-9 h-9 rounded-xl bg-primary text-primary-foreground flex items-center justify-center font-mono font-bold text-xs shrink-0">
                         P{slot.period}
                       </div>
                       <div>
                         <div className="flex items-center gap-2">
-                          <p className="text-xs font-bold text-[#171614]">
+                          <p className="text-xs font-bold text-foreground">
                             {slot.subjectName}
                           </p>
-                          <span className="text-[10px] font-mono px-2 py-0.5 rounded-md bg-[#FAF6ED] border border-[#D4B87C]/40 text-[#856D3B] font-bold">
+                          <span className="text-[10px] font-mono px-2 py-0.5 rounded-md bg-accent-subtle border border-accent/30 text-accent font-bold">
                             {slot.className}
                           </span>
                         </div>
-                        <p className="text-[11px] text-[#7A756B] mt-0.5 font-mono">
+                        <p className="text-[11px] text-muted-foreground mt-0.5 font-mono">
                           {slot.startTime} – {slot.endTime} · Room {slot.roomNumber}
                         </p>
                       </div>
                     </div>
 
-                    <span className="text-[11px] font-mono text-[#7A756B] font-medium">
+                    <span className="text-[11px] font-mono text-muted-foreground font-medium">
                       Lecture
                     </span>
                   </div>
@@ -225,41 +256,41 @@ export function TeacherDashboard({
           <section className="space-y-3">
             <div className="flex items-center justify-between">
               <div>
-                <h2 className="text-sm font-extrabold uppercase tracking-wider text-[#171614]">
+                <h2 className="text-sm font-extrabold uppercase tracking-wider text-foreground">
                   Administrative & Department Tasks
                 </h2>
-                <p className="text-xs text-[#7A756B]">Institutional action items assigned to you</p>
+                <p className="text-xs text-muted-foreground">Institutional action items assigned to you</p>
               </div>
-              <Link href="/tasks" className="text-[11px] font-mono font-bold text-[#856D3B] hover:text-[#171614]">
+              <Link href="/tasks" className="text-[11px] font-mono font-bold text-primary hover:underline">
                 View All Tasks →
               </Link>
             </div>
 
-            <div className="divide-y divide-[#EFECE3] border border-[#E5E0D5] rounded-2xl bg-white overflow-hidden shadow-2xs">
+            <div className="divide-y divide-border border border-border rounded-2xl bg-card overflow-hidden shadow-2xs">
               {assignedTasks.length === 0 ? (
-                <div className="p-6 text-center text-xs text-[#7A756B]">
+                <div className="p-6 text-center text-xs text-muted-foreground">
                   No pending tasks assigned.
                 </div>
               ) : (
                 assignedTasks.map((t) => (
-                  <div key={t.id} className="p-4 flex items-center justify-between hover:bg-[#FAF8F3] transition-colors">
+                  <div key={t.id} className="p-4 flex items-center justify-between hover:bg-muted/40 transition-colors">
                     <div className="flex items-center gap-3">
                       <span
                         className={`w-2 h-2 rounded-full shrink-0 ${
                           t.priority === "HIGH" || t.priority === "URGENT"
-                            ? "bg-[#6F3D3A]"
-                            : "bg-[#B89B62]"
+                            ? "bg-destructive"
+                            : "bg-warning"
                         }`}
                       />
                       <div>
-                        <p className="text-xs font-bold text-[#171614]">{t.title}</p>
-                        <p className="text-[11px] text-[#7A756B] font-mono">
+                        <p className="text-xs font-bold text-foreground">{t.title}</p>
+                        <p className="text-[11px] text-muted-foreground font-mono">
                           Due: {t.dueDate ? formatDate(t.dueDate) : "No deadline"}
                         </p>
                       </div>
                     </div>
 
-                    <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded-md bg-[#FAF8F3] border border-[#E5E0D5] text-[#171614]">
+                    <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded-md bg-muted border border-border text-foreground">
                       {t.status}
                     </span>
                   </div>
@@ -273,37 +304,37 @@ export function TeacherDashboard({
         <div className="space-y-8">
           <section className="space-y-3">
             <div className="flex items-center justify-between">
-              <h2 className="text-sm font-extrabold uppercase tracking-wider text-[#171614]">
+              <h2 className="text-sm font-extrabold uppercase tracking-wider text-foreground">
                 Coursework Submissions
               </h2>
-              <Link href="/academics/assignments" className="text-[11px] font-mono font-bold text-[#856D3B] hover:text-[#171614]">
+              <Link href="/academics/assignments" className="text-[11px] font-mono font-bold text-primary hover:underline">
                 All HW →
               </Link>
             </div>
 
-            <div className="divide-y divide-[#EFECE3] border border-[#E5E0D5] rounded-2xl bg-white overflow-hidden shadow-2xs">
+            <div className="divide-y divide-border border border-border rounded-2xl bg-card overflow-hidden shadow-2xs">
               {activeAssignments.length === 0 ? (
-                <div className="p-6 text-center text-xs text-[#7A756B]">
+                <div className="p-6 text-center text-xs text-muted-foreground">
                   No active assignments currently awaiting grading.
                 </div>
               ) : (
                 activeAssignments.map((a) => (
                   <div key={a.id} className="p-4 space-y-2">
                     <div className="flex items-center justify-between">
-                      <p className="text-xs font-bold text-[#171614]">{a.title}</p>
-                      <span className="text-[10px] font-mono text-[#856D3B] font-bold">
+                      <p className="text-xs font-bold text-foreground">{a.title}</p>
+                      <span className="text-[10px] font-mono text-primary font-bold">
                         {a.submissionsCount} / {a.totalStudents} Turned In
                       </span>
                     </div>
 
-                    <div className="flex items-center justify-between text-[11px] font-mono text-[#7A756B]">
+                    <div className="flex items-center justify-between text-[11px] font-mono text-muted-foreground">
                       <span>{a.className} • {a.subjectName}</span>
                       <span>Due {formatDate(a.dueDate)}</span>
                     </div>
 
-                    <div className="w-full bg-[#FAF8F3] h-1.5 rounded-full overflow-hidden border border-[#E5E0D5]">
+                    <div className="w-full bg-muted h-1.5 rounded-full overflow-hidden border border-border">
                       <div
-                        className="bg-[#65705B] h-full rounded-full"
+                        className="bg-primary h-full rounded-full"
                         style={{
                           width: `${Math.min(100, Math.round((a.submissionsCount / (a.totalStudents || 1)) * 100))}%`,
                         }}

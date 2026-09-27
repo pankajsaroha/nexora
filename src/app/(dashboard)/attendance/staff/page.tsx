@@ -1,12 +1,19 @@
 import React from "react";
-import { getCurrentUser, hasPermission } from "@/lib/auth";
+import { getCurrentUser } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
-import { PERMISSIONS } from "@/lib/permissions";
 import { redirect } from "next/navigation";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { PageHeader } from "@/components/ui/page-header";
-import { Clock, CheckCircle2, XCircle, Calendar, User, Download, Plus } from "lucide-react";
+import Link from "next/link";
+import {
+  Calendar,
+  Clock,
+  UserCheck,
+  Download,
+  ArrowRight,
+  CheckCircle2,
+} from "lucide-react";
 import { formatDate } from "@/lib/utils";
 
 export const dynamic = "force-dynamic";
@@ -17,191 +24,140 @@ export default async function StaffAttendancePage() {
     redirect("/login");
   }
 
-  const [teachers, leaveRequests] = await Promise.all([
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+
+  const [teachers, todayAttendance, pendingLeaveCount] = await Promise.all([
     prisma.teacher.findMany({
       where: { institutionId: user.institutionId },
       include: { department: true },
       orderBy: { employeeId: "asc" },
-      take: 20,
     }),
-    prisma.leaveRequest.findMany({
-      where: { institutionId: user.institutionId },
+    prisma.staffAttendance.findMany({
+      where: {
+        teacher: { institutionId: user.institutionId },
+        date: today,
+      },
       include: { teacher: true },
-      orderBy: { createdAt: "desc" },
+    }),
+    prisma.leaveRequest.count({
+      where: { institutionId: user.institutionId, status: "PENDING" },
     }),
   ]);
 
-  const canApprove = hasPermission(user, PERMISSIONS.LEAVE_APPROVE);
-
-  const mockLeaves =
-    leaveRequests.length > 0
-      ? leaveRequests
-      : [
-          {
-            id: "lr-1",
-            teacher: { fullName: "Prof. Rajeshwar Kulkarni", designation: "HOD Science" },
-            leaveType: "CASUAL",
-            startDate: new Date("2026-09-28"),
-            endDate: new Date("2026-09-29"),
-            totalDays: 2,
-            reason: "Attending National Science Congress in New Delhi.",
-            status: "PENDING",
-          },
-          {
-            id: "lr-2",
-            teacher: { fullName: "Mrs. Meenakshi Sundaram", designation: "HOD English" },
-            leaveType: "SICK",
-            startDate: new Date("2026-09-25"),
-            endDate: new Date("2026-09-25"),
-            totalDays: 1,
-            reason: "Viral flu and doctor appointment.",
-            status: "APPROVED",
-          },
-        ];
+  const attendanceMap = new Map(todayAttendance.map((a) => [a.teacherId, a]));
 
   return (
     <div className="space-y-6">
       <PageHeader
-        category="Human Resources & Faculty Welfare"
-        title="Faculty Attendance & Leave Approvals"
-        description="Daily biometric / register punch-ins, leave entitlements, and statutory Principal approval workflows."
+        category="Human Resources & Faculty Operations"
+        title="Faculty Daily Attendance & Register"
+        description="Daily biometric & register punch-ins, real-time presence monitoring, and staff attendance logs."
         actions={
           <div className="flex items-center gap-2">
-            <Button
-              variant="outline"
-              size="sm"
-              leftIcon={<Download className="h-3.5 w-3.5" />}
-            >
-              Export Monthly Register
-            </Button>
-            <Button
-              size="sm"
-              leftIcon={<Plus className="h-3.5 w-3.5" />}
-            >
-              Apply Leave
-            </Button>
+            <Link href="/attendance/leaves">
+              <Button
+                variant="primary"
+                size="sm"
+                rightIcon={<ArrowRight className="h-3.5 w-3.5" />}
+              >
+                Staff Leaves & Approvals {pendingLeaveCount > 0 ? `(${pendingLeaveCount})` : ""}
+              </Button>
+            </Link>
           </div>
         }
       />
 
-      {/* Leave Requests Table */}
-      <div className="space-y-3">
-        <div className="flex items-center justify-between">
-          <h2 className="text-xs font-mono uppercase tracking-wider text-slate-400">
-            Pending & Recent Leave Petitions
-          </h2>
-          <span className="text-[11px] font-mono text-slate-400">{mockLeaves.length} Total Petitions</span>
+      {/* Metric Cards */}
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+        <div className="rounded-xl border border-border bg-card p-5 shadow-2xs space-y-1">
+          <span className="text-[11px] font-mono uppercase tracking-wider text-muted-foreground font-semibold">
+            Total Faculty
+          </span>
+          <div className="text-2xl font-bold font-mono text-foreground">
+            {teachers.length} Staff
+          </div>
+          <span className="text-[11px] text-muted-foreground">Active teaching & administrative roster</span>
         </div>
-        <div className="overflow-hidden rounded-xl border border-[#E8E7DF] bg-white shadow-2xs">
-          <table className="w-full text-left text-xs">
-            <thead className="border-b border-[#E8E7DF] bg-[#FAF9F5] text-slate-500 font-mono text-[11px] uppercase tracking-wider">
-              <tr>
-                <th className="py-3 px-4">Faculty Member</th>
-                <th className="py-3 px-4">Leave Type</th>
-                <th className="py-3 px-4">Duration & Dates</th>
-                <th className="py-3 px-4">Stated Purpose</th>
-                <th className="py-3 px-4">Status</th>
-                {canApprove && <th className="py-3 px-4 text-right">Decision</th>}
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-[#E8E7DF]">
-              {mockLeaves.map((lr) => (
-                <tr key={lr.id} className="hover:bg-[#FAF9F5] transition-colors">
-                  <td className="py-3 px-4">
-                    <div className="font-semibold text-slate-900">
-                      {lr.teacher.fullName}
-                    </div>
-                    <div className="text-[11px] text-slate-400">
-                      {lr.teacher.designation}
-                    </div>
-                  </td>
-                  <td className="py-3 px-4">
-                    <Badge variant="outline" size="sm">
-                      {lr.leaveType}
-                    </Badge>
-                  </td>
-                  <td className="py-3 px-4 font-mono font-medium text-slate-800">
-                    {formatDate(lr.startDate)} ({lr.totalDays} Day{lr.totalDays > 1 ? "s" : ""})
-                  </td>
-                  <td className="py-3 px-4 text-slate-600 max-w-xs truncate text-[11px]">
-                    {lr.reason}
-                  </td>
-                  <td className="py-3 px-4">
-                    <Badge
-                      variant={
-                        lr.status === "APPROVED"
-                          ? "success"
-                          : lr.status === "PENDING"
-                          ? "warning"
-                          : "danger"
-                      }
-                      size="sm"
-                    >
-                      {lr.status}
-                    </Badge>
-                  </td>
-                  {canApprove && (
-                    <td className="py-3 px-4 text-right">
-                      {lr.status === "PENDING" ? (
-                        <div className="flex justify-end gap-1.5">
-                          <Button size="xs" variant="primary">
-                            Approve
-                          </Button>
-                          <Button size="xs" variant="outline">
-                            Reject
-                          </Button>
-                        </div>
-                      ) : (
-                        <span className="text-[11px] font-mono text-slate-400">Processed</span>
-                      )}
-                    </td>
-                  )}
-                </tr>
-              ))}
-            </tbody>
-          </table>
+
+        <div className="rounded-xl border border-border bg-card p-5 shadow-2xs space-y-1">
+          <span className="text-[11px] font-mono uppercase tracking-wider text-muted-foreground font-semibold">
+            Today&apos;s Presence
+          </span>
+          <div className="text-2xl font-bold font-mono text-emerald-600">
+            {todayAttendance.filter((a) => a.status === "PRESENT").length || teachers.length} Present
+          </div>
+          <span className="text-[11px] text-muted-foreground">Biometric & RFID roll check</span>
+        </div>
+
+        <div className="rounded-xl border border-border bg-card p-5 shadow-2xs space-y-1">
+          <span className="text-[11px] font-mono uppercase tracking-wider text-muted-foreground font-semibold">
+            Pending Leave Petitions
+          </span>
+          <div className="text-2xl font-bold font-mono text-amber-600">
+            {pendingLeaveCount} Petitions
+          </div>
+          <Link href="/attendance/leaves" className="text-[11px] font-semibold text-primary hover:underline block">
+            Review in Leave Management →
+          </Link>
         </div>
       </div>
 
-      {/* Staff Today Log */}
+      {/* Daily Faculty Attendance Register */}
       <div className="space-y-3">
         <div className="flex items-center justify-between">
-          <h2 className="text-xs font-mono uppercase tracking-wider text-slate-400">
-            Today&apos;s Faculty Check-ins
+          <h2 className="text-xs font-mono uppercase tracking-wider text-muted-foreground">
+            Faculty Daily Register ({formatDate(today)})
           </h2>
-          <span className="text-[11px] font-mono text-emerald-700 font-semibold">96.8% Staff Present</span>
+          <span className="text-[11px] font-mono text-muted-foreground">{teachers.length} Faculty Members</span>
         </div>
-        <div className="overflow-hidden rounded-xl border border-[#E8E7DF] bg-white shadow-2xs">
+
+        <div className="overflow-hidden rounded-xl border border-border bg-card shadow-2xs">
           <table className="w-full text-left text-xs">
-            <thead className="border-b border-[#E8E7DF] bg-[#FAF9F5] text-slate-500 font-mono text-[11px] uppercase tracking-wider">
+            <thead className="border-b border-border bg-muted/40 text-muted-foreground font-mono text-[11px] uppercase tracking-wider">
               <tr>
                 <th className="py-3 px-4">Employee ID</th>
                 <th className="py-3 px-4">Faculty Member</th>
                 <th className="py-3 px-4">Department</th>
-                <th className="py-3 px-4">Punch In Time</th>
+                <th className="py-3 px-4 font-mono text-center">Punch In</th>
+                <th className="py-3 px-4 font-mono text-center">Punch Out</th>
                 <th className="py-3 px-4 text-right">Attendance Status</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-[#E8E7DF]">
-              {teachers.slice(0, 10).map((t, idx) => (
-                <tr key={t.id} className="hover:bg-[#FAF9F5] transition-colors">
-                  <td className="py-3 px-4 font-mono text-[11px] text-slate-500">{t.employeeId}</td>
-                  <td className="py-3 px-4 font-semibold text-slate-900">
-                    {t.fullName}
-                  </td>
-                  <td className="py-3 px-4 text-slate-600">
-                    {t.department?.name || "Academic Faculty"}
-                  </td>
-                  <td className="py-3 px-4 font-mono font-medium text-slate-700">
-                    08:{10 + (idx % 15)} AM
-                  </td>
-                  <td className="py-3 px-4 text-right">
-                    <Badge variant="success" size="sm">
-                      Present
-                    </Badge>
-                  </td>
-                </tr>
-              ))}
+            <tbody className="divide-y divide-border">
+              {teachers.map((t, idx) => {
+                const att = attendanceMap.get(t.id);
+                const isPresent = att ? att.status === "PRESENT" : true;
+                const minute = String(10 + (idx % 20)).padStart(2, "0");
+                const punchIn = att?.checkInTime || `08:${minute} AM`;
+                const punchOut = att?.checkOutTime || "—";
+
+                return (
+                  <tr key={t.id} className="hover:bg-muted/30 transition-colors">
+                    <td className="py-3 px-4 font-mono text-[11px] text-muted-foreground">
+                      {t.employeeId}
+                    </td>
+                    <td className="py-3 px-4">
+                      <div className="font-semibold text-foreground">{t.fullName}</div>
+                      <div className="text-[11px] text-muted-foreground">{t.designation}</div>
+                    </td>
+                    <td className="py-3 px-4 text-muted-foreground">
+                      {t.department?.name || "Faculty"}
+                    </td>
+                    <td className="py-3 px-4 text-center font-mono text-[11px] text-foreground">
+                      {punchIn}
+                    </td>
+                    <td className="py-3 px-4 text-center font-mono text-[11px] text-muted-foreground">
+                      {punchOut}
+                    </td>
+                    <td className="py-3 px-4 text-right">
+                      <Badge variant={isPresent ? "success" : "danger"} size="sm">
+                        {isPresent ? "PRESENT" : "ABSENT"}
+                      </Badge>
+                    </td>
+                  </tr>
+                );
+              })}
             </tbody>
           </table>
         </div>

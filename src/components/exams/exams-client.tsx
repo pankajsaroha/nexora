@@ -118,7 +118,7 @@ export function ExamsClient({
               variant="outline"
               size="sm"
               onClick={() => setIsReportCardOpen(true)}
-              leftIcon={<Award className="h-3.5 w-3.5 text-[#B89B62]" />}
+              leftIcon={<Award className="h-3.5 w-3.5 text-primary" />}
             >
               Sample Report Card
             </Button>
@@ -135,40 +135,40 @@ export function ExamsClient({
 
       {/* Metrics Row */}
       <div className="grid grid-cols-1 gap-3 sm:grid-cols-4">
-        <div className="rounded-xl border border-[#E5E0D5] bg-white p-4 shadow-xs">
-          <div className="text-[11px] font-mono uppercase tracking-wider text-[#65705B]">Total Exams</div>
-          <div className="mt-1 text-2xl font-bold text-[#171614]">{exams.length}</div>
-          <div className="mt-0.5 text-[11px] text-[#65705B]">Scheduled assessment cycles</div>
+        <div className="rounded-xl border border-border bg-white p-4 shadow-xs">
+          <div className="text-[11px] font-mono uppercase tracking-wider text-accent">Total Exams</div>
+          <div className="mt-1 text-2xl font-bold text-foreground">{exams.length}</div>
+          <div className="mt-0.5 text-[11px] text-accent">Scheduled assessment cycles</div>
         </div>
-        <div className="rounded-xl border border-[#E5E0D5] bg-white p-4 shadow-xs">
-          <div className="text-[11px] font-mono uppercase tracking-wider text-[#65705B]">Papers Scheduled</div>
-          <div className="mt-1 text-2xl font-bold text-[#171614]">
+        <div className="rounded-xl border border-border bg-white p-4 shadow-xs">
+          <div className="text-[11px] font-mono uppercase tracking-wider text-accent">Papers Scheduled</div>
+          <div className="mt-1 text-2xl font-bold text-foreground">
             {exams.reduce((acc, e) => acc + e.subjects.length, 0)}
           </div>
-          <div className="mt-0.5 text-[11px] text-[#65705B]">Subject assessments</div>
+          <div className="mt-0.5 text-[11px] text-accent">Subject assessments</div>
         </div>
-        <div className="rounded-xl border border-[#E5E0D5] bg-white p-4 shadow-xs">
-          <div className="text-[11px] font-mono uppercase tracking-wider text-[#65705B]">Evaluation Status</div>
-          <div className="mt-1 text-2xl font-bold text-[#65705B]">96.4%</div>
-          <div className="mt-0.5 text-[11px] text-[#65705B]">Marks entered into ledger</div>
+        <div className="rounded-xl border border-border bg-white p-4 shadow-xs">
+          <div className="text-[11px] font-mono uppercase tracking-wider text-accent">Evaluation Status</div>
+          <div className="mt-1 text-2xl font-bold text-accent">96.4%</div>
+          <div className="mt-0.5 text-[11px] text-accent">Marks entered into ledger</div>
         </div>
-        <div className="rounded-xl border border-[#E5E0D5] bg-white p-4 shadow-xs">
-          <div className="text-[11px] font-mono uppercase tracking-wider text-[#65705B]">Institutional Average</div>
-          <div className="mt-1 text-2xl font-bold text-[#171614]">84.2%</div>
-          <div className="mt-0.5 text-[11px] text-[#65705B]">Mean academic score</div>
+        <div className="rounded-xl border border-border bg-white p-4 shadow-xs">
+          <div className="text-[11px] font-mono uppercase tracking-wider text-accent">Institutional Average</div>
+          <div className="mt-1 text-2xl font-bold text-foreground">84.2%</div>
+          <div className="mt-0.5 text-[11px] text-accent">Mean academic score</div>
         </div>
       </div>
 
       {/* Filter and Search Bar */}
-      <div className="flex flex-col sm:flex-row items-center gap-3 bg-white p-3 rounded-xl border border-[#E5E0D5] shadow-xs">
+      <div className="flex flex-col sm:flex-row items-center gap-3 bg-white p-3 rounded-xl border border-border shadow-xs">
         <div className="relative flex-1 w-full">
-          <Search className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-[#65705B]" />
+          <Search className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-accent" />
           <input
             type="search"
             placeholder="Search exam title, subject, or cohort..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full rounded-lg border border-[#E5E0D5] bg-[#FAF8F3] py-2 pl-9 pr-3 text-xs text-[#171614] placeholder:text-[#65705B] focus:outline-none focus:ring-1 focus:ring-[#171614]"
+            className="w-full rounded-lg border border-border bg-card py-2 pl-9 pr-3 text-xs text-foreground placeholder:text-accent focus:outline-none focus:ring-1 focus:ring-[#171614]"
           />
         </div>
 
@@ -179,8 +179,8 @@ export function ExamsClient({
               onClick={() => setSelectedExamType(type)}
               className={`px-3 py-1.5 text-xs font-mono uppercase rounded-lg transition-colors ${
                 selectedExamType === type
-                  ? "bg-[#171614] text-white font-semibold"
-                  : "bg-[#FAF8F3] border border-[#E5E0D5] text-[#171614] hover:bg-[#F3F0E8]"
+                  ? "bg-primary text-white font-semibold"
+                  : "bg-card border border-border text-foreground hover:bg-[#F3F0E8]"
               }`}
             >
               {type.replace("_", " ")}
@@ -192,26 +192,26 @@ export function ExamsClient({
       {/* Exam Schedules List */}
       <div className="space-y-4">
         {filteredExams.length === 0 ? (
-          <div className="p-8 text-center rounded-xl border border-dashed border-[#E5E0D5] bg-[#FAF8F3] text-xs text-[#65705B]">
+          <div className="p-8 text-center rounded-xl border border-dashed border-border bg-card text-xs text-accent">
             No assessments found matching the current filter.
           </div>
         ) : (
           filteredExams.map((exam) => (
             <div
               key={exam.id}
-              className="rounded-xl border border-[#E5E0D5] bg-white p-5 shadow-xs space-y-4"
+              className="rounded-xl border border-border bg-white p-5 shadow-xs space-y-4"
             >
-              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 border-b border-[#E5E0D5] pb-3">
+              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 border-b border-border pb-3">
                 <div>
                   <div className="flex items-center gap-2">
                     <Badge variant="outline" size="sm">
                       {exam.examType.replace("_", " ")}
                     </Badge>
-                    <h2 className="text-sm font-bold text-[#171614]">
+                    <h2 className="text-sm font-bold text-foreground">
                       {exam.name}
                     </h2>
                   </div>
-                  <div className="text-[11px] font-mono text-[#65705B] mt-1">
+                  <div className="text-[11px] font-mono text-accent mt-1">
                     Timeline: {formatDate(exam.startDate)} — {formatDate(exam.endDate)}
                   </div>
                 </div>
@@ -238,16 +238,16 @@ export function ExamsClient({
                 {exam.subjects.map((sub) => (
                   <div
                     key={sub.id}
-                    className="rounded-lg bg-[#FAF8F3] border border-[#E5E0D5] p-3 text-xs space-y-1 hover:bg-white transition-colors"
+                    className="rounded-lg bg-card border border-border p-3 text-xs space-y-1 hover:bg-white transition-colors"
                   >
-                    <div className="font-semibold text-[#171614]">
+                    <div className="font-semibold text-foreground">
                       {sub.subjectName}
                     </div>
-                    <div className="text-[11px] text-[#65705B] font-mono">
+                    <div className="text-[11px] text-accent font-mono">
                       {sub.className} • {formatDate(sub.examDate)}
                     </div>
-                    <div className="text-[10px] font-mono text-[#171614] pt-1">
-                      Max: {sub.maxMarks} marks <span className="text-[#65705B]">(Pass: {sub.passMarks})</span>
+                    <div className="text-[10px] font-mono text-foreground pt-1">
+                      Max: {sub.maxMarks} marks <span className="text-accent">(Pass: {sub.passMarks})</span>
                     </div>
                   </div>
                 ))}
@@ -268,35 +268,35 @@ export function ExamsClient({
         >
           {scheduleSuccess ? (
             <div className="p-6 text-center space-y-3">
-              <div className="w-12 h-12 rounded-full bg-[#FAF8F3] border border-[#B89B62] text-[#B89B62] flex items-center justify-center mx-auto">
+              <div className="w-12 h-12 rounded-full bg-card border border-primary text-primary flex items-center justify-center mx-auto">
                 <CheckCircle2 className="w-6 h-6" />
               </div>
-              <h4 className="text-sm font-bold text-[#171614]">Assessment Cycle Scheduled</h4>
-              <p className="text-xs text-[#65705B]">
+              <h4 className="text-sm font-bold text-foreground">Assessment Cycle Scheduled</h4>
+              <p className="text-xs text-accent">
                 Examination blueprint saved. Timetable and hall ticket slots are initialized.
               </p>
             </div>
           ) : (
             <form onSubmit={handleScheduleExam} className="space-y-4 text-xs">
               <div>
-                <label className="block font-semibold text-[#171614] mb-1">Assessment Name *</label>
+                <label className="block font-semibold text-foreground mb-1">Assessment Name *</label>
                 <input
                   type="text"
                   required
                   placeholder="e.g. Term 1 Summative Assessment"
                   value={scheduleForm.name}
                   onChange={(e) => setScheduleForm({ ...scheduleForm, name: e.target.value })}
-                  className="w-full rounded-lg border border-[#E5E0D5] bg-[#FAF8F3] p-2.5 text-xs text-[#171614] focus:outline-none focus:ring-1 focus:ring-[#171614]"
+                  className="w-full rounded-lg border border-border bg-card p-2.5 text-xs text-foreground focus:outline-none focus:ring-1 focus:ring-[#171614]"
                 />
               </div>
 
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block font-semibold text-[#171614] mb-1">Assessment Type *</label>
+                  <label className="block font-semibold text-foreground mb-1">Assessment Type *</label>
                   <select
                     value={scheduleForm.examType}
                     onChange={(e) => setScheduleForm({ ...scheduleForm, examType: e.target.value })}
-                    className="w-full rounded-lg border border-[#E5E0D5] bg-[#FAF8F3] p-2.5 text-xs text-[#171614]"
+                    className="w-full rounded-lg border border-border bg-card p-2.5 text-xs text-foreground"
                   >
                     <option value="TERM_EXAM">Term Exam</option>
                     <option value="UNIT_TEST">Unit Test</option>
@@ -305,41 +305,41 @@ export function ExamsClient({
                   </select>
                 </div>
                 <div>
-                  <label className="block font-semibold text-[#171614] mb-1">Cohort *</label>
+                  <label className="block font-semibold text-foreground mb-1">Cohort *</label>
                   <input
                     type="text"
                     required
                     value={scheduleForm.targetClass}
                     onChange={(e) => setScheduleForm({ ...scheduleForm, targetClass: e.target.value })}
-                    className="w-full rounded-lg border border-[#E5E0D5] bg-[#FAF8F3] p-2.5 text-xs text-[#171614]"
+                    className="w-full rounded-lg border border-border bg-card p-2.5 text-xs text-foreground"
                   />
                 </div>
               </div>
 
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block font-semibold text-[#171614] mb-1">Start Date *</label>
+                  <label className="block font-semibold text-foreground mb-1">Start Date *</label>
                   <input
                     type="date"
                     required
                     value={scheduleForm.startDate}
                     onChange={(e) => setScheduleForm({ ...scheduleForm, startDate: e.target.value })}
-                    className="w-full rounded-lg border border-[#E5E0D5] bg-[#FAF8F3] p-2.5 text-xs text-[#171614]"
+                    className="w-full rounded-lg border border-border bg-card p-2.5 text-xs text-foreground"
                   />
                 </div>
                 <div>
-                  <label className="block font-semibold text-[#171614] mb-1">End Date *</label>
+                  <label className="block font-semibold text-foreground mb-1">End Date *</label>
                   <input
                     type="date"
                     required
                     value={scheduleForm.endDate}
                     onChange={(e) => setScheduleForm({ ...scheduleForm, endDate: e.target.value })}
-                    className="w-full rounded-lg border border-[#E5E0D5] bg-[#FAF8F3] p-2.5 text-xs text-[#171614]"
+                    className="w-full rounded-lg border border-border bg-card p-2.5 text-xs text-foreground"
                   />
                 </div>
               </div>
 
-              <div className="flex justify-end gap-2 pt-4 border-t border-[#E5E0D5]">
+              <div className="flex justify-end gap-2 pt-4 border-t border-border">
                 <Button
                   type="button"
                   variant="outline"
@@ -368,52 +368,52 @@ export function ExamsClient({
         >
           <div className="space-y-6">
             {/* Printable Container */}
-            <div className="p-6 rounded-xl border border-[#E5E0D5] bg-white space-y-6">
+            <div className="p-6 rounded-xl border border-border bg-white space-y-6">
               {/* Institution Header */}
               <div className="text-center border-b border-[#171614] pb-4 space-y-1">
-                <div className="text-base font-extrabold tracking-tight text-[#171614] uppercase">
+                <div className="text-base font-extrabold tracking-tight text-foreground uppercase">
                   Northstar International Academy
                 </div>
-                <div className="text-xs text-[#65705B]">
+                <div className="text-xs text-accent">
                   Affiliated to CBSE • Institutional Assessment Wing • Knowledge Park III, Greater Noida
                 </div>
-                <div className="text-xs font-mono font-bold text-[#171614] uppercase tracking-widest pt-1">
+                <div className="text-xs font-mono font-bold text-foreground uppercase tracking-widest pt-1">
                   Term 1 Comprehensive Progress Report (AY 2026-2027)
                 </div>
               </div>
 
               {/* Student Demographics Header */}
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 bg-[#FAF8F3] p-3.5 rounded-lg text-xs border border-[#E5E0D5]">
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 bg-card p-3.5 rounded-lg text-xs border border-border">
                 <div>
-                  <span className="text-[10px] font-mono uppercase text-[#65705B]">Student Name</span>
-                  <div className="font-bold text-[#171614]">
+                  <span className="text-[10px] font-mono uppercase text-accent">Student Name</span>
+                  <div className="font-bold text-foreground">
                     {sampleReportCard.fullName}
                   </div>
                 </div>
                 <div>
-                  <span className="text-[10px] font-mono uppercase text-[#65705B]">Admission No</span>
-                  <div className="font-mono font-bold text-[#171614]">
+                  <span className="text-[10px] font-mono uppercase text-accent">Admission No</span>
+                  <div className="font-mono font-bold text-foreground">
                     {sampleReportCard.admissionNumber}
                   </div>
                 </div>
                 <div>
-                  <span className="text-[10px] font-mono uppercase text-[#65705B]">Class & Section</span>
-                  <div className="font-bold text-[#171614]">
+                  <span className="text-[10px] font-mono uppercase text-accent">Class & Section</span>
+                  <div className="font-bold text-foreground">
                     {sampleReportCard.className} ({sampleReportCard.sectionName})
                   </div>
                 </div>
                 <div>
-                  <span className="text-[10px] font-mono uppercase text-[#65705B]">Roll Number</span>
-                  <div className="font-mono font-bold text-[#171614]">
+                  <span className="text-[10px] font-mono uppercase text-accent">Roll Number</span>
+                  <div className="font-mono font-bold text-foreground">
                     #{sampleReportCard.rollNumber}
                   </div>
                 </div>
               </div>
 
               {/* Scholastic Performance Table */}
-              <div className="overflow-hidden border border-[#E5E0D5] rounded-lg">
+              <div className="overflow-hidden border border-border rounded-lg">
                 <table className="w-full text-left text-xs">
-                  <thead className="bg-[#FAF8F3] font-mono text-[11px] uppercase tracking-wider text-[#65705B] border-b border-[#E5E0D5]">
+                  <thead className="bg-card font-mono text-[11px] uppercase tracking-wider text-accent border-b border-border">
                     <tr>
                       <th className="py-2.5 px-3 font-semibold">Subject Name</th>
                       <th className="py-2.5 px-3 text-center font-semibold">Max Marks</th>
@@ -423,30 +423,30 @@ export function ExamsClient({
                   </thead>
                   <tbody className="divide-y divide-[#E5E0D5]">
                     {sampleReportCard.marks.map((m, idx) => (
-                      <tr key={idx} className="hover:bg-[#FAF8F3] transition-colors">
-                        <td className="py-2.5 px-3 font-medium text-[#171614]">
+                      <tr key={idx} className="hover:bg-card transition-colors">
+                        <td className="py-2.5 px-3 font-medium text-foreground">
                           {m.subjectName}
                         </td>
-                        <td className="py-2.5 px-3 text-center font-mono text-[#65705B]">
+                        <td className="py-2.5 px-3 text-center font-mono text-accent">
                           {m.maxMarks}
                         </td>
-                        <td className="py-2.5 px-3 text-center font-mono font-bold text-[#171614]">
+                        <td className="py-2.5 px-3 text-center font-mono font-bold text-foreground">
                           {m.marksObtained}
                         </td>
                         <td className="py-2.5 px-3 text-center">
-                          <span className="font-mono font-bold text-[#65705B]">
+                          <span className="font-mono font-bold text-accent">
                             {m.grade}
                           </span>
                         </td>
                       </tr>
                     ))}
-                    <tr className="bg-[#FAF8F3] font-bold text-xs border-t border-[#171614]">
-                      <td className="py-2.5 px-3 font-mono uppercase text-[11px] text-[#171614]">Grand Total & Percentage</td>
-                      <td className="py-2.5 px-3 text-center font-mono text-[#171614]">{totalMaxMarks}</td>
-                      <td className="py-2.5 px-3 text-center font-mono text-[#171614]">
+                    <tr className="bg-card font-bold text-xs border-t border-[#171614]">
+                      <td className="py-2.5 px-3 font-mono uppercase text-[11px] text-foreground">Grand Total & Percentage</td>
+                      <td className="py-2.5 px-3 text-center font-mono text-foreground">{totalMaxMarks}</td>
+                      <td className="py-2.5 px-3 text-center font-mono text-foreground">
                         {totalMarksObtained} ({overallPercentage}%)
                       </td>
-                      <td className="py-2.5 px-3 text-center font-mono text-[#65705B]">A+</td>
+                      <td className="py-2.5 px-3 text-center font-mono text-accent">A+</td>
                     </tr>
                   </tbody>
                 </table>
@@ -454,40 +454,40 @@ export function ExamsClient({
 
               {/* Attendance & Remarks */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
-                <div className="p-3 rounded-lg border border-[#E5E0D5] bg-[#FAF8F3] space-y-1">
-                  <span className="font-mono text-[10px] uppercase text-[#65705B]">
+                <div className="p-3 rounded-lg border border-border bg-card space-y-1">
+                  <span className="font-mono text-[10px] uppercase text-accent">
                     Class Tutor Remarks ({sampleReportCard.classTeacherName})
                   </span>
-                  <p className="text-[#171614] italic">
+                  <p className="text-foreground italic">
                     &quot;Aarav demonstrates stellar analytical reasoning in Mathematics and exemplary participation in school robotics events.&quot;
                   </p>
                 </div>
 
-                <div className="p-3 rounded-lg border border-[#E5E0D5] bg-[#FAF8F3] space-y-1">
-                  <span className="font-mono text-[10px] uppercase text-[#65705B]">
+                <div className="p-3 rounded-lg border border-border bg-card space-y-1">
+                  <span className="font-mono text-[10px] uppercase text-accent">
                     Institutional Attendance Record
                   </span>
-                  <div className="text-[#171614] font-mono font-bold">
+                  <div className="text-foreground font-mono font-bold">
                     {sampleReportCard.attendancePct}% Term Attendance Record
                   </div>
-                  <p className="text-[#65705B] text-[11px]">
+                  <p className="text-accent text-[11px]">
                     Result: Promoted with First-Class Distinction
                   </p>
                 </div>
               </div>
 
               {/* Signatures */}
-              <div className="flex justify-between pt-8 text-xs font-mono text-[#65705B]">
+              <div className="flex justify-between pt-8 text-xs font-mono text-accent">
                 <div className="text-center">
-                  <div className="w-32 border-b border-[#E5E0D5] mb-1" />
+                  <div className="w-32 border-b border-border mb-1" />
                   Class Tutor
                 </div>
                 <div className="text-center">
-                  <div className="w-32 border-b border-[#E5E0D5] mb-1" />
+                  <div className="w-32 border-b border-border mb-1" />
                   Exam Controller
                 </div>
                 <div className="text-center">
-                  <div className="w-32 border-b border-[#E5E0D5] mb-1" />
+                  <div className="w-32 border-b border-border mb-1" />
                   Principal
                 </div>
               </div>

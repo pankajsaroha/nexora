@@ -210,17 +210,17 @@ export function StandaloneOnboarding() {
   };
 
   return (
-    <div className="min-h-screen bg-[#FAF8F3] text-[#171614] font-sans flex flex-col md:flex-row">
+    <div className="min-h-screen bg-card text-foreground font-sans flex flex-col md:flex-row">
       {/* LEFT RAIL: Dark Editorial Brand & Step Journey */}
-      <div className="w-full md:w-80 lg:w-96 bg-[#171614] text-white p-8 sm:p-10 flex flex-col justify-between shrink-0 border-r border-[#2C2924]">
+      <div className="w-full md:w-80 lg:w-96 bg-primary text-white p-8 sm:p-10 flex flex-col justify-between shrink-0 border-r border-[#2C2924]">
         <div className="space-y-10">
           {/* Logo & Top Link */}
           <div>
             <Link href="/" className="inline-flex items-center gap-3 group">
-              <div className="w-8 h-8 rounded-md bg-white text-[#171614] flex items-center justify-center font-bold text-sm tracking-tighter shadow-xs">
+              <div className="w-8 h-8 rounded-md bg-white text-foreground flex items-center justify-center font-bold text-sm tracking-tighter shadow-xs">
                 NX
               </div>
-              <span className="font-extrabold text-base tracking-tight text-white group-hover:text-[#B89B62] transition-colors">
+              <span className="font-extrabold text-base tracking-tight text-white group-hover:text-primary transition-colors">
                 NEXORA
               </span>
             </Link>
@@ -243,9 +243,9 @@ export function StandaloneOnboarding() {
                     <div
                       className={`w-6 h-6 rounded-full flex items-center justify-center text-[10px] font-mono font-bold transition-all ${
                         isDone
-                          ? "bg-[#65705B] text-white"
+                          ? "bg-accent text-white"
                           : isCurrent
-                          ? "bg-white text-[#171614] ring-4 ring-white/10"
+                          ? "bg-white text-foreground ring-4 ring-white/10"
                           : "bg-[#2C2924] text-[#E5E0D5]/50 border border-[#3C3831]"
                       }`}
                     >
@@ -254,7 +254,7 @@ export function StandaloneOnboarding() {
                     {s.id !== 5 && (
                       <div
                         className={`w-px h-8 my-1 transition-colors ${
-                          isDone ? "bg-[#65705B]/50" : "bg-[#2C2924]"
+                          isDone ? "bg-accent/50" : "bg-[#2C2924]"
                         }`}
                       />
                     )}
@@ -277,7 +277,7 @@ export function StandaloneOnboarding() {
 
         {/* Security / Isolation Footer */}
         <div className="pt-8 border-t border-[#2C2924] text-[11px] text-[#E5E0D5]/60 flex items-center gap-2">
-          <Lock className="w-3.5 h-3.5 text-[#B89B62] shrink-0" />
+          <Lock className="w-3.5 h-3.5 text-primary shrink-0" />
           <span>Tenant isolation active. Your data stays partitioned.</span>
         </div>
       </div>
@@ -287,11 +287,11 @@ export function StandaloneOnboarding() {
         <div className="space-y-8">
           {/* Step Indicator Header */}
           {!isCompleted && (
-            <div className="flex items-center justify-between border-b border-[#E5E0D5] pb-4">
-              <span className="text-[11px] font-mono uppercase tracking-widest text-[#65705B] font-semibold">
+            <div className="flex items-center justify-between border-b border-border pb-4">
+              <span className="text-[11px] font-mono uppercase tracking-widest text-accent font-semibold">
                 Step 0{currentStep} of 05
               </span>
-              <span className="text-xs font-medium text-[#171614]">
+              <span className="text-xs font-medium text-foreground">
                 {STEPS[currentStep - 1]?.title}
               </span>
             </div>
@@ -299,8 +299,8 @@ export function StandaloneOnboarding() {
 
           {/* Error Banner */}
           {errorMsg && (
-            <div className="p-4 rounded-lg bg-[#8B3A3A]/10 border border-[#8B3A3A]/20 text-[#8B3A3A] text-xs flex items-center gap-3">
-              <div className="w-2 h-2 rounded-full bg-[#8B3A3A] animate-ping shrink-0" />
+            <div className="p-4 rounded-lg bg-destructive/10 border border-destructive/20 text-destructive text-xs flex items-center gap-3">
+              <div className="w-2 h-2 rounded-full bg-destructive animate-ping shrink-0" />
               <span className="font-medium">{errorMsg}</span>
             </div>
           )}
@@ -309,10 +309,10 @@ export function StandaloneOnboarding() {
           {currentStep === 1 && (
             <div className="space-y-6">
               <div>
-                <h2 className="text-2xl font-bold tracking-tight text-[#171614]">
+                <h2 className="text-2xl font-bold tracking-tight text-foreground">
                   What are you building?
                 </h2>
-                <p className="text-xs text-[#65705B] mt-1">
+                <p className="text-xs text-accent mt-1">
                   Nexora will tailor your timetable grids, attendance policies, and terminology based on the selected institution archetype.
                 </p>
               </div>
@@ -343,21 +343,21 @@ export function StandaloneOnboarding() {
                       className={`cursor-pointer p-5 rounded-xl border transition-all flex items-center justify-between ${
                         isSelected
                           ? "border-[#171614] bg-white shadow-xs"
-                          : "border-[#E5E0D5] bg-white hover:border-[#171614]"
+                          : "border-border bg-white hover:border-[#171614]"
                       }`}
                     >
                       <div className="space-y-1">
                         <div className="flex items-center gap-2">
-                          <h3 className="text-sm font-bold text-[#171614]">{opt.title}</h3>
+                          <h3 className="text-sm font-bold text-foreground">{opt.title}</h3>
                           {isSelected && (
                             <span className="w-2 h-2 rounded-full bg-[#B89B62]" />
                           )}
                         </div>
-                        <p className="text-xs text-[#65705B] leading-relaxed font-normal">{opt.desc}</p>
+                        <p className="text-xs text-accent leading-relaxed font-normal">{opt.desc}</p>
                       </div>
                       <ChevronRight
                         className={`w-4 h-4 transition-transform ${
-                          isSelected ? "text-[#171614] translate-x-1" : "text-[#E5E0D5]"
+                          isSelected ? "text-foreground translate-x-1" : "text-[#E5E0D5]"
                         }`}
                       />
                     </div>
@@ -371,45 +371,45 @@ export function StandaloneOnboarding() {
           {currentStep === 2 && (
             <div className="space-y-6">
               <div>
-                <h2 className="text-2xl font-bold tracking-tight text-[#171614]">
+                <h2 className="text-2xl font-bold tracking-tight text-foreground">
                   Institution Profile & Headquarters
                 </h2>
-                <p className="text-xs text-[#65705B] mt-1">
+                <p className="text-xs text-accent mt-1">
                   Official identity rendered on fee receipts, student identity cards, and academic transcripts.
                 </p>
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div className="space-y-1.5 sm:col-span-2">
-                  <Label htmlFor="inst-name" className="text-xs font-semibold text-[#171614]">
-                    Legal Institution Name <span className="text-[#8B3A3A]">*</span>
+                  <Label htmlFor="inst-name" className="text-xs font-semibold text-foreground">
+                    Legal Institution Name <span className="text-destructive">*</span>
                   </Label>
                   <Input
                     id="inst-name"
                     placeholder="e.g. Cambridge International Academy"
                     value={formData.name}
                     onChange={(e) => updateField("name", e.target.value)}
-                    className="h-10 text-xs border-[#E5E0D5] bg-white text-[#171614]"
+                    className="h-10 text-xs border-border bg-white text-foreground"
                   />
                 </div>
 
                 <div className="space-y-1.5">
-                  <Label htmlFor="inst-code" className="text-xs font-semibold text-[#171614]">
-                    Unique Institution Code <span className="text-[#8B3A3A]">*</span>
+                  <Label htmlFor="inst-code" className="text-xs font-semibold text-foreground">
+                    Unique Institution Code <span className="text-destructive">*</span>
                   </Label>
                   <Input
                     id="inst-code"
                     placeholder="e.g. CIA-GLOBAL"
                     value={formData.code}
                     onChange={(e) => updateField("code", e.target.value.toUpperCase())}
-                    className="h-10 text-xs font-mono uppercase border-[#E5E0D5] bg-white text-[#171614]"
+                    className="h-10 text-xs font-mono uppercase border-border bg-white text-foreground"
                   />
-                  <span className="text-[10px] text-[#65705B]">Used for tenant isolation and roll number prefixes.</span>
+                  <span className="text-[10px] text-accent">Used for tenant isolation and roll number prefixes.</span>
                 </div>
 
                 <div className="space-y-1.5">
-                  <Label htmlFor="inst-email" className="text-xs font-semibold text-[#171614]">
-                    Official Administrative Email <span className="text-[#8B3A3A]">*</span>
+                  <Label htmlFor="inst-email" className="text-xs font-semibold text-foreground">
+                    Official Administrative Email <span className="text-destructive">*</span>
                   </Label>
                   <Input
                     id="inst-email"
@@ -417,12 +417,12 @@ export function StandaloneOnboarding() {
                     placeholder="admin@cambridge.edu.in"
                     value={formData.email}
                     onChange={(e) => updateField("email", e.target.value)}
-                    className="h-10 text-xs border-[#E5E0D5] bg-white text-[#171614]"
+                    className="h-10 text-xs border-border bg-white text-foreground"
                   />
                 </div>
 
                 <div className="space-y-1.5">
-                  <Label htmlFor="inst-phone" className="text-xs font-semibold text-[#171614]">
+                  <Label htmlFor="inst-phone" className="text-xs font-semibold text-foreground">
                     Official Contact Number
                   </Label>
                   <Input
@@ -430,12 +430,12 @@ export function StandaloneOnboarding() {
                     placeholder="+91 98100 00000"
                     value={formData.phone}
                     onChange={(e) => updateField("phone", e.target.value)}
-                    className="h-10 text-xs border-[#E5E0D5] bg-white text-[#171614]"
+                    className="h-10 text-xs border-border bg-white text-foreground"
                   />
                 </div>
 
                 <div className="space-y-1.5">
-                  <Label htmlFor="inst-web" className="text-xs font-semibold text-[#171614]">
+                  <Label htmlFor="inst-web" className="text-xs font-semibold text-foreground">
                     Official Website URL
                   </Label>
                   <Input
@@ -443,12 +443,12 @@ export function StandaloneOnboarding() {
                     placeholder="https://www.cambridge.edu.in"
                     value={formData.website}
                     onChange={(e) => updateField("website", e.target.value)}
-                    className="h-10 text-xs border-[#E5E0D5] bg-white text-[#171614]"
+                    className="h-10 text-xs border-border bg-white text-foreground"
                   />
                 </div>
 
                 <div className="space-y-1.5 sm:col-span-2">
-                  <Label htmlFor="inst-address" className="text-xs font-semibold text-[#171614]">
+                  <Label htmlFor="inst-address" className="text-xs font-semibold text-foreground">
                     Campus Address
                   </Label>
                   <Input
@@ -456,12 +456,12 @@ export function StandaloneOnboarding() {
                     placeholder="Plot No. 14, Institutional Area, Knowledge Park III"
                     value={formData.address}
                     onChange={(e) => updateField("address", e.target.value)}
-                    className="h-10 text-xs border-[#E5E0D5] bg-white text-[#171614]"
+                    className="h-10 text-xs border-border bg-white text-foreground"
                   />
                 </div>
 
                 <div className="space-y-1.5">
-                  <Label htmlFor="inst-city" className="text-xs font-semibold text-[#171614]">
+                  <Label htmlFor="inst-city" className="text-xs font-semibold text-foreground">
                     City
                   </Label>
                   <Input
@@ -469,12 +469,12 @@ export function StandaloneOnboarding() {
                     placeholder="Greater Noida"
                     value={formData.city}
                     onChange={(e) => updateField("city", e.target.value)}
-                    className="h-10 text-xs border-[#E5E0D5] bg-white text-[#171614]"
+                    className="h-10 text-xs border-border bg-white text-foreground"
                   />
                 </div>
 
                 <div className="space-y-1.5">
-                  <Label htmlFor="inst-state" className="text-xs font-semibold text-[#171614]">
+                  <Label htmlFor="inst-state" className="text-xs font-semibold text-foreground">
                     State / Province
                   </Label>
                   <Input
@@ -482,7 +482,7 @@ export function StandaloneOnboarding() {
                     placeholder="Uttar Pradesh"
                     value={formData.state}
                     onChange={(e) => updateField("state", e.target.value)}
-                    className="h-10 text-xs border-[#E5E0D5] bg-white text-[#171614]"
+                    className="h-10 text-xs border-border bg-white text-foreground"
                   />
                 </div>
               </div>
@@ -493,10 +493,10 @@ export function StandaloneOnboarding() {
           {currentStep === 3 && (
             <div className="space-y-6">
               <div>
-                <h2 className="text-2xl font-bold tracking-tight text-[#171614]">
+                <h2 className="text-2xl font-bold tracking-tight text-foreground">
                   Academic Session & Grade Cohorts
                 </h2>
-                <p className="text-xs text-[#65705B] mt-1">
+                <p className="text-xs text-accent mt-1">
                   Define your initial academic calendar year and cohorts. You can add more sections and subjects later.
                 </p>
               </div>
@@ -504,36 +504,36 @@ export function StandaloneOnboarding() {
               <div className="space-y-4">
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div className="space-y-1.5">
-                    <Label htmlFor="session-name" className="text-xs font-semibold text-[#171614]">
-                      Current Academic Session Name <span className="text-[#8B3A3A]">*</span>
+                    <Label htmlFor="session-name" className="text-xs font-semibold text-foreground">
+                      Current Academic Session Name <span className="text-destructive">*</span>
                     </Label>
                     <Input
                       id="session-name"
                       placeholder="2026-2027"
                       value={formData.academicYearName}
                       onChange={(e) => updateField("academicYearName", e.target.value)}
-                      className="h-10 text-xs font-mono border-[#E5E0D5] bg-white text-[#171614]"
+                      className="h-10 text-xs font-mono border-border bg-white text-foreground"
                     />
                   </div>
 
                   <div className="space-y-1.5">
-                    <Label htmlFor="currency" className="text-xs font-semibold text-[#171614]">
+                    <Label htmlFor="currency" className="text-xs font-semibold text-foreground">
                       Base Ledger Currency
                     </Label>
                     <Input
                       id="currency"
                       value={`${formData.currency} (${formData.currencySymbol})`}
                       disabled
-                      className="h-10 text-xs font-mono border-[#E5E0D5] bg-[#FAF8F3] text-[#65705B]"
+                      className="h-10 text-xs font-mono border-border bg-card text-accent"
                     />
                   </div>
                 </div>
 
                 <div className="space-y-1.5 pt-2">
-                  <Label className="text-xs font-semibold text-[#171614]">
+                  <Label className="text-xs font-semibold text-foreground">
                     Active Classes / Programs ({formData.classesList.length})
                   </Label>
-                  <p className="text-[11px] text-[#65705B]">
+                  <p className="text-[11px] text-accent">
                     These cohorts will be seeded in your timetable and student enrollment engine.
                   </p>
                 </div>
@@ -545,7 +545,7 @@ export function StandaloneOnboarding() {
                     value={formData.newClassInput}
                     onChange={(e) => updateField("newClassInput", e.target.value)}
                     onKeyDown={(e) => e.key === "Enter" && (e.preventDefault(), addClassItem())}
-                    className="h-10 text-xs border-[#E5E0D5] bg-white text-[#171614]"
+                    className="h-10 text-xs border-border bg-white text-foreground"
                   />
                   <Button type="button" onClick={addClassItem} variant="outline" size="sm" className="h-10 px-4 text-xs font-semibold">
                     <Plus className="w-3.5 h-3.5 mr-1" />
@@ -557,18 +557,18 @@ export function StandaloneOnboarding() {
                   {formData.classesList.map((cls, idx) => (
                     <div
                       key={idx}
-                      className="flex items-center justify-between p-3 rounded-lg border border-[#E5E0D5] bg-white text-xs font-medium"
+                      className="flex items-center justify-between p-3 rounded-lg border border-border bg-white text-xs font-medium"
                     >
                       <div className="flex items-center gap-2.5">
-                        <span className="w-5 h-5 rounded bg-[#FAF8F3] border border-[#E5E0D5] flex items-center justify-center text-[10px] font-mono text-[#65705B] font-bold">
+                        <span className="w-5 h-5 rounded bg-card border border-border flex items-center justify-center text-[10px] font-mono text-accent font-bold">
                           {idx + 1}
                         </span>
-                        <span className="text-[#171614] font-semibold">{cls}</span>
+                        <span className="text-foreground font-semibold">{cls}</span>
                       </div>
                       <button
                         type="button"
                         onClick={() => removeClassItem(idx)}
-                        className="text-[#65705B] hover:text-[#8B3A3A] transition-colors p-1"
+                        className="text-accent hover:text-destructive transition-colors p-1"
                       >
                         <Trash2 className="w-3.5 h-3.5" />
                       </button>
@@ -583,31 +583,31 @@ export function StandaloneOnboarding() {
           {currentStep === 4 && (
             <div className="space-y-6">
               <div>
-                <h2 className="text-2xl font-bold tracking-tight text-[#171614]">
+                <h2 className="text-2xl font-bold tracking-tight text-foreground">
                   Master Executive Administrator
                 </h2>
-                <p className="text-xs text-[#65705B] mt-1">
+                <p className="text-xs text-accent mt-1">
                   This root credential holds governance access across all modules, academic rosters, and fee ledgers.
                 </p>
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div className="space-y-1.5 sm:col-span-2">
-                  <Label htmlFor="admin-name" className="text-xs font-semibold text-[#171614]">
-                    Administrator Full Name <span className="text-[#8B3A3A]">*</span>
+                  <Label htmlFor="admin-name" className="text-xs font-semibold text-foreground">
+                    Administrator Full Name <span className="text-destructive">*</span>
                   </Label>
                   <Input
                     id="admin-name"
                     placeholder="e.g. Dr. Rajeshwar Sen"
                     value={formData.adminName}
                     onChange={(e) => updateField("adminName", e.target.value)}
-                    className="h-10 text-xs border-[#E5E0D5] bg-white text-[#171614]"
+                    className="h-10 text-xs border-border bg-white text-foreground"
                   />
                 </div>
 
                 <div className="space-y-1.5">
-                  <Label htmlFor="admin-email" className="text-xs font-semibold text-[#171614]">
-                    Login Email Address <span className="text-[#8B3A3A]">*</span>
+                  <Label htmlFor="admin-email" className="text-xs font-semibold text-foreground">
+                    Login Email Address <span className="text-destructive">*</span>
                   </Label>
                   <Input
                     id="admin-email"
@@ -615,12 +615,12 @@ export function StandaloneOnboarding() {
                     placeholder="superadmin@cambridge.edu.in"
                     value={formData.adminEmail}
                     onChange={(e) => updateField("adminEmail", e.target.value)}
-                    className="h-10 text-xs border-[#E5E0D5] bg-white text-[#171614]"
+                    className="h-10 text-xs border-border bg-white text-foreground"
                   />
                 </div>
 
                 <div className="space-y-1.5">
-                  <Label htmlFor="admin-phone" className="text-xs font-semibold text-[#171614]">
+                  <Label htmlFor="admin-phone" className="text-xs font-semibold text-foreground">
                     Direct Contact Phone
                   </Label>
                   <Input
@@ -628,12 +628,12 @@ export function StandaloneOnboarding() {
                     placeholder="+91 98111 22233"
                     value={formData.adminPhone}
                     onChange={(e) => updateField("adminPhone", e.target.value)}
-                    className="h-10 text-xs border-[#E5E0D5] bg-white text-[#171614]"
+                    className="h-10 text-xs border-border bg-white text-foreground"
                   />
                 </div>
 
                 <div className="space-y-1.5 sm:col-span-2">
-                  <Label htmlFor="admin-pass" className="text-xs font-semibold text-[#171614]">
+                  <Label htmlFor="admin-pass" className="text-xs font-semibold text-foreground">
                     Initial Master Password
                   </Label>
                   <div className="relative">
@@ -642,14 +642,14 @@ export function StandaloneOnboarding() {
                       type={showAdminPassword ? "text" : "password"}
                       value={formData.adminPassword}
                       onChange={(e) => updateField("adminPassword", e.target.value)}
-                      className="h-10 text-xs border-[#E5E0D5] bg-white text-[#171614] pr-10 font-mono"
+                      className="h-10 text-xs border-border bg-white text-foreground pr-10 font-mono"
                     />
                     <button
                       type="button"
                       onClick={() => setShowAdminPassword(!showAdminPassword)}
                       tabIndex={-1}
                       aria-label={showAdminPassword ? "Hide password" : "Show password"}
-                      className="absolute right-3 top-1/2 -translate-y-1/2 text-[#7A756B] hover:text-[#171614] transition-colors p-0.5 focus:outline-none"
+                      className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors p-0.5 focus:outline-none"
                     >
                       {showAdminPassword ? (
                         <EyeOff className="w-4 h-4" />
@@ -658,7 +658,7 @@ export function StandaloneOnboarding() {
                       )}
                     </button>
                   </div>
-                  <span className="text-[10px] text-[#65705B]">Can be updated anytime after initial security login.</span>
+                  <span className="text-[10px] text-accent">Can be updated anytime after initial security login.</span>
                 </div>
               </div>
             </div>
@@ -668,50 +668,50 @@ export function StandaloneOnboarding() {
           {currentStep === 5 && !isCompleted && (
             <div className="space-y-6">
               <div>
-                <h2 className="text-2xl font-bold tracking-tight text-[#171614]">
+                <h2 className="text-2xl font-bold tracking-tight text-foreground">
                   Review & Confirm Deployment
                 </h2>
-                <p className="text-xs text-[#65705B] mt-1">
+                <p className="text-xs text-accent mt-1">
                   Inspect institutional configuration before committing records to the multi-tenant database cluster.
                 </p>
               </div>
 
-              <div className="p-6 rounded-xl border border-[#E5E0D5] bg-white space-y-4 text-xs">
-                <div className="grid grid-cols-2 gap-4 pb-4 border-b border-[#E5E0D5]">
+              <div className="p-6 rounded-xl border border-border bg-white space-y-4 text-xs">
+                <div className="grid grid-cols-2 gap-4 pb-4 border-b border-border">
                   <div>
-                    <span className="text-[#65705B] uppercase tracking-wider text-[10px] font-bold">Institution Name</span>
-                    <p className="font-bold text-[#171614] text-sm mt-0.5">{formData.name || "—"}</p>
-                    <p className="text-[#65705B] font-mono text-[11px] mt-0.5">Code: {formData.code || "—"}</p>
+                    <span className="text-accent uppercase tracking-wider text-[10px] font-bold">Institution Name</span>
+                    <p className="font-bold text-foreground text-sm mt-0.5">{formData.name || "—"}</p>
+                    <p className="text-accent font-mono text-[11px] mt-0.5">Code: {formData.code || "—"}</p>
                   </div>
                   <div>
-                    <span className="text-[#65705B] uppercase tracking-wider text-[10px] font-bold">Archetype</span>
-                    <p className="font-bold text-[#B89B62] text-sm mt-0.5">{formData.institutionType}</p>
-                    <p className="text-[#65705B] text-[11px] mt-0.5">Session: {formData.academicYearName}</p>
+                    <span className="text-accent uppercase tracking-wider text-[10px] font-bold">Archetype</span>
+                    <p className="font-bold text-primary text-sm mt-0.5">{formData.institutionType}</p>
+                    <p className="text-accent text-[11px] mt-0.5">Session: {formData.academicYearName}</p>
                   </div>
                 </div>
 
-                <div className="grid grid-cols-2 gap-4 pb-4 border-b border-[#E5E0D5]">
+                <div className="grid grid-cols-2 gap-4 pb-4 border-b border-border">
                   <div>
-                    <span className="text-[#65705B] uppercase tracking-wider text-[10px] font-bold">Administrative Contact</span>
-                    <p className="font-medium text-[#171614] mt-0.5">{formData.email}</p>
-                    <p className="text-[#65705B] text-[11px]">{formData.city}, {formData.state}</p>
+                    <span className="text-accent uppercase tracking-wider text-[10px] font-bold">Administrative Contact</span>
+                    <p className="font-medium text-foreground mt-0.5">{formData.email}</p>
+                    <p className="text-accent text-[11px]">{formData.city}, {formData.state}</p>
                   </div>
                   <div>
-                    <span className="text-[#65705B] uppercase tracking-wider text-[10px] font-bold">Root Administrator</span>
-                    <p className="font-medium text-[#171614] mt-0.5">{formData.adminName}</p>
-                    <p className="text-[#65705B] text-[11px]">{formData.adminEmail}</p>
+                    <span className="text-accent uppercase tracking-wider text-[10px] font-bold">Root Administrator</span>
+                    <p className="font-medium text-foreground mt-0.5">{formData.adminName}</p>
+                    <p className="text-accent text-[11px]">{formData.adminEmail}</p>
                   </div>
                 </div>
 
                 <div>
-                  <span className="text-[#65705B] uppercase tracking-wider text-[10px] font-bold block mb-2">
+                  <span className="text-accent uppercase tracking-wider text-[10px] font-bold block mb-2">
                     Configured Academic Cohorts ({formData.classesList.length})
                   </span>
                   <div className="flex flex-wrap gap-1.5">
                     {formData.classesList.map((c, i) => (
                       <span
                         key={i}
-                        className="px-2.5 py-1 rounded-md bg-[#FAF8F3] border border-[#E5E0D5] text-[11px] font-semibold text-[#171614]"
+                        className="px-2.5 py-1 rounded-md bg-card border border-border text-[11px] font-semibold text-foreground"
                       >
                         {c}
                       </span>
@@ -721,8 +721,8 @@ export function StandaloneOnboarding() {
               </div>
 
               {isSubmitting && (
-                <div className="p-4 rounded-xl bg-[#171614] text-white flex items-center gap-3 text-xs">
-                  <Loader2 className="w-4 h-4 text-[#B89B62] animate-spin shrink-0" />
+                <div className="p-4 rounded-xl bg-primary text-white flex items-center gap-3 text-xs">
+                  <Loader2 className="w-4 h-4 text-primary animate-spin shrink-0" />
                   <span className="font-medium">{provisionProgress || "Provisioning database schema..."}</span>
                 </div>
               )}
@@ -732,35 +732,35 @@ export function StandaloneOnboarding() {
           {/* STEP 5: SUCCESS STATE */}
           {isCompleted && (
             <div className="text-center py-10 space-y-6">
-              <div className="w-16 h-16 rounded-full bg-[#FAF8F3] border border-[#B89B62] text-[#B89B62] flex items-center justify-center mx-auto shadow-xs">
+              <div className="w-16 h-16 rounded-full bg-card border border-primary text-primary flex items-center justify-center mx-auto shadow-xs">
                 <CheckCircle2 className="w-8 h-8" />
               </div>
 
               <div className="space-y-2">
-                <span className="text-xs font-mono uppercase tracking-widest text-[#65705B] font-bold block">
+                <span className="text-xs font-mono uppercase tracking-widest text-accent font-bold block">
                   PROVISIONING COMPLETED
                 </span>
-                <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-[#171614]">
+                <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-foreground">
                   Your institution is ready.
                 </h2>
-                <p className="text-xs text-[#65705B] max-w-md mx-auto">
+                <p className="text-xs text-accent max-w-md mx-auto">
                   <strong>{formData.name}</strong> has been configured with campus records, academic session hierarchies, and root executive permissions.
                 </p>
               </div>
 
-              <div className="p-5 max-w-md mx-auto bg-white rounded-xl border border-[#E5E0D5] text-left text-xs space-y-2.5">
+              <div className="p-5 max-w-md mx-auto bg-white rounded-xl border border-border text-left text-xs space-y-2.5">
                 <div className="flex justify-between">
-                  <span className="text-[#65705B]">Institution Code:</span>
-                  <span className="font-mono font-bold text-[#171614]">{formData.code}</span>
+                  <span className="text-accent">Institution Code:</span>
+                  <span className="font-mono font-bold text-foreground">{formData.code}</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-[#65705B]">Administrator Login:</span>
-                  <span className="font-semibold text-[#171614]">{formData.adminEmail}</span>
+                  <span className="text-accent">Administrator Login:</span>
+                  <span className="font-semibold text-foreground">{formData.adminEmail}</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-[#65705B]">Tenancy Status:</span>
-                  <span className="text-[#65705B] font-semibold flex items-center gap-1.5">
-                    <span className="w-2 h-2 rounded-full bg-[#65705B]" />
+                  <span className="text-accent">Tenancy Status:</span>
+                  <span className="text-accent font-semibold flex items-center gap-1.5">
+                    <span className="w-2 h-2 rounded-full bg-accent" />
                     Active & Operational
                   </span>
                 </div>
@@ -781,14 +781,14 @@ export function StandaloneOnboarding() {
 
         {/* Footer Actions */}
         {!isCompleted && (
-          <div className="mt-10 pt-6 border-t border-[#E5E0D5] flex items-center justify-between">
+          <div className="mt-10 pt-6 border-t border-border flex items-center justify-between">
             <Button
               type="button"
               variant="outline"
               size="sm"
               onClick={handlePrev}
               disabled={currentStep === 1 || isSubmitting}
-              className="text-xs h-10 px-4 border-[#E5E0D5]"
+              className="text-xs h-10 px-4 border-border"
             >
               <ArrowLeft className="w-3.5 h-3.5 mr-1.5" />
               Back
@@ -820,7 +820,7 @@ export function StandaloneOnboarding() {
                     </>
                   ) : (
                     <>
-                      <Sparkles className="w-3.5 h-3.5 mr-1.5 text-[#B89B62]" />
+                      <Sparkles className="w-3.5 h-3.5 mr-1.5 text-primary" />
                       Create Institution Now
                     </>
                   )}

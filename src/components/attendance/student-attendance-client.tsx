@@ -131,7 +131,7 @@ export function StudentAttendanceClient({
                 variant="outline"
                 size="sm"
                 onClick={markAllPresent}
-                leftIcon={<CheckCircle2 className="h-3.5 w-3.5 text-[#65705B]" />}
+                leftIcon={<CheckCircle2 className="h-3.5 w-3.5 text-accent" />}
               >
                 Mark All Present
               </Button>
@@ -149,16 +149,16 @@ export function StudentAttendanceClient({
       />
 
       {saveFeedback && (
-        <div className="rounded-xl bg-[#FAF8F3] border border-[#65705B]/30 p-4 text-xs text-[#525E4B] font-semibold shadow-xs">
+        <div className="rounded-xl bg-card border border-success/30 p-4 text-xs text-success font-semibold shadow-xs">
           {saveFeedback}
         </div>
       )}
 
       {/* Class & Date Selector Bar */}
-      <div className="flex flex-col sm:flex-row items-center justify-between gap-4 rounded-xl bg-white p-4 border border-[#E5E0D5] shadow-xs">
+      <div className="flex flex-col sm:flex-row items-center justify-between gap-4 rounded-xl bg-white p-4 border border-border shadow-xs">
         <div className="flex flex-wrap items-center gap-3 w-full sm:w-auto">
           <div>
-            <label className="block text-[10px] font-mono uppercase tracking-wider text-[#65705B] font-bold mb-1">
+            <label className="block text-[10px] font-mono uppercase tracking-wider text-accent font-bold mb-1">
               Select Class / Section
             </label>
             <select
@@ -167,7 +167,7 @@ export function StudentAttendanceClient({
                 setCurrentSectionId(e.target.value);
                 router.push(`/attendance?sectionId=${e.target.value}&date=${date}`);
               }}
-              className="rounded-lg border border-[#E5E0D5] bg-[#FAF8F3] px-3 py-2 text-xs font-semibold text-[#171614] focus:outline-none focus:ring-1 focus:ring-[#171614]"
+              className="rounded-lg border border-border bg-card px-3 py-2 text-xs font-semibold text-foreground focus:outline-none focus:ring-1 focus:ring-[#171614]"
             >
               {sections.map((sec) => (
                 <option key={sec.id} value={sec.id}>
@@ -178,7 +178,7 @@ export function StudentAttendanceClient({
           </div>
 
           <div>
-            <label className="block text-[10px] font-mono uppercase tracking-wider text-[#65705B] font-bold mb-1">
+            <label className="block text-[10px] font-mono uppercase tracking-wider text-accent font-bold mb-1">
               Attendance Date
             </label>
             <input
@@ -188,40 +188,40 @@ export function StudentAttendanceClient({
                 setDate(e.target.value);
                 router.push(`/attendance?sectionId=${currentSectionId}&date=${e.target.value}`);
               }}
-              className="rounded-lg border border-[#E5E0D5] bg-[#FAF8F3] px-3 py-2 text-xs font-semibold text-[#171614] focus:outline-none focus:ring-1 focus:ring-[#171614]"
+              className="rounded-lg border border-border bg-card px-3 py-2 text-xs font-semibold text-foreground focus:outline-none focus:ring-1 focus:ring-[#171614]"
             />
           </div>
         </div>
 
         {/* Live Class Attendance KPI */}
-        <div className="flex items-center gap-4 bg-[#FAF8F3] p-2.5 rounded-xl border border-[#E5E0D5] text-xs">
+        <div className="flex items-center gap-4 bg-card p-2.5 rounded-xl border border-border text-xs">
           <div className="text-center px-3">
-            <div className="text-[10px] font-mono uppercase tracking-wider text-[#65705B] font-bold">PRESENT</div>
-            <div className="text-base font-mono font-bold text-[#65705B]">{presentCount}</div>
+            <div className="text-[10px] font-mono uppercase tracking-wider text-accent font-bold">PRESENT</div>
+            <div className="text-base font-mono font-bold text-accent">{presentCount}</div>
           </div>
           <div className="h-6 w-px bg-[#E5E0D5]" />
           <div className="text-center px-3">
-            <div className="text-[10px] font-mono uppercase tracking-wider text-[#65705B] font-bold">ABSENT</div>
-            <div className="text-base font-mono font-bold text-[#8B3A3A]">{absentCount}</div>
+            <div className="text-[10px] font-mono uppercase tracking-wider text-accent font-bold">ABSENT</div>
+            <div className="text-base font-mono font-bold text-destructive">{absentCount}</div>
           </div>
           <div className="h-6 w-px bg-[#E5E0D5]" />
           <div className="text-center px-3">
-            <div className="text-[10px] font-mono uppercase tracking-wider text-[#65705B] font-bold">LATE</div>
-            <div className="text-base font-mono font-bold text-[#B89B62]">{lateCount}</div>
+            <div className="text-[10px] font-mono uppercase tracking-wider text-accent font-bold">LATE</div>
+            <div className="text-base font-mono font-bold text-primary">{lateCount}</div>
           </div>
           <div className="h-6 w-px bg-[#E5E0D5]" />
           <div className="text-center px-3">
-            <div className="text-[10px] font-mono uppercase tracking-wider text-[#65705B] font-bold">RATE</div>
-            <div className="text-base font-mono font-bold text-[#171614]">{attendancePercentage}%</div>
+            <div className="text-[10px] font-mono uppercase tracking-wider text-accent font-bold">RATE</div>
+            <div className="text-base font-mono font-bold text-foreground">{attendancePercentage}%</div>
           </div>
         </div>
       </div>
 
       {/* Attendance Roster Table */}
-      <div className="overflow-hidden rounded-xl border border-[#E5E0D5] bg-white shadow-xs">
+      <div className="overflow-hidden rounded-xl border border-border bg-white shadow-xs">
         <div className="overflow-x-auto">
           <table className="w-full text-left text-xs">
-            <thead className="border-b border-[#E5E0D5] bg-[#FAF8F3] text-[#65705B] font-mono text-[11px] uppercase tracking-wider">
+            <thead className="border-b border-border bg-card text-accent font-mono text-[11px] uppercase tracking-wider">
               <tr>
                 <th className="py-3 px-4 w-16 font-bold">Roll #</th>
                 <th className="py-3 px-4 font-bold">Student Name & ID</th>
@@ -232,7 +232,7 @@ export function StudentAttendanceClient({
             <tbody className="divide-y divide-[#E5E0D5]">
               {attendanceRecords.length === 0 ? (
                 <tr>
-                  <td colSpan={4} className="py-12 text-center text-[#65705B] font-mono text-xs">
+                  <td colSpan={4} className="py-12 text-center text-accent font-mono text-xs">
                     No student records enrolled in this cohort.
                   </td>
                 </tr>
@@ -240,18 +240,18 @@ export function StudentAttendanceClient({
                 attendanceRecords.map((item) => (
                   <tr
                     key={item.id}
-                    className={`hover:bg-[#FAF8F3] transition-colors ${
-                      item.status === "ABSENT" ? "bg-[#8B3A3A]/5" : ""
+                    className={`hover:bg-card transition-colors ${
+                      item.status === "ABSENT" ? "bg-destructive/5" : ""
                     }`}
                   >
-                    <td className="py-3.5 px-4 font-mono font-bold text-[#171614]">
+                    <td className="py-3.5 px-4 font-mono font-bold text-foreground">
                       #{item.rollNumber || "-"}
                     </td>
                     <td className="py-3.5 px-4">
-                      <div className="font-bold text-[#171614]">
+                      <div className="font-bold text-foreground">
                         {item.fullName}
                       </div>
-                      <div className="text-[11px] text-[#65705B] font-mono mt-0.5">
+                      <div className="text-[11px] text-accent font-mono mt-0.5">
                         {item.admissionNumber}
                       </div>
                     </td>
@@ -262,8 +262,8 @@ export function StudentAttendanceClient({
                           onClick={() => handleStatusChange(item.id, "PRESENT")}
                           className={`px-3 py-1 rounded-md text-[11px] font-mono uppercase font-bold transition-all ${
                             item.status === "PRESENT"
-                              ? "bg-[#65705B] text-white shadow-xs"
-                              : "bg-[#FAF8F3] border border-[#E5E0D5] text-[#171614] hover:bg-[#F3F0E8]"
+                              ? "bg-accent text-white shadow-xs"
+                              : "bg-card border border-border text-foreground hover:bg-[#F3F0E8]"
                           }`}
                         >
                           Present
@@ -274,8 +274,8 @@ export function StudentAttendanceClient({
                           onClick={() => handleStatusChange(item.id, "ABSENT")}
                           className={`px-3 py-1 rounded-md text-[11px] font-mono uppercase font-bold transition-all ${
                             item.status === "ABSENT"
-                              ? "bg-[#8B3A3A] text-white shadow-xs"
-                              : "bg-[#FAF8F3] border border-[#E5E0D5] text-[#171614] hover:bg-[#F3F0E8]"
+                              ? "bg-destructive text-white shadow-xs"
+                              : "bg-card border border-border text-foreground hover:bg-[#F3F0E8]"
                           }`}
                         >
                           Absent
@@ -287,7 +287,7 @@ export function StudentAttendanceClient({
                           className={`px-3 py-1 rounded-md text-[11px] font-mono uppercase font-bold transition-all ${
                             item.status === "LATE"
                               ? "bg-[#B89B62] text-white shadow-xs"
-                              : "bg-[#FAF8F3] border border-[#E5E0D5] text-[#171614] hover:bg-[#F3F0E8]"
+                              : "bg-card border border-border text-foreground hover:bg-[#F3F0E8]"
                           }`}
                         >
                           Late
@@ -298,8 +298,8 @@ export function StudentAttendanceClient({
                           onClick={() => handleStatusChange(item.id, "EXCUSED")}
                           className={`px-3 py-1 rounded-md text-[11px] font-mono uppercase font-bold transition-all ${
                             item.status === "EXCUSED"
-                              ? "bg-[#171614] text-white shadow-xs"
-                              : "bg-[#FAF8F3] border border-[#E5E0D5] text-[#171614] hover:bg-[#F3F0E8]"
+                              ? "bg-primary text-white shadow-xs"
+                              : "bg-card border border-border text-foreground hover:bg-[#F3F0E8]"
                           }`}
                         >
                           Excused
@@ -312,7 +312,7 @@ export function StudentAttendanceClient({
                         placeholder="Add remark (e.g. Medical leave, Late bus)..."
                         value={item.remarks || ""}
                         onChange={(e) => handleRemarkChange(item.id, e.target.value)}
-                        className="w-full max-w-xs rounded-lg border border-[#E5E0D5] bg-white px-2.5 py-1 text-xs text-[#171614] placeholder:text-[#65705B] focus:outline-none focus:ring-1 focus:ring-[#171614]"
+                        className="w-full max-w-xs rounded-lg border border-border bg-white px-2.5 py-1 text-xs text-foreground placeholder:text-accent focus:outline-none focus:ring-1 focus:ring-[#171614]"
                       />
                     </td>
                   </tr>

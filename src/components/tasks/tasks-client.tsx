@@ -309,16 +309,16 @@ export function TasksClient({
               className="space-y-3 flex flex-col min-h-[550px]"
             >
               {/* Column Header */}
-              <div className="flex items-center justify-between pb-3 border-b border-[#E5E0D5]">
+              <div className="flex items-center justify-between pb-3 border-b border-border">
                 <div className="flex items-center gap-2">
-                  <span className="text-[10px] font-mono font-bold text-[#65705B]">
+                  <span className="text-[10px] font-mono font-bold text-accent">
                     {meta.num}
                   </span>
-                  <span className="text-xs font-bold uppercase tracking-wider text-[#171614]">
+                  <span className="text-xs font-bold uppercase tracking-wider text-foreground">
                     {meta.label}
                   </span>
                 </div>
-                <span className="text-[11px] font-mono font-bold text-[#171614] bg-[#FAF8F3] border border-[#E5E0D5] px-2 py-0.5 rounded">
+                <span className="text-[11px] font-mono font-bold text-foreground bg-card border border-border px-2 py-0.5 rounded">
                   {colTasks.length}
                 </span>
               </div>
@@ -326,7 +326,7 @@ export function TasksClient({
               {/* Column Cards Container */}
               <div className="space-y-3 flex-1 overflow-y-auto">
                 {colTasks.length === 0 ? (
-                  <div className="p-6 rounded-xl border border-dashed border-[#E5E0D5] bg-[#FAF8F3] text-center text-xs text-[#65705B]">
+                  <div className="p-6 rounded-xl border border-dashed border-border bg-card text-center text-xs text-accent">
                     No tasks in this lane.
                   </div>
                 ) : (
@@ -337,46 +337,46 @@ export function TasksClient({
                         setSelectedTask(t);
                         setReassignUserId(t.assigneeUserId || "");
                       }}
-                      className="cursor-pointer rounded-xl border border-[#E5E0D5] bg-white p-4 shadow-xs hover:border-[#171614] transition-colors space-y-3 group"
+                      className="cursor-pointer rounded-xl border border-border bg-white p-4 shadow-xs hover:border-[#171614] transition-colors space-y-3 group"
                     >
                       <div className="flex items-center justify-between">
                         <span
                           className={`text-[10px] font-mono uppercase tracking-wider px-2 py-0.5 rounded font-bold ${
                             t.priority === "URGENT" || t.priority === "HIGH"
-                              ? "bg-[#8B3A3A]/10 text-[#8B3A3A] border border-[#8B3A3A]/20"
+                              ? "bg-destructive/10 text-destructive border border-destructive/20"
                               : t.priority === "MEDIUM"
-                              ? "bg-[#B89B62]/10 text-[#B89B62] border border-[#B89B62]/20"
-                              : "bg-[#FAF8F3] text-[#65705B] border border-[#E5E0D5]"
+                              ? "bg-[#B89B62]/10 text-primary border border-primary/20"
+                              : "bg-card text-accent border border-border"
                           }`}
                         >
                           {t.priority}
                         </span>
                         {t.dueDate && (
-                          <span className="text-[10px] font-mono text-[#65705B]">
+                          <span className="text-[10px] font-mono text-accent">
                             Due {formatDate(t.dueDate, "dd MMM")}
                           </span>
                         )}
                       </div>
 
-                      <h4 className="text-xs font-bold text-[#171614] leading-snug group-hover:text-[#B89B62] transition-colors">
+                      <h4 className="text-xs font-bold text-foreground leading-snug group-hover:text-primary transition-colors">
                         {t.title}
                       </h4>
 
-                      <p className="text-[11px] text-[#65705B] line-clamp-2 leading-relaxed">
+                      <p className="text-[11px] text-accent line-clamp-2 leading-relaxed">
                         {t.description}
                       </p>
 
-                      <div className="flex items-center justify-between pt-2 border-t border-[#E5E0D5] text-[11px] text-[#65705B] font-medium">
+                      <div className="flex items-center justify-between pt-2 border-t border-border text-[11px] text-accent font-medium">
                         <span className="truncate">{t.assigneeName || "Unassigned"}</span>
                         <div className="flex items-center gap-2">
                           {t.activities && t.activities.length > 0 && (
-                            <span className="flex items-center gap-0.5 font-mono text-[10px] text-[#65705B]">
+                            <span className="flex items-center gap-0.5 font-mono text-[10px] text-accent">
                               <History className="h-3 w-3" />
                               {t.activities.length}
                             </span>
                           )}
                           {t.comments.length > 0 && (
-                            <span className="flex items-center gap-1 font-mono text-[10px] text-[#65705B]">
+                            <span className="flex items-center gap-1 font-mono text-[10px] text-accent">
                               <MessageSquare className="h-3 w-3" />
                               {t.comments.length}
                             </span>
@@ -407,7 +407,7 @@ export function TasksClient({
                   <Button
                     size="sm"
                     variant="outline"
-                    className="border-[#525E4B] text-[#525E4B] hover:bg-[#525E4B]/10"
+                    className="border-[#525E4B] text-success hover:bg-success/10"
                     onClick={() => handleStatusChange(selectedTask.id, "COMPLETED")}
                     leftIcon={<CheckCircle2 className="h-3.5 w-3.5" />}
                   >
@@ -432,14 +432,14 @@ export function TasksClient({
         >
           <div className="space-y-6 text-xs">
             {/* Drawer Tabs */}
-            <div className="flex border-b border-[#E5E0D5] gap-4">
+            <div className="flex border-b border-border gap-4">
               <button
                 type="button"
                 onClick={() => setActiveTab("DETAILS")}
                 className={`pb-2 text-xs font-bold uppercase tracking-wider cursor-pointer border-b-2 transition-all ${
                   activeTab === "DETAILS"
-                    ? "border-[#171614] text-[#171614]"
-                    : "border-transparent text-[#7A756B] hover:text-[#171614]"
+                    ? "border-[#171614] text-foreground"
+                    : "border-transparent text-muted-foreground hover:text-foreground"
                 }`}
               >
                 Overview & Assignment
@@ -449,8 +449,8 @@ export function TasksClient({
                 onClick={() => setActiveTab("ACTIVITY")}
                 className={`pb-2 text-xs font-bold uppercase tracking-wider cursor-pointer border-b-2 transition-all flex items-center gap-1.5 ${
                   activeTab === "ACTIVITY"
-                    ? "border-[#171614] text-[#171614]"
-                    : "border-transparent text-[#7A756B] hover:text-[#171614]"
+                    ? "border-[#171614] text-foreground"
+                    : "border-transparent text-muted-foreground hover:text-foreground"
                 }`}
               >
                 <History className="w-3.5 h-3.5" />
@@ -461,8 +461,8 @@ export function TasksClient({
                 onClick={() => setActiveTab("COMMENTS")}
                 className={`pb-2 text-xs font-bold uppercase tracking-wider cursor-pointer border-b-2 transition-all flex items-center gap-1.5 ${
                   activeTab === "COMMENTS"
-                    ? "border-[#171614] text-[#171614]"
-                    : "border-transparent text-[#7A756B] hover:text-[#171614]"
+                    ? "border-[#171614] text-foreground"
+                    : "border-transparent text-muted-foreground hover:text-foreground"
                 }`}
               >
                 <MessageSquare className="w-3.5 h-3.5" />
@@ -473,15 +473,15 @@ export function TasksClient({
             {activeTab === "DETAILS" && (
               <div className="space-y-6">
                 {/* Status & Priority Control Bar */}
-                <div className="p-4 rounded-xl border border-[#E5E0D5] bg-[#FAF8F3] grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div className="p-4 rounded-xl border border-border bg-card grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
-                    <label className="text-[10px] font-mono uppercase text-[#7A756B] font-bold block mb-1">
+                    <label className="text-[10px] font-mono uppercase text-muted-foreground font-bold block mb-1">
                       Workflow Status
                     </label>
                     <select
                       value={selectedTask.status}
                       onChange={(e) => handleStatusChange(selectedTask.id, e.target.value)}
-                      className="w-full rounded-lg border border-[#E5E0D5] bg-white px-2.5 py-1.5 text-xs font-bold text-[#171614]"
+                      className="w-full rounded-lg border border-border bg-white px-2.5 py-1.5 text-xs font-bold text-foreground"
                     >
                       <option value="TODO">To Do</option>
                       <option value="IN_PROGRESS">In Progress</option>
@@ -491,13 +491,13 @@ export function TasksClient({
                   </div>
 
                   <div>
-                    <label className="text-[10px] font-mono uppercase text-[#7A756B] font-bold block mb-1">
+                    <label className="text-[10px] font-mono uppercase text-muted-foreground font-bold block mb-1">
                       Task Priority
                     </label>
                     <select
                       value={selectedTask.priority}
                       onChange={(e) => handlePriorityChange(selectedTask.id, e.target.value)}
-                      className="w-full rounded-lg border border-[#E5E0D5] bg-white px-2.5 py-1.5 text-xs font-bold text-[#171614]"
+                      className="w-full rounded-lg border border-border bg-white px-2.5 py-1.5 text-xs font-bold text-foreground"
                     >
                       <option value="LOW">Low</option>
                       <option value="MEDIUM">Medium</option>
@@ -509,16 +509,16 @@ export function TasksClient({
 
                 {/* Reassignment Section */}
                 {canReassign && (
-                  <div className="p-4 rounded-xl border border-[#E5E0D5] bg-white space-y-3 shadow-2xs">
+                  <div className="p-4 rounded-xl border border-border bg-white space-y-3 shadow-2xs">
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-2">
-                        <UserCheck className="w-4 h-4 text-[#856D3B]" />
-                        <h5 className="font-bold text-[#171614] uppercase font-mono text-[10px] tracking-wider">
+                        <UserCheck className="w-4 h-4 text-primary" />
+                        <h5 className="font-bold text-foreground uppercase font-mono text-[10px] tracking-wider">
                           Assignee & Delegation
                         </h5>
                       </div>
-                      <span className="text-[11px] text-[#7A756B]">
-                        Current: <strong className="text-[#171614]">{selectedTask.assigneeName || "Unassigned"}</strong>
+                      <span className="text-[11px] text-muted-foreground">
+                        Current: <strong className="text-foreground">{selectedTask.assigneeName || "Unassigned"}</strong>
                       </span>
                     </div>
 
@@ -526,7 +526,7 @@ export function TasksClient({
                       <select
                         value={reassignUserId || selectedTask.assigneeUserId || ""}
                         onChange={(e) => setReassignUserId(e.target.value)}
-                        className="flex-1 rounded-lg border border-[#E5E0D5] bg-[#FAF8F3] px-3 py-2 text-xs text-[#171614]"
+                        className="flex-1 rounded-lg border border-border bg-card px-3 py-2 text-xs text-foreground"
                       >
                         {staffList.map((st) => (
                           <option key={st.id} value={st.id}>
@@ -548,23 +548,23 @@ export function TasksClient({
 
                 {/* Scope of Work */}
                 <div className="space-y-1.5">
-                  <h5 className="font-bold text-[#171614] uppercase font-mono text-[10px] tracking-wider">
+                  <h5 className="font-bold text-foreground uppercase font-mono text-[10px] tracking-wider">
                     Scope of Work & Deliverables
                   </h5>
-                  <div className="p-4 rounded-xl border border-[#E5E0D5] bg-white leading-relaxed text-[#171614] shadow-xs">
+                  <div className="p-4 rounded-xl border border-border bg-white leading-relaxed text-foreground shadow-xs">
                     {selectedTask.description}
                   </div>
                 </div>
 
                 {/* Meta Details */}
-                <div className="grid grid-cols-2 gap-3 p-3 rounded-xl bg-[#FAF8F3] border border-[#E5E0D5] text-[11px]">
+                <div className="grid grid-cols-2 gap-3 p-3 rounded-xl bg-card border border-border text-[11px]">
                   <div>
-                    <span className="text-[#7A756B] block">Created By</span>
-                    <span className="font-bold text-[#171614]">{selectedTask.creatorName}</span>
+                    <span className="text-muted-foreground block">Created By</span>
+                    <span className="font-bold text-foreground">{selectedTask.creatorName}</span>
                   </div>
                   <div>
-                    <span className="text-[#7A756B] block">Target Due Date</span>
-                    <span className="font-bold text-[#171614]">{formatDate(selectedTask.dueDate)}</span>
+                    <span className="text-muted-foreground block">Target Due Date</span>
+                    <span className="font-bold text-foreground">{formatDate(selectedTask.dueDate)}</span>
                   </div>
                 </div>
               </div>
@@ -572,49 +572,49 @@ export function TasksClient({
 
             {activeTab === "ACTIVITY" && (
               <div className="space-y-3">
-                <div className="flex items-center justify-between border-b border-[#E5E0D5] pb-2">
-                  <h5 className="font-bold text-[#171614] uppercase font-mono text-[10px] tracking-wider">
+                <div className="flex items-center justify-between border-b border-border pb-2">
+                  <h5 className="font-bold text-foreground uppercase font-mono text-[10px] tracking-wider">
                     Task Lifecycle & Activity Timeline
                   </h5>
-                  <span className="text-[10px] font-mono text-[#7A756B]">Append-only institutional log</span>
+                  <span className="text-[10px] font-mono text-muted-foreground">Append-only institutional log</span>
                 </div>
 
                 {(!selectedTask.activities || selectedTask.activities.length === 0) ? (
-                  <div className="p-6 text-center text-xs text-[#7A756B] bg-[#FAF8F3] rounded-xl border border-[#E5E0D5]">
-                    <History className="w-5 h-5 mx-auto mb-1.5 text-[#A8A398]" />
-                    <p className="font-medium text-[#555047]">No lifecycle events recorded yet.</p>
+                  <div className="p-6 text-center text-xs text-muted-foreground bg-card rounded-xl border border-border">
+                    <History className="w-5 h-5 mx-auto mb-1.5 text-muted-foreground" />
+                    <p className="font-medium text-muted-foreground">No lifecycle events recorded yet.</p>
                   </div>
                 ) : (
                   <div className="space-y-3">
                     {selectedTask.activities.map((act) => (
                       <div
                         key={act.id}
-                        className="p-3.5 rounded-xl bg-white border border-[#E5E0D5] space-y-1.5 shadow-2xs"
+                        className="p-3.5 rounded-xl bg-white border border-border space-y-1.5 shadow-2xs"
                       >
                         <div className="flex items-center justify-between">
                           <div className="flex items-center gap-2">
                             <span
                               className={`w-2 h-2 rounded-full ${
                                 act.actionType === "COMPLETED"
-                                  ? "bg-[#525E4B]"
+                                  ? "bg-success"
                                   : act.actionType === "REASSIGNED"
                                   ? "bg-[#856D3B]"
                                   : act.actionType === "PRIORITY_CHANGED"
-                                  ? "bg-[#8B3A3A]"
-                                  : "bg-[#171614]"
+                                  ? "bg-destructive"
+                                  : "bg-primary"
                               }`}
                             />
-                            <span className="font-bold text-[#171614] text-xs">
+                            <span className="font-bold text-foreground text-xs">
                               {act.actionType.replace(/_/g, " ")}
                             </span>
                           </div>
-                          <span className="text-[10px] font-mono text-[#7A756B]">
+                          <span className="text-[10px] font-mono text-muted-foreground">
                             {formatDate(act.createdAt, "dd MMM yyyy, HH:mm")}
                           </span>
                         </div>
-                        <p className="text-xs text-[#555047] pl-4">{act.details}</p>
-                        <div className="pl-4 text-[10px] font-mono text-[#7A756B]">
-                          Logged by: <strong className="text-[#171614]">{act.userName}</strong>
+                        <p className="text-xs text-muted-foreground pl-4">{act.details}</p>
+                        <div className="pl-4 text-[10px] font-mono text-muted-foreground">
+                          Logged by: <strong className="text-foreground">{act.userName}</strong>
                         </div>
                       </div>
                     ))}
@@ -625,28 +625,28 @@ export function TasksClient({
 
             {activeTab === "COMMENTS" && (
               <div className="space-y-3">
-                <div className="flex items-center justify-between border-b border-[#E5E0D5] pb-2">
-                  <h5 className="font-bold text-[#171614] uppercase font-mono text-[10px] tracking-wider">
+                <div className="flex items-center justify-between border-b border-border pb-2">
+                  <h5 className="font-bold text-foreground uppercase font-mono text-[10px] tracking-wider">
                     Discussion & Activity Trail ({selectedTask.comments.length})
                   </h5>
                 </div>
 
                 <div className="space-y-2 max-h-60 overflow-y-auto">
                   {selectedTask.comments.length === 0 ? (
-                    <p className="text-xs text-[#65705B] py-2">No remarks logged yet.</p>
+                    <p className="text-xs text-accent py-2">No remarks logged yet.</p>
                   ) : (
                     selectedTask.comments.map((c) => (
                       <div
                         key={c.id}
-                        className="p-3 rounded-lg bg-white border border-[#E5E0D5] space-y-1 shadow-xs"
+                        className="p-3 rounded-lg bg-white border border-border space-y-1 shadow-xs"
                       >
                         <div className="flex justify-between font-semibold">
-                          <span className="text-[#171614]">{c.userName}</span>
-                          <span className="text-[10px] font-mono text-[#65705B]">
+                          <span className="text-foreground">{c.userName}</span>
+                          <span className="text-[10px] font-mono text-accent">
                             {formatDate(c.createdAt, "dd MMM, HH:mm")}
                           </span>
                         </div>
-                        <p className="text-[#171614] leading-relaxed">{c.comment}</p>
+                        <p className="text-foreground leading-relaxed">{c.comment}</p>
                       </div>
                     ))
                   )}
@@ -659,7 +659,7 @@ export function TasksClient({
                     placeholder="Post operational remark or deliverable update..."
                     value={newComment}
                     onChange={(e) => setNewComment(e.target.value)}
-                    className="flex-1 rounded-lg border border-[#E5E0D5] bg-[#FAF8F3] p-2.5 text-xs text-[#171614] focus:outline-none focus:ring-1 focus:ring-[#171614]"
+                    className="flex-1 rounded-lg border border-border bg-card p-2.5 text-xs text-foreground focus:outline-none focus:ring-1 focus:ring-[#171614]"
                   />
                   <Button size="sm" type="submit" leftIcon={<Send className="h-3 w-3" />}>
                     Post Remark
@@ -682,24 +682,24 @@ export function TasksClient({
         >
           <form onSubmit={handleCreateTask} className="space-y-4 text-xs">
             <div>
-              <label className="block font-semibold text-[#171614] mb-1">Task Title *</label>
+              <label className="block font-semibold text-foreground mb-1">Task Title *</label>
               <input
                 type="text"
                 required
                 value={formData.title}
                 onChange={(e) => setFormData({ ...formData, title: e.target.value })}
                 placeholder="e.g. Grade 10 Pre-Board Assessment Blueprint"
-                className="w-full rounded-lg border border-[#E5E0D5] bg-[#FAF8F3] p-2.5 text-xs text-[#171614] focus:outline-none focus:ring-1 focus:ring-[#171614]"
+                className="w-full rounded-lg border border-border bg-card p-2.5 text-xs text-foreground focus:outline-none focus:ring-1 focus:ring-[#171614]"
               />
             </div>
 
             <div className="grid grid-cols-2 gap-3">
               <div>
-                <label className="block font-semibold text-[#171614] mb-1">Assignee Faculty *</label>
+                <label className="block font-semibold text-foreground mb-1">Assignee Faculty *</label>
                 <select
                   value={formData.assigneeUserId}
                   onChange={(e) => setFormData({ ...formData, assigneeUserId: e.target.value })}
-                  className="w-full rounded-lg border border-[#E5E0D5] bg-[#FAF8F3] p-2.5 text-xs text-[#171614]"
+                  className="w-full rounded-lg border border-border bg-card p-2.5 text-xs text-foreground"
                 >
                   {staffList.map((st) => (
                     <option key={st.id} value={st.id}>
@@ -710,11 +710,11 @@ export function TasksClient({
               </div>
 
               <div>
-                <label className="block font-semibold text-[#171614] mb-1">Priority *</label>
+                <label className="block font-semibold text-foreground mb-1">Priority *</label>
                 <select
                   value={formData.priority}
                   onChange={(e) => setFormData({ ...formData, priority: e.target.value })}
-                  className="w-full rounded-lg border border-[#E5E0D5] bg-[#FAF8F3] p-2.5 text-xs text-[#171614]"
+                  className="w-full rounded-lg border border-border bg-card p-2.5 text-xs text-foreground"
                 >
                   <option value="LOW">Low</option>
                   <option value="MEDIUM">Medium</option>
@@ -725,28 +725,28 @@ export function TasksClient({
             </div>
 
             <div>
-              <label className="block font-semibold text-[#171614] mb-1">Due Date</label>
+              <label className="block font-semibold text-foreground mb-1">Due Date</label>
               <input
                 type="date"
                 value={formData.dueDate}
                 onChange={(e) => setFormData({ ...formData, dueDate: e.target.value })}
-                className="w-full rounded-lg border border-[#E5E0D5] bg-[#FAF8F3] p-2.5 text-xs text-[#171614]"
+                className="w-full rounded-lg border border-border bg-card p-2.5 text-xs text-foreground"
               />
             </div>
 
             <div>
-              <label className="block font-semibold text-[#171614] mb-1">Scope of Work & Description *</label>
+              <label className="block font-semibold text-foreground mb-1">Scope of Work & Description *</label>
               <textarea
                 rows={3}
                 required
                 value={formData.description}
                 onChange={(e) => setFormData({ ...formData, description: e.target.value })}
                 placeholder="Scope of work, deliverables, and departmental guidelines..."
-                className="w-full rounded-lg border border-[#E5E0D5] bg-[#FAF8F3] p-2.5 text-xs text-[#171614] focus:outline-none focus:ring-1 focus:ring-[#171614]"
+                className="w-full rounded-lg border border-border bg-card p-2.5 text-xs text-foreground focus:outline-none focus:ring-1 focus:ring-[#171614]"
               />
             </div>
 
-            <div className="flex justify-end gap-2 pt-4 border-t border-[#E5E0D5]">
+            <div className="flex justify-end gap-2 pt-4 border-t border-border">
               <Button
                 type="button"
                 variant="outline"

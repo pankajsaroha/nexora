@@ -3,7 +3,16 @@ import { cn } from "@/lib/utils";
 import { Loader2 } from "lucide-react";
 
 export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
-  variant?: "primary" | "secondary" | "outline" | "champagne" | "olive" | "danger" | "ghost" | "link" | "subtle";
+  variant?:
+    | "primary"
+    | "secondary"
+    | "outline"
+    | "champagne"
+    | "olive"
+    | "danger"
+    | "ghost"
+    | "link"
+    | "subtle";
   size?: "xs" | "sm" | "md" | "lg";
   isLoading?: boolean;
   leftIcon?: React.ReactNode;
@@ -26,7 +35,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
     ref
   ) => {
     const baseStyles =
-      "inline-flex items-center justify-center font-medium rounded-xl transition-all duration-150 focus:outline-none focus:ring-2 focus:ring-[#B89B62] focus:ring-offset-1 disabled:opacity-50 disabled:cursor-not-allowed select-none active:scale-[0.98]";
+      "inline-flex items-center justify-center font-medium rounded-xl transition-all duration-150 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-1 disabled:opacity-50 disabled:cursor-not-allowed select-none active:scale-[0.98]";
 
     const sizeStyles = {
       xs: "text-xs px-2.5 py-1 gap-1.5",
@@ -37,22 +46,22 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
 
     const variantStyles = {
       primary:
-        "bg-[#1B1916] text-[#F7F4ED] hover:bg-[#2A2722] hover:border-[#B89B62] border border-[#1B1916] shadow-xs",
+        "bg-primary text-primary-foreground hover:bg-primary-hover border border-primary shadow-xs",
       secondary:
-        "bg-[#FAF8F3] text-[#171614] hover:bg-[#EFECE3] border border-[#DCD7CB] shadow-2xs hover:border-[#B89B62]",
+        "bg-card text-foreground hover:bg-muted border border-border shadow-2xs",
       outline:
-        "border border-[#DCD7CB] bg-white text-[#171614] hover:bg-[#FAF8F3] hover:border-[#B89B62] shadow-2xs",
+        "border border-border bg-transparent text-foreground hover:bg-muted shadow-2xs",
       champagne:
-        "bg-[#FAF6ED] text-[#856D3B] hover:bg-[#F3EBD8] border border-[#D4B87C]/60 shadow-2xs",
+        "bg-warm/15 text-foreground hover:bg-warm/25 border border-warm/30 shadow-2xs",
       olive:
-        "bg-[#F4F6F1] text-[#525E4B] hover:bg-[#E5EAE0] border border-[#65705B]/30 shadow-2xs",
+        "bg-accent/15 text-foreground hover:bg-accent/25 border border-accent/30 shadow-2xs",
       subtle:
-        "bg-[#FAF8F3] text-[#555047] hover:bg-[#EFECE3] hover:text-[#171614] border border-[#E5E0D5]",
+        "bg-muted text-muted-foreground hover:bg-muted/80 hover:text-foreground border border-border",
       danger:
-        "bg-[#6F3D3A] text-[#FAF8F3] hover:bg-[#8C4A47] border border-[#572F2D] shadow-2xs",
+        "bg-destructive text-destructive-foreground hover:bg-destructive/90 border border-destructive shadow-2xs",
       ghost:
-        "text-[#555047] hover:bg-[#FAF8F3] hover:text-[#171614]",
-      link: "text-[#856D3B] hover:text-[#171614] hover:underline p-0 h-auto focus:ring-0 font-bold",
+        "text-muted-foreground hover:bg-muted hover:text-foreground",
+      link: "text-primary hover:text-primary-hover hover:underline p-0 h-auto focus:ring-0 font-bold",
     };
 
     return (
@@ -63,7 +72,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
         {...props}
       >
         {isLoading ? (
-          <Loader2 className="w-3.5 h-3.5 animate-spin shrink-0 text-[#D4B87C]" />
+          <Loader2 className="w-3.5 h-3.5 animate-spin shrink-0 text-current" />
         ) : (
           leftIcon && <span className="shrink-0">{leftIcon}</span>
         )}

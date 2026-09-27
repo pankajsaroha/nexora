@@ -64,32 +64,32 @@ export function AssignRollNumberModal({
     >
       <form onSubmit={handleSubmit} className="space-y-4 text-xs">
         {error && (
-          <div className="flex items-center gap-2 rounded-xl bg-red-50 p-3 text-xs text-red-800 border border-red-200">
-            <AlertCircle className="h-4 w-4 shrink-0 text-red-600" />
+          <div className="flex items-center gap-2 rounded-xl bg-destructive/15 p-3 text-xs text-destructive border border-destructive/30">
+            <AlertCircle className="h-4 w-4 shrink-0 text-destructive" />
             <span>{error}</span>
           </div>
         )}
 
         <div>
-          <label className="block font-bold text-[#171614] mb-1.5">
+          <label className="block font-bold text-foreground mb-1.5">
             Official Roll Number
           </label>
           <div className="relative">
-            <Hash className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[#7A756B]" />
+            <Hash className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
             <input
               type="text"
               value={rollNumber}
               onChange={(e) => setRollNumber(e.target.value)}
               placeholder="e.g. BTECH-CSE-2026-041 or 12"
-              className="w-full rounded-xl border border-[#DCD7CB] bg-[#FAF8F3] py-2.5 pl-9 pr-3 text-xs font-mono font-bold text-[#171614] focus:outline-none focus:ring-2 focus:ring-[#B89B62]"
+              className="w-full rounded-xl border border-border bg-card py-2.5 pl-9 pr-3 text-xs font-mono font-bold text-foreground focus:outline-none focus:ring-2 focus:ring-primary/20"
             />
           </div>
-          <p className="text-[11px] text-[#7A756B] mt-1.5 leading-relaxed">
+          <p className="text-[11px] text-muted-foreground mt-1.5 leading-relaxed">
             Enter the institution or university issued roll number. Leave blank if not yet assigned. Nexora does not auto-generate or increment roll numbers.
           </p>
         </div>
 
-        <div className="flex justify-end gap-2.5 pt-4 border-t border-[#EFECE3]">
+        <div className="flex justify-end gap-2.5 pt-4 border-t border-border">
           <Button type="button" variant="secondary" size="sm" onClick={onClose}>
             Cancel
           </Button>

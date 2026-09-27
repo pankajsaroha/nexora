@@ -13,6 +13,8 @@ export const PERMISSIONS = {
   TEACHERS_VIEW: "teachers.view",
   TEACHERS_CREATE: "teachers.create",
   TEACHERS_EDIT: "teachers.edit",
+  TEACHERS_DEACTIVATE: "teachers.deactivate",
+  TEACHERS_RESTORE: "teachers.restore",
   TEACHERS_DELETE: "teachers.delete",
 
   // Academics

@@ -7,7 +7,7 @@ export function Skeleton({
 }: React.HTMLAttributes<HTMLDivElement>) {
   return (
     <div
-      className={cn("animate-pulse rounded-xl bg-[#EFECE3]/80", className)}
+      className={cn("animate-pulse rounded-xl bg-muted/80", className)}
       {...props}
     />
   );
@@ -15,7 +15,7 @@ export function Skeleton({
 
 export function StatCardSkeleton() {
   return (
-    <div className="p-5 rounded-2xl border border-[#E5E0D5] bg-white space-y-3 shadow-2xs">
+    <div className="p-5 rounded-2xl border border-border bg-card space-y-3 shadow-2xs">
       <div className="flex justify-between items-center">
         <Skeleton className="h-3.5 w-24" />
         <Skeleton className="h-7 w-7 rounded-lg" />
@@ -28,7 +28,7 @@ export function StatCardSkeleton() {
 
 export function TableRowSkeleton({ columns = 5 }: { columns?: number }) {
   return (
-    <div className="flex items-center gap-4 py-3.5 px-4 border-b border-[#EFECE3]">
+    <div className="flex items-center gap-4 py-3.5 px-4 border-b border-border">
       {Array.from({ length: columns }).map((_, i) => (
         <Skeleton
           key={i}
@@ -41,8 +41,8 @@ export function TableRowSkeleton({ columns = 5 }: { columns?: number }) {
 
 export function TableSkeleton({ rows = 5, columns = 5 }: { rows?: number; columns?: number }) {
   return (
-    <div className="rounded-2xl border border-[#E5E0D5] bg-white overflow-hidden shadow-2xs">
-      <div className="flex items-center gap-4 py-3.5 px-4 bg-[#FAF8F3] border-b border-[#E5E0D5]">
+    <div className="rounded-2xl border border-border bg-card overflow-hidden shadow-2xs">
+      <div className="flex items-center gap-4 py-3.5 px-4 bg-muted/40 border-b border-border">
         {Array.from({ length: columns }).map((_, i) => (
           <Skeleton key={i} className="h-3.5 w-20" />
         ))}
@@ -56,7 +56,7 @@ export function TableSkeleton({ rows = 5, columns = 5 }: { rows?: number; column
 
 export function PageHeaderSkeleton() {
   return (
-    <div className="border-b border-[#E5E0D5] pb-6 mb-8 flex justify-between items-baseline">
+    <div className="border-b border-border pb-6 mb-8 flex justify-between items-baseline">
       <div className="space-y-2">
         <Skeleton className="h-3 w-28" />
         <Skeleton className="h-8 w-64" />

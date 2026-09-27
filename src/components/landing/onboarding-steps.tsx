@@ -37,31 +37,31 @@ export function OnboardingSteps() {
   ];
 
   return (
-    <section id="solutions" className="py-20 sm:py-28 bg-[#F7F4ED] border-b border-[#E5E0D5]">
+    <section id="solutions" className="py-20 sm:py-28 bg-background border-b border-border">
       <div className="max-w-7xl mx-auto px-6 sm:px-8 space-y-12">
         {/* Section Header */}
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
           <div className="max-w-2xl space-y-4">
-            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-[#B89B62]/40 bg-[#FAF6ED] text-[11px] font-mono uppercase tracking-widest text-[#856D3B] shadow-2xs">
-              <Sparkles className="w-3.5 h-3.5 text-[#B89B62]" />
+            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-primary/40 bg-warm/15 text-[11px] font-mono uppercase tracking-widest text-primary shadow-2xs">
+              <Sparkles className="w-3.5 h-3.5 text-primary" />
               <span>Onboarding Blueprint</span>
             </div>
 
-            <h2 className="text-3xl sm:text-4xl font-extrabold text-[#171614] tracking-tight">
+            <h2 className="text-3xl sm:text-4xl font-extrabold text-foreground tracking-tight">
               From zero to a fully connected institution workspace in minutes.
             </h2>
 
-            <p className="text-sm sm:text-base text-[#555047] leading-relaxed">
+            <p className="text-sm sm:text-base text-muted-foreground leading-relaxed">
               No protracted 6-month consulting deployments. Nexora provides an automated guided setup wizard with built-in CSV ingestion engines.
             </p>
           </div>
 
           <Link
             href="/onboarding"
-            className="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl text-xs font-bold uppercase tracking-wider bg-[#1B1916] text-[#F7F4ED] hover:bg-[#2A2722] hover:border-[#B89B62] border border-[#1B1916] transition-all shadow-xs shrink-0 self-start md:self-auto"
+            className="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl text-xs font-bold uppercase tracking-wider bg-primary text-primary-foreground hover:bg-primary-hover hover:border-primary border border-primary transition-all shadow-xs shrink-0 self-start md:self-auto"
           >
             <span>Start Onboarding Wizard</span>
-            <ArrowRight className="w-4 h-4 text-[#D4B87C]" />
+            <ArrowRight className="w-4 h-4 text-primary" />
           </Link>
         </div>
 
@@ -72,21 +72,21 @@ export function OnboardingSteps() {
             return (
               <div
                 key={idx}
-                className="p-6 rounded-3xl border border-[#E5E0D5] bg-white space-y-3 hover:border-[#B89B62] transition-all shadow-2xs flex flex-col justify-between"
+                className="p-6 rounded-3xl border border-border bg-white space-y-3 hover:border-primary transition-all shadow-2xs flex flex-col justify-between"
               >
                 <div className="space-y-3">
                   <div className="flex items-center justify-between">
-                    <span className="w-7 h-7 rounded-lg bg-[#FAF6ED] border border-[#D4B87C]/50 flex items-center justify-center font-mono font-bold text-xs text-[#856D3B] shadow-2xs">
+                    <span className="w-7 h-7 rounded-lg bg-warm/15 border border-warm/30 flex items-center justify-center font-mono font-bold text-xs text-primary shadow-2xs">
                       {st.num}
                     </span>
-                    <Icon className="w-4 h-4 text-[#7A756B]" />
+                    <Icon className="w-4 h-4 text-muted-foreground" />
                   </div>
 
-                  <h3 className="font-bold text-sm text-[#171614] leading-snug">{st.title}</h3>
-                  <p className="text-xs text-[#555047] leading-relaxed font-normal">{st.desc}</p>
+                  <h3 className="font-bold text-sm text-foreground leading-snug">{st.title}</h3>
+                  <p className="text-xs text-muted-foreground leading-relaxed font-normal">{st.desc}</p>
                 </div>
 
-                <div className="pt-3 border-t border-[#EFECE3] text-[10px] font-mono text-[#525E4B] font-bold">
+                <div className="pt-3 border-t border-border text-[10px] font-mono text-success font-bold">
                   Step {idx + 1} of 5
                 </div>
               </div>

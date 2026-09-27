@@ -55,6 +55,10 @@ model Institution {
   auditLogs           AuditLog[]
   exams               Exam[]
   leaveRequests       LeaveRequest[]
+  leaveYears          LeaveYear[]
+  leaveTypes          LeaveType[]
+  leavePolicies       LeavePolicy[]
+  employeeLeaveAccounts EmployeeLeaveAccount[]
   assignments         Assignment[]
   studentCustomFields StudentCustomField[]
 }
@@ -307,9 +311,9 @@ model Teacher {
   bankAccountNumber   String?
   bankIfsc            String?
   photoUrl            String?
-  casualLeaveBalance  Int                 @default(12)
-  sickLeaveBalance    Int                 @default(10)
-  earnedLeaveBalance  Int                 @default(15)
+  casualLeaveBalance  Int                 @default(0)
+  sickLeaveBalance    Int                 @default(0)
+  earnedLeaveBalance  Int                 @default(0)
   createdAt           DateTime            @default(now())
   updatedAt           DateTime            @updatedAt
 
@@ -320,6 +324,7 @@ model Teacher {
   timetableSlots      TimetableSlot[]
   attendanceRecords   StaffAttendance[]
   leaveRequests       LeaveRequest[]
+  leaveAccounts       EmployeeLeaveAccount[]
   payrolls            Payroll[]
   bookIssues          BookIssue[]
 }
@@ -458,22 +463,142 @@ model StaffAttendance {
   @@unique([teacherId, date])
 }
 
+model LeaveYear {
+  id            String      @id @default(uuid())
+  institutionId String
+  institution   Institution @relation(fields: [institutionId], references: [id], onDelete: Cascade)
+  name          String      // e.g. "2026-2027"
+  startDate     DateTime
+  endDate       DateTime
+  isCurrent     Boolean     @default(false)
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+
+  policies      LeavePolicy[]
+  accounts      EmployeeLeaveAccount[]
+  leaveRequests LeaveRequest[]
+}
+
+model LeaveType {
+  id            String      @id @default(uuid())
+  institutionId String
+  institution   Institution @relation(fields: [institutionId], references: [id], onDelete: Cascade)
+  name          String      // "Casual Leave", "Sick Leave", "Earned Leave"
+  code          String      // "CL", "SL", "EL"
+  isPaid        Boolean     @default(true)
+  description   String?
+  isActive      Boolean     @default(true)
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+
+  policyRules   LeavePolicyRule[]
+  accounts      EmployeeLeaveAccount[]
+  leaveRequests LeaveRequest[]
+}
+
+model LeavePolicy {
+  id             String      @id @default(uuid())
+  institutionId  String
+  institution    Institution @relation(fields: [institutionId], references: [id], onDelete: Cascade)
+  name           String      // "Permanent Faculty Policy", "Staff Leave Policy"
+  staffType      String      @default("TEACHING") // TEACHING, NON_TEACHING, ALL
+  employmentType String?     @default("ALL") // ALL, PERMANENT, PROBATIONARY, CONTRACT
+  leaveYearId    String?
+  leaveYear      LeaveYear?  @relation(fields: [leaveYearId], references: [id])
+  isActive       Boolean     @default(true)
+  createdAt      DateTime    @default(now())
+  updatedAt      DateTime    @updatedAt
+
+  rules          LeavePolicyRule[]
+}
+
+model LeavePolicyRule {
+  id                  String      @id @default(uuid())
+  policyId            String
+  policy              LeavePolicy @relation(fields: [policyId], references: [id], onDelete: Cascade)
+  leaveTypeId         String
+  leaveType           LeaveType   @relation(fields: [leaveTypeId], references: [id], onDelete: Cascade)
+  annualEntitlement   Float       @default(12)
+  accrualFrequency    String      @default("ANNUAL") // ANNUAL, MONTHLY, QUARTERLY
+  proRataEnabled      Boolean     @default(true)
+  proRataBasis        String      @default("JOINING_DATE") // JOINING_DATE, CONFIRMATION_DATE, WORKING_DAYS
+  roundingRule        String      @default("NEAREST_HALF") // EXACT, NEAREST_HALF, NEAREST_ONE, FLOOR, CEILING
+  eligibilityRule     String      @default("IMMEDIATE") // IMMEDIATE, AFTER_PROBATION, AFTER_DAYS
+  eligibilityDays     Int         @default(0)
+  allowCarryForward   Boolean     @default(false)
+  maxCarryForwardDays Float       @default(0)
+  maxBalance          Float?
+  requiresProof       Boolean     @default(false)
+  createdAt           DateTime    @default(now())
+  updatedAt           DateTime    @updatedAt
+
+  @@unique([policyId, leaveTypeId])
+}
+
+model EmployeeLeaveAccount {
+  id              String      @id @default(uuid())
+  institutionId   String
+  institution     Institution @relation(fields: [institutionId], references: [id], onDelete: Cascade)
+  teacherId       String
+  teacher         Teacher     @relation(fields: [teacherId], references: [id], onDelete: Cascade)
+  leaveTypeId     String
+  leaveType       LeaveType   @relation(fields: [leaveTypeId], references: [id], onDelete: Cascade)
+  leaveYearId     String
+  leaveYear       LeaveYear   @relation(fields: [leaveYearId], references: [id], onDelete: Cascade)
+
+  entitledDays    Float       @default(0)
+  carriedOverDays Float       @default(0)
+  accruedDays     Float       @default(0)
+  usedDays        Float       @default(0)
+  pendingDays     Float       @default(0)
+  availableDays   Float       @default(0)
+  createdAt       DateTime    @default(now())
+  updatedAt       DateTime    @updatedAt
+
+  transactions    LeaveTransaction[]
+  leaveRequests   LeaveRequest[]
+
+  @@unique([teacherId, leaveTypeId, leaveYearId])
+}
+
+model LeaveTransaction {
+  id              String               @id @default(uuid())
+  accountId       String
+  account         EmployeeLeaveAccount @relation(fields: [accountId], references: [id], onDelete: Cascade)
+  type            String               // OPENING_BALANCE, ACCRUAL_GRANT, PRORATA_GRANT, CARRY_FORWARD, LEAVE_DEBIT, LEAVE_REVERSAL, ADJUSTMENT, LAPSE, ENCASHMENT
+  days            Float                // Positive for credit, negative for debit
+  balanceAfter    Float
+  leaveRequestId  String?
+  leaveRequest    LeaveRequest?        @relation(fields: [leaveRequestId], references: [id])
+  remarks         String?
+  createdByUserId String?
+  createdAt       DateTime             @default(now())
+}
+
 model LeaveRequest {
-  id               String      @id @default(uuid())
-  institutionId    String
-  institution      Institution @relation(fields: [institutionId], references: [id], onDelete: Cascade)
-  teacherId        String
-  teacher          Teacher     @relation(fields: [teacherId], references: [id], onDelete: Cascade)
-  leaveType        String      // CASUAL, SICK, EARNED, UNPAID
-  startDate        DateTime
-  endDate          DateTime
-  totalDays        Int         @default(1)
-  reason           String
-  status           String      @default("PENDING") // PENDING, APPROVED, REJECTED
-  approvedByUserId String?
-  rejectionReason  String?
-  createdAt        DateTime    @default(now())
-  updatedAt        DateTime    @updatedAt
+  id                     String                @id @default(uuid())
+  institutionId          String
+  institution            Institution           @relation(fields: [institutionId], references: [id], onDelete: Cascade)
+  teacherId              String
+  teacher                Teacher               @relation(fields: [teacherId], references: [id], onDelete: Cascade)
+  leaveTypeId            String?
+  leaveTypeRel           LeaveType?            @relation(fields: [leaveTypeId], references: [id])
+  leaveYearId            String?
+  leaveYear              LeaveYear?            @relation(fields: [leaveYearId], references: [id])
+  employeeLeaveAccountId String?
+  employeeLeaveAccount   EmployeeLeaveAccount? @relation(fields: [employeeLeaveAccountId], references: [id])
+  leaveType              String                // Legacy code e.g. "CASUAL", "SICK", "EARNED"
+  startDate              DateTime
+  endDate                DateTime
+  totalDays              Int                   @default(1)
+  reason                 String
+  status                 String                @default("PENDING") // PENDING, APPROVED, REJECTED, CANCELLED
+  approvedByUserId       String?
+  rejectionReason        String?
+  createdAt              DateTime              @default(now())
+  updatedAt              DateTime              @updatedAt
+
+  transactions           LeaveTransaction[]
 }
 
 model Assignment {

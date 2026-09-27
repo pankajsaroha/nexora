@@ -46,17 +46,17 @@ export function RoleStrip() {
       email: "principal@nexora.demo",
       capabilities: ["Campus Roll-Call (94.2%)", "Revenue & Fee Ledgers", "Staff Absence & Leave Approvals"],
       metrics: "350 Students • 35 Faculty • 19 Cohorts",
-      badgeColor: "bg-[#2E281F] text-[#D4B87C] border-[#B89B62]/40",
-      accentBorder: "hover:border-[#B89B62]",
-      cardTint: "bg-[#201E1A]",
-      accentGlow: "group-hover:border-[#B89B62]/70",
-      iconColor: "text-[#D4B87C]",
+      badgeColor: "bg-[#2E281F] text-primary border-primary/40",
+      accentBorder: "hover:border-primary",
+      cardTint: "bg-muted",
+      accentGlow: "group-hover:border-primary/70",
+      iconColor: "text-primary",
       icon: Award,
       preview: {
         type: "stat",
         kpis: [
           { label: "Today Attendance", val: "94.2%", color: "text-[#7A8068]" },
-          { label: "Term 1 Realized", val: "₹18.4L", color: "text-[#D4B87C]" },
+          { label: "Term 1 Realized", val: "₹18.4L", color: "text-primary" },
           { label: "Pending Tasks", val: "3 Active", color: "text-[#C4AA76]" },
         ],
       },
@@ -69,10 +69,10 @@ export function RoleStrip() {
       email: "teacher@nexora.demo",
       capabilities: ["Grade 8A Roll-Call (45s)", "7-Period Timetable", "Assignment Dispatch & Marks"],
       metrics: "Maths Lead • Grade 8A Incharge • 32 Scholars",
-      badgeColor: "bg-[#232B22] text-[#A3B19B] border-[#65705B]/40",
+      badgeColor: "bg-[#232B22] text-[#A3B19B] border-success/30/40",
       accentBorder: "hover:border-[#7A8068]",
-      cardTint: "bg-[#201E1A]",
-      accentGlow: "group-hover:border-[#65705B]/70",
+      cardTint: "bg-muted",
+      accentGlow: "group-hover:border-success/30/70",
       iconColor: "text-[#A3B19B]",
       icon: GraduationCap,
       preview: {
@@ -93,7 +93,7 @@ export function RoleStrip() {
       metrics: "Grade 8A • Roll #12 • 92.4% Attendance",
       badgeColor: "bg-[#2B2925] text-[#DCD7CB] border-[#7A756B]/40",
       accentBorder: "hover:border-[#9A958A]",
-      cardTint: "bg-[#201E1A]",
+      cardTint: "bg-muted",
       accentGlow: "group-hover:border-[#7A756B]/70",
       iconColor: "text-[#DCD7CB]",
       icon: BookOpen,
@@ -115,7 +115,7 @@ export function RoleStrip() {
       metrics: "Aarav (Grade 8A) & Meera (Grade 5B)",
       badgeColor: "bg-[#2C1F1F] text-[#E0A8A5] border-[#8C4A47]/40",
       accentBorder: "hover:border-[#8C4A47]",
-      cardTint: "bg-[#201E1A]",
+      cardTint: "bg-muted",
       accentGlow: "group-hover:border-[#8C4A47]/70",
       iconColor: "text-[#E0A8A5]",
       icon: HeartHandshake,
@@ -130,13 +130,13 @@ export function RoleStrip() {
   ];
 
   return (
-    <section className="py-20 sm:py-28 bg-[#171614] text-[#F7F4ED] border-b border-[#2A2722]">
+    <section className="py-20 sm:py-28 bg-primary text-primary-foreground border-b border-border">
       <div className="max-w-7xl mx-auto px-6 sm:px-8 space-y-12">
         {/* Section Header */}
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
           <div className="space-y-3 max-w-2xl">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-[#B89B62]/30 bg-[#201E1A] text-[11px] font-mono uppercase tracking-widest text-[#C4AA76]">
-              <Sparkles className="w-3.5 h-3.5 text-[#B89B62]" />
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-primary/30 bg-muted text-[11px] font-mono uppercase tracking-widest text-[#C4AA76]">
+              <Sparkles className="w-3.5 h-3.5 text-primary" />
               <span>One Platform. Every Role.</span>
             </div>
 
@@ -149,7 +149,7 @@ export function RoleStrip() {
             </p>
           </div>
 
-          <span className="text-xs font-mono text-[#D4B87C] font-semibold bg-[#201E1A] px-3.5 py-2 rounded-xl border border-[#35322C] shadow-2xs">
+          <span className="text-xs font-mono text-primary font-semibold bg-muted px-3.5 py-2 rounded-xl border border-border shadow-2xs">
             1-Click Instant Demo Access • No Password Required
           </span>
         </div>
@@ -172,7 +172,7 @@ export function RoleStrip() {
                     handleLaunchRole(r.email, r.roleCode);
                   }
                 }}
-                className={`group relative rounded-3xl border border-[#35322C] ${r.cardTint} p-6 transition-all duration-200 cursor-pointer flex flex-col justify-between shadow-lg hover:shadow-2xl hover:translate-y-[-3px] ${r.accentBorder} focus:outline-none focus:ring-2 focus:ring-[#B89B62]`}
+                className={`group relative rounded-3xl border border-border ${r.cardTint} p-6 transition-all duration-200 cursor-pointer flex flex-col justify-between shadow-lg hover:shadow-2xl hover:translate-y-[-3px] ${r.accentBorder} focus:outline-none focus:ring-2 focus:ring-primary/20`}
               >
                 <div className="space-y-5">
                   {/* Top Badge & Role Name */}
@@ -182,14 +182,14 @@ export function RoleStrip() {
                     >
                       {r.title}
                     </span>
-                    <div className="w-7 h-7 rounded-lg bg-[#2B2925] border border-[#3A3730] flex items-center justify-center text-[#FAF8F3] shadow-2xs">
+                    <div className="w-7 h-7 rounded-lg bg-[#2B2925] border border-[#3A3730] flex items-center justify-center text-primary-foreground shadow-2xs">
                       <Icon className={`w-3.5 h-3.5 ${r.iconColor}`} />
                     </div>
                   </div>
 
                   {/* Headline & Persona */}
                   <div>
-                    <h3 className="font-extrabold text-base text-[#FAF8F3] group-hover:text-white transition-colors">
+                    <h3 className="font-extrabold text-base text-primary-foreground group-hover:text-white transition-colors">
                       {r.persona}
                     </h3>
                     <p className="text-xs font-medium text-[#A6A095] mt-1 leading-snug">
@@ -198,13 +198,13 @@ export function RoleStrip() {
                   </div>
 
                   {/* Visual UI Preview Snippet */}
-                  <div className="p-3.5 rounded-2xl bg-[#171614] border border-[#2F2C26] space-y-2 text-xs shadow-inner">
+                  <div className="p-3.5 rounded-2xl bg-primary border border-[#2F2C26] space-y-2 text-xs shadow-inner">
                     {r.preview.type === "stat" && (
                       <div className="grid grid-cols-3 gap-2 text-center">
                         {r.preview.kpis?.map((k, i) => (
                           <div key={i} className="space-y-0.5">
                             <div className={`text-xs font-extrabold ${k.color}`}>{k.val}</div>
-                            <div className="text-[9px] text-[#8C877D] font-medium truncate">{k.label}</div>
+                            <div className="text-[9px] text-muted-foreground font-medium truncate">{k.label}</div>
                           </div>
                         ))}
                       </div>
@@ -213,8 +213,8 @@ export function RoleStrip() {
                     {r.preview.type === "timetable" && (
                       <div className="space-y-1.5 font-mono text-[10px]">
                         {r.preview.slots?.map((s, i) => (
-                          <div key={i} className="flex justify-between items-center bg-[#201E1A] p-1.5 rounded-lg border border-[#2F2C26]">
-                            <span className="font-bold text-[#FAF8F3]">{s.period}</span>
+                          <div key={i} className="flex justify-between items-center bg-muted p-1.5 rounded-lg border border-[#2F2C26]">
+                            <span className="font-bold text-primary-foreground">{s.period}</span>
                             <span className="text-[#A6A095] truncate">{s.sub}</span>
                           </div>
                         ))}
@@ -225,8 +225,8 @@ export function RoleStrip() {
                       <div className="space-y-1 font-mono text-[10px]">
                         {r.preview.items?.map((item, i) => (
                           <div key={i} className="flex justify-between items-center text-[#C5C0B6]">
-                            <span className="text-[#8C877D]">{item.label}:</span>
-                            <span className="font-bold text-[#FAF8F3]">{item.val}</span>
+                            <span className="text-muted-foreground">{item.label}:</span>
+                            <span className="font-bold text-primary-foreground">{item.val}</span>
                           </div>
                         ))}
                       </div>
@@ -235,8 +235,8 @@ export function RoleStrip() {
                     {r.preview.type === "parent" && (
                       <div className="space-y-1.5">
                         {r.preview.children?.map((c, i) => (
-                          <div key={i} className="flex justify-between items-center text-[10px] font-mono bg-[#201E1A] p-1.5 rounded-lg border border-[#2F2C26]">
-                            <span className="font-bold text-[#FAF8F3]">{c.name}</span>
+                          <div key={i} className="flex justify-between items-center text-[10px] font-mono bg-muted p-1.5 rounded-lg border border-[#2F2C26]">
+                            <span className="font-bold text-primary-foreground">{c.name}</span>
                             <span className="text-[#7A8068] font-bold">{c.att}</span>
                           </div>
                         ))}
@@ -256,14 +256,14 @@ export function RoleStrip() {
                 </div>
 
                 {/* 1-Click Action Footer */}
-                <div className="mt-6 pt-4 border-t border-[#2A2722] flex items-center justify-between text-xs font-bold text-[#FAF8F3]">
+                <div className="mt-6 pt-4 border-t border-border flex items-center justify-between text-xs font-bold text-primary-foreground">
                   <span>
                     {isNavigating ? "Opening Portal..." : "Enter Portal"}
                   </span>
                   {isNavigating ? (
-                    <Loader2 className="w-4 h-4 animate-spin text-[#D4B87C]" />
+                    <Loader2 className="w-4 h-4 animate-spin text-primary" />
                   ) : (
-                    <div className="w-7 h-7 rounded-lg bg-[#2E2B25] border border-[#3A3730] flex items-center justify-center text-[#FAF8F3] group-hover:bg-[#B89B62] group-hover:text-[#171614] group-hover:border-[#B89B62] transition-all shadow-2xs">
+                    <div className="w-7 h-7 rounded-lg bg-[#2E2B25] border border-[#3A3730] flex items-center justify-center text-primary-foreground group-hover:bg-[#B89B62] group-hover:text-foreground group-hover:border-primary transition-all shadow-2xs">
                       <ArrowRight className="w-3.5 h-3.5" />
                     </div>
                   )}

@@ -32,25 +32,25 @@ export function Badge({
   };
 
   const variantStyles = {
-    default: "bg-[#FAF8F3] text-[#171614] border border-[#E5E0D5]",
-    secondary: "bg-[#FAF8F3] text-[#7A756B] border border-[#DCD7CB]",
-    champagne: "bg-[#FAF6ED] text-[#856D3B] border border-[#D4B87C]/50",
-    olive: "bg-[#F4F6F1] text-[#525E4B] border border-[#65705B]/30",
-    burgundy: "bg-[#FAF6ED] text-[#6F3D3A] border border-[#8C4A47]/30",
-    stone: "bg-[#FAF8F3] text-[#7A756B] border border-[#DCD7CB]",
-    espresso: "bg-[#1B1916] text-[#FAF8F3] border border-[#35322C]",
-    success: "bg-[#F4F6F1] text-[#525E4B] border border-[#65705B]/30",
-    warning: "bg-[#FAF6ED] text-[#856D3B] border border-[#D4B87C]/50",
-    danger: "bg-[#FAF6ED] text-[#6F3D3A] border border-[#8C4A47]/30",
-    info: "bg-[#FAF6ED] text-[#856D3B] border border-[#D4B87C]/40",
-    neutral: "bg-[#FAF8F3] text-[#555047] border border-[#E5E0D5]",
-    outline: "bg-transparent text-[#555047] border border-[#DCD7CB]",
+    default: "bg-muted text-foreground border border-border",
+    secondary: "bg-muted/60 text-muted-foreground border border-border",
+    champagne: "bg-warm/15 text-foreground border border-warm/30",
+    olive: "bg-accent/15 text-foreground border border-accent/30",
+    burgundy: "bg-destructive/15 text-destructive border border-destructive/30",
+    stone: "bg-muted text-muted-foreground border border-border",
+    espresso: "bg-primary text-primary-foreground border border-primary",
+    success: "bg-success/15 text-success border border-success/30",
+    warning: "bg-warning/15 text-warning border border-warning/30",
+    danger: "bg-destructive/15 text-destructive border border-destructive/30",
+    info: "bg-primary-subtle text-primary border border-primary/25",
+    neutral: "bg-muted text-muted-foreground border border-border",
+    outline: "bg-transparent text-muted-foreground border border-border",
   };
 
   return (
     <span
       className={cn(
-        "inline-flex items-center gap-1 rounded-md whitespace-nowrap transition-colors",
+        "inline-flex items-center gap-1 rounded-lg whitespace-nowrap transition-colors select-none",
         sizeStyles[size],
         variantStyles[variant],
         className

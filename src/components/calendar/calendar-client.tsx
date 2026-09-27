@@ -95,7 +95,7 @@ export function CalendarClient({ events }: { events: CalendarEventItem[] }) {
               variant="outline"
               size="sm"
               onClick={handleExportICal}
-              leftIcon={<Download className="h-3.5 w-3.5 text-[#B89B62]" />}
+              leftIcon={<Download className="h-3.5 w-3.5 text-primary" />}
             >
               Export iCal
             </Button>
@@ -112,42 +112,42 @@ export function CalendarClient({ events }: { events: CalendarEventItem[] }) {
 
       {/* Metrics Row */}
       <div className="grid grid-cols-1 gap-3 sm:grid-cols-4">
-        <div className="rounded-xl border border-[#E5E0D5] bg-white p-4 shadow-xs">
-          <div className="text-[11px] font-mono uppercase tracking-wider text-[#65705B]">Total Events</div>
-          <div className="mt-1 text-2xl font-bold text-[#171614]">{events.length}</div>
-          <div className="mt-0.5 text-[11px] text-[#65705B]">Scheduled calendar entries</div>
+        <div className="rounded-xl border border-border bg-white p-4 shadow-xs">
+          <div className="text-[11px] font-mono uppercase tracking-wider text-accent">Total Events</div>
+          <div className="mt-1 text-2xl font-bold text-foreground">{events.length}</div>
+          <div className="mt-0.5 text-[11px] text-accent">Scheduled calendar entries</div>
         </div>
-        <div className="rounded-xl border border-[#E5E0D5] bg-white p-4 shadow-xs">
-          <div className="text-[11px] font-mono uppercase tracking-wider text-[#65705B]">Exams & Milestones</div>
-          <div className="mt-1 text-2xl font-bold text-[#171614]">
+        <div className="rounded-xl border border-border bg-white p-4 shadow-xs">
+          <div className="text-[11px] font-mono uppercase tracking-wider text-accent">Exams & Milestones</div>
+          <div className="mt-1 text-2xl font-bold text-foreground">
             {events.filter((e) => e.eventType === "EXAM" || e.eventType === "DEADLINE").length}
           </div>
-          <div className="mt-0.5 text-[11px] text-[#65705B]">Academic checkpoints</div>
+          <div className="mt-0.5 text-[11px] text-accent">Academic checkpoints</div>
         </div>
-        <div className="rounded-xl border border-[#E5E0D5] bg-white p-4 shadow-xs">
-          <div className="text-[11px] font-mono uppercase tracking-wider text-[#65705B]">Parent Conferences</div>
-          <div className="mt-1 text-2xl font-bold text-[#171614]">
+        <div className="rounded-xl border border-border bg-white p-4 shadow-xs">
+          <div className="text-[11px] font-mono uppercase tracking-wider text-accent">Parent Conferences</div>
+          <div className="mt-1 text-2xl font-bold text-foreground">
             {events.filter((e) => e.eventType === "PARENT_MEETING").length}
           </div>
-          <div className="mt-0.5 text-[11px] text-[#65705B]">Community engagements</div>
+          <div className="mt-0.5 text-[11px] text-accent">Community engagements</div>
         </div>
-        <div className="rounded-xl border border-[#E5E0D5] bg-white p-4 shadow-xs">
-          <div className="text-[11px] font-mono uppercase tracking-wider text-[#65705B]">Upcoming Holiday</div>
-          <div className="mt-1 text-2xl font-bold text-[#171614]">02 Oct</div>
-          <div className="mt-0.5 text-[11px] text-[#65705B]">Gandhi Jayanti</div>
+        <div className="rounded-xl border border-border bg-white p-4 shadow-xs">
+          <div className="text-[11px] font-mono uppercase tracking-wider text-accent">Upcoming Holiday</div>
+          <div className="mt-1 text-2xl font-bold text-foreground">02 Oct</div>
+          <div className="mt-0.5 text-[11px] text-accent">Gandhi Jayanti</div>
         </div>
       </div>
 
       {/* Filter Bar */}
-      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between rounded-xl border border-[#E5E0D5] bg-white p-3 shadow-xs">
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between rounded-xl border border-border bg-white p-3 shadow-xs">
         <div className="relative flex-1 max-w-md">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-[#65705B]" />
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-accent" />
           <input
             type="text"
             placeholder="Search events, locations, descriptions..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full pl-9 pr-3 py-1.5 text-xs rounded-lg border border-[#E5E0D5] bg-[#FAF8F3] focus:bg-white focus:outline-none focus:ring-1 focus:ring-[#171614] transition-colors"
+            className="w-full pl-9 pr-3 py-1.5 text-xs rounded-lg border border-border bg-card focus:bg-white focus:outline-none focus:ring-1 focus:ring-[#171614] transition-colors"
           />
         </div>
 
@@ -164,8 +164,8 @@ export function CalendarClient({ events }: { events: CalendarEventItem[] }) {
               onClick={() => setSelectedFilter(item.key)}
               className={`px-2.5 py-1 text-xs font-mono uppercase rounded-md transition-colors ${
                 selectedFilter === item.key
-                  ? "bg-[#171614] text-white font-semibold"
-                  : "bg-[#FAF8F3] border border-[#E5E0D5] text-[#171614] hover:bg-[#F3F0E8]"
+                  ? "bg-primary text-white font-semibold"
+                  : "bg-card border border-border text-foreground hover:bg-[#F3F0E8]"
               }`}
             >
               {item.label}
@@ -177,16 +177,16 @@ export function CalendarClient({ events }: { events: CalendarEventItem[] }) {
       {/* Events Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         {filteredEvents.length === 0 ? (
-          <div className="col-span-full p-8 text-center rounded-xl border border-dashed border-[#E5E0D5] bg-[#FAF8F3] text-xs text-[#65705B]">
+          <div className="col-span-full p-8 text-center rounded-xl border border-dashed border-border bg-card text-xs text-accent">
             No calendar events found matching the selection.
           </div>
         ) : (
           filteredEvents.map((ev) => (
             <div
               key={ev.id}
-              className="rounded-xl border border-[#E5E0D5] bg-white p-5 shadow-xs space-y-3 hover:border-[#171614] transition-colors"
+              className="rounded-xl border border-border bg-white p-5 shadow-xs space-y-3 hover:border-[#171614] transition-colors"
             >
-              <div className="flex items-center justify-between border-b border-[#E5E0D5] pb-2.5">
+              <div className="flex items-center justify-between border-b border-border pb-2.5">
                 <Badge
                   variant={
                     ev.eventType === "EXAM"
@@ -201,33 +201,33 @@ export function CalendarClient({ events }: { events: CalendarEventItem[] }) {
                 >
                   {ev.eventType.replace("_", " ")}
                 </Badge>
-                <span className="text-[11px] font-mono text-[#65705B]">
+                <span className="text-[11px] font-mono text-accent">
                   Audience: {ev.targetAudience}
                 </span>
               </div>
 
               <div>
-                <h3 className="text-sm font-bold text-[#171614]">
+                <h3 className="text-sm font-bold text-foreground">
                   {ev.title}
                 </h3>
                 {ev.description && (
-                  <p className="mt-1 text-xs text-[#65705B] line-clamp-2 leading-relaxed">
+                  <p className="mt-1 text-xs text-accent line-clamp-2 leading-relaxed">
                     {ev.description}
                   </p>
                 )}
               </div>
 
-              <div className="pt-2 border-t border-[#E5E0D5] space-y-1.5 text-xs text-[#65705B]">
+              <div className="pt-2 border-t border-border space-y-1.5 text-xs text-accent">
                 <div className="flex items-center gap-1.5 font-mono text-[11px]">
-                  <CalendarIcon className="h-3.5 w-3.5 text-[#B89B62]" />
-                  <span className="text-[#171614] font-medium">
+                  <CalendarIcon className="h-3.5 w-3.5 text-primary" />
+                  <span className="text-foreground font-medium">
                     {formatDate(ev.startDate)}
                     {ev.startDate !== ev.endDate && ` — ${formatDate(ev.endDate)}`}
                   </span>
                 </div>
                 {ev.location && (
                   <div className="flex items-center gap-1.5 text-[11px]">
-                    <MapPin className="h-3.5 w-3.5 text-[#65705B]" />
+                    <MapPin className="h-3.5 w-3.5 text-accent" />
                     <span>{ev.location}</span>
                   </div>
                 )}
@@ -248,35 +248,35 @@ export function CalendarClient({ events }: { events: CalendarEventItem[] }) {
         >
           {scheduleSuccess ? (
             <div className="p-6 text-center space-y-3">
-              <div className="w-12 h-12 rounded-full bg-[#FAF8F3] border border-[#B89B62] text-[#B89B62] flex items-center justify-center mx-auto">
+              <div className="w-12 h-12 rounded-full bg-card border border-primary text-primary flex items-center justify-center mx-auto">
                 <CheckCircle2 className="w-6 h-6" />
               </div>
-              <h4 className="text-sm font-bold text-[#171614]">Event Added to Calendar</h4>
-              <p className="text-xs text-[#65705B]">
+              <h4 className="text-sm font-bold text-foreground">Event Added to Calendar</h4>
+              <p className="text-xs text-accent">
                 Calendar entry synchronized with timetable and community notification feeds.
               </p>
             </div>
           ) : (
             <form onSubmit={handleScheduleEvent} className="space-y-4 text-xs">
               <div>
-                <label className="block font-semibold text-[#171614] mb-1">Event Title *</label>
+                <label className="block font-semibold text-foreground mb-1">Event Title *</label>
                 <input
                   type="text"
                   required
                   placeholder="e.g. Annual Parent-Teacher Academic Review"
                   value={formData.title}
                   onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-                  className="w-full rounded-lg border border-[#E5E0D5] bg-[#FAF8F3] p-2.5 text-xs text-[#171614] focus:outline-none focus:ring-1 focus:ring-[#171614]"
+                  className="w-full rounded-lg border border-border bg-card p-2.5 text-xs text-foreground focus:outline-none focus:ring-1 focus:ring-[#171614]"
                 />
               </div>
 
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block font-semibold text-[#171614] mb-1">Event Type *</label>
+                  <label className="block font-semibold text-foreground mb-1">Event Type *</label>
                   <select
                     value={formData.eventType}
                     onChange={(e) => setFormData({ ...formData, eventType: e.target.value as any })}
-                    className="w-full rounded-lg border border-[#E5E0D5] bg-[#FAF8F3] p-2.5 text-xs text-[#171614]"
+                    className="w-full rounded-lg border border-border bg-card p-2.5 text-xs text-foreground"
                   >
                     <option value="EVENT">Event</option>
                     <option value="EXAM">Examination</option>
@@ -287,11 +287,11 @@ export function CalendarClient({ events }: { events: CalendarEventItem[] }) {
                 </div>
 
                 <div>
-                  <label className="block font-semibold text-[#171614] mb-1">Target Audience *</label>
+                  <label className="block font-semibold text-foreground mb-1">Target Audience *</label>
                   <select
                     value={formData.targetAudience}
                     onChange={(e) => setFormData({ ...formData, targetAudience: e.target.value })}
-                    className="w-full rounded-lg border border-[#E5E0D5] bg-[#FAF8F3] p-2.5 text-xs text-[#171614]"
+                    className="w-full rounded-lg border border-border bg-card p-2.5 text-xs text-foreground"
                   >
                     <option value="EVERYONE">Everyone</option>
                     <option value="PARENTS">Parents</option>
@@ -303,50 +303,50 @@ export function CalendarClient({ events }: { events: CalendarEventItem[] }) {
 
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block font-semibold text-[#171614] mb-1">Start Date *</label>
+                  <label className="block font-semibold text-foreground mb-1">Start Date *</label>
                   <input
                     type="date"
                     required
                     value={formData.startDate}
                     onChange={(e) => setFormData({ ...formData, startDate: e.target.value })}
-                    className="w-full rounded-lg border border-[#E5E0D5] bg-[#FAF8F3] p-2.5 text-xs text-[#171614]"
+                    className="w-full rounded-lg border border-border bg-card p-2.5 text-xs text-foreground"
                   />
                 </div>
                 <div>
-                  <label className="block font-semibold text-[#171614] mb-1">End Date *</label>
+                  <label className="block font-semibold text-foreground mb-1">End Date *</label>
                   <input
                     type="date"
                     required
                     value={formData.endDate}
                     onChange={(e) => setFormData({ ...formData, endDate: e.target.value })}
-                    className="w-full rounded-lg border border-[#E5E0D5] bg-[#FAF8F3] p-2.5 text-xs text-[#171614]"
+                    className="w-full rounded-lg border border-border bg-card p-2.5 text-xs text-foreground"
                   />
                 </div>
               </div>
 
               <div>
-                <label className="block font-semibold text-[#171614] mb-1">Location / Venue</label>
+                <label className="block font-semibold text-foreground mb-1">Location / Venue</label>
                 <input
                   type="text"
                   placeholder="e.g. Main Auditorium / Block B Lab"
                   value={formData.location}
                   onChange={(e) => setFormData({ ...formData, location: e.target.value })}
-                  className="w-full rounded-lg border border-[#E5E0D5] bg-[#FAF8F3] p-2.5 text-xs text-[#171614] focus:outline-none focus:ring-1 focus:ring-[#171614]"
+                  className="w-full rounded-lg border border-border bg-card p-2.5 text-xs text-foreground focus:outline-none focus:ring-1 focus:ring-[#171614]"
                 />
               </div>
 
               <div>
-                <label className="block font-semibold text-[#171614] mb-1">Description</label>
+                <label className="block font-semibold text-foreground mb-1">Description</label>
                 <textarea
                   rows={2}
                   placeholder="Event itinerary, dress code, or special instructions..."
                   value={formData.description}
                   onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                  className="w-full rounded-lg border border-[#E5E0D5] bg-[#FAF8F3] p-2.5 text-xs text-[#171614] focus:outline-none focus:ring-1 focus:ring-[#171614]"
+                  className="w-full rounded-lg border border-border bg-card p-2.5 text-xs text-foreground focus:outline-none focus:ring-1 focus:ring-[#171614]"
                 />
               </div>
 
-              <div className="flex justify-end gap-2 pt-4 border-t border-[#E5E0D5]">
+              <div className="flex justify-end gap-2 pt-4 border-t border-border">
                 <Button
                   type="button"
                   variant="outline"

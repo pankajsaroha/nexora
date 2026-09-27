@@ -15,7 +15,7 @@ import { LandingFooter } from "@/components/landing/landing-footer";
 
 export function HomepageClient() {
   return (
-    <div className="min-h-screen bg-[#F7F4ED] text-[#171614] font-sans selection:bg-[#171614] selection:text-[#F7F4ED] antialiased">
+    <div className="min-h-screen bg-background text-foreground font-sans selection:bg-primary selection:text-primary-foreground antialiased">
       {/* 1. Sticky Navigation */}
       <LandingNavbar />
 

@@ -68,27 +68,27 @@ export function Drawer({
     <div className="fixed inset-0 z-50 overflow-hidden">
       {/* Backdrop */}
       <div
-        className="fixed inset-0 bg-[#171614]/70 backdrop-blur-xs transition-opacity animate-in fade-in"
+        className="fixed inset-0 bg-foreground/40 backdrop-blur-xs transition-opacity animate-in fade-in"
         onClick={onClose}
       />
 
       {/* Drawer Container */}
       <div
         className={cn(
-          "fixed flex w-full flex-col bg-white shadow-2xl border-l border-[#E5E0D5]",
+          "fixed flex w-full flex-col bg-card text-card-foreground shadow-2xl border-l border-border",
           positionClasses[position],
           sizeClasses[effectiveSize] || "max-w-md",
           className
         )}
       >
         {/* Header */}
-        <div className="flex items-center justify-between border-b border-[#EFECE3] bg-[#FAF8F3] px-6 py-4">
+        <div className="flex items-center justify-between border-b border-border bg-muted/40 px-6 py-4">
           <div>
-            <h2 className="text-base font-extrabold text-[#171614] tracking-tight">
+            <h2 className="text-base font-extrabold text-foreground tracking-tight">
               {title}
             </h2>
             {desc && (
-              <p className="mt-0.5 text-xs text-[#7A756B]">
+              <p className="mt-0.5 text-xs text-muted-foreground">
                 {desc}
               </p>
             )}
@@ -96,18 +96,19 @@ export function Drawer({
           <button
             type="button"
             onClick={onClose}
-            className="rounded-lg p-1.5 text-[#7A756B] hover:bg-[#EFECE3] hover:text-[#171614] transition-colors"
+            className="rounded-lg p-1.5 text-muted-foreground hover:bg-muted hover:text-foreground transition-colors"
+            aria-label="Close drawer"
           >
             <X className="h-4 w-4" />
           </button>
         </div>
 
         {/* Content Body */}
-        <div className="flex-1 overflow-y-auto p-6 bg-white">{children}</div>
+        <div className="flex-1 overflow-y-auto p-6 bg-card text-card-foreground">{children}</div>
 
         {/* Footer if provided */}
         {footer && (
-          <div className="border-t border-[#EFECE3] bg-[#FAF8F3] px-6 py-3 flex items-center justify-end gap-2">
+          <div className="border-t border-border bg-muted/30 px-6 py-3 flex items-center justify-end gap-2">
             {footer}
           </div>
         )}

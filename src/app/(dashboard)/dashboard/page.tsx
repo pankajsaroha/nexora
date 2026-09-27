@@ -8,6 +8,7 @@ import { StudentDashboard } from "@/components/dashboards/student-dashboard";
 import { ParentDashboard } from "@/components/dashboards/parent-dashboard";
 import { AccountantDashboard } from "@/components/dashboards/accountant-dashboard";
 import { formatCurrency } from "@/lib/utils";
+import { getEmployeeLeaveSummary } from "@/lib/leave/service";
 
 export const dynamic = "force-dynamic";
 
@@ -37,13 +38,29 @@ export default async function DashboardPage() {
       },
     });
 
+    let leaveSummary = null;
+    if (teacher) {
+      try {
+        leaveSummary = await getEmployeeLeaveSummary({
+          institutionId: user.institutionId,
+          teacherId: teacher.id,
+        });
+      } catch (err) {
+        console.error("Failed to fetch teacher leave summary:", err);
+      }
+    }
+
     const activeSection = teacher?.sectionsAsClassTeacher?.[0];
 
     // Today's schedule slots for this teacher
+    const dayNames = ["SUNDAY", "MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY", "SATURDAY"];
+    const currentDayName = dayNames[new Date().getDay()];
+    const timetableDay = currentDayName === "SUNDAY" ? "MONDAY" : currentDayName;
+
     const timetableSlots = await prisma.timetableSlot.findMany({
       where: {
         teacherId: teacher?.id || undefined,
-        dayOfWeek: "MONDAY", // Default to current school day schedule
+        dayOfWeek: timetableDay,
       },
       include: {
         subject: true,
@@ -76,7 +93,7 @@ export default async function DashboardPage() {
       <TeacherDashboard
         teacher={{
           fullName: teacher?.fullName || user.fullName,
-          designation: teacher?.designation || "Senior Faculty",
+          designation: teacher?.designation || "Faculty",
           classTeacherSection: activeSection
             ? {
                 id: activeSection.id,
@@ -85,10 +102,8 @@ export default async function DashboardPage() {
                 studentsCount: activeSection.students.length,
               }
             : null,
-          casualLeaveBalance: teacher?.casualLeaveBalance || 12,
-          sickLeaveBalance: teacher?.sickLeaveBalance || 10,
-          earnedLeaveBalance: teacher?.earnedLeaveBalance || 15,
         }}
+        leaveSummary={leaveSummary || undefined}
         todaySchedule={timetableSlots.map((s) => ({
           period: s.periodNumber,
           subjectName: s.subject.name,
@@ -141,11 +156,14 @@ export default async function DashboardPage() {
     });
 
     const fallbackSectionId = student?.currentSectionId;
+    const dayNames = ["SUNDAY", "MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY", "SATURDAY"];
+    const currentDayName = dayNames[new Date().getDay()];
+    const timetableDay = currentDayName === "SUNDAY" ? "MONDAY" : currentDayName;
 
     const timetableSlots = await prisma.timetableSlot.findMany({
       where: {
         sectionId: fallbackSectionId,
-        dayOfWeek: "MONDAY",
+        dayOfWeek: timetableDay,
       },
       include: {
         subject: true,
@@ -167,17 +185,17 @@ export default async function DashboardPage() {
       },
     });
 
-    const totalAttendanceDays = student?.attendance?.length || 15;
+    const totalAttendanceDays = student?.attendance?.length || 0;
     const presentCount =
-      student?.attendance?.filter((a) => a.status === "PRESENT").length || 14;
+      student?.attendance?.filter((a) => a.status === "PRESENT").length || 0;
     const absentCount =
       student?.attendance?.filter((a) => a.status === "ABSENT").length || 0;
     const lateCount =
-      student?.attendance?.filter((a) => a.status === "LATE").length || 1;
+      student?.attendance?.filter((a) => a.status === "LATE").length || 0;
     const pct =
       totalAttendanceDays > 0
         ? Math.round((presentCount / totalAttendanceDays) * 100)
-        : 95;
+        : 100;
 
     const totalFee = student?.fees?.reduce((acc, f) => acc + f.totalAmount, 0) || 0;
     const paidFee = student?.fees?.reduce((acc, f) => acc + f.paidAmount, 0) || 0;
@@ -255,26 +273,12 @@ export default async function DashboardPage() {
 
     const rawChildren = guardian?.students?.map((sg) => sg.student) || [];
 
-    // Fallback if no direct link to query mock children (Aarav & Meera)
     const childrenList = await Promise.all(
-      (rawChildren.length > 0
-        ? rawChildren
-        : await prisma.student.findMany({
-            where: {
-              OR: [{ firstName: "Aarav" }, { firstName: "Meera" }],
-            },
-            include: {
-              currentClass: true,
-              currentSection: { include: { classTeacher: true } },
-              attendance: true,
-              fees: true,
-            },
-          })
-      ).map(async (child) => {
-        const total = child.attendance.length || 15;
-        const present = child.attendance.filter((a) => a.status === "PRESENT").length || 14;
+      rawChildren.map(async (child) => {
+        const total = child.attendance.length || 0;
+        const present = child.attendance.filter((a) => a.status === "PRESENT").length || 0;
         const absent = child.attendance.filter((a) => a.status === "ABSENT").length || 0;
-        const pct = total > 0 ? Math.round((present / total) * 100) : 93;
+        const pct = total > 0 ? Math.round((present / total) * 100) : 100;
 
         const assignments = await prisma.assignment.findMany({
           where: { sectionId: child.currentSectionId, status: "PUBLISHED" },
@@ -283,11 +287,11 @@ export default async function DashboardPage() {
         });
 
         const feeRec = child.fees[0] || {
-          totalAmount: 36000,
-          paidAmount: 36000,
+          totalAmount: 0,
+          paidAmount: 0,
           pendingAmount: 0,
           status: "PAID",
-          dueDate: new Date("2026-10-15"),
+          dueDate: new Date(),
         };
 
         return {
@@ -296,9 +300,9 @@ export default async function DashboardPage() {
           admissionNumber: child.admissionNumber,
           className: child.currentClass.name,
           sectionName: child.currentSection.name,
-          rollNumber: child.rollNumber || "01",
-          classTeacherName: child.currentSection.classTeacher?.fullName || "Mrs. Sharma",
-          classTeacherPhone: child.currentSection.classTeacher?.phone || "+91 98100 11002",
+          rollNumber: child.rollNumber || "—",
+          classTeacherName: child.currentSection.classTeacher?.fullName || "Class Teacher",
+          classTeacherPhone: child.currentSection.classTeacher?.phone || "+91 98100 00000",
           attendancePct: pct,
           totalClasses: total,
           presentCount: present,
@@ -397,6 +401,15 @@ export default async function DashboardPage() {
   }
 
   // 5. PRINCIPAL, SUPER ADMIN, EXECUTIVE MANAGEMENT (Daily Operations Command Desk)
+  const startOfToday = new Date();
+  startOfToday.setHours(0, 0, 0, 0);
+  const endOfToday = new Date();
+  endOfToday.setHours(23, 59, 59, 999);
+
+  const dayNames = ["SUNDAY", "MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY", "SATURDAY"];
+  const currentDayName = dayNames[new Date().getDay()];
+  const timetableDay = currentDayName === "SUNDAY" ? "MONDAY" : currentDayName;
+
   const [
     totalStudents,
     totalTeachers,
@@ -406,6 +419,11 @@ export default async function DashboardPage() {
     pendingLeavesCount,
     timetableSlots,
     recentPayments,
+    todayAttendanceRecords,
+    programs,
+    academicYears,
+    customFields,
+    classesCount,
   ] = await Promise.all([
     prisma.student.count({
       where: { institutionId: user.institutionId },
@@ -440,6 +458,7 @@ export default async function DashboardPage() {
     }),
     prisma.timetableSlot.findMany({
       where: {
+        dayOfWeek: timetableDay,
         section: { class: { institutionId: user.institutionId } },
       },
       include: {
@@ -453,10 +472,50 @@ export default async function DashboardPage() {
       where: { student: { institutionId: user.institutionId } },
       include: { student: true },
       orderBy: { paymentDate: "desc" },
-      take: 3,
+      take: 4,
+    }),
+    prisma.studentAttendance.findMany({
+      where: {
+        student: { institutionId: user.institutionId },
+        date: {
+          gte: startOfToday,
+          lte: endOfToday,
+        },
+      },
+    }),
+    prisma.class.findMany({
+      where: { institutionId: user.institutionId },
+      include: {
+        department: true,
+        sections: true,
+        feeStructures: { include: { feeCategory: true } },
+      },
+      orderBy: { orderIndex: "asc" },
+    }),
+    prisma.academicYear.findMany({
+      where: { institutionId: user.institutionId },
+      orderBy: { startDate: "desc" },
+    }),
+    prisma.studentCustomField.findMany({
+      where: { institutionId: user.institutionId },
+      orderBy: { orderIndex: "asc" },
+    }),
+    prisma.class.count({
+      where: { institutionId: user.institutionId },
     }),
   ]);
 
+  // Attendance calculation
+  const totalRecordedAttendance = todayAttendanceRecords.length;
+  const isAttendanceRecordedToday = totalRecordedAttendance > 0;
+  const presentCount = todayAttendanceRecords.filter((a) => a.status === "PRESENT" || a.status === "LATE").length;
+  const absentCount = todayAttendanceRecords.filter((a) => a.status === "ABSENT").length;
+  const leaveCount = todayAttendanceRecords.filter((a) => a.status === "EXCUSED" || a.status === "HALF_DAY").length;
+  const attendanceTodayPct = totalRecordedAttendance > 0
+    ? +( (presentCount / totalRecordedAttendance) * 100 ).toFixed(1)
+    : (totalStudents > 0 ? 0 : 0);
+
+  // Attention Items
   const attentionItems: Array<{
     id: string;
     type: "ATTENDANCE" | "FEE" | "LEAVE" | "TASK" | "SETUP";
@@ -466,13 +525,33 @@ export default async function DashboardPage() {
     linkUrl: string;
   }> = [];
 
+  if (absentCount > 0) {
+    attentionItems.push({
+      id: "att-absent",
+      type: "ATTENDANCE",
+      title: `${absentCount} student${absentCount > 1 ? "s" : ""} absent today`,
+      subtitle: "Review attendance exceptions and contact primary guardians",
+      severity: "MEDIUM",
+      linkUrl: "/attendance",
+    });
+  } else if (totalStudents > 0 && !isAttendanceRecordedToday) {
+    attentionItems.push({
+      id: "att-att-pending",
+      type: "ATTENDANCE",
+      title: "Daily morning attendance roll not submitted",
+      subtitle: "Awaiting teacher submission for today's active cohorts",
+      severity: "MEDIUM",
+      linkUrl: "/attendance",
+    });
+  }
+
   if (overdueTasks.length > 0) {
     attentionItems.push({
       id: "att-tasks",
       type: "TASK",
       title: `${overdueTasks.length} administrative task${overdueTasks.length > 1 ? "s" : ""} pending resolution`,
-      subtitle: "Open workflow boards to review assigned responsibilities",
-      severity: "MEDIUM",
+      subtitle: "Open workflow board to review urgent institutional tasks",
+      severity: "HIGH",
       linkUrl: "/tasks",
     });
   }
@@ -481,10 +560,10 @@ export default async function DashboardPage() {
     attentionItems.push({
       id: "att-leaves",
       type: "LEAVE",
-      title: `${pendingLeavesCount} staff leave request${pendingLeavesCount > 1 ? "s" : ""} awaiting approval`,
-      subtitle: "Faculty requests pending administrative review",
+      title: `${pendingLeavesCount} faculty leave request${pendingLeavesCount > 1 ? "s" : ""} awaiting approval`,
+      subtitle: "Staff leave applications pending administrative review",
       severity: "LOW",
-      linkUrl: "/attendance/staff",
+      linkUrl: "/attendance/leaves",
     });
   }
 
@@ -493,21 +572,10 @@ export default async function DashboardPage() {
     attentionItems.push({
       id: "att-fees",
       type: "FEE",
-      title: `${formatCurrency(pendingFeeAmount)} outstanding tuition reconciliation`,
-      subtitle: "Pending student balance ledger requires follow-up",
-      severity: "MEDIUM",
+      title: `${formatCurrency(pendingFeeAmount)} pending fee reconciliation`,
+      subtitle: "Student fee balances requiring ledger follow-up",
+      severity: "LOW",
       linkUrl: "/finance/fees",
-    });
-  }
-
-  if (totalStudents === 0) {
-    attentionItems.push({
-      id: "att-setup",
-      type: "SETUP",
-      title: "Initialize Student & Faculty Roster",
-      subtitle: "Add students and classes to activate automated attendance tracking",
-      severity: "HIGH",
-      linkUrl: "/students",
     });
   }
 
@@ -533,8 +601,8 @@ export default async function DashboardPage() {
   recentAnnouncements.forEach((a) => {
     recentActivity.push({
       id: `act-ann-${a.id}`,
-      title: `Notice published: ${a.title}`,
-      subtitle: `Broadcasted to ${a.targetAudience}`,
+      title: `Notice broadcasted: ${a.title}`,
+      subtitle: `Published to ${a.targetAudience}`,
       timestamp: a.publishedAt,
       type: "ANNOUNCEMENT",
     });
@@ -547,7 +615,11 @@ export default async function DashboardPage() {
       stats={{
         totalStudents,
         totalTeachers,
-        attendanceTodayPct: totalStudents > 0 ? 94.2 : 0,
+        attendanceTodayPct,
+        attendancePresentCount: presentCount,
+        attendanceAbsentCount: absentCount,
+        attendanceLeaveCount: leaveCount,
+        isAttendanceRecordedToday,
         totalFeeCollected: totalFees._sum.paidAmount || 0,
         totalFeePending: pendingFeeAmount,
         pendingTasksCount: overdueTasks.length,
@@ -578,6 +650,16 @@ export default async function DashboardPage() {
         publishedAt: a.publishedAt,
         authorName: a.authorUser?.fullName || "Principal's Office",
       }))}
+      programs={programs as any}
+      academicYears={academicYears as any}
+      customFields={customFields as any}
+      setupState={{
+        hasClasses: classesCount > 0,
+        hasStudents: totalStudents > 0,
+        hasTeachers: totalTeachers > 0,
+        hasTimetable: timetableSlots.length > 0,
+        hasAcademicYear: academicYears.length > 0,
+      }}
     />
   );
 }

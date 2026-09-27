@@ -112,7 +112,7 @@ export function AssignmentsClient({
           <Button
             size="sm"
             onClick={() => setIsCreateModalOpen(true)}
-            leftIcon={<Plus className="h-3.5 w-3.5 text-[#D4B87C]" />}
+            leftIcon={<Plus className="h-3.5 w-3.5 text-primary" />}
           >
             Create Assignment
           </Button>
@@ -122,7 +122,7 @@ export function AssignmentsClient({
       {/* Grid of Assignments */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
         {paginatedAssignments.length === 0 ? (
-          <div className="col-span-full py-16 text-center text-[#7A756B] rounded-2xl border border-dashed border-[#DCD7CB] bg-[#FAF8F3]">
+          <div className="col-span-full py-16 text-center text-muted-foreground rounded-2xl border border-dashed border-border bg-card">
             No coursework assignments published yet.
           </div>
         ) : (
@@ -134,46 +134,46 @@ export function AssignmentsClient({
             return (
               <div
                 key={a.id}
-                className="rounded-2xl border border-[#E5E0D5] bg-white p-5 shadow-2xs hover:border-[#B89B62] transition-all space-y-4 flex flex-col justify-between"
+                className="rounded-2xl border border-border bg-white p-5 shadow-2xs hover:border-primary transition-all space-y-4 flex flex-col justify-between"
               >
                 <div className="space-y-3">
                   <div className="flex items-center justify-between">
-                    <span className="text-[10px] font-mono font-bold uppercase tracking-wider px-2 py-0.5 rounded-md bg-[#FAF6ED] text-[#856D3B] border border-[#D4B87C]/50">
+                    <span className="text-[10px] font-mono font-bold uppercase tracking-wider px-2 py-0.5 rounded-md bg-warm/15 text-primary border border-warm/30">
                       {a.subjectName}
                     </span>
-                    <span className="text-[10px] font-mono text-[#7A756B]">
+                    <span className="text-[10px] font-mono text-muted-foreground">
                       {a.className} ({a.sectionName})
                     </span>
                   </div>
 
                   <div>
-                    <h3 className="text-sm font-extrabold text-[#171614] leading-snug">
+                    <h3 className="text-sm font-extrabold text-foreground leading-snug">
                       {a.title}
                     </h3>
-                    <p className="text-xs text-[#555047] mt-1 line-clamp-2 leading-relaxed">
+                    <p className="text-xs text-muted-foreground mt-1 line-clamp-2 leading-relaxed">
                       {a.description}
                     </p>
                   </div>
                 </div>
 
-                <div className="space-y-3 pt-3 border-t border-[#EFECE3]">
-                  <div className="flex items-center justify-between text-[11px] font-mono text-[#7A756B]">
+                <div className="space-y-3 pt-3 border-t border-border">
+                  <div className="flex items-center justify-between text-[11px] font-mono text-muted-foreground">
                     <span>Submissions</span>
-                    <span className="font-bold text-[#171614]">
+                    <span className="font-bold text-foreground">
                       {a.submissionsCount} / {a.totalStudents} ({completionPct}%)
                     </span>
                   </div>
 
-                  <div className="w-full bg-[#FAF8F3] h-1.5 rounded-full overflow-hidden border border-[#E5E0D5]">
+                  <div className="w-full bg-card h-1.5 rounded-full overflow-hidden border border-border">
                     <div
-                      className="bg-[#65705B] h-full rounded-full transition-all"
+                      className="bg-accent h-full rounded-full transition-all"
                       style={{ width: `${completionPct}%` }}
                     />
                   </div>
 
-                  <div className="flex items-center justify-between text-[11px] text-[#7A756B] pt-1">
-                    <span className="font-mono text-[#6F3D3A] font-bold">Due: {formatDate(a.dueDate)}</span>
-                    <span className="font-mono font-bold text-[#171614]">{a.maxMarks} Marks</span>
+                  <div className="flex items-center justify-between text-[11px] text-muted-foreground pt-1">
+                    <span className="font-mono text-destructive font-bold">Due: {formatDate(a.dueDate)}</span>
+                    <span className="font-mono font-bold text-foreground">{a.maxMarks} Marks</span>
                   </div>
                 </div>
               </div>
@@ -202,7 +202,7 @@ export function AssignmentsClient({
         >
           <form onSubmit={handleCreateAssignment} className="space-y-4 text-xs">
             <div>
-              <label className="block font-bold text-[#171614] mb-1">
+              <label className="block font-bold text-foreground mb-1">
                 Assignment Title *
               </label>
               <input
@@ -211,12 +211,12 @@ export function AssignmentsClient({
                 value={formData.title}
                 onChange={(e) => setFormData({ ...formData, title: e.target.value })}
                 placeholder="e.g. Physics: Mechanics & Optics Problem Set #4"
-                className="w-full rounded-xl border border-[#DCD7CB] bg-[#FAF8F3] p-2.5 text-xs text-[#171614] focus:outline-none focus:ring-2 focus:ring-[#B89B62]"
+                className="w-full rounded-xl border border-border bg-card p-2.5 text-xs text-foreground focus:outline-none focus:ring-2 focus:ring-primary/20"
               />
             </div>
 
             <div>
-              <label className="block font-bold text-[#171614] mb-1">
+              <label className="block font-bold text-foreground mb-1">
                 Instructions & Rubric
               </label>
               <textarea
@@ -224,19 +224,19 @@ export function AssignmentsClient({
                 value={formData.description}
                 onChange={(e) => setFormData({ ...formData, description: e.target.value })}
                 placeholder="Detail the expected solutions, format, and chapter references..."
-                className="w-full rounded-xl border border-[#DCD7CB] bg-[#FAF8F3] p-2.5 text-xs text-[#171614] focus:outline-none focus:ring-2 focus:ring-[#B89B62] resize-none"
+                className="w-full rounded-xl border border-border bg-card p-2.5 text-xs text-foreground focus:outline-none focus:ring-2 focus:ring-primary/20 resize-none"
               />
             </div>
 
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <label className="block font-bold text-[#171614] mb-1">
+                <label className="block font-bold text-foreground mb-1">
                   Target Cohort / Section *
                 </label>
                 <select
                   value={formData.sectionId}
                   onChange={(e) => setFormData({ ...formData, sectionId: e.target.value })}
-                  className="w-full rounded-xl border border-[#DCD7CB] bg-[#FAF8F3] p-2.5 text-xs text-[#171614] font-semibold"
+                  className="w-full rounded-xl border border-border bg-card p-2.5 text-xs text-foreground font-semibold"
                 >
                   {sections.map((s) => (
                     <option key={s.id} value={s.id}>
@@ -247,13 +247,13 @@ export function AssignmentsClient({
               </div>
 
               <div>
-                <label className="block font-bold text-[#171614] mb-1">
+                <label className="block font-bold text-foreground mb-1">
                   Subject *
                 </label>
                 <select
                   value={formData.subjectId}
                   onChange={(e) => setFormData({ ...formData, subjectId: e.target.value })}
-                  className="w-full rounded-xl border border-[#DCD7CB] bg-[#FAF8F3] p-2.5 text-xs text-[#171614] font-semibold"
+                  className="w-full rounded-xl border border-border bg-card p-2.5 text-xs text-foreground font-semibold"
                 >
                   {subjects.map((sub) => (
                     <option key={sub.id} value={sub.id}>
@@ -266,7 +266,7 @@ export function AssignmentsClient({
 
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <label className="block font-bold text-[#171614] mb-1">
+                <label className="block font-bold text-foreground mb-1">
                   Submission Deadline *
                 </label>
                 <input
@@ -274,12 +274,12 @@ export function AssignmentsClient({
                   required
                   value={formData.dueDate}
                   onChange={(e) => setFormData({ ...formData, dueDate: e.target.value })}
-                  className="w-full rounded-xl border border-[#DCD7CB] bg-[#FAF8F3] p-2.5 text-xs text-[#171614]"
+                  className="w-full rounded-xl border border-border bg-card p-2.5 text-xs text-foreground"
                 />
               </div>
 
               <div>
-                <label className="block font-bold text-[#171614] mb-1">
+                <label className="block font-bold text-foreground mb-1">
                   Max Marks *
                 </label>
                 <input
@@ -288,12 +288,12 @@ export function AssignmentsClient({
                   value={formData.maxMarks}
                   onChange={(e) => setFormData({ ...formData, maxMarks: e.target.value })}
                   placeholder="50"
-                  className="w-full rounded-xl border border-[#DCD7CB] bg-[#FAF8F3] p-2.5 text-xs text-[#171614]"
+                  className="w-full rounded-xl border border-border bg-card p-2.5 text-xs text-foreground"
                 />
               </div>
             </div>
 
-            <div className="flex justify-end gap-2.5 pt-4 border-t border-[#EFECE3]">
+            <div className="flex justify-end gap-2.5 pt-4 border-t border-border">
               <Button
                 type="button"
                 variant="secondary"

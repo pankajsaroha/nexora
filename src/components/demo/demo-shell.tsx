@@ -47,12 +47,12 @@ export function DemoShell({
   const pathname = usePathname();
 
   return (
-    <div className="flex min-h-screen flex-col bg-[#F7F4ED] text-[#171614] font-sans antialiased selection:bg-[#171614] selection:text-[#F7F4ED]">
+    <div className="flex min-h-screen flex-col bg-background text-foreground font-sans antialiased selection:bg-primary selection:text-primary-foreground">
       {/* Top Demo Mode Banner */}
-      <div className="sticky top-0 z-50 bg-[#171614] text-[#F7F4ED] border-b border-[#2C2924] px-4 sm:px-8 py-2.5 flex flex-wrap items-center justify-between gap-3 shadow-md">
+      <div className="sticky top-0 z-50 bg-primary text-primary-foreground border-b border-[#2C2924] px-4 sm:px-8 py-2.5 flex flex-wrap items-center justify-between gap-3 shadow-md">
         <div className="flex items-center gap-2.5">
-          <span className="px-2 py-0.5 rounded-md bg-[#262420] border border-[#35322C] text-[#D4B87C] text-[10px] font-mono font-extrabold uppercase tracking-widest flex items-center gap-1.5 shadow-2xs">
-            <Sparkles className="w-3 h-3 text-[#D4B87C]" />
+          <span className="px-2 py-0.5 rounded-md bg-muted border border-border text-primary text-[10px] font-mono font-extrabold uppercase tracking-widest flex items-center gap-1.5 shadow-2xs">
+            <Sparkles className="w-3 h-3 text-primary" />
             DEMO MODE
           </span>
           <span className="text-xs text-[#C5C0B6] font-medium hidden sm:inline">
@@ -66,17 +66,17 @@ export function DemoShell({
             <button
               type="button"
               onClick={() => setIsPersonaMenuOpen(!isPersonaMenuOpen)}
-              className="inline-flex items-center gap-2 px-3 py-1.5 rounded-xl bg-[#262420] hover:bg-[#35322C] border border-[#35322C] text-xs font-semibold text-white transition-colors"
+              className="inline-flex items-center gap-2 px-3 py-1.5 rounded-xl bg-muted hover:bg-[#35322C] border border-border text-xs font-semibold text-white transition-colors"
             >
-              <span>Switch Demo: <strong className="text-[#D4B87C]">{userName}</strong></span>
-              <ChevronDown className="w-3.5 h-3.5 text-[#A8A398]" />
+              <span>Switch Demo: <strong className="text-primary">{userName}</strong></span>
+              <ChevronDown className="w-3.5 h-3.5 text-muted-foreground" />
             </button>
 
             {isPersonaMenuOpen && (
               <>
                 <div className="fixed inset-0 z-40" onClick={() => setIsPersonaMenuOpen(false)} />
-                <div className="absolute right-0 top-full mt-2 w-64 rounded-2xl border border-[#35322C] bg-[#1B1916] p-2 shadow-2xl z-50 space-y-1 text-xs text-[#C5C0B6]">
-                  <div className="px-3 py-2 text-[10px] font-mono font-bold uppercase tracking-widest text-[#7A756B] border-b border-[#2C2924]">
+                <div className="absolute right-0 top-full mt-2 w-64 rounded-2xl border border-border bg-primary p-2 shadow-2xl z-50 space-y-1 text-xs text-[#C5C0B6]">
+                  <div className="px-3 py-2 text-[10px] font-mono font-bold uppercase tracking-widest text-muted-foreground border-b border-[#2C2924]">
                     Select Demo Persona
                   </div>
                   {DEMO_PERSONAS.map((p) => (
@@ -86,16 +86,16 @@ export function DemoShell({
                       onClick={() => setIsPersonaMenuOpen(false)}
                       className={`flex items-center justify-between p-2 rounded-xl transition-colors ${
                         roleCode === p.roleCode
-                          ? "bg-[#262420] text-white font-bold border border-[#35322C]"
+                          ? "bg-muted text-white font-bold border border-border"
                           : "hover:bg-white/5 hover:text-white"
                       }`}
                     >
                       <div>
                         <p className="leading-none text-white">{p.name}</p>
-                        <p className="text-[10px] font-mono text-[#7A756B] uppercase mt-0.5">{p.label}</p>
+                        <p className="text-[10px] font-mono text-muted-foreground uppercase mt-0.5">{p.label}</p>
                       </div>
                       {roleCode === p.roleCode && (
-                        <span className="text-[10px] font-mono text-[#D4B87C] font-bold">ACTIVE</span>
+                        <span className="text-[10px] font-mono text-primary font-bold">ACTIVE</span>
                       )}
                     </Link>
                   ))}
@@ -107,15 +107,15 @@ export function DemoShell({
           {/* Call to Actions */}
           <Link
             href="/onboarding"
-            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[#FAF8F3] text-[#171614] hover:bg-white text-xs font-bold uppercase tracking-wider transition-all shadow-xs"
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-card text-foreground hover:bg-white text-xs font-bold uppercase tracking-wider transition-all shadow-xs"
           >
             <span>Create Real Institution</span>
-            <ArrowRight className="w-3 h-3 text-[#856D3B]" />
+            <ArrowRight className="w-3 h-3 text-primary" />
           </Link>
 
           <Link
             href="/"
-            className="p-1.5 rounded-lg text-[#A8A398] hover:text-white hover:bg-white/5 transition-colors"
+            className="p-1.5 rounded-lg text-muted-foreground hover:text-white hover:bg-white/5 transition-colors"
             title="Exit Demo to Homepage"
           >
             <LogOut className="w-4 h-4" />

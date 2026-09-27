@@ -82,7 +82,7 @@ export function TimetableClient({
           variant="outline"
           size="sm"
           onClick={() => window.print()}
-          leftIcon={<Printer className="h-3.5 w-3.5 text-[#7A756B]" />}
+          leftIcon={<Printer className="h-3.5 w-3.5 text-muted-foreground" />}
           className="no-print"
         >
           Print Schedule
@@ -90,16 +90,16 @@ export function TimetableClient({
       </PageHeader>
 
       {/* Selector and Filter Controls */}
-      <div className="flex flex-col sm:flex-row items-center justify-between gap-4 rounded-2xl bg-white p-4 border border-[#E5E0D5] shadow-2xs no-print">
+      <div className="flex flex-col sm:flex-row items-center justify-between gap-4 rounded-2xl bg-white p-4 border border-border shadow-2xs no-print">
         <div className="flex items-center gap-2">
-          <div className="flex rounded-xl bg-[#FAF8F3] border border-[#DCD7CB] p-1">
+          <div className="flex rounded-xl bg-card border border-border p-1">
             <button
               type="button"
               onClick={() => setViewMode("CLASS")}
               className={`px-3 py-1.5 rounded-lg text-xs font-bold uppercase tracking-wider transition-all ${
                 viewMode === "CLASS"
-                  ? "bg-[#1B1916] text-[#FAF8F3] shadow-xs"
-                  : "text-[#555047] hover:text-[#171614]"
+                  ? "bg-primary text-primary-foreground shadow-xs"
+                  : "text-muted-foreground hover:text-foreground"
               }`}
             >
               Class Timetable
@@ -109,8 +109,8 @@ export function TimetableClient({
               onClick={() => setViewMode("TEACHER")}
               className={`px-3 py-1.5 rounded-lg text-xs font-bold uppercase tracking-wider transition-all ${
                 viewMode === "TEACHER"
-                  ? "bg-[#1B1916] text-[#FAF8F3] shadow-xs"
-                  : "text-[#555047] hover:text-[#171614]"
+                  ? "bg-primary text-primary-foreground shadow-xs"
+                  : "text-muted-foreground hover:text-foreground"
               }`}
             >
               Faculty Timetable
@@ -120,11 +120,11 @@ export function TimetableClient({
 
         {viewMode === "CLASS" ? (
           <div className="flex items-center gap-2">
-            <span className="text-xs text-[#7A756B] font-mono">Select Cohort:</span>
+            <span className="text-xs text-muted-foreground font-mono">Select Cohort:</span>
             <select
               value={selectedSectionId}
               onChange={(e) => setSelectedSectionId(e.target.value)}
-              className="rounded-xl border border-[#DCD7CB] bg-[#FAF8F3] px-3.5 py-2 text-xs font-bold text-[#171614] focus:outline-none focus:ring-2 focus:ring-[#B89B62]"
+              className="rounded-xl border border-border bg-card px-3.5 py-2 text-xs font-bold text-foreground focus:outline-none focus:ring-2 focus:ring-primary/20"
             >
               {sections.map((s) => (
                 <option key={s.id} value={s.id}>
@@ -135,11 +135,11 @@ export function TimetableClient({
           </div>
         ) : (
           <div className="flex items-center gap-2">
-            <span className="text-xs text-[#7A756B] font-mono">Select Faculty:</span>
+            <span className="text-xs text-muted-foreground font-mono">Select Faculty:</span>
             <select
               value={selectedTeacherId}
               onChange={(e) => setSelectedTeacherId(e.target.value)}
-              className="rounded-xl border border-[#DCD7CB] bg-[#FAF8F3] px-3.5 py-2 text-xs font-bold text-[#171614] focus:outline-none focus:ring-2 focus:ring-[#B89B62]"
+              className="rounded-xl border border-border bg-card px-3.5 py-2 text-xs font-bold text-foreground focus:outline-none focus:ring-2 focus:ring-primary/20"
             >
               {teachers.map((t) => (
                 <option key={t.id} value={t.id}>
@@ -152,16 +152,16 @@ export function TimetableClient({
       </div>
 
       {/* Grid Matrix Table */}
-      <div className="overflow-hidden rounded-2xl border border-[#E5E0D5] bg-white shadow-2xs">
+      <div className="overflow-hidden rounded-2xl border border-border bg-white shadow-2xs">
         <div className="overflow-x-auto">
           <table className="w-full text-left text-xs border-collapse min-w-[750px]">
-            <thead className="border-b border-[#EFECE3] bg-[#FAF8F3] text-[#7A756B] font-mono text-[11px] uppercase tracking-wider">
+            <thead className="border-b border-border bg-card text-muted-foreground font-mono text-[11px] uppercase tracking-wider">
               <tr>
-                <th className="py-3.5 px-4 font-bold border-r border-[#EFECE3] w-24">Day</th>
+                <th className="py-3.5 px-4 font-bold border-r border-border w-24">Day</th>
                 {periods.map((p) => (
-                  <th key={p.period} className="py-3.5 px-3 font-bold border-r border-[#EFECE3] last:border-r-0">
+                  <th key={p.period} className="py-3.5 px-3 font-bold border-r border-border last:border-r-0">
                     <div>P{p.period}</div>
-                    <div className="text-[9px] font-normal text-[#7A756B]">
+                    <div className="text-[9px] font-normal text-muted-foreground">
                       {p.start}–{p.end}
                     </div>
                   </th>
@@ -170,8 +170,8 @@ export function TimetableClient({
             </thead>
             <tbody className="divide-y divide-[#EFECE3]">
               {days.map((day) => (
-                <tr key={day} className="hover:bg-[#FAF8F3]/50 transition-colors">
-                  <td className="py-4 px-4 font-mono font-bold text-[#171614] border-r border-[#EFECE3] bg-[#FAF8F3]/40">
+                <tr key={day} className="hover:bg-muted/30 transition-colors">
+                  <td className="py-4 px-4 font-mono font-bold text-foreground border-r border-border bg-muted/20">
                     {day.slice(0, 3)}
                   </td>
                   {periods.map((p) => {
@@ -179,20 +179,20 @@ export function TimetableClient({
                     return (
                       <td
                         key={p.period}
-                        className="py-2.5 px-2.5 border-r border-[#EFECE3] last:border-r-0 align-top"
+                        className="py-2.5 px-2.5 border-r border-border last:border-r-0 align-top"
                       >
                         {slot ? (
-                          <div className="p-2.5 rounded-xl bg-[#FAF8F3] border border-[#E5E0D5] space-y-1 hover:border-[#B89B62] transition-all">
-                            <p className="font-bold text-xs text-[#171614] truncate">{slot.subjectName}</p>
-                            <p className="text-[10px] text-[#7A756B] truncate font-mono">
+                          <div className="p-2.5 rounded-xl bg-card border border-border space-y-1 hover:border-primary transition-all">
+                            <p className="font-bold text-xs text-foreground truncate">{slot.subjectName}</p>
+                            <p className="text-[10px] text-muted-foreground truncate font-mono">
                               {viewMode === "CLASS" ? slot.teacherName : `${slot.className} (${slot.sectionName})`}
                             </p>
-                            <span className="text-[9px] font-mono px-1.5 py-0.5 rounded bg-[#FAF6ED] border border-[#D4B87C]/50 text-[#856D3B] font-bold inline-block">
+                            <span className="text-[9px] font-mono px-1.5 py-0.5 rounded bg-warm/15 border border-warm/30 text-primary font-bold inline-block">
                               {slot.roomNumber || "Room 104"}
                             </span>
                           </div>
                         ) : (
-                          <div className="h-16 flex items-center justify-center text-[10px] text-[#A8A398] font-mono">
+                          <div className="h-16 flex items-center justify-center text-[10px] text-muted-foreground font-mono">
                             —
                           </div>
                         )}

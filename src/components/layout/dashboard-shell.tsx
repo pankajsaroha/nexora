@@ -11,7 +11,14 @@ export interface DashboardShellProps {
     email: string;
     roleCode: string;
     institutionName: string;
+    institutionId?: string;
   };
+  institutions?: Array<{
+    id: string;
+    name: string;
+    code: string;
+    type?: string;
+  }>;
   notifications?: Array<{
     id: string;
     title: string;
@@ -23,11 +30,11 @@ export interface DashboardShellProps {
   children: React.ReactNode;
 }
 
-export function DashboardShell({ user, notifications, children }: DashboardShellProps) {
+export function DashboardShell({ user, institutions = [], notifications, children }: DashboardShellProps) {
   const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false);
 
   return (
-    <div className="flex min-h-screen bg-[#F7F4ED] text-[#171614] font-sans antialiased selection:bg-[#171614] selection:text-[#F7F4ED]">
+    <div className="flex min-h-screen bg-background text-foreground font-sans antialiased selection:bg-primary selection:text-primary-foreground transition-colors duration-200">
       {/* Sidebar */}
       <Sidebar
         roleCode={user.roleCode}
@@ -41,6 +48,7 @@ export function DashboardShell({ user, notifications, children }: DashboardShell
       <div className="flex flex-1 flex-col min-w-0">
         <Topbar
           user={user}
+          institutions={institutions}
           notifications={notifications}
           onOpenMobileSidebar={() => setIsMobileSidebarOpen(true)}
         />

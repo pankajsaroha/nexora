@@ -19,10 +19,10 @@ import {
   ArrowRight,
   ArrowLeft,
   Sparkles,
+  Sliders,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Modal } from "@/components/ui/modal";
 import { formatDate } from "@/lib/utils";
 
 export interface ProgramOption {
@@ -61,6 +61,7 @@ export interface CustomFieldOption {
   isVisibleToTeacher: boolean;
   isVisibleToParent: boolean;
   isVisibleToStudent: boolean;
+  orderIndex?: number;
 }
 
 interface StudentAdmissionDialogProps {
@@ -71,6 +72,7 @@ interface StudentAdmissionDialogProps {
   customFields?: CustomFieldOption[];
   onSuccess: (student: any) => void;
   onAssignRollNumber?: (studentId: string, currentRoll: string | null) => void;
+  onOpenManageFields?: () => void;
 }
 
 export function StudentAdmissionDialog({
@@ -81,6 +83,7 @@ export function StudentAdmissionDialog({
   customFields = [],
   onSuccess,
   onAssignRollNumber,
+  onOpenManageFields,
 }: StudentAdmissionDialogProps) {
   const [activeStep, setActiveStep] = useState<1 | 2 | 3 | 4 | 5>(1);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -162,6 +165,11 @@ export function StudentAdmissionDialog({
   const applicableFees = selectedProgram?.feeStructures || [];
   const totalFeeAmount = applicableFees.reduce((acc, f) => acc + f.amount, 0);
 
+  // Active institution custom fields sorted by orderIndex
+  const sortedCustomFields = [...customFields].sort(
+    (a, b) => (a.orderIndex || 0) - (b.orderIndex || 0)
+  );
+
   const resetForm = () => {
     setFormData({
       firstName: "",
@@ -241,11 +249,17 @@ export function StudentAdmissionDialog({
         setErrorMessage("Please select a Program / Course.");
         return false;
       }
-      // Check required custom fields
-      for (const cf of customFields) {
+    } else if (step === 5) {
+      // Validate institution-defined required custom fields
+      for (const cf of sortedCustomFields) {
         if (cf.isRequired) {
           const val = formData.customFieldValues[cf.key];
-          if (val === undefined || val === null || (typeof val === "string" && val.trim() === "")) {
+          if (
+            val === undefined ||
+            val === null ||
+            (typeof val === "string" && val.trim() === "") ||
+            (Array.isArray(val) && val.length === 0)
+          ) {
             setErrorMessage(`Custom field '${cf.name}' is mandatory.`);
             return false;
           }
@@ -278,7 +292,7 @@ export function StudentAdmissionDialog({
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!validateStep(activeStep)) return;
+    if (!validateStep(5)) return;
 
     setIsSubmitting(true);
     setErrorMessage(null);
@@ -287,7 +301,16 @@ export function StudentAdmissionDialog({
       const payload = {
         ...formData,
         guardianAddress: formData.guardianAddressSameAsStudent
-          ? [formData.addressLine1, formData.addressLine2, formData.city, formData.state, formData.pincode, formData.country].filter(Boolean).join(", ")
+          ? [
+              formData.addressLine1,
+              formData.addressLine2,
+              formData.city,
+              formData.state,
+              formData.pincode,
+              formData.country,
+            ]
+              .filter(Boolean)
+              .join(", ")
           : formData.guardianAddress,
         rollNumber: formData.rollNumber.trim() !== "" ? formData.rollNumber.trim() : null,
       };
@@ -318,18 +341,18 @@ export function StudentAdmissionDialog({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-xs p-4 overflow-y-auto">
-      <div className="relative w-full max-w-4xl rounded-3xl border border-[#E5E0D5] bg-[#FAF8F3] shadow-2xl overflow-hidden my-8">
+      <div className="relative w-full max-w-4xl rounded-3xl border border-border bg-card shadow-2xl overflow-hidden my-8">
         {/* Header */}
-        <div className="flex items-center justify-between border-b border-[#EFECE3] bg-white px-6 py-5">
+        <div className="flex items-center justify-between border-b border-border bg-card px-6 py-5">
           <div className="flex items-center gap-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-[#171614] text-[#FAF8F3] shadow-xs">
-              <UserPlus className="h-5 w-5 text-[#D4B87C]" />
+            <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-primary text-primary-foreground shadow-xs">
+              <UserPlus className="h-5 w-5" />
             </div>
             <div>
-              <h3 className="text-base font-bold text-[#171614]">
+              <h3 className="text-base font-bold text-foreground">
                 New Student Admission
               </h3>
-              <p className="text-xs text-[#7A756B]">
+              <p className="text-xs text-muted-foreground">
                 Register candidate, establish guardian linkages, and assign institution course fee structures.
               </p>
             </div>
@@ -339,7 +362,7 @@ export function StudentAdmissionDialog({
               resetForm();
               onClose();
             }}
-            className="rounded-xl p-2 text-[#7A756B] hover:bg-[#FAF8F3] hover:text-[#171614] transition-colors"
+            className="rounded-xl p-2 text-muted-foreground hover:bg-muted hover:text-foreground transition-colors"
           >
             <X className="h-4 w-4" />
           </button>
@@ -347,14 +370,14 @@ export function StudentAdmissionDialog({
 
         {/* Step Indicator (If not completed) */}
         {!admittedStudent && (
-          <div className="border-b border-[#EFECE3] bg-[#FAF8F3] px-6 py-3">
+          <div className="border-b border-border bg-muted/20 px-6 py-3">
             <div className="flex items-center justify-between">
               {[
                 { step: 1, label: "Student Info", icon: FileText },
                 { step: 2, label: "Address", icon: MapPin },
                 { step: 3, label: "Guardian Details", icon: Users },
                 { step: 4, label: "Academic Enrollment", icon: GraduationCap },
-                { step: 5, label: "Fee & Confirmation", icon: CreditCard },
+                { step: 5, label: "Fees & Custom Fields", icon: CreditCard },
               ].map((s) => {
                 const isCurrent = activeStep === s.step;
                 const isDone = activeStep > s.step;
@@ -367,19 +390,19 @@ export function StudentAdmissionDialog({
                     }}
                     className={`flex items-center gap-2 text-xs font-bold transition-colors ${
                       isCurrent
-                        ? "text-[#171614]"
+                        ? "text-foreground"
                         : isDone
-                        ? "text-[#856D3B]"
-                        : "text-[#A8A295]"
+                        ? "text-primary"
+                        : "text-muted-foreground"
                     }`}
                   >
                     <div
                       className={`flex h-6 w-6 items-center justify-center rounded-full text-[11px] font-mono font-bold transition-all ${
                         isCurrent
-                          ? "bg-[#171614] text-[#FAF8F3]"
+                          ? "bg-primary text-primary-foreground"
                           : isDone
-                          ? "bg-[#D4B87C] text-[#171614]"
-                          : "bg-[#EFECE3] text-[#7A756B]"
+                          ? "bg-primary/20 text-primary"
+                          : "bg-muted text-muted-foreground"
                       }`}
                     >
                       {isDone ? "✓" : s.step}
@@ -394,8 +417,8 @@ export function StudentAdmissionDialog({
 
         {/* Error Banner */}
         {errorMessage && (
-          <div className="mx-6 mt-4 flex items-center gap-2.5 rounded-2xl border border-red-200 bg-red-50 p-3.5 text-xs text-red-800">
-            <AlertCircle className="h-4 w-4 shrink-0 text-red-600" />
+          <div className="mx-6 mt-4 flex items-center gap-2.5 rounded-2xl border border-destructive/30 bg-destructive/10 p-3.5 text-xs text-destructive">
+            <AlertCircle className="h-4 w-4 shrink-0" />
             <span className="font-semibold">{errorMessage}</span>
           </div>
         )}
@@ -405,41 +428,50 @@ export function StudentAdmissionDialog({
           {admittedStudent ? (
             /* SUCCESS VIEW */
             <div className="text-center py-6 space-y-6 max-w-lg mx-auto">
-              <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-[#FAF6ED] border border-[#D4B87C]/40 text-[#856D3B]">
-                <CheckCircle2 className="h-9 w-9 text-[#856D3B]" />
+              <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-primary/10 border border-primary/20 text-primary">
+                <CheckCircle2 className="h-9 w-9 text-primary" />
               </div>
 
               <div>
-                <span className="text-[10px] font-mono uppercase tracking-widest text-[#856D3B] font-bold">
+                <span className="text-[10px] font-mono uppercase tracking-widest text-primary font-bold">
                   ADMISSION COMPLETED
                 </span>
-                <h4 className="text-xl font-extrabold text-[#171614] mt-1">
+                <h4 className="text-xl font-extrabold text-foreground mt-1">
                   {admittedStudent.fullName}
                 </h4>
-                <p className="text-xs text-[#7A756B] mt-1">
-                  Official Admission ID: <span className="font-mono font-bold text-[#171614]">{admittedStudent.admissionNumber}</span>
+                <p className="text-xs text-muted-foreground mt-1">
+                  Official Admission ID:{" "}
+                  <span className="font-mono font-bold text-foreground">
+                    {admittedStudent.admissionNumber}
+                  </span>
                 </p>
               </div>
 
-              <div className="rounded-2xl border border-[#E5E0D5] bg-white p-4 text-xs space-y-2.5 text-left">
+              <div className="rounded-2xl border border-border bg-card p-4 text-xs space-y-2.5 text-left shadow-2xs">
                 <div className="flex justify-between">
-                  <span className="text-[#7A756B]">Program / Course:</span>
-                  <span className="font-bold text-[#171614]">{selectedProgram?.name}</span>
+                  <span className="text-muted-foreground">Program / Course:</span>
+                  <span className="font-bold text-foreground">{selectedProgram?.name}</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-[#7A756B]">Academic Year:</span>
-                  <span className="font-mono font-bold text-[#171614]">{selectedYear?.name}</span>
+                  <span className="text-muted-foreground">Academic Year:</span>
+                  <span className="font-mono font-bold text-foreground">{selectedYear?.name}</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-[#7A756B]">Roll Number:</span>
-                  <span className={`font-mono font-bold ${admittedStudent.rollNumber ? "text-[#171614]" : "text-[#856D3B]"}`}>
+                  <span className="text-muted-foreground">Roll Number:</span>
+                  <span
+                    className={`font-mono font-bold ${
+                      admittedStudent.rollNumber ? "text-foreground" : "text-primary"
+                    }`}
+                  >
                     {admittedStudent.rollNumber || "Not assigned"}
                   </span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-[#7A756B]">Assigned Fee:</span>
-                  <span className="font-mono font-bold text-[#171614]">
-                    {totalFeeAmount > 0 ? `₹${totalFeeAmount.toLocaleString("en-IN")}` : "No fee configured"}
+                  <span className="text-muted-foreground">Assigned Fee:</span>
+                  <span className="font-mono font-bold text-foreground">
+                    {totalFeeAmount > 0
+                      ? `₹${totalFeeAmount.toLocaleString("en-IN")}`
+                      : "No fee configured"}
                   </span>
                 </div>
               </div>
@@ -449,52 +481,51 @@ export function StudentAdmissionDialog({
                   variant="outline"
                   size="sm"
                   onClick={() => {
+                    if (onAssignRollNumber) {
+                      onAssignRollNumber(admittedStudent.id, admittedStudent.rollNumber);
+                    }
+                    onClose();
+                  }}
+                >
+                  Assign / Update Roll #
+                </Button>
+                <Button
+                  variant="primary"
+                  size="sm"
+                  onClick={() => {
                     resetForm();
                   }}
-                  className="w-full sm:w-auto"
                 >
-                  Admit Another Student
+                  Admit Another Candidate
                 </Button>
-                {onAssignRollNumber && !admittedStudent.rollNumber && (
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={() => {
-                      onAssignRollNumber(admittedStudent.id, null);
-                      resetForm();
-                      onClose();
-                    }}
-                    className="w-full sm:w-auto"
-                  >
-                    Assign Roll Number
-                  </Button>
-                )}
                 <Button
+                  variant="secondary"
                   size="sm"
                   onClick={() => {
                     resetForm();
                     onClose();
                   }}
-                  className="w-full sm:w-auto"
                 >
-                  View Student Directory
+                  Done & Close
                 </Button>
               </div>
             </div>
           ) : (
-            /* STEPPED ADMISSION FORM */
+            /* FORM STEPS */
             <form onSubmit={handleSubmit} className="space-y-6">
-              {/* STEP 1: STUDENT PERSONAL INFO */}
+              {/* STEP 1: CANDIDATE INFO */}
               {activeStep === 1 && (
                 <div className="space-y-4">
-                  <div className="border-b border-[#EFECE3] pb-2">
-                    <h4 className="text-sm font-bold text-[#171614]">1. Candidate Information</h4>
-                    <p className="text-xs text-[#7A756B]">Primary biographical and identity details of the applicant.</p>
+                  <div className="border-b border-border pb-2">
+                    <h4 className="text-sm font-bold text-foreground">1. Candidate Biographical Data</h4>
+                    <p className="text-xs text-muted-foreground">
+                      Core student identity fields registered with the institution.
+                    </p>
                   </div>
 
                   <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                     <div>
-                      <label className="block text-xs font-bold text-[#171614] mb-1">
+                      <label className="block text-xs font-bold text-foreground mb-1">
                         First Name *
                       </label>
                       <input
@@ -502,13 +533,13 @@ export function StudentAdmissionDialog({
                         required
                         value={formData.firstName}
                         onChange={(e) => setFormData({ ...formData, firstName: e.target.value })}
-                        placeholder="e.g. Ishaan"
-                        className="w-full rounded-xl border border-[#DCD7CB] bg-white p-2.5 text-xs text-[#171614] focus:outline-none focus:ring-2 focus:ring-[#B89B62]"
+                        placeholder="e.g. Ananya"
+                        className="w-full rounded-xl border border-border bg-card p-2.5 text-xs text-foreground focus:ring-1 focus:ring-primary outline-hidden"
                       />
                     </div>
 
                     <div>
-                      <label className="block text-xs font-bold text-[#171614] mb-1">
+                      <label className="block text-xs font-bold text-foreground mb-1">
                         Middle Name
                       </label>
                       <input
@@ -516,12 +547,12 @@ export function StudentAdmissionDialog({
                         value={formData.middleName}
                         onChange={(e) => setFormData({ ...formData, middleName: e.target.value })}
                         placeholder="Optional"
-                        className="w-full rounded-xl border border-[#DCD7CB] bg-white p-2.5 text-xs text-[#171614] focus:outline-none focus:ring-2 focus:ring-[#B89B62]"
+                        className="w-full rounded-xl border border-border bg-card p-2.5 text-xs text-foreground focus:ring-1 focus:ring-primary outline-hidden"
                       />
                     </div>
 
                     <div>
-                      <label className="block text-xs font-bold text-[#171614] mb-1">
+                      <label className="block text-xs font-bold text-foreground mb-1">
                         Last Name *
                       </label>
                       <input
@@ -529,15 +560,15 @@ export function StudentAdmissionDialog({
                         required
                         value={formData.lastName}
                         onChange={(e) => setFormData({ ...formData, lastName: e.target.value })}
-                        placeholder="e.g. Verma"
-                        className="w-full rounded-xl border border-[#DCD7CB] bg-white p-2.5 text-xs text-[#171614] focus:outline-none focus:ring-2 focus:ring-[#B89B62]"
+                        placeholder="e.g. Mukherjee"
+                        className="w-full rounded-xl border border-border bg-card p-2.5 text-xs text-foreground focus:ring-1 focus:ring-primary outline-hidden"
                       />
                     </div>
                   </div>
 
                   <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                     <div>
-                      <label className="block text-xs font-bold text-[#171614] mb-1">
+                      <label className="block text-xs font-bold text-foreground mb-1">
                         Date of Birth *
                       </label>
                       <input
@@ -545,18 +576,16 @@ export function StudentAdmissionDialog({
                         required
                         value={formData.dateOfBirth}
                         onChange={(e) => setFormData({ ...formData, dateOfBirth: e.target.value })}
-                        className="w-full rounded-xl border border-[#DCD7CB] bg-white p-2.5 text-xs text-[#171614] focus:outline-none focus:ring-2 focus:ring-[#B89B62]"
+                        className="w-full rounded-xl border border-border bg-card p-2.5 text-xs text-foreground focus:ring-1 focus:ring-primary outline-hidden"
                       />
                     </div>
 
                     <div>
-                      <label className="block text-xs font-bold text-[#171614] mb-1">
-                        Gender *
-                      </label>
+                      <label className="block text-xs font-bold text-foreground mb-1">Gender *</label>
                       <select
                         value={formData.gender}
                         onChange={(e) => setFormData({ ...formData, gender: e.target.value })}
-                        className="w-full rounded-xl border border-[#DCD7CB] bg-white p-2.5 text-xs font-semibold text-[#171614] focus:outline-none focus:ring-2 focus:ring-[#B89B62]"
+                        className="w-full rounded-xl border border-border bg-card p-2.5 text-xs font-semibold text-foreground focus:ring-1 focus:ring-primary outline-hidden cursor-pointer"
                       >
                         <option value="MALE">Male</option>
                         <option value="FEMALE">Female</option>
@@ -565,15 +594,15 @@ export function StudentAdmissionDialog({
                     </div>
 
                     <div>
-                      <label className="block text-xs font-bold text-[#171614] mb-1">
+                      <label className="block text-xs font-bold text-foreground mb-1">
                         Blood Group
                       </label>
                       <select
                         value={formData.bloodGroup}
                         onChange={(e) => setFormData({ ...formData, bloodGroup: e.target.value })}
-                        className="w-full rounded-xl border border-[#DCD7CB] bg-white p-2.5 text-xs font-semibold text-[#171614] focus:outline-none focus:ring-2 focus:ring-[#B89B62]"
+                        className="w-full rounded-xl border border-border bg-card p-2.5 text-xs font-semibold text-foreground focus:ring-1 focus:ring-primary outline-hidden cursor-pointer"
                       >
-                        <option value="">Select (Optional)</option>
+                        <option value="">Select Blood Group</option>
                         <option value="A+">A+</option>
                         <option value="A-">A-</option>
                         <option value="B+">B+</option>
@@ -586,9 +615,9 @@ export function StudentAdmissionDialog({
                     </div>
                   </div>
 
-                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-4 gap-4">
                     <div>
-                      <label className="block text-xs font-bold text-[#171614] mb-1">
+                      <label className="block text-xs font-bold text-foreground mb-1">
                         Nationality
                       </label>
                       <input
@@ -596,18 +625,16 @@ export function StudentAdmissionDialog({
                         value={formData.nationality}
                         onChange={(e) => setFormData({ ...formData, nationality: e.target.value })}
                         placeholder="Indian"
-                        className="w-full rounded-xl border border-[#DCD7CB] bg-white p-2.5 text-xs text-[#171614] focus:outline-none focus:ring-2 focus:ring-[#B89B62]"
+                        className="w-full rounded-xl border border-border bg-card p-2.5 text-xs text-foreground focus:ring-1 focus:ring-primary outline-hidden"
                       />
                     </div>
 
                     <div>
-                      <label className="block text-xs font-bold text-[#171614] mb-1">
-                        Social Category
-                      </label>
+                      <label className="block text-xs font-bold text-foreground mb-1">Category</label>
                       <select
                         value={formData.category}
                         onChange={(e) => setFormData({ ...formData, category: e.target.value })}
-                        className="w-full rounded-xl border border-[#DCD7CB] bg-white p-2.5 text-xs font-semibold text-[#171614]"
+                        className="w-full rounded-xl border border-border bg-card p-2.5 text-xs font-semibold text-foreground focus:ring-1 focus:ring-primary outline-hidden cursor-pointer"
                       >
                         <option value="GENERAL">General</option>
                         <option value="OBC">OBC</option>
@@ -618,43 +645,28 @@ export function StudentAdmissionDialog({
                     </div>
 
                     <div>
-                      <label className="block text-xs font-bold text-[#171614] mb-1">
-                        Aadhaar / Government ID
+                      <label className="block text-xs font-bold text-foreground mb-1">
+                        Aadhaar / National ID
                       </label>
                       <input
                         type="text"
                         value={formData.aadhaarNumber}
                         onChange={(e) => setFormData({ ...formData, aadhaarNumber: e.target.value })}
-                        placeholder="XXXX-XXXX-XXXX (Optional)"
-                        className="w-full rounded-xl border border-[#DCD7CB] bg-white p-2.5 text-xs text-[#171614] font-mono focus:outline-none focus:ring-2 focus:ring-[#B89B62]"
-                      />
-                    </div>
-                  </div>
-
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
-                    <div>
-                      <label className="block text-xs font-bold text-[#171614] mb-1">
-                        Student Direct Email
-                      </label>
-                      <input
-                        type="email"
-                        value={formData.email}
-                        onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                        placeholder="student@domain.com (Optional)"
-                        className="w-full rounded-xl border border-[#DCD7CB] bg-white p-2.5 text-xs text-[#171614] focus:outline-none focus:ring-2 focus:ring-[#B89B62]"
+                        placeholder="12-digit Aadhaar"
+                        className="w-full rounded-xl border border-border bg-card p-2.5 text-xs font-mono text-foreground focus:ring-1 focus:ring-primary outline-hidden"
                       />
                     </div>
 
                     <div>
-                      <label className="block text-xs font-bold text-[#171614] mb-1">
-                        Student Mobile Phone
+                      <label className="block text-xs font-bold text-foreground mb-1">
+                        Candidate Phone
                       </label>
                       <input
                         type="tel"
                         value={formData.phone}
                         onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                        placeholder="+91 XXXXX XXXXX (Optional)"
-                        className="w-full rounded-xl border border-[#DCD7CB] bg-white p-2.5 text-xs text-[#171614] font-mono focus:outline-none focus:ring-2 focus:ring-[#B89B62]"
+                        placeholder="+91 XXXXX XXXXX"
+                        className="w-full rounded-xl border border-border bg-card p-2.5 text-xs font-mono text-foreground focus:ring-1 focus:ring-primary outline-hidden"
                       />
                     </div>
                   </div>
@@ -664,90 +676,82 @@ export function StudentAdmissionDialog({
               {/* STEP 2: ADDRESS */}
               {activeStep === 2 && (
                 <div className="space-y-4">
-                  <div className="border-b border-[#EFECE3] pb-2">
-                    <h4 className="text-sm font-bold text-[#171614]">2. Residential & Contact Address</h4>
-                    <p className="text-xs text-[#7A756B]">Official correspondence and residential location for transport and emergency reach.</p>
+                  <div className="border-b border-border pb-2">
+                    <h4 className="text-sm font-bold text-foreground">2. Residential Location</h4>
+                    <p className="text-xs text-muted-foreground">Permanent and correspondence address details.</p>
                   </div>
 
-                  <div className="space-y-3">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
-                      <label className="block text-xs font-bold text-[#171614] mb-1">
+                      <label className="block text-xs font-bold text-foreground mb-1">
                         Address Line 1
                       </label>
                       <input
                         type="text"
                         value={formData.addressLine1}
                         onChange={(e) => setFormData({ ...formData, addressLine1: e.target.value })}
-                        placeholder="Flat / House No., Building Name, Street"
-                        className="w-full rounded-xl border border-[#DCD7CB] bg-white p-2.5 text-xs text-[#171614] focus:outline-none focus:ring-2 focus:ring-[#B89B62]"
+                        placeholder="House / Flat No., Street, Building"
+                        className="w-full rounded-xl border border-border bg-card p-2.5 text-xs text-foreground focus:ring-1 focus:ring-primary outline-hidden"
                       />
                     </div>
 
                     <div>
-                      <label className="block text-xs font-bold text-[#171614] mb-1">
+                      <label className="block text-xs font-bold text-foreground mb-1">
                         Address Line 2
                       </label>
                       <input
                         type="text"
                         value={formData.addressLine2}
                         onChange={(e) => setFormData({ ...formData, addressLine2: e.target.value })}
-                        placeholder="Area, Landmark, Sector"
-                        className="w-full rounded-xl border border-[#DCD7CB] bg-white p-2.5 text-xs text-[#171614] focus:outline-none focus:ring-2 focus:ring-[#B89B62]"
+                        placeholder="Locality, Sector, Landmark (Optional)"
+                        className="w-full rounded-xl border border-border bg-card p-2.5 text-xs text-foreground focus:ring-1 focus:ring-primary outline-hidden"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+                    <div>
+                      <label className="block text-xs font-bold text-foreground mb-1">City</label>
+                      <input
+                        type="text"
+                        value={formData.city}
+                        onChange={(e) => setFormData({ ...formData, city: e.target.value })}
+                        placeholder="e.g. New Delhi"
+                        className="w-full rounded-xl border border-border bg-card p-2.5 text-xs text-foreground focus:ring-1 focus:ring-primary outline-hidden"
                       />
                     </div>
 
-                    <div className="grid grid-cols-1 sm:grid-cols-4 gap-4">
-                      <div>
-                        <label className="block text-xs font-bold text-[#171614] mb-1">
-                          City
-                        </label>
-                        <input
-                          type="text"
-                          value={formData.city}
-                          onChange={(e) => setFormData({ ...formData, city: e.target.value })}
-                          placeholder="e.g. Noida / New Delhi"
-                          className="w-full rounded-xl border border-[#DCD7CB] bg-white p-2.5 text-xs text-[#171614]"
-                        />
-                      </div>
+                    <div>
+                      <label className="block text-xs font-bold text-foreground mb-1">State</label>
+                      <input
+                        type="text"
+                        value={formData.state}
+                        onChange={(e) => setFormData({ ...formData, state: e.target.value })}
+                        placeholder="e.g. Delhi"
+                        className="w-full rounded-xl border border-border bg-card p-2.5 text-xs text-foreground focus:ring-1 focus:ring-primary outline-hidden"
+                      />
+                    </div>
 
-                      <div>
-                        <label className="block text-xs font-bold text-[#171614] mb-1">
-                          State
-                        </label>
-                        <input
-                          type="text"
-                          value={formData.state}
-                          onChange={(e) => setFormData({ ...formData, state: e.target.value })}
-                          placeholder="e.g. Uttar Pradesh"
-                          className="w-full rounded-xl border border-[#DCD7CB] bg-white p-2.5 text-xs text-[#171614]"
-                        />
-                      </div>
+                    <div>
+                      <label className="block text-xs font-bold text-foreground mb-1">PIN / Postal Code</label>
+                      <input
+                        type="text"
+                        value={formData.pincode}
+                        onChange={(e) => setFormData({ ...formData, pincode: e.target.value })}
+                        placeholder="110001"
+                        className="w-full rounded-xl border border-border bg-card p-2.5 text-xs font-mono text-foreground focus:ring-1 focus:ring-primary outline-hidden"
+                      />
+                    </div>
 
-                      <div>
-                        <label className="block text-xs font-bold text-[#171614] mb-1">
-                          PIN / Postal Code
-                        </label>
-                        <input
-                          type="text"
-                          value={formData.pincode}
-                          onChange={(e) => setFormData({ ...formData, pincode: e.target.value })}
-                          placeholder="201301"
-                          className="w-full rounded-xl border border-[#DCD7CB] bg-white p-2.5 text-xs font-mono text-[#171614]"
-                        />
-                      </div>
-
-                      <div>
-                        <label className="block text-xs font-bold text-[#171614] mb-1">
-                          Country
-                        </label>
-                        <input
-                          type="text"
-                          value={formData.country}
-                          onChange={(e) => setFormData({ ...formData, country: e.target.value })}
-                          placeholder="India"
-                          className="w-full rounded-xl border border-[#DCD7CB] bg-white p-2.5 text-xs text-[#171614]"
-                        />
-                      </div>
+                    <div>
+                      <label className="block text-xs font-bold text-foreground mb-1">Country</label>
+                      <input
+                        type="text"
+                        value={formData.country}
+                        onChange={(e) => setFormData({ ...formData, country: e.target.value })}
+                        placeholder="India"
+                        className="w-full rounded-xl border border-border bg-card p-2.5 text-xs text-foreground focus:ring-1 focus:ring-primary outline-hidden"
+                      />
                     </div>
                   </div>
                 </div>
@@ -756,19 +760,19 @@ export function StudentAdmissionDialog({
               {/* STEP 3: GUARDIAN DETAILS */}
               {activeStep === 3 && (
                 <div className="space-y-4">
-                  <div className="border-b border-[#EFECE3] pb-2">
-                    <h4 className="text-sm font-bold text-[#171614]">3. Guardian & Family Linkage</h4>
-                    <p className="text-xs text-[#7A756B]">Establish verified parent records linked directly to the admitted candidate in the database.</p>
+                  <div className="border-b border-border pb-2">
+                    <h4 className="text-sm font-bold text-foreground">3. Primary Guardian & Emergency Contacts</h4>
+                    <p className="text-xs text-muted-foreground">Emergency point of contact and primary parent/guardian linkage.</p>
                   </div>
 
-                  <div className="rounded-2xl border border-[#E5E0D5] bg-white p-4 space-y-4 shadow-2xs">
-                    <span className="text-[11px] font-mono font-bold uppercase tracking-wider text-[#856D3B] block">
-                      Primary Guardian (Required)
+                  <div className="rounded-2xl border border-border bg-card p-4 space-y-4 shadow-2xs">
+                    <span className="text-[11px] font-mono font-bold uppercase tracking-wider text-primary block">
+                      Primary Guardian
                     </span>
 
                     <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                       <div>
-                        <label className="block text-xs font-bold text-[#171614] mb-1">
+                        <label className="block text-xs font-bold text-foreground mb-1">
                           First Name *
                         </label>
                         <input
@@ -776,32 +780,32 @@ export function StudentAdmissionDialog({
                           required
                           value={formData.guardianFirstName}
                           onChange={(e) => setFormData({ ...formData, guardianFirstName: e.target.value })}
-                          placeholder="e.g. Ramesh"
-                          className="w-full rounded-xl border border-[#DCD7CB] bg-[#FAF8F3] p-2.5 text-xs text-[#171614]"
+                          placeholder="e.g. Alok"
+                          className="w-full rounded-xl border border-border bg-card p-2.5 text-xs text-foreground focus:ring-1 focus:ring-primary outline-hidden"
                         />
                       </div>
 
                       <div>
-                        <label className="block text-xs font-bold text-[#171614] mb-1">
+                        <label className="block text-xs font-bold text-foreground mb-1">
                           Last Name
                         </label>
                         <input
                           type="text"
                           value={formData.guardianLastName}
                           onChange={(e) => setFormData({ ...formData, guardianLastName: e.target.value })}
-                          placeholder="e.g. Verma"
-                          className="w-full rounded-xl border border-[#DCD7CB] bg-[#FAF8F3] p-2.5 text-xs text-[#171614]"
+                          placeholder="e.g. Mukherjee"
+                          className="w-full rounded-xl border border-border bg-card p-2.5 text-xs text-foreground focus:ring-1 focus:ring-primary outline-hidden"
                         />
                       </div>
 
                       <div>
-                        <label className="block text-xs font-bold text-[#171614] mb-1">
+                        <label className="block text-xs font-bold text-foreground mb-1">
                           Relationship *
                         </label>
                         <select
                           value={formData.guardianRelation}
                           onChange={(e) => setFormData({ ...formData, guardianRelation: e.target.value })}
-                          className="w-full rounded-xl border border-[#DCD7CB] bg-[#FAF8F3] p-2.5 text-xs font-semibold text-[#171614]"
+                          className="w-full rounded-xl border border-border bg-card p-2.5 text-xs font-semibold text-foreground focus:ring-1 focus:ring-primary outline-hidden cursor-pointer"
                         >
                           <option value="FATHER">Father</option>
                           <option value="MOTHER">Mother</option>
@@ -815,7 +819,7 @@ export function StudentAdmissionDialog({
 
                     <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                       <div>
-                        <label className="block text-xs font-bold text-[#171614] mb-1">
+                        <label className="block text-xs font-bold text-foreground mb-1">
                           Primary Phone *
                         </label>
                         <input
@@ -824,12 +828,12 @@ export function StudentAdmissionDialog({
                           value={formData.guardianPhone}
                           onChange={(e) => setFormData({ ...formData, guardianPhone: e.target.value })}
                           placeholder="+91 XXXXX XXXXX"
-                          className="w-full rounded-xl border border-[#DCD7CB] bg-[#FAF8F3] p-2.5 text-xs font-mono text-[#171614]"
+                          className="w-full rounded-xl border border-border bg-card p-2.5 text-xs font-mono text-foreground focus:ring-1 focus:ring-primary outline-hidden"
                         />
                       </div>
 
                       <div>
-                        <label className="block text-xs font-bold text-[#171614] mb-1">
+                        <label className="block text-xs font-bold text-foreground mb-1">
                           Email Address
                         </label>
                         <input
@@ -837,12 +841,12 @@ export function StudentAdmissionDialog({
                           value={formData.guardianEmail}
                           onChange={(e) => setFormData({ ...formData, guardianEmail: e.target.value })}
                           placeholder="parent@domain.com"
-                          className="w-full rounded-xl border border-[#DCD7CB] bg-[#FAF8F3] p-2.5 text-xs text-[#171614]"
+                          className="w-full rounded-xl border border-border bg-card p-2.5 text-xs text-foreground focus:ring-1 focus:ring-primary outline-hidden"
                         />
                       </div>
 
                       <div>
-                        <label className="block text-xs font-bold text-[#171614] mb-1">
+                        <label className="block text-xs font-bold text-foreground mb-1">
                           Occupation / Designation
                         </label>
                         <input
@@ -850,7 +854,7 @@ export function StudentAdmissionDialog({
                           value={formData.guardianOccupation}
                           onChange={(e) => setFormData({ ...formData, guardianOccupation: e.target.value })}
                           placeholder="e.g. Civil Engineer (Optional)"
-                          className="w-full rounded-xl border border-[#DCD7CB] bg-[#FAF8F3] p-2.5 text-xs text-[#171614]"
+                          className="w-full rounded-xl border border-border bg-card p-2.5 text-xs text-foreground focus:ring-1 focus:ring-primary outline-hidden"
                         />
                       </div>
                     </div>
@@ -858,38 +862,38 @@ export function StudentAdmissionDialog({
 
                   {/* Secondary Guardian Toggle */}
                   <div className="pt-2">
-                    <label className="flex items-center gap-2 text-xs font-bold text-[#171614] cursor-pointer">
+                    <label className="flex items-center gap-2 text-xs font-bold text-foreground cursor-pointer select-none">
                       <input
                         type="checkbox"
                         checked={formData.hasSecondaryGuardian}
                         onChange={(e) => setFormData({ ...formData, hasSecondaryGuardian: e.target.checked })}
-                        className="rounded border-[#DCD7CB] text-[#171614] focus:ring-[#B89B62]"
+                        className="rounded border-border text-primary focus:ring-primary/20"
                       />
                       Add Secondary Guardian / Co-Parent (Optional)
                     </label>
 
                     {formData.hasSecondaryGuardian && (
-                      <div className="mt-3 rounded-2xl border border-[#E5E0D5] bg-white p-4 space-y-4 shadow-2xs">
-                        <span className="text-[11px] font-mono font-bold uppercase tracking-wider text-[#7A756B] block">
+                      <div className="mt-3 rounded-2xl border border-border bg-card p-4 space-y-4 shadow-2xs">
+                        <span className="text-[11px] font-mono font-bold uppercase tracking-wider text-muted-foreground block">
                           Secondary Guardian
                         </span>
                         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                           <div>
-                            <label className="block text-xs font-bold text-[#171614] mb-1">Full Name</label>
+                            <label className="block text-xs font-bold text-foreground mb-1">Full Name</label>
                             <input
                               type="text"
                               value={formData.secondaryGuardianName}
                               onChange={(e) => setFormData({ ...formData, secondaryGuardianName: e.target.value })}
-                              placeholder="e.g. Sunita Verma"
-                              className="w-full rounded-xl border border-[#DCD7CB] bg-[#FAF8F3] p-2.5 text-xs text-[#171614]"
+                              placeholder="e.g. Sunita Mukherjee"
+                              className="w-full rounded-xl border border-border bg-card p-2.5 text-xs text-foreground focus:ring-1 focus:ring-primary outline-hidden"
                             />
                           </div>
                           <div>
-                            <label className="block text-xs font-bold text-[#171614] mb-1">Relationship</label>
+                            <label className="block text-xs font-bold text-foreground mb-1">Relationship</label>
                             <select
                               value={formData.secondaryGuardianRelation}
                               onChange={(e) => setFormData({ ...formData, secondaryGuardianRelation: e.target.value })}
-                              className="w-full rounded-xl border border-[#DCD7CB] bg-[#FAF8F3] p-2.5 text-xs font-semibold text-[#171614]"
+                              className="w-full rounded-xl border border-border bg-card p-2.5 text-xs font-semibold text-foreground focus:ring-1 focus:ring-primary outline-hidden cursor-pointer"
                             >
                               <option value="MOTHER">Mother</option>
                               <option value="FATHER">Father</option>
@@ -898,13 +902,13 @@ export function StudentAdmissionDialog({
                             </select>
                           </div>
                           <div>
-                            <label className="block text-xs font-bold text-[#171614] mb-1">Phone</label>
+                            <label className="block text-xs font-bold text-foreground mb-1">Phone</label>
                             <input
                               type="tel"
                               value={formData.secondaryGuardianPhone}
                               onChange={(e) => setFormData({ ...formData, secondaryGuardianPhone: e.target.value })}
                               placeholder="+91 XXXXX XXXXX"
-                              className="w-full rounded-xl border border-[#DCD7CB] bg-[#FAF8F3] p-2.5 text-xs font-mono text-[#171614]"
+                              className="w-full rounded-xl border border-border bg-card p-2.5 text-xs font-mono text-foreground focus:ring-1 focus:ring-primary outline-hidden"
                             />
                           </div>
                         </div>
@@ -914,23 +918,23 @@ export function StudentAdmissionDialog({
                 </div>
               )}
 
-              {/* STEP 4: ACADEMIC DETAILS & CUSTOM FIELDS */}
+              {/* STEP 4: ACADEMIC ENROLLMENT */}
               {activeStep === 4 && (
                 <div className="space-y-4">
-                  <div className="border-b border-[#EFECE3] pb-2">
-                    <h4 className="text-sm font-bold text-[#171614]">4. Academic Cohort & Custom Fields</h4>
-                    <p className="text-xs text-[#7A756B]">Assign to institution-defined course/grade, section, and capture institution custom fields.</p>
+                  <div className="border-b border-border pb-2">
+                    <h4 className="text-sm font-bold text-foreground">4. Academic Enrollment</h4>
+                    <p className="text-xs text-muted-foreground">Assign candidate to academic year, program/grade, and section cohort.</p>
                   </div>
 
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
-                      <label className="block text-xs font-bold text-[#171614] mb-1">
+                      <label className="block text-xs font-bold text-foreground mb-1">
                         Academic Year *
                       </label>
                       <select
                         value={formData.academicYearId}
                         onChange={(e) => setFormData({ ...formData, academicYearId: e.target.value })}
-                        className="w-full rounded-xl border border-[#DCD7CB] bg-white p-2.5 text-xs font-semibold text-[#171614]"
+                        className="w-full rounded-xl border border-border bg-card p-2.5 text-xs font-semibold text-foreground focus:ring-1 focus:ring-primary outline-hidden cursor-pointer"
                       >
                         {academicYears.map((ay) => (
                           <option key={ay.id} value={ay.id}>
@@ -941,13 +945,13 @@ export function StudentAdmissionDialog({
                     </div>
 
                     <div>
-                      <label className="block text-xs font-bold text-[#171614] mb-1">
+                      <label className="block text-xs font-bold text-foreground mb-1">
                         Program / Course / Grade *
                       </label>
                       <select
                         value={formData.classId}
                         onChange={(e) => setFormData({ ...formData, classId: e.target.value })}
-                        className="w-full rounded-xl border border-[#DCD7CB] bg-white p-2.5 text-xs font-semibold text-[#171614]"
+                        className="w-full rounded-xl border border-border bg-card p-2.5 text-xs font-semibold text-foreground focus:ring-1 focus:ring-primary outline-hidden cursor-pointer"
                       >
                         {programs.map((p) => (
                           <option key={p.id} value={p.id}>
@@ -960,13 +964,13 @@ export function StudentAdmissionDialog({
 
                   <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                     <div>
-                      <label className="block text-xs font-bold text-[#171614] mb-1">
+                      <label className="block text-xs font-bold text-foreground mb-1">
                         Section / Batch
                       </label>
                       <select
                         value={formData.sectionId}
                         onChange={(e) => setFormData({ ...formData, sectionId: e.target.value })}
-                        className="w-full rounded-xl border border-[#DCD7CB] bg-white p-2.5 text-xs font-semibold text-[#171614]"
+                        className="w-full rounded-xl border border-border bg-card p-2.5 text-xs font-semibold text-foreground focus:ring-1 focus:ring-primary outline-hidden cursor-pointer"
                       >
                         {selectedProgram?.sections.map((s) => (
                           <option key={s.id} value={s.id}>
@@ -977,25 +981,25 @@ export function StudentAdmissionDialog({
                     </div>
 
                     <div>
-                      <label className="block text-xs font-bold text-[#171614] mb-1">
+                      <label className="block text-xs font-bold text-foreground mb-1">
                         Admission Date *
                       </label>
                       <input
                         type="date"
                         value={formData.admissionDate}
                         onChange={(e) => setFormData({ ...formData, admissionDate: e.target.value })}
-                        className="w-full rounded-xl border border-[#DCD7CB] bg-white p-2.5 text-xs text-[#171614]"
+                        className="w-full rounded-xl border border-border bg-card p-2.5 text-xs text-foreground focus:ring-1 focus:ring-primary outline-hidden"
                       />
                     </div>
 
                     <div>
-                      <label className="block text-xs font-bold text-[#171614] mb-1">
+                      <label className="block text-xs font-bold text-foreground mb-1">
                         Admission Type
                       </label>
                       <select
                         value={formData.admissionType}
                         onChange={(e) => setFormData({ ...formData, admissionType: e.target.value })}
-                        className="w-full rounded-xl border border-[#DCD7CB] bg-white p-2.5 text-xs font-semibold text-[#171614]"
+                        className="w-full rounded-xl border border-border bg-card p-2.5 text-xs font-semibold text-foreground focus:ring-1 focus:ring-primary outline-hidden cursor-pointer"
                       >
                         <option value="REGULAR">Regular Admission</option>
                         <option value="LATERAL_ENTRY">Lateral Entry</option>
@@ -1006,17 +1010,17 @@ export function StudentAdmissionDialog({
                   </div>
 
                   {/* ROLL NUMBER & ADMISSION NUMBER EXPLICIT FIELDS */}
-                  <div className="rounded-2xl border border-[#D4B87C]/40 bg-[#FAF6ED] p-4 space-y-3">
+                  <div className="rounded-2xl border border-border bg-muted/20 p-4 space-y-3">
                     <div className="flex items-center gap-2">
-                      <Sparkles className="h-4 w-4 text-[#856D3B]" />
-                      <span className="text-xs font-bold text-[#171614]">
+                      <Sparkles className="h-4 w-4 text-primary" />
+                      <span className="text-xs font-bold text-foreground">
                         Institutional Identifiers (No Auto-Generation)
                       </span>
                     </div>
 
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
                       <div>
-                        <label className="block font-bold text-[#171614] mb-1">
+                        <label className="block font-bold text-foreground mb-1">
                           Official Roll Number
                         </label>
                         <input
@@ -1024,15 +1028,15 @@ export function StudentAdmissionDialog({
                           value={formData.rollNumber}
                           onChange={(e) => setFormData({ ...formData, rollNumber: e.target.value })}
                           placeholder="e.g. BTECH-CSE-2026-041 or leave blank"
-                          className="w-full rounded-xl border border-[#DCD7CB] bg-white p-2.5 text-xs font-mono text-[#171614] focus:outline-none focus:ring-2 focus:ring-[#B89B62]"
+                          className="w-full rounded-xl border border-border bg-card p-2.5 text-xs font-mono text-foreground focus:ring-1 focus:ring-primary outline-hidden"
                         />
-                        <p className="text-[11px] text-[#7A756B] mt-1">
-                          Leave empty to set as &quot;Not assigned&quot;. Nexora does not generate roll numbers.
+                        <p className="text-[11px] text-muted-foreground mt-1">
+                          Leave empty to set as &quot;Not assigned&quot;. Nexora does not auto-force roll numbers.
                         </p>
                       </div>
 
                       <div>
-                        <label className="block font-bold text-[#171614] mb-1">
+                        <label className="block font-bold text-foreground mb-1">
                           Admission Number
                         </label>
                         <input
@@ -1040,145 +1044,258 @@ export function StudentAdmissionDialog({
                           value={formData.admissionNumber}
                           onChange={(e) => setFormData({ ...formData, admissionNumber: e.target.value })}
                           placeholder="Auto-assigned by institution sequence if empty"
-                          className="w-full rounded-xl border border-[#DCD7CB] bg-white p-2.5 text-xs font-mono text-[#171614] focus:outline-none focus:ring-2 focus:ring-[#B89B62]"
+                          className="w-full rounded-xl border border-border bg-card p-2.5 text-xs font-mono text-foreground focus:ring-1 focus:ring-primary outline-hidden"
                         />
-                        <p className="text-[11px] text-[#7A756B] mt-1">
+                        <p className="text-[11px] text-muted-foreground mt-1">
                           Institution serial identifier.
                         </p>
                       </div>
                     </div>
                   </div>
-
-                  {/* DYNAMIC INSTITUTION CUSTOM FIELDS */}
-                  {customFields.length > 0 && (
-                    <div className="rounded-2xl border border-[#E5E0D5] bg-white p-4 space-y-3 shadow-2xs">
-                      <div className="flex items-center justify-between border-b border-[#EFECE3] pb-2">
-                        <span className="text-xs font-bold text-[#171614]">
-                          Additional Institutional Attributes
-                        </span>
-                        <span className="text-[10px] font-mono text-[#856D3B]">
-                          Configured by Institution
-                        </span>
-                      </div>
-
-                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
-                        {customFields.map((field) => (
-                          <div key={field.id} className={field.fieldType === "TEXTAREA" ? "sm:col-span-2" : ""}>
-                            <label className="block font-bold text-[#171614] mb-1">
-                              {field.name} {field.isRequired ? <span className="text-red-600">*</span> : ""}
-                            </label>
-
-                            {field.fieldType === "DROPDOWN" ? (
-                              <select
-                                value={formData.customFieldValues[field.key] || ""}
-                                onChange={(e) => handleCustomFieldChange(field.key, e.target.value)}
-                                className="w-full rounded-xl border border-[#DCD7CB] bg-[#FAF8F3] p-2.5 text-xs font-semibold text-[#171614]"
-                              >
-                                <option value="">Select Option</option>
-                                {field.options.map((opt, i) => (
-                                  <option key={i} value={opt}>
-                                    {opt}
-                                  </option>
-                                ))}
-                              </select>
-                            ) : field.fieldType === "TEXTAREA" ? (
-                              <textarea
-                                value={formData.customFieldValues[field.key] || ""}
-                                onChange={(e) => handleCustomFieldChange(field.key, e.target.value)}
-                                placeholder={field.placeholder || ""}
-                                rows={2}
-                                className="w-full rounded-xl border border-[#DCD7CB] bg-[#FAF8F3] p-2.5 text-xs text-[#171614]"
-                              />
-                            ) : field.fieldType === "BOOLEAN" ? (
-                              <select
-                                value={formData.customFieldValues[field.key] ?? ""}
-                                onChange={(e) => handleCustomFieldChange(field.key, e.target.value === "true")}
-                                className="w-full rounded-xl border border-[#DCD7CB] bg-[#FAF8F3] p-2.5 text-xs font-semibold text-[#171614]"
-                              >
-                                <option value="">Select Yes/No</option>
-                                <option value="true">Yes</option>
-                                <option value="false">No</option>
-                              </select>
-                            ) : (
-                              <input
-                                type={field.fieldType === "NUMBER" ? "number" : field.fieldType === "DATE" ? "date" : "text"}
-                                value={formData.customFieldValues[field.key] || ""}
-                                onChange={(e) => handleCustomFieldChange(field.key, e.target.value)}
-                                placeholder={field.placeholder || ""}
-                                className="w-full rounded-xl border border-[#DCD7CB] bg-[#FAF8F3] p-2.5 text-xs text-[#171614]"
-                              />
-                            )}
-
-                            {field.helpText && (
-                              <p className="text-[10px] text-[#7A756B] mt-0.5">{field.helpText}</p>
-                            )}
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  )}
                 </div>
               )}
 
-              {/* STEP 5: FEE STRUCTURE RESOLUTION & REVIEW */}
+              {/* STEP 5: FEES & CUSTOM FIELDS */}
               {activeStep === 5 && (
-                <div className="space-y-4">
-                  <div className="border-b border-[#EFECE3] pb-2">
-                    <h4 className="text-sm font-bold text-[#171614]">5. Course Fee Structure & Review</h4>
-                    <p className="text-xs text-[#7A756B]">Fees are automatically derived from the institution&apos;s configured fee blueprint for this course.</p>
+                <div className="space-y-6">
+                  <div className="border-b border-border pb-2">
+                    <h4 className="text-sm font-bold text-foreground">5. Fees & Custom Fields</h4>
+                    <p className="text-xs text-muted-foreground">
+                      Course fee structure blueprint and institution-configured custom attributes.
+                    </p>
                   </div>
 
-                  {/* Dynamic Fee Structure Resolution Box */}
-                  <div className="rounded-2xl border border-[#E5E0D5] bg-white p-4 shadow-2xs space-y-3">
+                  {/* Fee Structure Box */}
+                  <div className="space-y-3">
                     <div className="flex items-center justify-between">
-                      <span className="text-xs font-bold text-[#171614]">
-                        Assigned Fee Structure: {selectedProgram?.name} ({selectedYear?.name})
+                      <span className="text-xs font-bold text-foreground uppercase tracking-wider font-mono">
+                        Fee Structure: {selectedProgram?.name} ({selectedYear?.name})
                       </span>
-                      <span className="text-xs font-mono font-extrabold text-[#171614]">
+                      <span className="text-xs font-mono font-extrabold text-foreground">
                         Total: ₹{totalFeeAmount.toLocaleString("en-IN")}
                       </span>
                     </div>
 
-                    {applicableFees.length === 0 ? (
-                      <div className="rounded-xl bg-[#FAF8F3] p-3 text-center text-xs text-[#7A756B]">
-                        No specific fee breakdown is pre-configured for this course. You can configure fee structures under Finance & Fees anytime.
-                      </div>
-                    ) : (
-                      <div className="divide-y divide-[#EFECE3] text-xs">
-                        {applicableFees.map((fee) => (
-                          <div key={fee.id} className="py-2 flex items-center justify-between">
-                            <span className="text-[#555047] font-medium">{fee.feeCategory.name}</span>
-                            <div className="flex items-center gap-3 font-mono">
-                              <span className="text-[11px] text-[#7A756B]">{fee.frequency}</span>
-                              <span className="font-bold text-[#171614]">₹{fee.amount.toLocaleString("en-IN")}</span>
+                    <div className="rounded-2xl border border-border bg-card p-4 shadow-2xs space-y-3">
+                      {applicableFees.length === 0 ? (
+                        <div className="rounded-xl bg-muted/40 p-3 text-center text-xs text-muted-foreground">
+                          No specific fee breakdown is pre-configured for this course. You can configure fee structures under Finance & Fees anytime.
+                        </div>
+                      ) : (
+                        <div className="divide-y divide-border text-xs">
+                          {applicableFees.map((fee) => (
+                            <div key={fee.id} className="py-2.5 first:pt-0 last:pb-0 flex items-center justify-between">
+                              <span className="text-foreground font-medium">{fee.feeCategory.name}</span>
+                              <div className="flex items-center gap-3 font-mono">
+                                <span className="text-[11px] text-muted-foreground">{fee.frequency}</span>
+                                <span className="font-bold text-foreground">₹{fee.amount.toLocaleString("en-IN")}</span>
+                              </div>
                             </div>
-                          </div>
-                        ))}
-                      </div>
-                    )}
+                          ))}
+                        </div>
+                      )}
+                    </div>
                   </div>
 
+                  {/* CUSTOM FIELDS (Rendered only if active fields exist) */}
+                  {sortedCustomFields.length > 0 && (
+                    <div className="space-y-3 pt-2">
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-2">
+                          <Sparkles className="w-4 h-4 text-primary" />
+                          <span className="text-xs font-bold text-foreground uppercase tracking-wider font-mono">
+                            Custom Fields
+                          </span>
+                        </div>
+                        {onOpenManageFields && (
+                          <button
+                            type="button"
+                            onClick={onOpenManageFields}
+                            className="text-xs font-semibold text-primary hover:underline flex items-center gap-1"
+                          >
+                            <span>Manage Fields</span>
+                            <ArrowRight className="w-3 h-3" />
+                          </button>
+                        )}
+                      </div>
+
+                      <div className="rounded-2xl border border-border bg-card p-4 shadow-2xs">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
+                          {sortedCustomFields.map((field) => (
+                            <div
+                              key={field.id}
+                              className={field.fieldType === "TEXTAREA" ? "sm:col-span-2" : ""}
+                            >
+                              <label className="block text-xs font-bold text-foreground mb-1">
+                                {field.name}{" "}
+                                {field.isRequired && <span className="text-destructive">*</span>}
+                              </label>
+
+                              {field.fieldType === "DROPDOWN" ? (
+                                <select
+                                  value={formData.customFieldValues[field.key] || ""}
+                                  onChange={(e) => handleCustomFieldChange(field.key, e.target.value)}
+                                  className="w-full rounded-xl border border-border bg-card p-2.5 text-xs font-semibold text-foreground focus:ring-1 focus:ring-primary outline-hidden cursor-pointer"
+                                >
+                                  <option value="">-- Select {field.name} --</option>
+                                  {field.options?.map((opt, idx) => (
+                                    <option key={idx} value={opt}>
+                                      {opt}
+                                    </option>
+                                  ))}
+                                </select>
+                              ) : field.fieldType === "MULTI_SELECT" ? (
+                                <div className="space-y-1.5 p-2.5 rounded-xl bg-muted/40 border border-border">
+                                  <div className="flex flex-wrap gap-2">
+                                    {field.options?.map((opt, idx) => {
+                                      const currentVal = formData.customFieldValues[field.key];
+                                      const selectedArr = Array.isArray(currentVal)
+                                        ? currentVal
+                                        : typeof currentVal === "string" && currentVal.startsWith("[")
+                                        ? JSON.parse(currentVal)
+                                        : currentVal
+                                        ? [currentVal]
+                                        : [];
+                                      const isChecked = selectedArr.includes(opt);
+
+                                      return (
+                                        <label
+                                          key={idx}
+                                          className={`flex items-center gap-1.5 px-2.5 py-1 rounded-lg border text-xs cursor-pointer select-none transition-colors ${
+                                            isChecked
+                                              ? "bg-primary text-primary-foreground border-primary font-semibold"
+                                              : "bg-card border-border text-foreground hover:bg-muted"
+                                          }`}
+                                        >
+                                          <input
+                                            type="checkbox"
+                                            className="hidden"
+                                            checked={isChecked}
+                                            onChange={(e) => {
+                                              const next = e.target.checked
+                                                ? [...selectedArr, opt]
+                                                : selectedArr.filter((x: string) => x !== opt);
+                                              handleCustomFieldChange(field.key, next);
+                                            }}
+                                          />
+                                          <span>{opt}</span>
+                                        </label>
+                                      );
+                                    })}
+                                  </div>
+                                </div>
+                              ) : field.fieldType === "BOOLEAN" ? (
+                                <div className="flex items-center gap-3 pt-1">
+                                  <button
+                                    type="button"
+                                    onClick={() => handleCustomFieldChange(field.key, true)}
+                                    className={`px-4 py-2 rounded-xl border text-xs font-semibold transition-all ${
+                                      formData.customFieldValues[field.key] === true ||
+                                      formData.customFieldValues[field.key] === "true"
+                                        ? "bg-primary text-primary-foreground border-primary"
+                                        : "bg-card border-border text-foreground hover:bg-muted"
+                                    }`}
+                                  >
+                                    Yes
+                                  </button>
+                                  <button
+                                    type="button"
+                                    onClick={() => handleCustomFieldChange(field.key, false)}
+                                    className={`px-4 py-2 rounded-xl border text-xs font-semibold transition-all ${
+                                      formData.customFieldValues[field.key] === false ||
+                                      formData.customFieldValues[field.key] === "false"
+                                        ? "bg-primary text-primary-foreground border-primary"
+                                        : "bg-card border-border text-foreground hover:bg-muted"
+                                    }`}
+                                  >
+                                    No
+                                  </button>
+                                </div>
+                              ) : field.fieldType === "TEXTAREA" ? (
+                                <textarea
+                                  rows={2}
+                                  placeholder={field.placeholder || `Enter ${field.name}...`}
+                                  value={formData.customFieldValues[field.key] || ""}
+                                  onChange={(e) => handleCustomFieldChange(field.key, e.target.value)}
+                                  className="w-full rounded-xl border border-border bg-card p-2.5 text-xs text-foreground focus:ring-1 focus:ring-primary outline-hidden"
+                                />
+                              ) : field.fieldType === "NUMBER" ? (
+                                <input
+                                  type="number"
+                                  placeholder={field.placeholder || "0"}
+                                  value={formData.customFieldValues[field.key] || ""}
+                                  onChange={(e) => handleCustomFieldChange(field.key, e.target.value)}
+                                  className="w-full rounded-xl border border-border bg-card p-2.5 text-xs font-mono text-foreground focus:ring-1 focus:ring-primary outline-hidden"
+                                />
+                              ) : field.fieldType === "DATE" ? (
+                                <input
+                                  type="date"
+                                  value={formData.customFieldValues[field.key] || ""}
+                                  onChange={(e) => handleCustomFieldChange(field.key, e.target.value)}
+                                  className="w-full rounded-xl border border-border bg-card p-2.5 text-xs text-foreground focus:ring-1 focus:ring-primary outline-hidden"
+                                />
+                              ) : field.fieldType === "PHONE" ? (
+                                <input
+                                  type="tel"
+                                  placeholder={field.placeholder || "+91 XXXXX XXXXX"}
+                                  value={formData.customFieldValues[field.key] || ""}
+                                  onChange={(e) => handleCustomFieldChange(field.key, e.target.value)}
+                                  className="w-full rounded-xl border border-border bg-card p-2.5 text-xs font-mono text-foreground focus:ring-1 focus:ring-primary outline-hidden"
+                                />
+                              ) : field.fieldType === "EMAIL" ? (
+                                <input
+                                  type="email"
+                                  placeholder={field.placeholder || "email@domain.com"}
+                                  value={formData.customFieldValues[field.key] || ""}
+                                  onChange={(e) => handleCustomFieldChange(field.key, e.target.value)}
+                                  className="w-full rounded-xl border border-border bg-card p-2.5 text-xs text-foreground focus:ring-1 focus:ring-primary outline-hidden"
+                                />
+                              ) : (
+                                <input
+                                  type="text"
+                                  placeholder={field.placeholder || `Enter ${field.name}...`}
+                                  value={formData.customFieldValues[field.key] || ""}
+                                  onChange={(e) => handleCustomFieldChange(field.key, e.target.value)}
+                                  className="w-full rounded-xl border border-border bg-card p-2.5 text-xs text-foreground focus:ring-1 focus:ring-primary outline-hidden"
+                                />
+                              )}
+
+                              {field.helpText && (
+                                <p className="text-[10px] text-muted-foreground mt-0.5">{field.helpText}</p>
+                              )}
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
                   {/* Final Review Summary Card */}
-                  <div className="rounded-2xl border border-[#DCD7CB] bg-[#FAF8F3] p-4 text-xs space-y-2">
-                    <span className="text-[11px] font-mono font-bold uppercase tracking-wider text-[#856D3B] block">
-                      Admission Summary
+                  <div className="rounded-2xl border border-border bg-muted/20 p-4 text-xs space-y-2">
+                    <span className="text-[11px] font-mono font-bold uppercase tracking-wider text-primary block">
+                      Admission Candidate Summary
                     </span>
                     <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-1">
                       <div>
-                        <span className="text-[#7A756B] text-[11px]">Candidate:</span>
-                        <p className="font-bold text-[#171614]">{formData.firstName} {formData.middleName} {formData.lastName}</p>
+                        <span className="text-muted-foreground text-[11px]">Candidate:</span>
+                        <p className="font-bold text-foreground">
+                          {formData.firstName} {formData.middleName} {formData.lastName}
+                        </p>
                       </div>
                       <div>
-                        <span className="text-[#7A756B] text-[11px]">Program:</span>
-                        <p className="font-bold text-[#171614]">{selectedProgram?.name}</p>
+                        <span className="text-muted-foreground text-[11px]">Program:</span>
+                        <p className="font-bold text-foreground">{selectedProgram?.name}</p>
                       </div>
                       <div>
-                        <span className="text-[#7A756B] text-[11px]">Primary Guardian:</span>
-                        <p className="font-bold text-[#171614]">{formData.guardianFirstName} {formData.guardianLastName} ({formData.guardianRelation})</p>
+                        <span className="text-muted-foreground text-[11px]">Primary Guardian:</span>
+                        <p className="font-bold text-foreground">
+                          {formData.guardianFirstName} {formData.guardianLastName} (
+                          {formData.guardianRelation})
+                        </p>
                       </div>
                       <div>
-                        <span className="text-[#7A756B] text-[11px]">Assigned Roll No:</span>
-                        <p className="font-mono font-bold text-[#856D3B]">
+                        <span className="text-muted-foreground text-[11px]">Assigned Roll No:</span>
+                        <p className="font-mono font-bold text-primary">
                           {formData.rollNumber.trim() ? formData.rollNumber : "Not assigned"}
                         </p>
                       </div>
@@ -1188,7 +1305,7 @@ export function StudentAdmissionDialog({
               )}
 
               {/* Navigation Footer */}
-              <div className="flex items-center justify-between pt-4 border-t border-[#EFECE3]">
+              <div className="flex items-center justify-between pt-4 border-t border-border">
                 {activeStep > 1 ? (
                   <Button
                     type="button"
@@ -1206,7 +1323,7 @@ export function StudentAdmissionDialog({
                 <div className="flex items-center gap-2">
                   <Button
                     type="button"
-                    variant="secondary"
+                    variant="outline"
                     size="sm"
                     onClick={() => {
                       resetForm();
@@ -1219,6 +1336,7 @@ export function StudentAdmissionDialog({
                   {activeStep < 5 ? (
                     <Button
                       type="button"
+                      variant="primary"
                       size="sm"
                       onClick={handleNext}
                       rightIcon={<ArrowRight className="h-3.5 w-3.5" />}
@@ -1228,9 +1346,10 @@ export function StudentAdmissionDialog({
                   ) : (
                     <Button
                       type="submit"
+                      variant="primary"
                       size="sm"
                       isLoading={isSubmitting}
-                      leftIcon={<CheckCircle2 className="h-3.5 w-3.5 text-[#D4B87C]" />}
+                      leftIcon={<CheckCircle2 className="h-3.5 w-3.5" />}
                     >
                       Admit Student
                     </Button>

@@ -12,7 +12,6 @@ import {
   X,
   BookOpen,
   Calendar,
-  CreditCard,
   Loader2,
   Receipt,
   Clock,
@@ -105,13 +104,16 @@ export function CommandPalette() {
       <button
         type="button"
         onClick={() => setIsOpen(true)}
-        className="hidden sm:flex items-center justify-between w-full max-w-sm rounded-xl border border-[#DCD7CB] bg-[#FAF8F3] py-2 px-3.5 text-xs text-[#7A756B] hover:text-[#171614] hover:border-[#B89B62] transition-all shadow-2xs"
+        className="flex items-center justify-between w-full max-w-[260px] sm:max-w-[320px] rounded-xl border border-border bg-card/90 hover:bg-card py-2 px-3 text-xs text-muted-foreground hover:text-foreground hover:border-primary/50 transition-all shadow-2xs group cursor-pointer"
+        aria-label="Search students, faculty, classes and tasks"
       >
-        <span className="flex items-center gap-2">
-          <Search className="h-3.5 w-3.5 text-[#7A756B]" />
-          <span>Search students, faculty, classes, tasks...</span>
+        <span className="flex items-center gap-2 overflow-hidden mr-2">
+          <Search className="h-3.5 w-3.5 text-muted-foreground group-hover:text-primary shrink-0 transition-colors" />
+          <span className="truncate whitespace-nowrap text-left text-[11px] sm:text-xs">
+            Search students, faculty, classes...
+          </span>
         </span>
-        <kbd className="hidden sm:inline-flex items-center gap-0.5 rounded-md border border-[#DCD7CB] bg-white px-1.5 py-0.5 text-[10px] font-mono font-bold text-[#7A756B]">
+        <kbd className="hidden sm:inline-flex items-center gap-0.5 rounded-md border border-border bg-muted/80 px-1.5 py-0.5 text-[10px] font-mono font-semibold text-muted-foreground shrink-0">
           <Command className="w-2.5 h-2.5" /> K
         </kbd>
       </button>
@@ -120,26 +122,26 @@ export function CommandPalette() {
       {isOpen && (
         <div className="fixed inset-0 z-50 flex items-start justify-center pt-20 sm:pt-24 px-4 animate-in fade-in duration-150">
           <div
-            className="fixed inset-0 bg-[#171614]/70 backdrop-blur-xs transition-opacity"
+            className="fixed inset-0 bg-foreground/40 backdrop-blur-xs transition-opacity"
             onClick={() => setIsOpen(false)}
           />
 
-          <div className="relative w-full max-w-2xl rounded-2xl border border-[#E5E0D5] bg-white shadow-2xl overflow-hidden z-10 animate-in zoom-in-95 duration-150">
+          <div className="relative w-full max-w-2xl rounded-2xl border border-border bg-card shadow-2xl overflow-hidden z-10 animate-in zoom-in-95 duration-150">
             {/* Search Input */}
-            <div className="flex items-center px-4 border-b border-[#EFECE3] bg-[#FAF8F3]">
-              <Search className="w-4 h-4 text-[#7A756B] shrink-0" />
+            <div className="flex items-center px-4 border-b border-border bg-muted/40">
+              <Search className="w-4 h-4 text-muted-foreground shrink-0" />
               <input
                 ref={inputRef}
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
                 placeholder="Type student name, admission #, teacher, subject, or task..."
-                className="w-full py-4 px-3 text-xs text-[#171614] bg-transparent placeholder-[#7A756B] focus:outline-none"
+                className="w-full py-4 px-3 text-xs text-foreground bg-transparent placeholder:text-muted-foreground focus:outline-none"
               />
-              {loading && <Loader2 className="w-4 h-4 text-[#B89B62] animate-spin shrink-0" />}
+              {loading && <Loader2 className="w-4 h-4 text-primary animate-spin shrink-0" />}
               {query && !loading && (
                 <button
                   onClick={() => setQuery("")}
-                  className="p-1 rounded-lg text-[#7A756B] hover:text-[#171614] hover:bg-[#EFECE3]"
+                  className="p-1 rounded-lg text-muted-foreground hover:text-foreground hover:bg-muted"
                 >
                   <X className="w-3.5 h-3.5" />
                 </button>
@@ -147,11 +149,11 @@ export function CommandPalette() {
             </div>
 
             {/* Content Area */}
-            <div className="max-h-96 overflow-y-auto p-3 space-y-3 bg-white">
+            <div className="max-h-96 overflow-y-auto p-3 space-y-3 bg-card text-card-foreground">
               {/* If no query, show quick navigation */}
               {!query.trim() && (
                 <div className="p-2">
-                  <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-[#7A756B] px-2 block mb-2">
+                  <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-muted-foreground px-2 block mb-2">
                     Quick Jump Navigation
                   </span>
                   <div className="grid grid-cols-2 gap-2">
@@ -170,9 +172,9 @@ export function CommandPalette() {
                         <button
                           key={i}
                           onClick={() => handleSelect(item.url)}
-                          className="flex items-center gap-2.5 p-2.5 rounded-xl text-left text-xs font-semibold text-[#35322C] hover:bg-[#FAF8F3] hover:text-[#171614] border border-transparent hover:border-[#DCD7CB] transition-all"
+                          className="flex items-center gap-2.5 p-2.5 rounded-xl text-left text-xs font-semibold text-foreground hover:bg-muted border border-transparent hover:border-border transition-all"
                         >
-                          <Icon className="w-3.5 h-3.5 text-[#7A756B]" />
+                          <Icon className="w-3.5 h-3.5 text-primary" />
                           <span className="truncate">{item.title}</span>
                         </button>
                       );
@@ -183,8 +185,8 @@ export function CommandPalette() {
 
               {/* Dynamic Results */}
               {query.trim() && !loading && !hasResults && (
-                <div className="py-12 text-center text-[#7A756B] text-xs space-y-1">
-                  <p className="font-bold text-[#171614]">No records found</p>
+                <div className="py-12 text-center text-muted-foreground text-xs space-y-1">
+                  <p className="font-bold text-foreground">No records found</p>
                   <p className="text-[11px]">
                     No students, faculty, classes, or tasks matched &quot;{query}&quot;.
                   </p>
@@ -194,7 +196,7 @@ export function CommandPalette() {
               {/* Students Results */}
               {results.students.length > 0 && (
                 <div>
-                  <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-[#7A756B] px-2 block mb-1">
+                  <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-muted-foreground px-2 block mb-1">
                     Students ({results.students.length})
                   </span>
                   <div className="space-y-1">
@@ -202,22 +204,22 @@ export function CommandPalette() {
                       <button
                         key={st.id}
                         onClick={() => handleSelect(`/students?search=${encodeURIComponent(st.fullName)}`)}
-                        className="w-full flex items-center justify-between p-2.5 rounded-xl text-left hover:bg-[#FAF8F3] transition-colors group border border-transparent hover:border-[#DCD7CB]"
+                        className="w-full flex items-center justify-between p-2.5 rounded-xl text-left hover:bg-muted transition-colors group border border-transparent hover:border-border"
                       >
                         <div className="flex items-center gap-2.5">
-                          <div className="w-7 h-7 rounded-lg bg-[#FAF6ED] border border-[#D4B87C]/50 flex items-center justify-center text-[#856D3B] font-bold text-[11px]">
+                          <div className="w-7 h-7 rounded-lg bg-primary-subtle border border-primary/20 flex items-center justify-center text-primary font-bold text-[11px]">
                             {st.fullName[0]}
                           </div>
                           <div>
-                            <p className="text-xs font-bold text-[#171614] group-hover:text-[#856D3B]">
+                            <p className="text-xs font-bold text-foreground group-hover:text-primary">
                               {st.fullName}
                             </p>
-                            <p className="text-[11px] text-[#7A756B] font-mono">
+                            <p className="text-[11px] text-muted-foreground font-mono">
                               {st.currentClass?.name} - {st.currentSection?.name} • Roll #{st.rollNumber || "—"} • {st.admissionNumber}
                             </p>
                           </div>
                         </div>
-                        <ArrowRight className="w-3.5 h-3.5 text-[#7A756B] group-hover:text-[#171614] transition-colors" />
+                        <ArrowRight className="w-3.5 h-3.5 text-muted-foreground group-hover:text-foreground transition-colors" />
                       </button>
                     ))}
                   </div>
@@ -227,7 +229,7 @@ export function CommandPalette() {
               {/* Teachers Results */}
               {results.teachers.length > 0 && (
                 <div>
-                  <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-[#7A756B] px-2 block mb-1">
+                  <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-muted-foreground px-2 block mb-1">
                     Faculty & Staff ({results.teachers.length})
                   </span>
                   <div className="space-y-1">
@@ -235,22 +237,22 @@ export function CommandPalette() {
                       <button
                         key={t.id}
                         onClick={() => handleSelect(`/teachers?search=${encodeURIComponent(t.fullName)}`)}
-                        className="w-full flex items-center justify-between p-2.5 rounded-xl text-left hover:bg-[#FAF8F3] transition-colors group border border-transparent hover:border-[#DCD7CB]"
+                        className="w-full flex items-center justify-between p-2.5 rounded-xl text-left hover:bg-muted transition-colors group border border-transparent hover:border-border"
                       >
                         <div className="flex items-center gap-2.5">
-                          <div className="w-7 h-7 rounded-lg bg-[#F4F6F1] border border-[#65705B]/30 flex items-center justify-center text-[#525E4B] font-bold text-[11px]">
+                          <div className="w-7 h-7 rounded-lg bg-accent-subtle border border-accent/20 flex items-center justify-center text-accent font-bold text-[11px]">
                             {t.fullName[0]}
                           </div>
                           <div>
-                            <p className="text-xs font-bold text-[#171614] group-hover:text-[#525E4B]">
+                            <p className="text-xs font-bold text-foreground group-hover:text-primary">
                               {t.fullName}
                             </p>
-                            <p className="text-[11px] text-[#7A756B] font-mono">
+                            <p className="text-[11px] text-muted-foreground font-mono">
                               {t.designation} • {t.employeeId}
                             </p>
                           </div>
                         </div>
-                        <ArrowRight className="w-3.5 h-3.5 text-[#7A756B] group-hover:text-[#171614] transition-colors" />
+                        <ArrowRight className="w-3.5 h-3.5 text-muted-foreground group-hover:text-foreground transition-colors" />
                       </button>
                     ))}
                   </div>
@@ -260,7 +262,7 @@ export function CommandPalette() {
               {/* Classes Results */}
               {results.classes.length > 0 && (
                 <div>
-                  <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-[#7A756B] px-2 block mb-1">
+                  <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-muted-foreground px-2 block mb-1">
                     Classes & Cohorts ({results.classes.length})
                   </span>
                   <div className="space-y-1">
@@ -268,22 +270,22 @@ export function CommandPalette() {
                       <button
                         key={cls.id}
                         onClick={() => handleSelect("/academics/classes")}
-                        className="w-full flex items-center justify-between p-2.5 rounded-xl text-left hover:bg-[#FAF8F3] transition-colors group border border-transparent hover:border-[#DCD7CB]"
+                        className="w-full flex items-center justify-between p-2.5 rounded-xl text-left hover:bg-muted transition-colors group border border-transparent hover:border-border"
                       >
                         <div className="flex items-center gap-2.5">
-                          <div className="w-7 h-7 rounded-lg bg-[#FAF8F3] border border-[#E5E0D5] flex items-center justify-center text-[#171614] font-bold text-[11px]">
+                          <div className="w-7 h-7 rounded-lg bg-muted border border-border flex items-center justify-center text-foreground font-bold text-[11px]">
                             {cls.name[0]}
                           </div>
                           <div>
-                            <p className="text-xs font-bold text-[#171614]">
+                            <p className="text-xs font-bold text-foreground">
                               {cls.name}
                             </p>
-                            <p className="text-[11px] text-[#7A756B] font-mono">
+                            <p className="text-[11px] text-muted-foreground font-mono">
                               {cls.sections?.length || 0} Sections Active
                             </p>
                           </div>
                         </div>
-                        <ArrowRight className="w-3.5 h-3.5 text-[#7A756B] group-hover:text-[#171614] transition-colors" />
+                        <ArrowRight className="w-3.5 h-3.5 text-muted-foreground group-hover:text-foreground transition-colors" />
                       </button>
                     ))}
                   </div>
@@ -293,7 +295,7 @@ export function CommandPalette() {
               {/* Tasks Results */}
               {results.tasks.length > 0 && (
                 <div>
-                  <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-[#7A756B] px-2 block mb-1">
+                  <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-muted-foreground px-2 block mb-1">
                     Tasks ({results.tasks.length})
                   </span>
                   <div className="space-y-1">
@@ -301,20 +303,20 @@ export function CommandPalette() {
                       <button
                         key={task.id}
                         onClick={() => handleSelect("/tasks")}
-                        className="w-full flex items-center justify-between p-2.5 rounded-xl text-left hover:bg-[#FAF8F3] transition-colors group border border-transparent hover:border-[#DCD7CB]"
+                        className="w-full flex items-center justify-between p-2.5 rounded-xl text-left hover:bg-muted transition-colors group border border-transparent hover:border-border"
                       >
                         <div className="flex items-center gap-2.5">
-                          <CheckSquare className="w-4 h-4 text-[#856D3B]" />
+                          <CheckSquare className="w-4 h-4 text-primary" />
                           <div>
-                            <p className="text-xs font-bold text-[#171614]">
+                            <p className="text-xs font-bold text-foreground">
                               {task.title}
                             </p>
-                            <p className="text-[11px] text-[#7A756B] font-mono">
+                            <p className="text-[11px] text-muted-foreground font-mono">
                               Priority: {task.priority} • Status: {task.status}
                             </p>
                           </div>
                         </div>
-                        <ArrowRight className="w-3.5 h-3.5 text-[#7A756B] group-hover:text-[#171614] transition-colors" />
+                        <ArrowRight className="w-3.5 h-3.5 text-muted-foreground group-hover:text-foreground transition-colors" />
                       </button>
                     ))}
                   </div>

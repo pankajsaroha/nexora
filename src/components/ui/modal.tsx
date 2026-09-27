@@ -54,28 +54,28 @@ export function Modal({
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 overflow-y-auto animate-in fade-in duration-150">
       {/* Backdrop */}
       <div
-        className="fixed inset-0 bg-[#171614]/70 backdrop-blur-xs transition-opacity"
+        className="fixed inset-0 bg-foreground/40 backdrop-blur-xs transition-opacity"
         onClick={onClose}
       />
 
       {/* Modal Dialog */}
       <div
         className={cn(
-          "relative w-full rounded-2xl bg-white shadow-2xl border border-[#E5E0D5] z-10 overflow-hidden flex flex-col max-h-[90vh] animate-in zoom-in-95 duration-150",
+          "relative w-full rounded-2xl bg-card text-card-foreground shadow-2xl border border-border z-10 overflow-hidden flex flex-col max-h-[90vh] animate-in zoom-in-95 duration-150",
           sizeClasses[size],
           className
         )}
         role="dialog"
         aria-modal="true"
       >
-        {/* Header in Warm Ivory */}
-        <div className="flex items-center justify-between border-b border-[#EFECE3] bg-[#FAF8F3] px-6 py-4">
+        {/* Header */}
+        <div className="flex items-center justify-between border-b border-border bg-muted/40 px-6 py-4">
           <div>
-            <h2 className="text-base font-extrabold text-[#171614] tracking-tight">
+            <h2 className="text-base font-extrabold text-foreground tracking-tight">
               {title}
             </h2>
             {description && (
-              <p className="mt-0.5 text-xs text-[#7A756B]">
+              <p className="mt-0.5 text-xs text-muted-foreground">
                 {description}
               </p>
             )}
@@ -83,15 +83,15 @@ export function Modal({
           <button
             type="button"
             onClick={onClose}
-            className="rounded-lg p-1.5 text-[#7A756B] hover:bg-[#EFECE3] hover:text-[#171614] transition-colors"
-            aria-label="Close"
+            className="rounded-lg p-1.5 text-muted-foreground hover:bg-muted hover:text-foreground transition-colors"
+            aria-label="Close modal"
           >
             <X className="h-4 w-4" />
           </button>
         </div>
 
         {/* Content Body */}
-        <div className="p-6 overflow-y-auto bg-white">{children}</div>
+        <div className="p-6 overflow-y-auto bg-card text-card-foreground">{children}</div>
       </div>
     </div>
   );

@@ -86,19 +86,19 @@ export function RoleSwitcher({ currentRoleCode }: { currentRoleCode?: string }) 
         type="button"
         onClick={() => setIsOpen(!isOpen)}
         disabled={isSwitching}
-        className="flex items-center gap-2 rounded-xl border border-[#DCD7CB] bg-[#FAF8F3] px-3 py-1.5 text-xs text-[#35322C] hover:border-[#B89B62] hover:bg-white transition-all shadow-2xs"
+        className="flex items-center gap-2 rounded-xl border border-border bg-card px-3 py-1.5 text-xs text-foreground hover:border-primary hover:bg-muted transition-all shadow-2xs"
       >
-        <span className="text-[11px] text-[#7A756B]">Viewing as:</span>
-        <span className="font-bold text-[#171614] truncate max-w-[140px] sm:max-w-[180px]">
+        <span className="text-[11px] text-muted-foreground">Viewing as:</span>
+        <span className="font-bold text-foreground truncate max-w-[140px] sm:max-w-[180px]">
           {activeRole.name}
         </span>
-        <span className="text-[10px] font-mono text-[#7A756B] uppercase hidden md:inline">
+        <span className="text-[10px] font-mono text-muted-foreground uppercase hidden md:inline">
           · {activeRole.roleTitle}
         </span>
         {isSwitching ? (
-          <Loader2 className="h-3 w-3 animate-spin text-[#B89B62]" />
+          <Loader2 className="h-3 w-3 animate-spin text-primary" />
         ) : (
-          <ChevronDown className="h-3.5 w-3.5 text-[#7A756B]" />
+          <ChevronDown className="h-3.5 w-3.5 text-muted-foreground" />
         )}
       </button>
 
@@ -106,12 +106,12 @@ export function RoleSwitcher({ currentRoleCode }: { currentRoleCode?: string }) 
       {isOpen && (
         <>
           <div className="fixed inset-0 z-40" onClick={() => setIsOpen(false)} />
-          <div className="absolute right-0 top-full mt-2 w-72 rounded-2xl border border-[#E5E0D5] bg-white p-2 shadow-2xl z-50 animate-in fade-in zoom-in-95 duration-100 space-y-1">
-            <div className="px-3 py-2 border-b border-[#EFECE3] flex items-center justify-between">
-              <span className="text-[10px] font-mono uppercase tracking-widest text-[#7A756B] font-bold">
+          <div className="absolute right-0 top-full mt-2 w-72 rounded-2xl border border-border bg-card p-2 shadow-2xl z-50 animate-in fade-in zoom-in-95 duration-100 space-y-1">
+            <div className="px-3 py-2 border-b border-border flex items-center justify-between">
+              <span className="text-[10px] font-mono uppercase tracking-widest text-muted-foreground font-bold">
                 DEMO PERSONAS
               </span>
-              <span className="text-[10px] text-[#7A756B] font-mono">Northstar Academy</span>
+              <span className="text-[10px] text-muted-foreground font-mono">Northstar Academy</span>
             </div>
 
             <div className="max-h-72 overflow-y-auto space-y-0.5 pt-1">
@@ -125,16 +125,16 @@ export function RoleSwitcher({ currentRoleCode }: { currentRoleCode?: string }) 
                     className={cn(
                       "w-full flex items-center justify-between p-2.5 rounded-xl text-left text-xs transition-all",
                       isSelected
-                        ? "bg-[#FAF8F3] border border-[#DCD7CB] font-bold text-[#171614]"
-                        : "hover:bg-[#FAF8F3] text-[#555047] hover:text-[#171614] border border-transparent"
+                        ? "bg-primary-subtle border border-primary/30 font-bold text-foreground"
+                        : "hover:bg-muted text-muted-foreground hover:text-foreground border border-transparent"
                     )}
                   >
                     <div>
-                      <p className="font-bold text-[#171614]">{role.name}</p>
-                      <p className="text-[11px] text-[#7A756B] font-normal">{role.roleTitle}</p>
+                      <p className="font-bold text-foreground">{role.name}</p>
+                      <p className="text-[11px] text-muted-foreground font-normal">{role.roleTitle}</p>
                     </div>
 
-                    {isSelected && <Check className="h-4 w-4 text-[#B89B62]" />}
+                    {isSelected && <Check className="h-4 w-4 text-primary" />}
                   </button>
                 );
               })}

@@ -4,20 +4,17 @@ import React, { useState } from "react";
 import {
   Menu,
   Bell,
-  Search,
-  Check,
   LogOut,
   Calendar,
-  Building,
   User,
   Shield,
-  ExternalLink,
   ChevronDown,
+  Settings,
+  ShieldAlert,
 } from "lucide-react";
-import { RoleSwitcher } from "@/components/ui/role-switcher";
 import { CommandPalette } from "@/components/ui/command-palette";
-import { Badge } from "@/components/ui/badge";
-import { useRouter } from "next/navigation";
+import { ThemeToggle, ThemeDropdownItem } from "@/components/ui/theme-toggle";
+import { InstitutionSelector, InstitutionItem } from "@/components/ui/institution-selector";
 import Link from "next/link";
 import { formatDate } from "@/lib/utils";
 
@@ -28,7 +25,9 @@ export interface TopbarProps {
     email: string;
     roleCode: string;
     institutionName: string;
+    institutionId?: string;
   };
+  institutions?: InstitutionItem[];
   notifications?: Array<{
     id: string;
     title: string;
@@ -40,59 +39,108 @@ export interface TopbarProps {
   onOpenMobileSidebar: () => void;
 }
 
-export function Topbar({ user, notifications = [], onOpenMobileSidebar }: TopbarProps) {
+function formatTitleCase(str: string): string {
+  if (!str) return "";
+  return str
+    .toLowerCase()
+    .split(" ")
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(" ");
+}
+
+function formatRoleTitle(roleCode: string): string {
+  if (!roleCode) return "Staff";
+  switch (roleCode.toUpperCase()) {
+    case "SUPER_ADMIN":
+      return "Super Admin";
+    case "PRINCIPAL":
+      return "Principal";
+    case "TEACHER":
+      return "Faculty";
+    case "STUDENT":
+      return "Student";
+    case "PARENT":
+      return "Parent";
+    case "ACCOUNTANT":
+      return "Accountant";
+    case "ADMIN":
+      return "Administrator";
+    default:
+      return formatTitleCase(roleCode.replace(/_/g, " "));
+  }
+}
+
+export function Topbar({
+  user,
+  institutions = [],
+  notifications = [],
+  onOpenMobileSidebar,
+}: TopbarProps) {
   const [showNotifications, setShowNotifications] = useState(false);
   const [showUserMenu, setShowUserMenu] = useState(false);
-  const router = useRouter();
 
   const unreadCount = notifications.filter((n) => !n.isRead).length;
+  const isSuperAdmin = user.roleCode === "SUPER_ADMIN";
+  const formattedName = formatTitleCase(user.fullName || "User");
+  const formattedRole = formatRoleTitle(user.roleCode);
 
   const handleLogout = async () => {
-    await fetch("/api/auth/logout", { method: "POST" });
+    try {
+      await fetch("/api/auth/logout", { method: "POST" });
+    } catch {
+      // Continue redirect
+    }
     window.location.href = "/login";
   };
 
   return (
-    <header className="sticky top-0 z-30 flex h-20 shrink-0 items-center justify-between border-b border-[#E5E0D5] bg-[#F7F4ED]/95 px-6 sm:px-8 backdrop-blur-md">
+    <header className="sticky top-0 z-30 flex h-16 shrink-0 items-center justify-between border-b border-border bg-background/95 px-4 sm:px-6 lg:px-8 backdrop-blur-md transition-colors duration-200">
       {/* Left: Mobile Toggle & Global Search Command */}
-      <div className="flex items-center gap-3 sm:gap-4 flex-1 max-w-md">
+      <div className="flex items-center gap-3 flex-1 min-w-0 mr-3">
         <button
           type="button"
           onClick={onOpenMobileSidebar}
-          className="rounded-xl p-2 text-[#555047] hover:bg-[#FAF8F3] hover:text-[#171614] border border-[#E5E0D5] lg:hidden"
+          className="rounded-xl p-2 text-muted-foreground hover:bg-muted hover:text-foreground border border-border lg:hidden transition-colors shrink-0"
+          aria-label="Open sidebar navigation"
         >
           <Menu className="h-5 w-5" />
         </button>
 
-        {/* Global Command Search Palette */}
+        {/* Global Single-line Command Search */}
         <CommandPalette />
       </div>
 
-      {/* Right: Academic Context, Role Switcher, Notifications, User Menu */}
-      <div className="flex items-center gap-3">
-        {/* Subtle Academic Session Context */}
-        <div className="hidden md:flex items-center gap-1.5 text-xs text-[#555047] font-mono px-3 py-1.5 rounded-xl border border-[#DCD7CB] bg-[#FAF8F3] shadow-2xs">
-          <Calendar className="h-3.5 w-3.5 text-[#856D3B]" />
+      {/* Right: Institution Context (Super Admin), Academic Session, Notifications, Theme, User Menu */}
+      <div className="flex items-center gap-2 sm:gap-2.5 shrink-0">
+        {/* Super Admin Institution Selector */}
+        {isSuperAdmin && (
+          <InstitutionSelector
+            currentInstitutionId={user.institutionId}
+            currentInstitutionName={user.institutionName}
+            institutions={institutions}
+            isSuperAdmin={isSuperAdmin}
+          />
+        )}
+
+        {/* Academic Session Context */}
+        <div className="hidden xl:flex items-center gap-1.5 text-xs text-muted-foreground font-mono px-2.5 py-1.5 rounded-xl border border-border bg-card/80 shadow-2xs">
+          <Calendar className="h-3.5 w-3.5 text-primary" />
           <span>AY 2026–27 · Term 1</span>
         </div>
 
-        {/* Authenticated User Role Badge */}
-        <div className="hidden sm:flex items-center gap-1.5 text-xs text-[#555047] font-mono px-3 py-1.5 rounded-xl border border-[#DCD7CB] bg-[#FAF8F3] shadow-2xs">
-          <Shield className="h-3.5 w-3.5 text-[#856D3B]" />
-          <span className="font-bold text-[#171614] uppercase">{user.roleCode?.replace(/_/g, " ") || "MEMBER"}</span>
-        </div>
-
-        {/* Notification Trigger */}
+        {/* Notifications Popover */}
         <div className="relative">
           <button
             type="button"
             onClick={() => setShowNotifications(!showNotifications)}
-            className="relative rounded-xl p-2.5 text-[#555047] hover:bg-white hover:text-[#171614] border border-[#DCD7CB] bg-[#FAF8F3] transition-all shadow-2xs"
+            className="relative rounded-xl p-2 text-muted-foreground hover:bg-muted hover:text-foreground border border-border bg-card/80 transition-all shadow-2xs cursor-pointer"
+            aria-label="View notifications"
           >
             <Bell className="h-4 w-4" />
             {unreadCount > 0 && (
-              <span className="absolute right-1.5 top-1.5 flex h-2 w-2">
-                <span className="relative inline-flex h-2 w-2 rounded-full bg-[#8C4A47]" />
+              <span className="absolute right-1 top-1 flex h-2 w-2">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-destructive opacity-75" />
+                <span className="relative inline-flex h-2 w-2 rounded-full bg-destructive" />
               </span>
             )}
           </button>
@@ -103,26 +151,28 @@ export function Topbar({ user, notifications = [], onOpenMobileSidebar }: Topbar
                 className="fixed inset-0 z-40"
                 onClick={() => setShowNotifications(false)}
               />
-              <div className="absolute right-0 top-full mt-2 w-80 sm:w-96 rounded-2xl border border-[#E5E0D5] bg-white p-4 shadow-2xl z-50 animate-in fade-in zoom-in-95 duration-100 space-y-3">
-                <div className="flex items-center justify-between border-b border-[#EFECE3] pb-3">
-                  <span className="text-xs font-extrabold text-[#171614]">Notifications</span>
-                  <span className="text-[11px] font-mono text-[#7A756B]">{unreadCount} unread</span>
+              <div className="absolute right-0 top-full mt-2 w-80 sm:w-96 rounded-2xl border border-border bg-card p-4 shadow-2xl z-50 animate-in fade-in zoom-in-95 duration-100 space-y-3">
+                <div className="flex items-center justify-between border-b border-border/80 pb-3">
+                  <span className="text-xs font-bold text-foreground">Notifications</span>
+                  <span className="text-[11px] font-mono text-muted-foreground">{unreadCount} unread</span>
                 </div>
 
                 <div className="max-h-80 overflow-y-auto space-y-2">
                   {notifications.length === 0 ? (
-                    <p className="text-xs text-[#7A756B] py-4 text-center">No notifications at this time.</p>
+                    <p className="text-xs text-muted-foreground py-6 text-center">
+                      No new notifications for your profile.
+                    </p>
                   ) : (
                     notifications.map((n) => (
                       <div
                         key={n.id}
-                        className="p-2.5 rounded-xl border border-[#E5E0D5] bg-[#FAF8F3] text-xs space-y-1 hover:border-[#B89B62] transition-colors"
+                        className="p-3 rounded-xl border border-border bg-muted/30 text-xs space-y-1 hover:border-primary/50 transition-colors"
                       >
                         <div className="flex items-center justify-between">
-                          <p className="font-bold text-[#171614]">{n.title}</p>
-                          <span className="text-[10px] font-mono text-[#7A756B]">{formatDate(n.createdAt)}</span>
+                          <p className="font-semibold text-foreground">{n.title}</p>
+                          <span className="text-[10px] font-mono text-muted-foreground">{formatDate(n.createdAt)}</span>
                         </div>
-                        <p className="text-[#555047] text-[11px]">{n.message}</p>
+                        <p className="text-muted-foreground text-[11px] leading-relaxed">{n.message}</p>
                       </div>
                     ))
                   )}
@@ -132,47 +182,78 @@ export function Topbar({ user, notifications = [], onOpenMobileSidebar }: Topbar
           )}
         </div>
 
-        {/* User Menu Dropdown */}
+        {/* Theme Toggle (Unobtrusive) */}
+        <ThemeToggle className="hidden sm:flex" />
+
+        {/* User Profile Menu */}
         <div className="relative">
           <button
             type="button"
             onClick={() => setShowUserMenu(!showUserMenu)}
-            className="flex items-center gap-2 rounded-xl p-1.5 hover:bg-white border border-[#DCD7CB] bg-[#FAF8F3] transition-all shadow-2xs"
+            className="flex items-center gap-2 rounded-xl p-1.5 hover:bg-muted/80 border border-border bg-card/90 transition-all shadow-2xs cursor-pointer"
+            aria-label="User profile and settings"
           >
-            <div className="w-7 h-7 rounded-lg bg-[#1B1916] text-[#FAF8F3] flex items-center justify-center text-xs font-bold shadow-2xs">
-              {user.fullName ? user.fullName[0] : "U"}
+            <div className="w-7 h-7 rounded-lg bg-primary text-primary-foreground flex items-center justify-center text-xs font-bold shadow-2xs shrink-0">
+              {formattedName ? formattedName[0] : "U"}
             </div>
-            <div className="hidden sm:block text-left">
-              <p className="text-xs font-bold text-[#171614] leading-none">{user.fullName}</p>
-              <p className="text-[10px] font-mono text-[#7A756B] uppercase mt-0.5">{user.roleCode}</p>
+            <div className="hidden sm:block text-left mr-0.5">
+              <p className="text-xs font-semibold text-foreground leading-none">{formattedName}</p>
+              <p className="text-[10px] text-muted-foreground font-mono mt-0.5">{formattedRole}</p>
             </div>
-            <ChevronDown className="h-3.5 w-3.5 text-[#7A756B] hidden sm:block" />
+            <ChevronDown className="h-3.5 w-3.5 text-muted-foreground hidden sm:block" />
           </button>
 
           {showUserMenu && (
             <>
-              <div className="fixed inset-0 z-40" onClick={() => setShowUserMenu(false)} />
-              <div className="absolute right-0 top-full mt-2 w-56 rounded-2xl border border-[#E5E0D5] bg-white p-2 shadow-2xl z-50 animate-in fade-in zoom-in-95 duration-100 space-y-1 text-xs">
-                <div className="p-2.5 border-b border-[#EFECE3] bg-[#FAF8F3] rounded-xl">
-                  <p className="font-bold text-[#171614]">{user.fullName}</p>
-                  <p className="text-[11px] text-[#7A756B] truncate font-mono">{user.email}</p>
+              <div
+                className="fixed inset-0 z-40"
+                onClick={() => setShowUserMenu(false)}
+              />
+              <div className="absolute right-0 top-full mt-2 w-64 rounded-2xl border border-border bg-card p-2 shadow-2xl z-50 animate-in fade-in zoom-in-95 duration-100 space-y-1">
+                <div className="px-3 py-2.5 border-b border-border/80">
+                  <div className="flex items-center justify-between">
+                    <p className="text-xs font-bold text-foreground">{formattedName}</p>
+                    <span className="text-[10px] font-mono px-1.5 py-0.5 rounded-md bg-muted text-muted-foreground border border-border">
+                      {formattedRole}
+                    </span>
+                  </div>
+                  <p className="text-[11px] text-muted-foreground font-mono truncate mt-0.5">{user.email}</p>
+                  <p className="text-[10px] text-primary font-medium truncate mt-1">{user.institutionName}</p>
                 </div>
-                <Link
-                  href="/settings"
-                  onClick={() => setShowUserMenu(false)}
-                  className="flex items-center gap-2 p-2 rounded-xl text-[#35322C] hover:bg-[#FAF8F3] font-medium transition-colors"
-                >
-                  <Building className="h-3.5 w-3.5 text-[#7A756B]" />
-                  <span>Institution Profile</span>
-                </Link>
-                <button
-                  type="button"
-                  onClick={handleLogout}
-                  className="w-full flex items-center gap-2 p-2 rounded-xl text-[#6F3D3A] hover:bg-[#FBF4F4] font-medium transition-colors"
-                >
-                  <LogOut className="h-3.5 w-3.5" />
-                  <span>Sign Out</span>
-                </button>
+
+                {/* Appearance Switcher */}
+                <ThemeDropdownItem />
+
+                <div className="pt-1 border-t border-border/60">
+                  <Link
+                    href="/settings"
+                    onClick={() => setShowUserMenu(false)}
+                    className="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-medium text-muted-foreground hover:text-foreground hover:bg-muted transition-colors"
+                  >
+                    <Settings className="h-3.5 w-3.5 text-muted-foreground" />
+                    <span>Account Settings</span>
+                  </Link>
+
+                  {isSuperAdmin && (
+                    <Link
+                      href="/audit-logs"
+                      onClick={() => setShowUserMenu(false)}
+                      className="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-medium text-muted-foreground hover:text-foreground hover:bg-muted transition-colors"
+                    >
+                      <ShieldAlert className="h-3.5 w-3.5 text-muted-foreground" />
+                      <span>Security & Audit Logs</span>
+                    </Link>
+                  )}
+
+                  <button
+                    type="button"
+                    onClick={handleLogout}
+                    className="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-medium text-destructive hover:bg-destructive/10 transition-colors cursor-pointer"
+                  >
+                    <LogOut className="h-3.5 w-3.5" />
+                    <span>Sign Out</span>
+                  </button>
+                </div>
               </div>
             </>
           )}

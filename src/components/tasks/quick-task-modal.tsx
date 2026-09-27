@@ -104,42 +104,42 @@ export function QuickTaskModal({
     >
       {success ? (
         <div className="p-8 text-center space-y-3">
-          <div className="w-12 h-12 rounded-full bg-[#525E4B]/10 text-[#525E4B] flex items-center justify-center mx-auto">
+          <div className="w-12 h-12 rounded-full bg-success/10 text-success flex items-center justify-center mx-auto">
             <CheckCircle2 className="w-6 h-6" />
           </div>
-          <h4 className="text-sm font-bold text-[#171614] font-serif">Task Assigned Successfully</h4>
-          <p className="text-xs text-[#65705B]">
+          <h4 className="text-sm font-bold text-foreground font-serif">Task Assigned Successfully</h4>
+          <p className="text-xs text-accent">
             The task and activity timeline have been initialized and recorded in the audit log.
           </p>
         </div>
       ) : (
         <form onSubmit={handleSubmit} className="space-y-4 text-xs">
           {error && (
-            <div className="p-3 rounded-lg bg-[#8B3A3A]/10 border border-[#8B3A3A]/20 text-[#8B3A3A] flex items-center gap-2">
+            <div className="p-3 rounded-lg bg-destructive/10 border border-destructive/20 text-destructive flex items-center gap-2">
               <AlertCircle className="w-4 h-4 shrink-0" />
               <span>{error}</span>
             </div>
           )}
 
           <div>
-            <label className="block font-semibold text-[#171614] mb-1">Task Title *</label>
+            <label className="block font-semibold text-foreground mb-1">Task Title *</label>
             <input
               type="text"
               required
               value={formData.title}
               onChange={(e) => setFormData({ ...formData, title: e.target.value })}
               placeholder="e.g. Science Laboratory Inventory Audit Q3"
-              className="w-full rounded-lg border border-[#E5E0D5] bg-[#FAF8F3] p-2.5 text-xs text-[#171614] focus:outline-none focus:ring-1 focus:ring-[#171614]"
+              className="w-full rounded-lg border border-border bg-card p-2.5 text-xs text-foreground focus:outline-none focus:ring-1 focus:ring-[#171614]"
             />
           </div>
 
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="block font-semibold text-[#171614] mb-1">Assign To *</label>
+              <label className="block font-semibold text-foreground mb-1">Assign To *</label>
               <select
                 value={formData.assigneeUserId}
                 onChange={(e) => setFormData({ ...formData, assigneeUserId: e.target.value })}
-                className="w-full rounded-lg border border-[#E5E0D5] bg-[#FAF8F3] p-2.5 text-xs text-[#171614]"
+                className="w-full rounded-lg border border-border bg-card p-2.5 text-xs text-foreground"
               >
                 {isLoadingStaff ? (
                   <option value="">Loading faculty roster...</option>
@@ -156,11 +156,11 @@ export function QuickTaskModal({
             </div>
 
             <div>
-              <label className="block font-semibold text-[#171614] mb-1">Priority *</label>
+              <label className="block font-semibold text-foreground mb-1">Priority *</label>
               <select
                 value={formData.priority}
                 onChange={(e) => setFormData({ ...formData, priority: e.target.value })}
-                className="w-full rounded-lg border border-[#E5E0D5] bg-[#FAF8F3] p-2.5 text-xs text-[#171614]"
+                className="w-full rounded-lg border border-border bg-card p-2.5 text-xs text-foreground"
               >
                 <option value="LOW">Low</option>
                 <option value="MEDIUM">Medium</option>
@@ -171,28 +171,28 @@ export function QuickTaskModal({
           </div>
 
           <div>
-            <label className="block font-semibold text-[#171614] mb-1">Target Due Date</label>
+            <label className="block font-semibold text-foreground mb-1">Target Due Date</label>
             <input
               type="date"
               value={formData.dueDate}
               onChange={(e) => setFormData({ ...formData, dueDate: e.target.value })}
-              className="w-full rounded-lg border border-[#E5E0D5] bg-[#FAF8F3] p-2.5 text-xs text-[#171614]"
+              className="w-full rounded-lg border border-border bg-card p-2.5 text-xs text-foreground"
             />
           </div>
 
           <div>
-            <label className="block font-semibold text-[#171614] mb-1">Scope of Work & Instructions *</label>
+            <label className="block font-semibold text-foreground mb-1">Scope of Work & Instructions *</label>
             <textarea
               rows={3}
               required
               value={formData.description}
               onChange={(e) => setFormData({ ...formData, description: e.target.value })}
               placeholder="Outline specific objectives, checklist items, and institutional deliverables..."
-              className="w-full rounded-lg border border-[#E5E0D5] bg-[#FAF8F3] p-2.5 text-xs text-[#171614] focus:outline-none focus:ring-1 focus:ring-[#171614]"
+              className="w-full rounded-lg border border-border bg-card p-2.5 text-xs text-foreground focus:outline-none focus:ring-1 focus:ring-[#171614]"
             />
           </div>
 
-          <div className="flex justify-end gap-2 pt-4 border-t border-[#E5E0D5]">
+          <div className="flex justify-end gap-2 pt-4 border-t border-border">
             <Button type="button" variant="outline" size="sm" onClick={onClose} disabled={isSubmitting}>
               Cancel
             </Button>
