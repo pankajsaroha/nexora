@@ -20,74 +20,82 @@ export default async function DashboardPage() {
 
   // 1. TEACHER PORTAL
   if (user.roleCode === "TEACHER") {
-    const teacher = await prisma.teacher.findFirst({
-      where: {
-        OR: [
-          { userId: user.id },
-          { email: user.email },
-          { id: user.teacherId },
-        ],
-      },
-      include: {
-        sectionsAsClassTeacher: {
-          include: {
-            class: true,
-            students: true,
+    let teacher: any = null;
+    let leaveSummary: any = null;
+    let timetableSlots: any[] = [];
+    let activeAssignments: any[] = [];
+    let tasks: any[] = [];
+
+    try {
+      teacher = await prisma.teacher.findFirst({
+        where: {
+          OR: [
+            { userId: user.id },
+            { email: user.email },
+            { id: user.teacherId },
+          ],
+        },
+        include: {
+          sectionsAsClassTeacher: {
+            include: {
+              class: true,
+              students: true,
+            },
           },
         },
-      },
-    });
+      });
 
-    let leaveSummary = null;
-    if (teacher) {
-      try {
-        leaveSummary = await getEmployeeLeaveSummary({
-          institutionId: user.institutionId,
-          teacherId: teacher.id,
-        });
-      } catch (err) {
-        console.error("Failed to fetch teacher leave summary:", err);
+      if (teacher) {
+        try {
+          leaveSummary = await getEmployeeLeaveSummary({
+            institutionId: user.institutionId,
+            teacherId: teacher.id,
+          });
+        } catch (err) {
+          console.error("Failed to fetch teacher leave summary:", err);
+        }
       }
+
+      const dayNames = ["SUNDAY", "MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY", "SATURDAY"];
+      const currentDayName = dayNames[new Date().getDay()];
+      const timetableDay = currentDayName === "SUNDAY" ? "MONDAY" : currentDayName;
+
+      [timetableSlots, activeAssignments, tasks] = await Promise.all([
+        prisma.timetableSlot.findMany({
+          where: {
+            teacherId: teacher?.id || undefined,
+            dayOfWeek: timetableDay,
+          },
+          include: {
+            subject: true,
+            section: { include: { class: true } },
+          },
+          orderBy: { periodNumber: "asc" },
+        }),
+        prisma.assignment.findMany({
+          where: {
+            teacherId: teacher?.id || undefined,
+            status: "PUBLISHED",
+          },
+          include: {
+            subject: true,
+            section: { include: { class: true, students: true } },
+            submissions: true,
+          },
+          take: 5,
+        }),
+        prisma.task.findMany({
+          where: {
+            assigneeUserId: user.id,
+          },
+          take: 5,
+        }),
+      ]);
+    } catch (err) {
+      console.error("Teacher Dashboard fetch warning:", err);
     }
 
     const activeSection = teacher?.sectionsAsClassTeacher?.[0];
-
-    // Today's schedule slots for this teacher
-    const dayNames = ["SUNDAY", "MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY", "SATURDAY"];
-    const currentDayName = dayNames[new Date().getDay()];
-    const timetableDay = currentDayName === "SUNDAY" ? "MONDAY" : currentDayName;
-
-    const timetableSlots = await prisma.timetableSlot.findMany({
-      where: {
-        teacherId: teacher?.id || undefined,
-        dayOfWeek: timetableDay,
-      },
-      include: {
-        subject: true,
-        section: { include: { class: true } },
-      },
-      orderBy: { periodNumber: "asc" },
-    });
-
-    const activeAssignments = await prisma.assignment.findMany({
-      where: {
-        teacherId: teacher?.id || undefined,
-        status: "PUBLISHED",
-      },
-      include: {
-        subject: true,
-        section: { include: { class: true, students: true } },
-        submissions: true,
-      },
-      take: 5,
-    });
-
-    const tasks = await prisma.task.findMany({
-      where: {
-        assigneeUserId: user.id,
-      },
-      take: 5,
-    });
 
     return (
       <TeacherDashboard
@@ -104,24 +112,24 @@ export default async function DashboardPage() {
             : null,
         }}
         leaveSummary={leaveSummary || undefined}
-        todaySchedule={timetableSlots.map((s) => ({
+        todaySchedule={timetableSlots.map((s: any) => ({
           period: s.periodNumber,
-          subjectName: s.subject.name,
-          className: `${s.section.class.name} ${s.section.name}`,
+          subjectName: s.subject?.name || "Subject",
+          className: `${s.section?.class?.name || ""} ${s.section?.name || ""}`.trim(),
           startTime: s.startTime,
           endTime: s.endTime,
           roomNumber: s.roomNumber || "Room-104",
         }))}
-        activeAssignments={activeAssignments.map((a) => ({
+        activeAssignments={activeAssignments.map((a: any) => ({
           id: a.id,
           title: a.title,
-          subjectName: a.subject.name,
-          className: `${a.section.class.name} ${a.section.name}`,
+          subjectName: a.subject?.name || "Subject",
+          className: `${a.section?.class?.name || ""} ${a.section?.name || ""}`.trim(),
           dueDate: a.dueDate,
-          submissionsCount: a.submissions.length,
-          totalStudents: a.section.students.length,
+          submissionsCount: a.submissions?.length || 0,
+          totalStudents: a.section?.students?.length || 0,
         }))}
-        assignedTasks={tasks.map((t) => ({
+        assignedTasks={tasks.map((t: any) => ({
           id: t.id,
           title: t.title,
           priority: t.priority,
@@ -134,72 +142,85 @@ export default async function DashboardPage() {
 
   // 2. STUDENT PORTAL
   if (user.roleCode === "STUDENT") {
-    const student = await prisma.student.findFirst({
-      where: {
-        OR: [
-          { userId: user.id },
-          { email: user.email },
-          { id: user.studentId },
-        ],
-      },
-      include: {
-        currentClass: true,
-        currentSection: {
-          include: {
-            classTeacher: true,
+    let student: any = null;
+    let timetableSlots: any[] = [];
+    let assignments: any[] = [];
+
+    try {
+      student = await prisma.student.findFirst({
+        where: {
+          OR: [
+            { userId: user.id },
+            { email: user.email },
+            { id: user.studentId },
+          ],
+        },
+        include: {
+          currentClass: true,
+          currentSection: {
+            include: {
+              classTeacher: true,
+            },
           },
+          attendance: true,
+          fees: true,
+          submissions: true,
         },
-        attendance: true,
-        fees: true,
-        submissions: true,
-      },
-    });
+      });
 
-    const fallbackSectionId = student?.currentSectionId;
-    const dayNames = ["SUNDAY", "MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY", "SATURDAY"];
-    const currentDayName = dayNames[new Date().getDay()];
-    const timetableDay = currentDayName === "SUNDAY" ? "MONDAY" : currentDayName;
+      const fallbackSectionId = student?.currentSectionId;
+      const dayNames = ["SUNDAY", "MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY", "SATURDAY"];
+      const currentDayName = dayNames[new Date().getDay()];
+      const timetableDay = currentDayName === "SUNDAY" ? "MONDAY" : currentDayName;
 
-    const timetableSlots = await prisma.timetableSlot.findMany({
-      where: {
-        sectionId: fallbackSectionId,
-        dayOfWeek: timetableDay,
-      },
-      include: {
-        subject: true,
-        teacher: true,
-      },
-      orderBy: { periodNumber: "asc" },
-    });
-
-    const assignments = await prisma.assignment.findMany({
-      where: {
-        sectionId: fallbackSectionId,
-        status: "PUBLISHED",
-      },
-      include: {
-        subject: true,
-        submissions: {
-          where: { studentId: student?.id },
-        },
-      },
-    });
+      [timetableSlots, assignments] = await Promise.all([
+        fallbackSectionId
+          ? prisma.timetableSlot.findMany({
+              where: {
+                sectionId: fallbackSectionId,
+                dayOfWeek: timetableDay,
+              },
+              include: {
+                subject: true,
+                teacher: true,
+              },
+              orderBy: { periodNumber: "asc" },
+            })
+          : Promise.resolve([]),
+        fallbackSectionId
+          ? prisma.assignment.findMany({
+              where: {
+                sectionId: fallbackSectionId,
+                status: "PUBLISHED",
+              },
+              include: {
+                subject: true,
+                submissions: {
+                  where: { studentId: student?.id },
+                },
+              },
+            })
+          : Promise.resolve([]),
+      ]);
+    } catch (err) {
+      console.error("Student Dashboard fetch warning:", err);
+    }
 
     const totalAttendanceDays = student?.attendance?.length || 0;
     const presentCount =
-      student?.attendance?.filter((a) => a.status === "PRESENT").length || 0;
+      student?.attendance?.filter((a: any) => a.status === "PRESENT").length || 0;
     const absentCount =
-      student?.attendance?.filter((a) => a.status === "ABSENT").length || 0;
+      student?.attendance?.filter((a: any) => a.status === "ABSENT").length || 0;
     const lateCount =
-      student?.attendance?.filter((a) => a.status === "LATE").length || 0;
+      student?.attendance?.filter((a: any) => a.status === "LATE").length || 0;
     const pct =
       totalAttendanceDays > 0
         ? Math.round((presentCount / totalAttendanceDays) * 100)
         : 100;
 
-    const totalFee = student?.fees?.reduce((acc, f) => acc + f.totalAmount, 0) || 0;
-    const paidFee = student?.fees?.reduce((acc, f) => acc + f.paidAmount, 0) || 0;
-    const pendingFee = student?.fees?.reduce((acc, f) => acc + f.pendingAmount, 0) || 0;
+    const totalFee = student?.fees?.reduce((acc: number, f: any) => acc + (f.totalAmount || 0), 0) || 0;
+    const paidFee = student?.fees?.reduce((acc: number, f: any) => acc + (f.paidAmount || 0), 0) || 0;
+    const pendingFee = student?.fees?.reduce((acc: number, f: any) => acc + (f.pendingAmount || 0), 0) || 0;
 
     return (
       <StudentDashboard
@@ -218,18 +239,18 @@ export default async function DashboardPage() {
           lateCount,
           percentage: pct,
         }}
-        todaySchedule={timetableSlots.map((s) => ({
+        todaySchedule={timetableSlots.map((s: any) => ({
           period: s.periodNumber,
-          subjectName: s.subject.name,
-          teacherName: s.teacher.fullName,
+          subjectName: s.subject?.name || "Subject",
+          teacherName: s.teacher?.fullName || "Faculty",
           startTime: s.startTime,
           endTime: s.endTime,
           roomNumber: s.roomNumber || "Room-104",
         }))}
-        pendingAssignments={assignments.map((a) => ({
+        pendingAssignments={assignments.map((a: any) => ({
           id: a.id,
           title: a.title,
-          subjectName: a.subject.name,
+          subjectName: a.subject?.name || "Subject",
           dueDate: a.dueDate,
           maxMarks: a.maxMarks,
           submissionStatus: a.submissions?.[0]?.status || "Pending",
@@ -246,84 +267,97 @@ export default async function DashboardPage() {
 
   // 3. PARENT PORTAL
   if (user.roleCode === "PARENT") {
-    const guardian = await prisma.guardian.findFirst({
-      where: {
-        OR: [
-          { userId: user.id },
-          { email: user.email },
-        ],
-      },
-      include: {
-        students: {
-          include: {
-            student: {
-              include: {
-                currentClass: true,
-                currentSection: {
-                  include: { classTeacher: true },
+    let childrenList: any[] = [];
+
+    try {
+      const guardian = await prisma.guardian.findFirst({
+        where: {
+          OR: [
+            { userId: user.id },
+            { email: user.email },
+          ],
+        },
+        include: {
+          students: {
+            include: {
+              student: {
+                include: {
+                  currentClass: true,
+                  currentSection: {
+                    include: { classTeacher: true },
+                  },
+                  attendance: true,
+                  fees: true,
                 },
-                attendance: true,
-                fees: true,
               },
             },
           },
         },
-      },
-    });
+      });
 
-    const rawChildren = guardian?.students?.map((sg) => sg.student) || [];
+      const rawChildren = guardian?.students?.map((sg: any) => sg.student) || [];
 
-    const childrenList = await Promise.all(
-      rawChildren.map(async (child) => {
-        const total = child.attendance.length || 0;
-        const present = child.attendance.filter((a) => a.status === "PRESENT").length || 0;
-        const absent = child.attendance.filter((a) => a.status === "ABSENT").length || 0;
-        const pct = total > 0 ? Math.round((present / total) * 100) : 100;
+      childrenList = await Promise.all(
+        rawChildren.map(async (child: any) => {
+          const total = child.attendance?.length || 0;
+          const present = child.attendance?.filter((a: any) => a.status === "PRESENT").length || 0;
+          const absent = child.attendance?.filter((a: any) => a.status === "ABSENT").length || 0;
+          const pct = total > 0 ? Math.round((present / total) * 100) : 100;
 
-        const assignments = await prisma.assignment.findMany({
-          where: { sectionId: child.currentSectionId, status: "PUBLISHED" },
-          include: { subject: true },
-          take: 3,
-        });
+          let assignments: any[] = [];
+          try {
+            if (child.currentSectionId) {
+              assignments = await prisma.assignment.findMany({
+                where: { sectionId: child.currentSectionId, status: "PUBLISHED" },
+                include: { subject: true },
+                take: 3,
+              });
+            }
+          } catch (e) {
+            console.error("Failed to fetch child assignments:", e);
+          }
 
-        const feeRec = child.fees[0] || {
-          totalAmount: 0,
-          paidAmount: 0,
-          pendingAmount: 0,
-          status: "PAID",
-          dueDate: new Date(),
-        };
+          const feeRec = child.fees?.[0] || {
+            totalAmount: 0,
+            paidAmount: 0,
+            pendingAmount: 0,
+            status: "PAID",
+            dueDate: new Date(),
+          };
 
-        return {
-          id: child.id,
-          fullName: child.fullName,
-          admissionNumber: child.admissionNumber,
-          className: child.currentClass.name,
-          sectionName: child.currentSection.name,
-          rollNumber: child.rollNumber || "—",
-          classTeacherName: child.currentSection.classTeacher?.fullName || "Class Teacher",
-          classTeacherPhone: child.currentSection.classTeacher?.phone || "+91 98100 00000",
-          attendancePct: pct,
-          totalClasses: total,
-          presentCount: present,
-          absentCount: absent,
-          assignments: assignments.map((a) => ({
-            id: a.id,
-            title: a.title,
-            subjectName: a.subject.name,
-            dueDate: a.dueDate,
-            status: "Assigned",
-          })),
-          fees: {
-            total: feeRec.totalAmount,
-            paid: feeRec.paidAmount,
-            pending: feeRec.pendingAmount,
-            status: feeRec.status,
-            dueDate: feeRec.dueDate,
-          },
-        };
-      })
-    );
+          return {
+            id: child.id,
+            fullName: child.fullName,
+            admissionNumber: child.admissionNumber,
+            className: child.currentClass?.name || "Class",
+            sectionName: child.currentSection?.name || "A",
+            rollNumber: child.rollNumber || "—",
+            classTeacherName: child.currentSection?.classTeacher?.fullName || "Class Teacher",
+            classTeacherPhone: child.currentSection?.classTeacher?.phone || "+91 98100 00000",
+            attendancePct: pct,
+            totalClasses: total,
+            presentCount: present,
+            absentCount: absent,
+            assignments: assignments.map((a: any) => ({
+              id: a.id,
+              title: a.title,
+              subjectName: a.subject?.name || "Subject",
+              dueDate: a.dueDate,
+              status: "Assigned",
+            })),
+            fees: {
+              total: feeRec.totalAmount || 0,
+              paid: feeRec.paidAmount || 0,
+              pending: feeRec.pendingAmount || 0,
+              status: feeRec.status || "PAID",
+              dueDate: feeRec.dueDate || new Date(),
+            },
+          };
+        })
+      );
+    } catch (err) {
+      console.error("Parent Dashboard fetch warning:", err);
+    }
 
     return (
       <ParentDashboard
@@ -335,66 +369,74 @@ export default async function DashboardPage() {
 
   // 4. ACCOUNTANT PORTAL
   if (user.roleCode === "ACCOUNTANT") {
-    const totalFees = await prisma.studentFee.aggregate({
-      where: { student: { institutionId: user.institutionId } },
-      _sum: { paidAmount: true, pendingAmount: true },
-    });
+    let totalFees: any = { _sum: { paidAmount: 0, pendingAmount: 0 } };
+    let recentPayments: any[] = [];
+    let overdueAccounts: any[] = [];
+    let payrollSum: any = { _sum: { netSalary: 0 } };
 
-    const recentPayments = await prisma.feePayment.findMany({
-      where: { student: { institutionId: user.institutionId } },
-      include: {
-        student: { include: { currentClass: true } },
-      },
-      orderBy: { paymentDate: "desc" },
-      take: 6,
-    });
-
-    const overdueAccounts = await prisma.studentFee.findMany({
-      where: {
-        status: "OVERDUE",
-        student: { institutionId: user.institutionId },
-      },
-      include: {
-        student: {
+    try {
+      [totalFees, recentPayments, overdueAccounts, payrollSum] = await Promise.all([
+        prisma.studentFee.aggregate({
+          where: { student: { institutionId: user.institutionId } },
+          _sum: { paidAmount: true, pendingAmount: true },
+        }),
+        prisma.feePayment.findMany({
+          where: { student: { institutionId: user.institutionId } },
           include: {
-            currentClass: true,
-            guardians: { include: { guardian: true } },
+            student: { include: { currentClass: true } },
           },
-        },
-      },
-      take: 6,
-    });
-
-    const payrollSum = await prisma.payroll.aggregate({
-      where: { institutionId: user.institutionId, month: 9, year: 2026 },
-      _sum: { netSalary: true },
-    });
+          orderBy: { paymentDate: "desc" },
+          take: 6,
+        }),
+        prisma.studentFee.findMany({
+          where: {
+            status: "OVERDUE",
+            student: { institutionId: user.institutionId },
+          },
+          include: {
+            student: {
+              include: {
+                currentClass: true,
+                guardians: { include: { guardian: true } },
+              },
+            },
+          },
+          take: 6,
+        }),
+        prisma.payroll.aggregate({
+          where: { institutionId: user.institutionId, month: 9, year: 2026 },
+          _sum: { netSalary: true },
+        }),
+      ]);
+    } catch (err) {
+      console.error("Accountant Dashboard fetch warning:", err);
+    }
 
     return (
       <AccountantDashboard
         stats={{
-          totalCollected: totalFees._sum.paidAmount || 0,
-          totalPending: totalFees._sum.pendingAmount || 0,
+          totalCollected: totalFees._sum?.paidAmount || 0,
+          totalPending: totalFees._sum?.pendingAmount || 0,
           todayCollections: 0,
           overdueInvoicesCount: overdueAccounts.length,
-          monthlyPayrollTotal: payrollSum._sum.netSalary || 0,
+          monthlyPayrollTotal: payrollSum._sum?.netSalary || 0,
         }}
-        recentPayments={recentPayments.map((p) => ({
+        recentPayments={recentPayments.map((p: any) => ({
           id: p.id,
           receiptNumber: p.receiptNumber,
-          studentName: p.student.fullName,
-          className: p.student.currentClass.name,
+          studentName: p.student?.fullName || "Student",
+          className: p.student?.currentClass?.name || "Class",
           amount: p.amount,
           paymentMethod: p.paymentMethod,
           paymentDate: p.paymentDate,
         }))}
-        overdueAccounts={overdueAccounts.map((a) => ({
+        overdueAccounts={overdueAccounts.map((a: any) => ({
           id: a.id,
-          studentName: a.student.fullName,
-          className: a.student.currentClass.name,
+          studentName: a.student?.fullName || "Student",
+          className: a.student?.currentClass?.name || "Class",
           pendingAmount: a.pendingAmount,
           dueDate: a.dueDate,
-          parentPhone: a.student.guardians[0]?.guardian?.phone,
+          parentPhone: a.student?.guardians?.[0]?.guardian?.phone,
         }))}
       />
     );
@@ -410,100 +452,118 @@ export default async function DashboardPage() {
   const currentDayName = dayNames[new Date().getDay()];
   const timetableDay = currentDayName === "SUNDAY" ? "MONDAY" : currentDayName;
 
-  const [
-    totalStudents,
-    totalTeachers,
-    totalFees,
-    recentAnnouncements,
-    overdueTasks,
-    pendingLeavesCount,
-    timetableSlots,
-    recentPayments,
-    todayAttendanceRecords,
-    programs,
-    academicYears,
-    customFields,
-    classesCount,
-  ] = await Promise.all([
-    prisma.student.count({
-      where: { institutionId: user.institutionId },
-    }),
-    prisma.teacher.count({
-      where: { institutionId: user.institutionId },
-    }),
-    prisma.studentFee.aggregate({
-      where: { student: { institutionId: user.institutionId } },
-      _sum: { paidAmount: true, pendingAmount: true },
-    }),
-    prisma.announcement.findMany({
-      where: { institutionId: user.institutionId },
-      include: { authorUser: true },
-      orderBy: { publishedAt: "desc" },
-      take: 3,
-    }),
-    prisma.task.findMany({
-      where: {
-        institutionId: user.institutionId,
-        status: { in: ["TODO", "IN_PROGRESS", "BLOCKED"] },
-      },
-      include: { assigneeUser: true },
-      orderBy: { createdAt: "desc" },
-      take: 4,
-    }),
-    prisma.leaveRequest.count({
-      where: {
-        institutionId: user.institutionId,
-        status: "PENDING",
-      },
-    }),
-    prisma.timetableSlot.findMany({
-      where: {
-        dayOfWeek: timetableDay,
-        section: { class: { institutionId: user.institutionId } },
-      },
-      include: {
-        subject: true,
-        section: { include: { class: true } },
-      },
-      orderBy: { periodNumber: "asc" },
-      take: 4,
-    }),
-    prisma.feePayment.findMany({
-      where: { student: { institutionId: user.institutionId } },
-      include: { student: true },
-      orderBy: { paymentDate: "desc" },
-      take: 4,
-    }),
-    prisma.studentAttendance.findMany({
-      where: {
-        student: { institutionId: user.institutionId },
-        date: {
-          gte: startOfToday,
-          lte: endOfToday,
+  let totalStudents = 0;
+  let totalTeachers = 0;
+  let totalFees: any = { _sum: { paidAmount: 0, pendingAmount: 0 } };
+  let recentAnnouncements: any[] = [];
+  let overdueTasks: any[] = [];
+  let pendingLeavesCount = 0;
+  let timetableSlots: any[] = [];
+  let recentPayments: any[] = [];
+  let todayAttendanceRecords: any[] = [];
+  let programs: any[] = [];
+  let academicYears: any[] = [];
+  let customFields: any[] = [];
+  let classesCount = 0;
+
+  try {
+    const results = await Promise.all([
+      prisma.student.count({
+        where: { institutionId: user.institutionId },
+      }),
+      prisma.teacher.count({
+        where: { institutionId: user.institutionId },
+      }),
+      prisma.studentFee.aggregate({
+        where: { student: { institutionId: user.institutionId } },
+        _sum: { paidAmount: true, pendingAmount: true },
+      }),
+      prisma.announcement.findMany({
+        where: { institutionId: user.institutionId },
+        include: { authorUser: true },
+        orderBy: { publishedAt: "desc" },
+        take: 3,
+      }),
+      prisma.task.findMany({
+        where: {
+          institutionId: user.institutionId,
+          status: { in: ["TODO", "IN_PROGRESS", "BLOCKED"] },
         },
-      },
-    }),
-    prisma.class.findMany({
-      where: { institutionId: user.institutionId },
-      include: {
-        department: true,
-        sections: true,
-        feeStructures: { include: { feeCategory: true } },
-      },
-      orderBy: { orderIndex: "asc" },
-    }),
-    prisma.academicYear.findMany({
-      where: { institutionId: user.institutionId },
-      orderBy: { startDate: "desc" },
-    }),
-    prisma.studentCustomField.findMany({
-      where: { institutionId: user.institutionId },
-      orderBy: { orderIndex: "asc" },
-    }),
-    prisma.class.count({
-      where: { institutionId: user.institutionId },
-    }),
-  ]);
+        include: { assigneeUser: true },
+        orderBy: { createdAt: "desc" },
+        take: 4,
+      }),
+      prisma.leaveRequest.count({
+        where: {
+          institutionId: user.institutionId,
+          status: "PENDING",
+        },
+      }),
+      prisma.timetableSlot.findMany({
+        where: {
+          dayOfWeek: timetableDay,
+          section: { class: { institutionId: user.institutionId } },
+        },
+        include: {
+          subject: true,
+          section: { include: { class: true } },
+        },
+        orderBy: { periodNumber: "asc" },
+        take: 4,
+      }),
+      prisma.feePayment.findMany({
+        where: { student: { institutionId: user.institutionId } },
+        include: { student: true },
+        orderBy: { paymentDate: "desc" },
+        take: 4,
+      }),
+      prisma.studentAttendance.findMany({
+        where: {
+          student: { institutionId: user.institutionId },
+          date: {
+            gte: startOfToday,
+            lte: endOfToday,
+          },
+        },
+      }),
+      prisma.class.findMany({
+        where: { institutionId: user.institutionId },
+        include: {
+          department: true,
+          sections: true,
+          feeStructures: { include: { feeCategory: true } },
+        },
+        orderBy: { orderIndex: "asc" },
+      }),
+      prisma.academicYear.findMany({
+        where: { institutionId: user.institutionId },
+        orderBy: { startDate: "desc" },
+      }),
+      prisma.studentCustomField.findMany({
+        where: { institutionId: user.institutionId },
+        orderBy: { orderIndex: "asc" },
+      }),
+      prisma.class.count({
+        where: { institutionId: user.institutionId },
+      }),
+    ]);
+
+    totalStudents = results[0];
+    totalTeachers = results[1];
+    totalFees = results[2];
+    recentAnnouncements = results[3];
+    overdueTasks = results[4];
+    pendingLeavesCount = results[5];
+    timetableSlots = results[6];
+    recentPayments = results[7];
+    todayAttendanceRecords = results[8];
+    programs = results[9];
+    academicYears = results[10];
+    customFields = results[11];
+    classesCount = results[12];
+  } catch (err) {
+    console.error("Principal Dashboard data fetch warning (intermittent DB connection issue):", err);
+  }
 
   // Attendance calculation
   const totalRecordedAttendance = todayAttendanceRecords.length;

@@ -226,7 +226,7 @@ export function PayrollClient({
         <Modal
           isOpen={!!selectedPayslip}
           onClose={() => setSelectedPayslip(null)}
-          title="Staff Salary Payslip Dossier"
+          title="Staff Salary Payslip"
           description={`Cycle: September 2026 • Employee: ${selectedPayslip.teacherName} (${selectedPayslip.employeeId})`}
           size="lg"
         >

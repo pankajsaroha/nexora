@@ -103,7 +103,7 @@ export function LandingGateway({ stats }: LandingGatewayProps) {
         <section className="grid grid-cols-2 md:grid-cols-4 gap-3 max-w-4xl mx-auto">
           {[
             { label: "Active Students", value: `${stats.studentCount || 350}+`, meta: "Enrolled across Grades 5-12" },
-            { label: "Faculty & Staff", value: `${stats.teacherCount || 35}`, meta: "Verified teaching dossiers" },
+            { label: "Faculty & Staff", value: `${stats.teacherCount || 35}`, meta: "Verified faculty & staff" },
             { label: "Academic Cohorts", value: `${stats.cohortCount || 19}`, meta: "Timetable periods synced" },
             { label: "Attendance Integrity", value: "92.4%", meta: "Daily biometrics & roll call" },
           ].map((item, idx) => (

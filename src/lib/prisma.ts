@@ -13,8 +13,7 @@ if (!databaseUrl && process.env.NODE_ENV === "production") {
   );
 }
 
-export const prisma =
-  global.globalPrisma ||
+const createPrismaClient = () =>
   new PrismaClient({
     datasources: databaseUrl
       ? {
@@ -26,7 +25,8 @@ export const prisma =
     log: process.env.NODE_ENV === "development" ? ["warn", "error"] : ["error"],
   });
 
+export const prisma = global.globalPrisma || createPrismaClient();
+
 if (process.env.NODE_ENV !== "production") {
   global.globalPrisma = prisma;
 }
-

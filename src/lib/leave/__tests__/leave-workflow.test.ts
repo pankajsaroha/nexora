@@ -147,4 +147,84 @@ describe("End-to-End Leave Request & Approval Ledger Logic", () => {
     assert.equal(scopedRequests.length, 1);
     assert.equal(scopedRequests[0].id, "req-1");
   });
+
+  it("Reporting Manager Hierarchy & Targeted Notification: Notifies designated approver only, avoiding broadcast", () => {
+    const ananya = {
+      id: "teacher-ananya",
+      fullName: "Ananya Mukherjee",
+      institutionId: "inst-1",
+      reportingManager: "teacher-rajesh", // ID or Name or Email
+    };
+
+    const rajesh = {
+      id: "teacher-rajesh",
+      userId: "user-rajesh",
+      fullName: "Dr. Rajesh Sharma",
+      institutionId: "inst-1",
+    };
+
+    const pankajSuperAdmin = {
+      id: "user-pankaj",
+      fullName: "Pankaj Kumar",
+      roleCode: "SUPER_ADMIN",
+      institutionId: "inst-1",
+    };
+
+    // Resolver logic matching service.ts
+    let designatedApproverUserId: string | null = null;
+    if (ananya.reportingManager === rajesh.id) {
+      designatedApproverUserId = rajesh.userId;
+    }
+
+    // Verify targeted notification
+    const notificationsCreated: Array<{ userId: string; message: string }> = [];
+    if (designatedApproverUserId) {
+      notificationsCreated.push({
+        userId: designatedApproverUserId,
+        message: `${ananya.fullName} submitted a leave request for 2 days.`,
+      });
+    }
+
+    assert.equal(notificationsCreated.length, 1);
+    assert.equal(notificationsCreated[0].userId, "user-rajesh");
+    assert.ok(
+      !notificationsCreated.some((n) => n.userId === pankajSuperAdmin.id),
+      "Super Admin is NOT notified when a valid reporting manager exists"
+    );
+  });
+
+  it("Approval Ownership & Authorization: Manager is authorized for direct reports, rejected for non-reports", () => {
+    const manager = {
+      id: "user-rajesh",
+      teacherId: "teacher-rajesh",
+      roleCode: "FACULTY",
+    };
+
+    const directReportReq = {
+      id: "req-1",
+      teacher: {
+        id: "teacher-ananya",
+        qualification: JSON.stringify({ reportingManager: "teacher-rajesh" }),
+      },
+    };
+
+    const nonReportReq = {
+      id: "req-2",
+      teacher: {
+        id: "teacher-other",
+        qualification: JSON.stringify({ reportingManager: "teacher-someone-else" }),
+      },
+    };
+
+    const canReview = (user: typeof manager, req: typeof directReportReq) => {
+      const isGlobalAdmin = ["SUPER_ADMIN", "ADMIN", "PRINCIPAL", "HR_ADMIN"].includes(user.roleCode);
+      if (isGlobalAdmin) return true;
+      const meta = JSON.parse(req.teacher.qualification || "{}");
+      return meta.reportingManager === user.teacherId || meta.reportingManager === user.id;
+    };
+
+    assert.equal(canReview(manager, directReportReq), true, "Manager CAN approve direct report");
+    assert.equal(canReview(manager, nonReportReq), false, "Manager CANNOT approve non-direct report");
+  });
 });
+

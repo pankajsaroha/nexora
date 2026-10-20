@@ -34,6 +34,7 @@ export interface TopbarProps {
     message: string;
     type: string;
     isRead: boolean;
+    linkUrl?: string | null;
     createdAt: string | Date;
   }>;
   onOpenMobileSidebar: () => void;
@@ -164,16 +165,18 @@ export function Topbar({
                     </p>
                   ) : (
                     notifications.map((n) => (
-                      <div
+                      <Link
                         key={n.id}
-                        className="p-3 rounded-xl border border-border bg-muted/30 text-xs space-y-1 hover:border-primary/50 transition-colors"
+                        href={n.linkUrl || "/attendance/leaves"}
+                        onClick={() => setShowNotifications(false)}
+                        className="block p-3 rounded-xl border border-border bg-muted/30 text-xs space-y-1 hover:border-primary/50 transition-colors"
                       >
                         <div className="flex items-center justify-between">
                           <p className="font-semibold text-foreground">{n.title}</p>
                           <span className="text-[10px] font-mono text-muted-foreground">{formatDate(n.createdAt)}</span>
                         </div>
                         <p className="text-muted-foreground text-[11px] leading-relaxed">{n.message}</p>
-                      </div>
+                      </Link>
                     ))
                   )}
                 </div>

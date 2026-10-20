@@ -26,27 +26,58 @@ export async function GET(req: NextRequest) {
     const teacherIdParam = searchParams.get("teacherId");
     const statusParam = searchParams.get("status");
 
-    const canManage = ["SUPER_ADMIN", "ADMIN", "PRINCIPAL", "HR_ADMIN"].includes(user.roleCode || "");
+    const canManage = ["SUPER_ADMIN", "ADMIN", "PRINCIPAL", "HR_ADMIN", "DIRECTOR", "DEAN"].includes(user.roleCode || "");
 
     let targetTeacherId = teacherIdParam;
+    let allowedTeacherIds: string[] | null = null;
+
     if (!canManage) {
-      const myTeacher = await prisma.teacher.findFirst({
-        where: {
-          institutionId: user.institutionId,
-          OR: [{ userId: user.id }, { email: user.email }, { id: user.teacherId }],
-        },
+      const { parseStaffMetadata } = await import("@/lib/staff");
+      const allTeachers = await prisma.teacher.findMany({
+        where: { institutionId: user.institutionId },
+        select: { id: true, employeeId: true, email: true, fullName: true, qualification: true, userId: true },
       });
-      if (!myTeacher) {
+
+      const myTeacher = allTeachers.find(
+        (t) => t.userId === user.id || t.email === user.email || t.id === user.teacherId
+      );
+
+      const directReportTeacherIds = allTeachers
+        .filter((t) => {
+          const meta = parseStaffMetadata(t.qualification);
+          if (!meta.reportingManager) return false;
+          return (
+            meta.reportingManager === user.id ||
+            meta.reportingManager === user.email ||
+            (user.teacherId && meta.reportingManager === user.teacherId) ||
+            (myTeacher && meta.reportingManager === myTeacher.id) ||
+            meta.reportingManager.toLowerCase() === user.fullName.toLowerCase()
+          );
+        })
+        .map((t) => t.id);
+
+      if (!myTeacher && directReportTeacherIds.length === 0) {
         return NextResponse.json({ leaveRequests: [] });
       }
-      targetTeacherId = myTeacher.id;
+
+      if (directReportTeacherIds.length > 0) {
+        allowedTeacherIds = myTeacher ? [myTeacher.id, ...directReportTeacherIds] : directReportTeacherIds;
+      } else if (myTeacher) {
+        targetTeacherId = myTeacher.id;
+      }
     }
 
     const where: any = {
       institutionId: user.institutionId,
     };
 
-    if (targetTeacherId) {
+    if (allowedTeacherIds && allowedTeacherIds.length > 0) {
+      if (targetTeacherId && allowedTeacherIds.includes(targetTeacherId)) {
+        where.teacherId = targetTeacherId;
+      } else {
+        where.teacherId = { in: allowedTeacherIds };
+      }
+    } else if (targetTeacherId) {
       where.teacherId = targetTeacherId;
     }
 

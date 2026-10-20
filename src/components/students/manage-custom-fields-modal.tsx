@@ -290,7 +290,7 @@ export function ManageCustomFieldsModal({
       isOpen={isOpen}
       onClose={onClose}
       title="Manage Student Custom Fields"
-      description="Configure institutional custom fields for student records, enrollment forms, and dossiers."
+      description="Configure institutional custom fields for student records, enrollment forms, and profiles."
       size="xl"
     >
       <div className="space-y-6 text-xs">

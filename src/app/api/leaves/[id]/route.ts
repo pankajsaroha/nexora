@@ -54,17 +54,28 @@ export async function PATCH(
       return NextResponse.json({ error: "Leave request not found." }, { status: 404 });
     }
 
+    const { parseStaffMetadata } = await import("@/lib/staff");
+    const teacherMeta = parseStaffMetadata(existingReq.teacher.qualification);
+    const isReportingManager =
+      !!teacherMeta.reportingManager &&
+      (teacherMeta.reportingManager === user.id ||
+        teacherMeta.reportingManager === user.email ||
+        (user.teacherId && teacherMeta.reportingManager === user.teacherId) ||
+        teacherMeta.reportingManager.toLowerCase() === user.fullName.toLowerCase());
+
+    const hasApprovalAuthority = canApprove || isReportingManager;
+
     // If teacher is cancelling their own request
     const isOwnerTeacher =
       user.teacherId === existingReq.teacherId ||
       existingReq.teacher.userId === user.id ||
       existingReq.teacher.email === user.email;
 
-    if (targetStatus === "CANCELLED" && (canApprove || isOwnerTeacher)) {
+    if (targetStatus === "CANCELLED" && (hasApprovalAuthority || isOwnerTeacher)) {
       // Allowed cancellation
-    } else if (!canApprove) {
+    } else if (!hasApprovalAuthority) {
       return NextResponse.json(
-        { error: "Forbidden: Only designated administrators / principals can approve or reject leaves." },
+        { error: "Forbidden: You do not have authority to approve or reject this leave request." },
         { status: 403 }
       );
     }

@@ -104,7 +104,7 @@ export default function LoginPage() {
           </h1>
 
           <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed max-w-lg">
-            Sign in to access your institution&apos;s operational dossiers, student directories, academic timetables, fee collection ledgers, and executive governance tools.
+            Sign in to access your institution&apos;s operational records, student directories, academic timetables, fee collection ledgers, and executive governance tools.
           </p>
 
           <div className="pt-4 border-t border-border space-y-3">

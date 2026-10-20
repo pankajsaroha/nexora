@@ -45,7 +45,7 @@ export function ProductPillars() {
       },
       items: [
         { label: "Student Registry", icon: Users, note: "Admission #, guardian link, academic history" },
-        { label: "Faculty & Staff Dossiers", icon: GraduationCap, note: "Department, designation, lecture rosters" },
+        { label: "Faculty & Staff Directory", icon: GraduationCap, note: "Department, designation, lecture rosters" },
         { label: "Family / Guardian Portals", icon: Users, note: "Multi-child switcher & instant updates" },
         { label: "Role-Based Access Control", icon: CheckCircle2, note: "Strict multi-tenant data isolation" },
       ],

@@ -19,30 +19,73 @@ export default async function AttendanceLeavesPage() {
     redirect("/login");
   }
 
-  const isAdminOrReviewer = [
-    "SUPER_ADMIN",
-    "ADMIN",
-    "PRINCIPAL",
-    "HR_ADMIN",
-    "DIRECTOR",
-    "DEAN",
-  ].includes(user.roleCode || "") || hasPermission(user, PERMISSIONS.LEAVE_APPROVE);
+  const { parseStaffMetadata } = await import("@/lib/staff");
 
-  // 1. ADMIN / SUPER ADMIN / PRINCIPAL VIEW: Institution-level Leave Management
+  // Check if current user is an institution administrator or has direct reports
+  const allTeachersInInstitution = await prisma.teacher.findMany({
+    where: { institutionId: user.institutionId },
+    select: { id: true, employeeId: true, email: true, fullName: true, qualification: true },
+  });
+
+  const directReportTeacherIds = allTeachersInInstitution
+    .filter((t) => {
+      const meta = parseStaffMetadata(t.qualification);
+      if (!meta.reportingManager) return false;
+      return (
+        meta.reportingManager === user.id ||
+        meta.reportingManager === user.email ||
+        (user.teacherId && meta.reportingManager === user.teacherId) ||
+        meta.reportingManager.toLowerCase() === user.fullName.toLowerCase()
+      );
+    })
+    .map((t) => t.id);
+
+  const isManagerWithDirectReports = directReportTeacherIds.length > 0;
+
+  const isAdminOrReviewer =
+    [
+      "SUPER_ADMIN",
+      "ADMIN",
+      "PRINCIPAL",
+      "HR_ADMIN",
+      "DIRECTOR",
+      "DEAN",
+    ].includes(user.roleCode || "") ||
+    hasPermission(user, PERMISSIONS.LEAVE_APPROVE) ||
+    isManagerWithDirectReports;
+
+  // 1. ADMIN / SUPER ADMIN / PRINCIPAL / MANAGER VIEW: Leave Management
   if (isAdminOrReviewer) {
     const [leaveYear, policy] = await Promise.all([
       getOrCreateCurrentLeaveYear(user.institutionId),
       ensureInstitutionLeavePolicy(user.institutionId),
     ]);
 
+    const isGlobalAdmin = [
+      "SUPER_ADMIN",
+      "ADMIN",
+      "PRINCIPAL",
+      "HR_ADMIN",
+      "DIRECTOR",
+      "DEAN",
+    ].includes(user.roleCode || "") || hasPermission(user, PERMISSIONS.LEAVE_APPROVE);
+
+    const targetTeacherWhere: any = { institutionId: user.institutionId };
+    const targetRequestWhere: any = { institutionId: user.institutionId };
+
+    if (!isGlobalAdmin && isManagerWithDirectReports) {
+      targetTeacherWhere.id = { in: directReportTeacherIds };
+      targetRequestWhere.teacherId = { in: directReportTeacherIds };
+    }
+
     const [teachers, leaveRequests, leaveTypes] = await Promise.all([
       prisma.teacher.findMany({
-        where: { institutionId: user.institutionId },
+        where: targetTeacherWhere,
         include: { department: true },
         orderBy: { employeeId: "asc" },
       }),
       prisma.leaveRequest.findMany({
-        where: { institutionId: user.institutionId },
+        where: targetRequestWhere,
         include: { teacher: true, leaveTypeRel: true },
         orderBy: { createdAt: "desc" },
       }),
@@ -52,7 +95,7 @@ export default async function AttendanceLeavesPage() {
       }),
     ]);
 
-    const canApprove = hasPermission(user, PERMISSIONS.LEAVE_APPROVE) || isAdminOrReviewer;
+    const canApprove = true;
 
     // Fetch summaries for all teachers across the institution
     const staffBalances = await Promise.all(

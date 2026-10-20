@@ -1,5 +1,6 @@
 import { prisma } from "@/lib/prisma";
 import { logAuditEvent } from "@/lib/audit";
+import { parseStaffMetadata } from "@/lib/staff";
 
 export interface LeaveBalanceSummaryItem {
   leaveTypeId: string;
@@ -475,6 +476,74 @@ export async function submitLeaveRequest({
     );
   }
 
+  // Resolve applying teacher & designated approver
+  const teacher = await prisma.teacher.findFirst({
+    where: { id: teacherId, institutionId },
+    select: {
+      id: true,
+      fullName: true,
+      employeeId: true,
+      qualification: true,
+      userId: true,
+    },
+  });
+
+  let designatedApproverUserId: string | null = null;
+  if (teacher) {
+    const meta = parseStaffMetadata(teacher.qualification);
+    if (meta.reportingManager) {
+      const managerTeacher = await prisma.teacher.findFirst({
+        where: {
+          institutionId,
+          OR: [
+            { id: meta.reportingManager },
+            { employeeId: meta.reportingManager },
+            { email: meta.reportingManager },
+            { userId: meta.reportingManager },
+            { fullName: { equals: meta.reportingManager, mode: "insensitive" } },
+          ],
+        },
+        select: { userId: true },
+      });
+
+      if (managerTeacher?.userId) {
+        designatedApproverUserId = managerTeacher.userId;
+      } else {
+        const managerUser = await prisma.user.findFirst({
+          where: {
+            institutionId,
+            isActive: true,
+            OR: [
+              { id: meta.reportingManager },
+              { email: meta.reportingManager },
+              { fullName: { equals: meta.reportingManager, mode: "insensitive" } },
+            ],
+          },
+          select: { id: true },
+        });
+        if (managerUser) {
+          designatedApproverUserId = managerUser.id;
+        }
+      }
+    }
+
+    // Safe fallback: Institution administrative authority (Principal / HR Admin / Admin)
+    if (!designatedApproverUserId) {
+      const fallbackAuthority = await prisma.user.findFirst({
+        where: {
+          institutionId,
+          isActive: true,
+          roleCode: { in: ["PRINCIPAL", "HR_ADMIN", "ADMIN"] },
+        },
+        orderBy: { createdAt: "asc" },
+        select: { id: true },
+      });
+      if (fallbackAuthority) {
+        designatedApproverUserId = fallbackAuthority.id;
+      }
+    }
+  }
+
   return await prisma.$transaction(async (tx) => {
     const leaveRequest = await tx.leaveRequest.create({
       data: {
@@ -503,6 +572,27 @@ export async function submitLeaveRequest({
         pendingDays: { increment: totalDays },
       },
     });
+
+    // Send targeted notification ONLY to the designated approver (never broadcast to all admins)
+    if (designatedApproverUserId) {
+      const applicantName = teacher?.fullName || "Faculty member";
+      const sDateStr = new Date(startDate).toLocaleDateString();
+      const eDateStr = new Date(endDate).toLocaleDateString();
+
+      await tx.notification.create({
+        data: {
+          userId: designatedApproverUserId,
+          institutionId,
+          title: `Leave Request: ${applicantName}`,
+          message: `${applicantName} submitted a leave request for ${totalDays} day(s) (${sDateStr} - ${eDateStr}).`,
+          type: "LEAVE",
+          isRead: false,
+          linkUrl: "/attendance/leaves",
+          relatedEntity: "LeaveRequest",
+          relatedEntityId: leaveRequest.id,
+        },
+      });
+    }
 
     return leaveRequest;
   });
@@ -673,6 +763,37 @@ export async function reviewLeaveRequest({
         status,
       },
     });
+
+    // Notify the applicant teacher of the review decision
+    if (request.teacher?.userId) {
+      const decisionTitle =
+        status === "APPROVED"
+          ? "Leave Request Approved"
+          : status === "REJECTED"
+          ? "Leave Request Rejected"
+          : "Leave Request Cancelled";
+
+      const decisionMsg =
+        status === "APPROVED"
+          ? `Your ${request.leaveType} leave for ${request.totalDays} day(s) has been approved by ${reviewerName || "your supervisor"}.`
+          : status === "REJECTED"
+          ? `Your ${request.leaveType} leave for ${request.totalDays} day(s) was rejected${rejectionReason ? `: ${rejectionReason}` : "."}`
+          : `Your ${request.leaveType} leave for ${request.totalDays} day(s) has been cancelled.`;
+
+      await tx.notification.create({
+        data: {
+          userId: request.teacher.userId,
+          institutionId,
+          title: decisionTitle,
+          message: decisionMsg,
+          type: "LEAVE",
+          isRead: false,
+          linkUrl: "/attendance/leaves",
+          relatedEntity: "LeaveRequest",
+          relatedEntityId: request.id,
+        },
+      });
+    }
 
     return { request: updatedRequest, account: updatedAccount };
   });

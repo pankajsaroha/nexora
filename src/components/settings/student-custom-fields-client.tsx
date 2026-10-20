@@ -269,7 +269,7 @@ export function StudentCustomFieldsClient({
           <h3 className="text-sm font-bold text-foreground">Hybrid Field Architecture</h3>
         </div>
         <p className="text-xs text-muted-foreground leading-relaxed">
-          Nexora combines <strong>Fixed Strongly-Typed Core Fields</strong> (Names, DOB, Gender, Guardians, Cohorts, Roll Numbers) with <strong>Institution-Specific Custom Attributes</strong> (e.g. APAAR ID, Scholarship Tier, Transport Stop, Hostel Needs). Configured fields appear seamlessly in the New Student Admission workflow and student dossiers.
+          Nexora combines <strong>Fixed Strongly-Typed Core Fields</strong> (Names, DOB, Gender, Guardians, Cohorts, Roll Numbers) with <strong>Institution-Specific Custom Attributes</strong> (e.g. APAAR ID, Scholarship Tier, Transport Stop, Hostel Needs). Configured fields appear seamlessly in the New Student Admission workflow and student profiles and records.
         </p>
       </div>
 

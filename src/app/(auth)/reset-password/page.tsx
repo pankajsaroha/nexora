@@ -215,7 +215,7 @@ export default function ResetPasswordPage() {
           </h1>
 
           <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed max-w-lg">
-            Choose a strong, confidential password to protect your institutional databases, student dossiers, fee collection records, and administrative controls.
+            Choose a strong, confidential password to protect your institutional databases, student records, fee collection records, and administrative controls.
           </p>
 
           <div className="pt-4 border-t border-border space-y-3">

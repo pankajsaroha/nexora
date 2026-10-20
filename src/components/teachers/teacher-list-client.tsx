@@ -223,7 +223,14 @@ export function TeacherListClient({
 
       {/* HR Metric Strip */}
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
-        <div className="p-3.5 rounded-xl bg-card border border-border shadow-2xs space-y-1">
+        <div
+          onClick={() => {
+            setSelectedStaffType("ALL");
+            setSelectedStatus("ALL");
+            setCurrentPage(1);
+          }}
+          className="p-3.5 rounded-xl bg-card border border-border shadow-2xs space-y-1 cursor-pointer hover:border-primary/40 transition-all select-none"
+        >
           <div className="flex items-center justify-between text-muted-foreground">
             <span className="text-[11px] font-medium">Total Staff</span>
             <Users className="w-3.5 h-3.5 text-muted-foreground opacity-70" />
@@ -231,7 +238,13 @@ export function TeacherListClient({
           <div className="text-xl font-bold text-foreground">{hrStats.totalStaff}</div>
         </div>
 
-        <div className="p-3.5 rounded-xl bg-card border border-border shadow-2xs space-y-1">
+        <div
+          onClick={() => {
+            setSelectedStaffType("TEACHING");
+            setCurrentPage(1);
+          }}
+          className="p-3.5 rounded-xl bg-card border border-border shadow-2xs space-y-1 cursor-pointer hover:border-primary/40 transition-all select-none"
+        >
           <div className="flex items-center justify-between text-muted-foreground">
             <span className="text-[11px] font-medium">Teaching Faculty</span>
             <GraduationCap className="w-3.5 h-3.5 text-muted-foreground opacity-70" />
@@ -239,7 +252,13 @@ export function TeacherListClient({
           <div className="text-xl font-bold text-foreground">{hrStats.teachingCount}</div>
         </div>
 
-        <div className="p-3.5 rounded-xl bg-card border border-border shadow-2xs space-y-1">
+        <div
+          onClick={() => {
+            setSelectedStaffType("NON_TEACHING");
+            setCurrentPage(1);
+          }}
+          className="p-3.5 rounded-xl bg-card border border-border shadow-2xs space-y-1 cursor-pointer hover:border-primary/40 transition-all select-none"
+        >
           <div className="flex items-center justify-between text-muted-foreground">
             <span className="text-[11px] font-medium">Non-Teaching</span>
             <Briefcase className="w-3.5 h-3.5 text-muted-foreground opacity-70" />
@@ -247,7 +266,13 @@ export function TeacherListClient({
           <div className="text-xl font-bold text-foreground">{hrStats.nonTeachingCount}</div>
         </div>
 
-        <div className="p-3.5 rounded-xl bg-card border border-border shadow-2xs space-y-1">
+        <div
+          onClick={() => {
+            setSelectedStatus("ACTIVE");
+            setCurrentPage(1);
+          }}
+          className="p-3.5 rounded-xl bg-card border border-border shadow-2xs space-y-1 cursor-pointer hover:border-primary/40 transition-all select-none"
+        >
           <div className="flex items-center justify-between text-muted-foreground">
             <span className="text-[11px] font-medium">Active on Duty</span>
             <UserCheck className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400 opacity-80" />
@@ -257,7 +282,13 @@ export function TeacherListClient({
           </div>
         </div>
 
-        <div className="p-3.5 rounded-xl bg-card border border-border shadow-2xs space-y-1">
+        <div
+          onClick={() => {
+            setSelectedStatus("ON_LEAVE");
+            setCurrentPage(1);
+          }}
+          className="p-3.5 rounded-xl bg-card border border-border shadow-2xs space-y-1 cursor-pointer hover:border-primary/40 transition-all select-none"
+        >
           <div className="flex items-center justify-between text-muted-foreground">
             <span className="text-[11px] font-medium">On Leave</span>
             <CalendarDays className="w-3.5 h-3.5 text-amber-600 dark:text-amber-400 opacity-80" />
@@ -267,7 +298,10 @@ export function TeacherListClient({
           </div>
         </div>
 
-        <div className="p-3.5 rounded-xl bg-card border border-border shadow-2xs space-y-1">
+        <div
+          onClick={() => router.push("/attendance/leaves")}
+          className="p-3.5 rounded-xl bg-card border border-border shadow-2xs space-y-1 cursor-pointer hover:border-primary/40 transition-all select-none"
+        >
           <div className="flex items-center justify-between text-muted-foreground">
             <span className="text-[11px] font-medium">Pending Leaves</span>
             <Clock className="w-3.5 h-3.5 text-muted-foreground opacity-70" />

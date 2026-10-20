@@ -149,7 +149,7 @@ export function EditorialEntry({ stats }: EditorialEntryProps) {
               {stats.teacherCount || 35}
             </div>
             <span className="text-xs text-slate-700 mt-0.5 block font-medium">
-              Verified teaching dossiers
+              Verified teaching faculty
             </span>
           </div>
 

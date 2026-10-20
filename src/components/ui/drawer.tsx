@@ -8,7 +8,7 @@ export interface DrawerProps {
   isOpen: boolean;
   onClose: () => void;
   title: string;
-  subtitle?: string;
+  subtitle?: React.ReactNode;
   description?: string;
   children: React.ReactNode;
   position?: "left" | "right";
@@ -16,6 +16,7 @@ export interface DrawerProps {
   width?: "sm" | "md" | "lg" | "xl" | string;
   footer?: React.ReactNode;
   className?: string;
+  headerActions?: React.ReactNode;
 }
 
 export function Drawer({
@@ -30,6 +31,7 @@ export function Drawer({
   width,
   footer,
   className,
+  headerActions,
 }: DrawerProps) {
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -83,8 +85,8 @@ export function Drawer({
       >
         {/* Header */}
         <div className="flex items-center justify-between border-b border-border bg-muted/40 px-6 py-4">
-          <div>
-            <h2 className="text-base font-extrabold text-foreground tracking-tight">
+          <div className="min-w-0 flex-1 pr-3">
+            <h2 className="text-base font-extrabold text-foreground tracking-tight truncate">
               {title}
             </h2>
             {desc && (
@@ -93,14 +95,17 @@ export function Drawer({
               </p>
             )}
           </div>
-          <button
-            type="button"
-            onClick={onClose}
-            className="rounded-lg p-1.5 text-muted-foreground hover:bg-muted hover:text-foreground transition-colors"
-            aria-label="Close drawer"
-          >
-            <X className="h-4 w-4" />
-          </button>
+          <div className="flex items-center gap-1.5 shrink-0">
+            {headerActions}
+            <button
+              type="button"
+              onClick={onClose}
+              className="rounded-lg p-1.5 text-muted-foreground hover:bg-muted hover:text-foreground transition-colors"
+              aria-label="Close drawer"
+            >
+              <X className="h-4 w-4" />
+            </button>
+          </div>
         </div>
 
         {/* Content Body */}
