@@ -296,7 +296,7 @@ export function ManageCustomFieldsModal({
       <div className="space-y-6 text-xs">
         {/* Notification alerts */}
         {successMessage && (
-          <div className="p-3 rounded-xl bg-emerald-500/10 border border-emerald-500/25 text-emerald-600 dark:text-emerald-400 flex items-center justify-between">
+          <div className="p-3 rounded-xl bg-success-subtle border border-success/20 text-success flex items-center justify-between">
             <div className="flex items-center gap-2">
               <CheckCircle2 className="w-4 h-4 shrink-0" />
               <span>{successMessage}</span>
@@ -329,7 +329,7 @@ export function ManageCustomFieldsModal({
 
         {/* Editor Form View */}
         {isEditorOpen ? (
-          <div className="p-4 rounded-2xl border border-primary/20 bg-primary/5 space-y-4 animate-in fade-in duration-150">
+          <div className="p-4 rounded-xl border border-primary/20 bg-primary/5 space-y-4 animate-in fade-in duration-150">
             <div className="flex items-center justify-between border-b border-border/50 pb-2">
               <div className="flex items-center gap-2">
                 <Sparkles className="w-4 h-4 text-primary" />
@@ -514,8 +514,8 @@ export function ManageCustomFieldsModal({
             </div>
 
             {fields.length === 0 ? (
-              <div className="p-8 rounded-2xl border border-dashed border-border bg-card text-center space-y-3">
-                <div className="w-10 h-10 rounded-2xl bg-primary/10 border border-primary/20 text-primary flex items-center justify-center mx-auto">
+              <div className="p-8 rounded-xl border border-dashed border-border bg-card text-center space-y-3">
+                <div className="w-10 h-10 rounded-xl bg-primary/10 border border-primary/20 text-primary flex items-center justify-center mx-auto">
                   <Sparkles className="w-5 h-5" />
                 </div>
                 <div>
@@ -535,7 +535,7 @@ export function ManageCustomFieldsModal({
                 </Button>
               </div>
             ) : (
-              <div className="border border-border rounded-2xl overflow-hidden divide-y divide-border bg-card">
+              <div className="border border-border rounded-xl overflow-hidden divide-y divide-border bg-card">
                 {fields.map((field) => (
                   <div
                     key={field.id}
@@ -582,7 +582,7 @@ export function ManageCustomFieldsModal({
                             <EyeOff className="w-3 h-3" /> Deactivate
                           </span>
                         ) : (
-                          <span className="flex items-center gap-1 text-emerald-600 dark:text-emerald-400">
+                          <span className="flex items-center gap-1 text-success">
                             <Eye className="w-3 h-3" /> Activate
                           </span>
                         )}

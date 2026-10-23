@@ -263,10 +263,10 @@ export function StudentCustomFieldsClient({
       </div>
 
       {/* Core vs Custom Fields Explanation Card */}
-      <div className="rounded-3xl border border-border bg-white p-5 shadow-2xs space-y-3">
+      <div className="rounded-xl border border-border bg-card p-5 shadow-2xs space-y-3">
         <div className="flex items-center gap-2">
-          <Sparkles className="h-4 w-4 text-primary" />
-          <h3 className="text-sm font-bold text-foreground">Hybrid Field Architecture</h3>
+          <Sparkles className="h-4 w-4 text-accent" />
+          <h3 className="text-sm font-semibold text-foreground">Hybrid Field Architecture</h3>
         </div>
         <p className="text-xs text-muted-foreground leading-relaxed">
           Nexora combines <strong>Fixed Strongly-Typed Core Fields</strong> (Names, DOB, Gender, Guardians, Cohorts, Roll Numbers) with <strong>Institution-Specific Custom Attributes</strong> (e.g. APAAR ID, Scholarship Tier, Transport Stop, Hostel Needs). Configured fields appear seamlessly in the New Student Admission workflow and student profiles and records.
@@ -274,8 +274,8 @@ export function StudentCustomFieldsClient({
       </div>
 
       {/* Custom Fields List */}
-      <div className="rounded-3xl border border-border bg-white overflow-hidden shadow-2xs">
-        <div className="p-4 border-b border-border bg-card flex items-center justify-between">
+      <div className="rounded-xl border border-border bg-card overflow-hidden shadow-2xs">
+        <div className="p-4 border-b border-border bg-surface-subtle flex items-center justify-between">
           <span className="text-[11px] font-mono font-bold uppercase tracking-wider text-muted-foreground">
             Configured Fields ({fields.length})
           </span>
@@ -292,29 +292,29 @@ export function StudentCustomFieldsClient({
             </Button>
           </div>
         ) : (
-          <div className="divide-y divide-[#EFECE3]">
+          <div className="divide-y divide-border">
             {fields.map((field) => (
               <div
                 key={field.id}
-                className="p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4 hover:bg-card transition-colors"
+                className="p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4 hover:bg-muted/30 transition-colors"
               >
                 <div className="space-y-1">
                   <div className="flex items-center gap-2.5">
-                    <h4 className="text-sm font-bold text-foreground">{field.name}</h4>
-                    <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-warm/15 text-primary border border-warm/30 font-bold">
+                    <h4 className="text-sm font-semibold text-foreground">{field.name}</h4>
+                    <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-surface-subtle text-foreground border border-border font-medium">
                       {FIELD_TYPE_LABELS[field.fieldType] || field.fieldType}
                     </span>
                     {field.isRequired ? (
-                      <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-red-50 text-red-700 border border-red-200 font-bold">
+                      <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-destructive/10 text-destructive border border-destructive/20 font-bold">
                         Required
                       </span>
                     ) : (
-                      <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-card text-muted-foreground border border-border">
+                      <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-surface-subtle text-muted-foreground border border-border">
                         Optional
                       </span>
                     )}
                     {!field.isActive && (
-                      <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-gray-100 text-gray-500 border border-gray-300">
+                      <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-muted text-muted-foreground border border-border">
                         Inactive
                       </span>
                     )}
@@ -328,7 +328,7 @@ export function StudentCustomFieldsClient({
                       {field.options.map((opt, i) => (
                         <span
                           key={i}
-                          className="text-[10px] font-mono bg-white px-2 py-0.5 rounded border border-border text-foreground"
+                          className="text-[10px] font-mono bg-surface-subtle px-2 py-0.5 rounded border border-border text-foreground"
                         >
                           {opt}
                         </span>
@@ -341,10 +341,10 @@ export function StudentCustomFieldsClient({
                   <button
                     type="button"
                     onClick={() => handleToggleActive(field)}
-                    className={`px-2.5 py-1 rounded-xl text-xs font-bold border transition-colors ${
+                    className={`px-2.5 py-1 rounded-md text-xs font-medium border transition-colors ${
                       field.isActive
-                        ? "bg-success/15 text-success border-success/30"
-                        : "bg-gray-100 text-gray-600 border-gray-300"
+                        ? "bg-success/10 text-success border-success/20"
+                        : "bg-surface-subtle text-muted-foreground border border-border"
                     }`}
                   >
                     {field.isActive ? "Active" : "Disabled"}

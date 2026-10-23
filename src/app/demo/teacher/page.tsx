@@ -1,5 +1,7 @@
 import { redirect } from "next/navigation";
 
-export default function DemoTeacherRedirect() {
-  redirect("/demo/teacher/dashboard");
+export const dynamic = "force-dynamic";
+
+export default function Page() {
+  redirect("/");
 }

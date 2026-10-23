@@ -89,42 +89,42 @@ export function AnnouncementsClient({
 
       {/* Metrics Row */}
       <div className="grid grid-cols-1 gap-3 sm:grid-cols-4">
-        <div className="rounded-xl border border-border bg-white p-4 shadow-xs">
-          <div className="text-[11px] font-mono uppercase tracking-wider text-accent">Total Circulars</div>
+        <div className="rounded-xl border border-border bg-card p-4 shadow-xs">
+          <div className="text-[11px] font-mono uppercase tracking-wider text-muted-foreground">Total Circulars</div>
           <div className="mt-1 text-2xl font-bold text-foreground">{announcements.length}</div>
-          <div className="mt-0.5 text-[11px] text-accent">Published this session</div>
+          <div className="mt-0.5 text-[11px] text-muted-foreground">Published this session</div>
         </div>
-        <div className="rounded-xl border border-border bg-white p-4 shadow-xs">
-          <div className="text-[11px] font-mono uppercase tracking-wider text-accent">Parent Notices</div>
+        <div className="rounded-xl border border-border bg-card p-4 shadow-xs">
+          <div className="text-[11px] font-mono uppercase tracking-wider text-muted-foreground">Parent Notices</div>
           <div className="mt-1 text-2xl font-bold text-foreground">
             {announcements.filter((a) => a.targetAudience === "PARENTS" || a.targetAudience === "EVERYONE").length}
           </div>
-          <div className="mt-0.5 text-[11px] text-accent">Active guardian dispatches</div>
+          <div className="mt-0.5 text-[11px] text-muted-foreground">Active guardian dispatches</div>
         </div>
-        <div className="rounded-xl border border-border bg-white p-4 shadow-xs">
-          <div className="text-[11px] font-mono uppercase tracking-wider text-accent">Staff Directives</div>
+        <div className="rounded-xl border border-border bg-card p-4 shadow-xs">
+          <div className="text-[11px] font-mono uppercase tracking-wider text-muted-foreground">Staff Directives</div>
           <div className="mt-1 text-2xl font-bold text-foreground">
             {announcements.filter((a) => a.targetAudience === "TEACHERS").length}
           </div>
-          <div className="mt-0.5 text-[11px] text-accent">Internal faculty memos</div>
+          <div className="mt-0.5 text-[11px] text-muted-foreground">Internal faculty memos</div>
         </div>
-        <div className="rounded-xl border border-border bg-white p-4 shadow-xs">
-          <div className="text-[11px] font-mono uppercase tracking-wider text-accent">Delivery Channels</div>
+        <div className="rounded-xl border border-border bg-card p-4 shadow-xs">
+          <div className="text-[11px] font-mono uppercase tracking-wider text-muted-foreground">Delivery Channels</div>
           <div className="mt-1 text-2xl font-bold text-accent">App + WhatsApp</div>
-          <div className="mt-0.5 text-[11px] text-accent">Multi-point synchronization</div>
+          <div className="mt-0.5 text-[11px] text-muted-foreground">Multi-point synchronization</div>
         </div>
       </div>
 
       {/* Filter Bar */}
-      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between rounded-xl border border-border bg-white p-3 shadow-xs">
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between rounded-xl border border-border bg-card p-3 shadow-xs">
         <div className="relative flex-1 max-w-md">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-accent" />
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted-foreground" />
           <input
             type="text"
             placeholder="Search circulars, directives, authors..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full pl-9 pr-3 py-1.5 text-xs rounded-lg border border-border bg-card focus:bg-white focus:outline-none focus:ring-1 focus:ring-[#171614] transition-colors"
+            className="w-full pl-9 pr-3 py-1.5 text-xs rounded-lg border border-border bg-background focus:outline-none focus:ring-1 focus:ring-accent focus:border-accent transition-colors"
           />
         </div>
 
@@ -135,8 +135,8 @@ export function AnnouncementsClient({
               onClick={() => setAudienceFilter(aud)}
               className={`px-2.5 py-1 text-xs font-mono uppercase rounded-md transition-colors ${
                 audienceFilter === aud
-                  ? "bg-primary text-white font-semibold"
-                  : "bg-card border border-border text-foreground hover:bg-[#F3F0E8]"
+                  ? "bg-primary text-primary-foreground font-semibold"
+                  : "bg-card border border-border text-foreground hover:bg-muted"
               }`}
             >
               {aud}
@@ -155,7 +155,7 @@ export function AnnouncementsClient({
           filteredAnnouncements.map((ann) => (
             <div
               key={ann.id}
-              className="rounded-xl border border-border bg-white p-5 shadow-xs space-y-3 hover:border-[#171614] transition-colors"
+              className="rounded-xl border border-border bg-card p-5 shadow-xs space-y-3 hover:border-accent/40 transition-colors"
             >
               <div className="flex flex-wrap items-center justify-between gap-2 border-b border-border pb-3">
                 <div className="flex items-center gap-2">
@@ -239,7 +239,7 @@ export function AnnouncementsClient({
                   placeholder="e.g. Schedule for Annual Science & Robotics Conclave 2026"
                   value={formData.title}
                   onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-                  className="w-full rounded-lg border border-border bg-card p-2.5 text-xs text-foreground focus:outline-none focus:ring-1 focus:ring-[#171614]"
+                  className="w-full rounded-lg border border-border bg-background p-2.5 text-xs text-foreground focus:outline-none focus:ring-1 focus:ring-accent focus:border-accent"
                 />
               </div>
 
@@ -249,7 +249,7 @@ export function AnnouncementsClient({
                   <select
                     value={formData.targetAudience}
                     onChange={(e) => setFormData({ ...formData, targetAudience: e.target.value })}
-                    className="w-full rounded-lg border border-border bg-card p-2.5 text-xs text-foreground"
+                    className="w-full rounded-lg border border-border bg-background p-2.5 text-xs text-foreground focus:outline-none focus:ring-1 focus:ring-accent focus:border-accent"
                   >
                     <option value="EVERYONE">Everyone (Public)</option>
                     <option value="PARENTS">Parents Only</option>
@@ -263,7 +263,7 @@ export function AnnouncementsClient({
                   <select
                     value={formData.priority}
                     onChange={(e) => setFormData({ ...formData, priority: e.target.value as any })}
-                    className="w-full rounded-lg border border-border bg-card p-2.5 text-xs text-foreground"
+                    className="w-full rounded-lg border border-border bg-background p-2.5 text-xs text-foreground focus:outline-none focus:ring-1 focus:ring-accent focus:border-accent"
                   >
                     <option value="NORMAL">Normal Notice</option>
                     <option value="HIGH">High Priority</option>
@@ -280,7 +280,7 @@ export function AnnouncementsClient({
                   placeholder="Detailed notice body, guidelines, schedules, or parental instructions..."
                   value={formData.content}
                   onChange={(e) => setFormData({ ...formData, content: e.target.value })}
-                  className="w-full rounded-lg border border-border bg-card p-2.5 text-xs text-foreground focus:outline-none focus:ring-1 focus:ring-[#171614]"
+                  className="w-full rounded-lg border border-border bg-background p-2.5 text-xs text-foreground focus:outline-none focus:ring-1 focus:ring-accent focus:border-accent"
                 />
               </div>
 

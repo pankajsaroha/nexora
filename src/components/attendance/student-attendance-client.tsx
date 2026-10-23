@@ -155,10 +155,10 @@ export function StudentAttendanceClient({
       )}
 
       {/* Class & Date Selector Bar */}
-      <div className="flex flex-col sm:flex-row items-center justify-between gap-4 rounded-xl bg-white p-4 border border-border shadow-xs">
+      <div className="flex flex-col sm:flex-row items-center justify-between gap-4 rounded-xl bg-card p-4 border border-border shadow-xs">
         <div className="flex flex-wrap items-center gap-3 w-full sm:w-auto">
           <div>
-            <label className="block text-[10px] font-mono uppercase tracking-wider text-accent font-bold mb-1">
+            <label className="block text-[10px] font-mono uppercase tracking-wider text-muted-foreground font-bold mb-1">
               Select Class / Section
             </label>
             <select
@@ -167,7 +167,7 @@ export function StudentAttendanceClient({
                 setCurrentSectionId(e.target.value);
                 router.push(`/attendance?sectionId=${e.target.value}&date=${date}`);
               }}
-              className="rounded-lg border border-border bg-card px-3 py-2 text-xs font-semibold text-foreground focus:outline-none focus:ring-1 focus:ring-[#171614]"
+              className="rounded-lg border border-border bg-background px-3 py-2 text-xs font-semibold text-foreground focus:outline-none focus:ring-1 focus:ring-accent focus:border-accent"
             >
               {sections.map((sec) => (
                 <option key={sec.id} value={sec.id}>
@@ -178,7 +178,7 @@ export function StudentAttendanceClient({
           </div>
 
           <div>
-            <label className="block text-[10px] font-mono uppercase tracking-wider text-accent font-bold mb-1">
+            <label className="block text-[10px] font-mono uppercase tracking-wider text-muted-foreground font-bold mb-1">
               Attendance Date
             </label>
             <input
@@ -188,40 +188,40 @@ export function StudentAttendanceClient({
                 setDate(e.target.value);
                 router.push(`/attendance?sectionId=${currentSectionId}&date=${e.target.value}`);
               }}
-              className="rounded-lg border border-border bg-card px-3 py-2 text-xs font-semibold text-foreground focus:outline-none focus:ring-1 focus:ring-[#171614]"
+              className="rounded-lg border border-border bg-background px-3 py-2 text-xs font-semibold text-foreground focus:outline-none focus:ring-1 focus:ring-accent focus:border-accent"
             />
           </div>
         </div>
 
         {/* Live Class Attendance KPI */}
-        <div className="flex items-center gap-4 bg-card p-2.5 rounded-xl border border-border text-xs">
+        <div className="flex items-center gap-4 bg-surface-subtle p-2.5 rounded-xl border border-border text-xs">
           <div className="text-center px-3">
-            <div className="text-[10px] font-mono uppercase tracking-wider text-accent font-bold">PRESENT</div>
-            <div className="text-base font-mono font-bold text-accent">{presentCount}</div>
+            <div className="text-[10px] font-mono uppercase tracking-wider text-muted-foreground font-bold">PRESENT</div>
+            <div className="text-base font-mono font-bold text-success">{presentCount}</div>
           </div>
-          <div className="h-6 w-px bg-[#E5E0D5]" />
+          <div className="h-6 w-px bg-border" />
           <div className="text-center px-3">
-            <div className="text-[10px] font-mono uppercase tracking-wider text-accent font-bold">ABSENT</div>
+            <div className="text-[10px] font-mono uppercase tracking-wider text-muted-foreground font-bold">ABSENT</div>
             <div className="text-base font-mono font-bold text-destructive">{absentCount}</div>
           </div>
-          <div className="h-6 w-px bg-[#E5E0D5]" />
+          <div className="h-6 w-px bg-border" />
           <div className="text-center px-3">
-            <div className="text-[10px] font-mono uppercase tracking-wider text-accent font-bold">LATE</div>
-            <div className="text-base font-mono font-bold text-primary">{lateCount}</div>
+            <div className="text-[10px] font-mono uppercase tracking-wider text-muted-foreground font-bold">LATE</div>
+            <div className="text-base font-mono font-bold text-warning">{lateCount}</div>
           </div>
-          <div className="h-6 w-px bg-[#E5E0D5]" />
+          <div className="h-6 w-px bg-border" />
           <div className="text-center px-3">
-            <div className="text-[10px] font-mono uppercase tracking-wider text-accent font-bold">RATE</div>
+            <div className="text-[10px] font-mono uppercase tracking-wider text-muted-foreground font-bold">RATE</div>
             <div className="text-base font-mono font-bold text-foreground">{attendancePercentage}%</div>
           </div>
         </div>
       </div>
 
       {/* Attendance Roster Table */}
-      <div className="overflow-hidden rounded-xl border border-border bg-white shadow-xs">
+      <div className="overflow-hidden rounded-xl border border-border bg-card shadow-xs">
         <div className="overflow-x-auto">
           <table className="w-full text-left text-xs">
-            <thead className="border-b border-border bg-card text-accent font-mono text-[11px] uppercase tracking-wider">
+            <thead className="border-b border-border bg-surface-subtle text-muted-foreground font-mono text-[11px] uppercase tracking-wider">
               <tr>
                 <th className="py-3 px-4 w-16 font-bold">Roll #</th>
                 <th className="py-3 px-4 font-bold">Student Name & ID</th>
@@ -229,10 +229,10 @@ export function StudentAttendanceClient({
                 <th className="py-3 px-4 font-bold">Remarks / Note</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-[#E5E0D5]">
+            <tbody className="divide-y divide-border">
               {attendanceRecords.length === 0 ? (
                 <tr>
-                  <td colSpan={4} className="py-12 text-center text-accent font-mono text-xs">
+                  <td colSpan={4} className="py-12 text-center text-muted-foreground font-mono text-xs">
                     No student records enrolled in this cohort.
                   </td>
                 </tr>
@@ -240,7 +240,7 @@ export function StudentAttendanceClient({
                 attendanceRecords.map((item) => (
                   <tr
                     key={item.id}
-                    className={`hover:bg-card transition-colors ${
+                    className={`hover:bg-muted/30 transition-colors ${
                       item.status === "ABSENT" ? "bg-destructive/5" : ""
                     }`}
                   >
@@ -251,7 +251,7 @@ export function StudentAttendanceClient({
                       <div className="font-bold text-foreground">
                         {item.fullName}
                       </div>
-                      <div className="text-[11px] text-accent font-mono mt-0.5">
+                      <div className="text-[11px] text-muted-foreground font-mono mt-0.5">
                         {item.admissionNumber}
                       </div>
                     </td>
@@ -263,7 +263,7 @@ export function StudentAttendanceClient({
                           className={`px-3 py-1 rounded-md text-[11px] font-mono uppercase font-bold transition-all ${
                             item.status === "PRESENT"
                               ? "bg-accent text-white shadow-xs"
-                              : "bg-card border border-border text-foreground hover:bg-[#F3F0E8]"
+                              : "bg-card border border-border text-foreground hover:bg-muted"
                           }`}
                         >
                           Present
@@ -275,7 +275,7 @@ export function StudentAttendanceClient({
                           className={`px-3 py-1 rounded-md text-[11px] font-mono uppercase font-bold transition-all ${
                             item.status === "ABSENT"
                               ? "bg-destructive text-white shadow-xs"
-                              : "bg-card border border-border text-foreground hover:bg-[#F3F0E8]"
+                              : "bg-card border border-border text-foreground hover:bg-muted"
                           }`}
                         >
                           Absent
@@ -286,8 +286,8 @@ export function StudentAttendanceClient({
                           onClick={() => handleStatusChange(item.id, "LATE")}
                           className={`px-3 py-1 rounded-md text-[11px] font-mono uppercase font-bold transition-all ${
                             item.status === "LATE"
-                              ? "bg-[#B89B62] text-white shadow-xs"
-                              : "bg-card border border-border text-foreground hover:bg-[#F3F0E8]"
+                              ? "bg-warning text-white shadow-xs"
+                              : "bg-card border border-border text-foreground hover:bg-muted"
                           }`}
                         >
                           Late
@@ -298,8 +298,8 @@ export function StudentAttendanceClient({
                           onClick={() => handleStatusChange(item.id, "EXCUSED")}
                           className={`px-3 py-1 rounded-md text-[11px] font-mono uppercase font-bold transition-all ${
                             item.status === "EXCUSED"
-                              ? "bg-primary text-white shadow-xs"
-                              : "bg-card border border-border text-foreground hover:bg-[#F3F0E8]"
+                              ? "bg-primary text-primary-foreground shadow-xs"
+                              : "bg-card border border-border text-foreground hover:bg-muted"
                           }`}
                         >
                           Excused
@@ -312,7 +312,7 @@ export function StudentAttendanceClient({
                         placeholder="Add remark (e.g. Medical leave, Late bus)..."
                         value={item.remarks || ""}
                         onChange={(e) => handleRemarkChange(item.id, e.target.value)}
-                        className="w-full max-w-xs rounded-lg border border-border bg-white px-2.5 py-1 text-xs text-foreground placeholder:text-accent focus:outline-none focus:ring-1 focus:ring-[#171614]"
+                        className="w-full max-w-xs rounded-lg border border-border bg-background px-2.5 py-1 text-xs text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-accent focus:border-accent"
                       />
                     </td>
                   </tr>

@@ -59,24 +59,9 @@ export function RoleSwitcher({ currentRoleCode }: { currentRoleCode?: string }) 
   const activeRole =
     DEMO_ROLES.find((r) => r.roleCode === currentRoleCode) || DEMO_ROLES[0];
 
-  const handleSwitch = async (email: string) => {
-    setIsSwitching(true);
-    try {
-      const res = await fetch("/api/auth/demo-switch", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email }),
-      });
-      if (res.ok) {
-        setIsOpen(false);
-        router.refresh();
-        router.push("/dashboard");
-      }
-    } catch (err) {
-      console.error("Role switch error:", err);
-    } finally {
-      setIsSwitching(false);
-    }
+  const handleSwitch = async () => {
+    // Demo-switch has been permanently disabled in production
+    setIsOpen(false);
   };
 
   return (
@@ -106,7 +91,7 @@ export function RoleSwitcher({ currentRoleCode }: { currentRoleCode?: string }) 
       {isOpen && (
         <>
           <div className="fixed inset-0 z-40" onClick={() => setIsOpen(false)} />
-          <div className="absolute right-0 top-full mt-2 w-72 rounded-2xl border border-border bg-card p-2 shadow-2xl z-50 animate-in fade-in zoom-in-95 duration-100 space-y-1">
+          <div className="absolute right-0 top-full mt-2 w-72 rounded-xl border border-border bg-card p-2 shadow-2xl z-50 animate-in fade-in zoom-in-95 duration-100 space-y-1">
             <div className="px-3 py-2 border-b border-border flex items-center justify-between">
               <span className="text-[10px] font-mono uppercase tracking-widest text-muted-foreground font-bold">
                 DEMO PERSONAS
@@ -121,7 +106,7 @@ export function RoleSwitcher({ currentRoleCode }: { currentRoleCode?: string }) 
                   <button
                     key={role.email}
                     type="button"
-                    onClick={() => handleSwitch(role.email)}
+                    onClick={() => handleSwitch()}
                     className={cn(
                       "w-full flex items-center justify-between p-2.5 rounded-xl text-left text-xs transition-all",
                       isSelected

@@ -84,22 +84,22 @@ Karthik,Subramanian,karthik.s@northstar.edu.in,+91 98100 22002,Mathematics Facul
 
       {/* Metrics / Info Row */}
       <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
-        <div className="rounded-xl border border-border bg-white p-4 shadow-xs">
-          <div className="text-[11px] font-mono uppercase tracking-wider text-accent">Target Schema</div>
+        <div className="rounded-xl border border-border bg-card p-4 shadow-xs">
+          <div className="text-[11px] font-mono uppercase tracking-wider text-muted-foreground">Target Schema</div>
           <div className="mt-1 text-base font-bold text-foreground font-mono">
             {entityType === "STUDENTS" ? "Student Registry (v2)" : "Faculty & Staff (v1)"}
           </div>
-          <div className="mt-0.5 text-[11px] text-accent">Auto-validates admission & roll #</div>
+          <div className="mt-0.5 text-[11px] text-muted-foreground">Auto-validates admission & roll #</div>
         </div>
-        <div className="rounded-xl border border-border bg-white p-4 shadow-xs">
-          <div className="text-[11px] font-mono uppercase tracking-wider text-accent">Duplicate Prevention</div>
+        <div className="rounded-xl border border-border bg-card p-4 shadow-xs">
+          <div className="text-[11px] font-mono uppercase tracking-wider text-muted-foreground">Duplicate Prevention</div>
           <div className="mt-1 text-base font-bold text-foreground font-mono">Unique Key Matching</div>
-          <div className="mt-0.5 text-[11px] text-accent">Prevents email & admission collisions</div>
+          <div className="mt-0.5 text-[11px] text-muted-foreground">Prevents email & admission collisions</div>
         </div>
-        <div className="rounded-xl border border-border bg-white p-4 shadow-xs">
-          <div className="text-[11px] font-mono uppercase tracking-wider text-accent">Audit & Rollback</div>
+        <div className="rounded-xl border border-border bg-card p-4 shadow-xs">
+          <div className="text-[11px] font-mono uppercase tracking-wider text-muted-foreground">Audit & Rollback</div>
           <div className="mt-1 text-base font-bold text-accent font-mono">Transaction Safe</div>
-          <div className="mt-0.5 text-[11px] text-accent">Rolls back batch on unhandled format</div>
+          <div className="mt-0.5 text-[11px] text-muted-foreground">Rolls back batch on unhandled format</div>
         </div>
       </div>
 
@@ -112,8 +112,8 @@ Karthik,Subramanian,karthik.s@northstar.edu.in,+91 98100 22002,Mathematics Facul
           }}
           className={`px-4 py-2 text-xs font-mono uppercase font-bold rounded-lg transition-colors ${
             entityType === "STUDENTS"
-              ? "bg-primary text-white shadow-xs"
-              : "bg-card border border-border text-foreground hover:bg-[#F3F0E8]"
+              ? "bg-primary text-primary-foreground shadow-xs"
+              : "bg-card border border-border text-foreground hover:bg-muted"
           }`}
         >
           Import Students Roster
@@ -125,8 +125,8 @@ Karthik,Subramanian,karthik.s@northstar.edu.in,+91 98100 22002,Mathematics Facul
           }}
           className={`px-4 py-2 text-xs font-mono uppercase font-bold rounded-lg transition-colors ${
             entityType === "TEACHERS"
-              ? "bg-primary text-white shadow-xs"
-              : "bg-card border border-border text-foreground hover:bg-[#F3F0E8]"
+              ? "bg-primary text-primary-foreground shadow-xs"
+              : "bg-card border border-border text-foreground hover:bg-muted"
           }`}
         >
           Import Faculty & Staff
@@ -134,13 +134,13 @@ Karthik,Subramanian,karthik.s@northstar.edu.in,+91 98100 22002,Mathematics Facul
       </div>
 
       {/* Ingestion Console */}
-      <div className="rounded-xl border border-border bg-white p-6 shadow-xs space-y-4">
+      <div className="rounded-xl border border-border bg-card p-6 shadow-xs space-y-4">
         <div className="flex items-center justify-between">
           <div>
             <h3 className="text-sm font-bold text-foreground">
               CSV Payload Input
             </h3>
-            <p className="text-xs text-accent">
+            <p className="text-xs text-muted-foreground">
               Paste raw CSV rows with headers. You may click &quot;Load Sample Template&quot; to test.
             </p>
           </div>
@@ -160,7 +160,7 @@ Karthik,Subramanian,karthik.s@northstar.edu.in,+91 98100 22002,Mathematics Facul
           value={rawText}
           onChange={(e) => setRawText(e.target.value)}
           placeholder="firstName,lastName,gender,dateOfBirth,class,section,parentName,parentPhone,email..."
-          className="w-full rounded-lg border border-border bg-card p-4 text-xs font-mono text-foreground focus:outline-none focus:ring-1 focus:ring-[#171614] leading-relaxed"
+          className="w-full rounded-lg border border-border bg-background p-4 text-xs font-mono text-foreground focus:outline-none focus:ring-1 focus:ring-accent focus:border-accent leading-relaxed"
         />
 
         {/* Results Banner */}
@@ -168,15 +168,15 @@ Karthik,Subramanian,karthik.s@northstar.edu.in,+91 98100 22002,Mathematics Facul
           <div
             className={`p-4 rounded-xl border text-xs space-y-2 ${
               result.error
-                ? "bg-destructive/5 border-destructive/20 text-destructive"
-                : "bg-accent/10 border-success/30/20 text-success"
+                ? "bg-destructive/15 border-destructive/30 text-destructive"
+                : "bg-success/15 border-success/30 text-success"
             }`}
           >
             <div className="flex items-center gap-2 font-bold">
               {result.error ? (
                 <AlertTriangle className="h-4 w-4" />
               ) : (
-                <CheckCircle2 className="h-4 w-4 text-accent" />
+                <CheckCircle2 className="h-4 w-4 text-success" />
               )}
               <span>{result.error ? "Ingestion Failed" : "Batch Successfully Processed"}</span>
             </div>

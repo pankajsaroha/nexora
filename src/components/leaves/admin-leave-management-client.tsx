@@ -268,12 +268,12 @@ export function AdminLeaveManagementClient({
         <div
           className={`flex items-center gap-2 p-3.5 rounded-xl border text-xs ${
             feedback.type === "success"
-              ? "border-emerald-200 bg-emerald-50 text-emerald-800"
+              ? "border-success/20 bg-success-subtle text-success"
               : "border-destructive/30 bg-destructive/10 text-destructive"
           }`}
         >
           {feedback.type === "success" ? (
-            <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
+            <CheckCircle2 className="w-4 h-4 text-success shrink-0" />
           ) : (
             <AlertCircle className="w-4 h-4 text-destructive shrink-0" />
           )}
@@ -667,7 +667,7 @@ export function AdminLeaveManagementClient({
       {/* Reject Reason Modal */}
       {rejectModalId && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs p-4 animate-in fade-in duration-150">
-          <div className="w-full max-w-sm bg-card border border-border rounded-2xl shadow-xl p-5 space-y-4">
+          <div className="w-full max-w-sm bg-card border border-border rounded-xl shadow-xl p-5 space-y-4">
             <div className="flex items-center justify-between">
               <h3 className="font-bold text-sm text-foreground">Reject Leave Petition</h3>
               <button
@@ -708,7 +708,7 @@ export function AdminLeaveManagementClient({
       {/* Audited Adjustment Modal */}
       {adjustModalTeacher && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs p-4 animate-in fade-in duration-150">
-          <div className="w-full max-w-md bg-card border border-border rounded-2xl shadow-xl p-5 space-y-4">
+          <div className="w-full max-w-md bg-card border border-border rounded-xl shadow-xl p-5 space-y-4">
             <div className="flex items-center justify-between">
               <div>
                 <h3 className="font-bold text-sm text-foreground">Audited Balance Adjustment</h3>
@@ -789,7 +789,7 @@ export function AdminLeaveManagementClient({
       {/* New Leave Type Modal */}
       {isCreateTypeOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs p-4 animate-in fade-in duration-150">
-          <div className="w-full max-w-md bg-card border border-border rounded-2xl shadow-xl p-5 space-y-4">
+          <div className="w-full max-w-md bg-card border border-border rounded-xl shadow-xl p-5 space-y-4">
             <div className="flex items-center justify-between">
               <h3 className="font-bold text-sm text-foreground">Create Leave Category</h3>
               <button

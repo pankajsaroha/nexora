@@ -10,14 +10,12 @@ export function TimelineTour() {
     {
       time: "08:00 AM",
       title: "Faculty Check-In & Morning Roll Call",
-      description: "35 teachers complete biometric attendance. Grade 8A tutor Mrs. Ananya Sharma marks 30/32 students present in 45 seconds.",
+      description: "35 teachers complete biometric attendance. Grade 8A tutor marks 30/32 students present in 45 seconds.",
       role: "Faculty & Homeroom",
-      tag: "Attendance Engine",
       icon: UserCheck,
-      iconColor: "text-success bg-success/15 border-success/30",
       cardPreview: {
         heading: "Grade 8A Roll-Call Reconciled",
-        sub: "30 Present • 2 Absent (Medical Leave)",
+        sub: "30 Present · 2 Absent (Medical Leave)",
         badge: "08:15 AM Verified",
         badgeColor: "text-success",
       },
@@ -25,16 +23,14 @@ export function TimelineTour() {
     {
       time: "10:15 AM",
       title: "Coursework Published to Scholars & Parents",
-      description: "Science department publishes 'Mechanics & Optics Problem Set'. Homework immediately syncs to student tablets and parent portals.",
+      description: "Science department publishes Mechanics Problem Set. Homework immediately syncs to student tablets and parent portals.",
       role: "Academics",
-      tag: "Coursework",
       icon: BookOpen,
-      iconColor: "text-primary bg-warm/15 border-warm/30",
       cardPreview: {
         heading: "Physics Problem Set #4",
-        sub: "Grade 10 Science • Due Friday • 25 Marks",
+        sub: "Grade 10 Science · Due Friday · 25 Marks",
         badge: "Synced to Portals",
-        badgeColor: "text-primary",
+        badgeColor: "text-accent",
       },
     },
     {
@@ -42,12 +38,10 @@ export function TimelineTour() {
       title: "Fee Payment Recorded & Receipt Dispatched",
       description: "Accountant reconciles ₹38,000 Term 1 tuition invoice. Official 3-part printable receipt voucher REC-0891 is generated automatically.",
       role: "Finance",
-      tag: "Bursar Ledger",
       icon: Receipt,
-      iconColor: "text-primary bg-warm/15 border-warm/30",
       cardPreview: {
         heading: "Receipt REC-2026-0891",
-        sub: "Mr. Rahul Sharma • ₹38,000 via UPI",
+        sub: "Mr. Rahul Sharma · ₹38,000 via UPI",
         badge: "Reconciled",
         badgeColor: "text-success",
       },
@@ -55,31 +49,27 @@ export function TimelineTour() {
     {
       time: "02:00 PM",
       title: "Principal Executive Health Audit",
-      description: "Dr. Arvind Menon reviews campus-wide 94.2% attendance, verifies absence notifications, and approves 2 faculty leave petitions.",
+      description: "Leadership reviews campus-wide 94.2% attendance, verifies absence notifications, and approves 2 faculty leave petitions.",
       role: "Leadership",
-      tag: "Executive Command",
       icon: Shield,
-      iconColor: "text-success bg-success/15 border-success/30",
       cardPreview: {
         heading: "Campus Attendance: 94.2%",
-        sub: "330 Present • 2 Leaves Approved",
+        sub: "330 Present · 2 Leaves Approved",
         badge: "Audit Complete",
         badgeColor: "text-success",
       },
     },
     {
       time: "04:30 PM",
-      title: "Task Resolution & Campus Circular Dispatch",
-      description: "Science Lab Audit task resolved. Evening robotics competition circular sent to all 350 parents via instant WhatsApp dispatch.",
+      title: "Task Resolution & Circular Dispatch",
+      description: "Science Lab Audit task resolved. Evening competition notice sent to parents via instant WhatsApp dispatch.",
       role: "Operations",
-      tag: "Dispatches",
       icon: Megaphone,
-      iconColor: "text-destructive bg-warm/15 border-destructive/30",
       cardPreview: {
         heading: "Circular: Robotics Championship",
-        sub: "Dispatched to 350 Parent WhatsApp feeds",
+        sub: "Dispatched to 350 Parent feeds",
         badge: "100% Delivered",
-        badgeColor: "text-destructive",
+        badgeColor: "text-accent",
       },
     },
   ];
@@ -88,13 +78,13 @@ export function TimelineTour() {
     <section className="py-20 sm:py-28 bg-background border-b border-border">
       <div className="max-w-7xl mx-auto px-6 sm:px-8 space-y-12">
         {/* Section Header */}
-        <div className="max-w-3xl space-y-4">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-primary/40 bg-warm/15 text-[11px] font-mono uppercase tracking-widest text-primary shadow-2xs">
-            <Sparkles className="w-3.5 h-3.5 text-primary" />
+        <div className="max-w-3xl space-y-3">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-accent/20 bg-accent-subtle text-xs font-medium text-accent">
+            <Sparkles className="w-3.5 h-3.5 text-accent" />
             <span>Operational Continuity</span>
           </div>
 
-          <h2 className="text-3xl sm:text-4xl font-extrabold text-foreground tracking-tight">
+          <h2 className="text-3xl sm:text-4xl font-bold text-foreground tracking-tight">
             A day in the life of a connected institution.
           </h2>
 
@@ -104,7 +94,7 @@ export function TimelineTour() {
         </div>
 
         {/* 5-Step Visual Timeline Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
           {events.map((ev, idx) => {
             const Icon = ev.icon;
             const isSelected = selectedEventIndex === idx;
@@ -113,35 +103,33 @@ export function TimelineTour() {
               <div
                 key={idx}
                 onClick={() => setSelectedEventIndex(idx)}
-                className={`p-5 rounded-3xl border transition-all duration-200 cursor-pointer flex flex-col justify-between space-y-4 shadow-2xs hover:shadow-lg ${
+                className={`p-4 rounded-xl border transition-all duration-150 cursor-pointer flex flex-col justify-between space-y-4 shadow-2xs ${
                   isSelected
-                    ? "border-primary bg-warm/15 translate-y-[-2px] ring-1 ring-[#B89B62]/30"
-                    : "border-border bg-white hover:border-primary hover:bg-card"
+                    ? "border-accent bg-accent-subtle/25 dark:bg-accent-subtle/15 ring-1 ring-accent/30"
+                    : "border-border bg-card hover:border-border-strong hover:bg-surface-subtle/50"
                 }`}
               >
                 <div className="space-y-3">
                   <div className="flex items-center justify-between">
-                    <span className="font-mono text-xs font-bold text-foreground bg-card px-2 py-0.5 rounded-md border border-border shadow-2xs">
+                    <span className="text-xs font-semibold text-foreground bg-surface-subtle px-2 py-0.5 rounded border border-border">
                       {ev.time}
                     </span>
-                    <span className="text-[10px] font-mono text-muted-foreground font-semibold">0{idx + 1}</span>
+                    <span className="text-[10px] text-muted-foreground font-medium">0{idx + 1}</span>
                   </div>
 
-                  <div className={`w-8 h-8 rounded-xl border flex items-center justify-center transition-colors shadow-2xs ${ev.iconColor}`}>
+                  <div className="w-8 h-8 rounded-lg bg-surface-subtle border border-border flex items-center justify-center text-foreground-secondary shadow-2xs">
                     <Icon className="w-4 h-4" />
                   </div>
 
-                  <h3 className="font-bold text-sm text-foreground leading-snug">{ev.title}</h3>
+                  <h3 className="font-semibold text-sm text-foreground leading-snug">{ev.title}</h3>
                   <p className="text-xs text-muted-foreground leading-relaxed">{ev.description}</p>
                 </div>
 
                 {/* Mini UI Snippet */}
-                <div className="p-3 rounded-2xl bg-card border border-border space-y-1 text-left font-mono text-[10px] shadow-2xs">
-                  <div className="flex justify-between items-center">
-                    <span className="font-bold text-foreground truncate">{ev.cardPreview.heading}</span>
-                  </div>
-                  <div className="text-muted-foreground text-[9px] truncate">{ev.cardPreview.sub}</div>
-                  <div className={`pt-1 font-bold text-[9px] ${ev.cardPreview.badgeColor}`}>{ev.cardPreview.badge}</div>
+                <div className="p-2.5 rounded-lg bg-surface-subtle border border-border space-y-1 text-left text-xs">
+                  <div className="font-medium text-foreground truncate text-[11px]">{ev.cardPreview.heading}</div>
+                  <div className="text-muted-foreground text-[10px] truncate">{ev.cardPreview.sub}</div>
+                  <div className={`pt-0.5 font-semibold text-[10px] ${ev.cardPreview.badgeColor}`}>{ev.cardPreview.badge}</div>
                 </div>
               </div>
             );

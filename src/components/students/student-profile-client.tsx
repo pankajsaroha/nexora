@@ -26,6 +26,11 @@ import {
   Sliders,
   Plus,
   ExternalLink,
+  KeyRound,
+  Copy,
+  Check,
+  Lock,
+  ShieldAlert,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -38,6 +43,8 @@ import { DeactivateStudentModal } from "./deactivate-student-modal";
 import { PermanentDeleteStudentModal } from "./permanent-delete-student-modal";
 import { ManageCustomFieldsModal } from "./manage-custom-fields-modal";
 import { AddCustomFieldValueModal } from "./add-custom-field-value-modal";
+import { ManageStudentAccessModal } from "./manage-student-access-modal";
+import { LinkGuardianModal } from "./link-guardian-modal";
 import { CustomFieldOption, ProgramOption, AcademicYearOption } from "./student-admission-dialog";
 import { useRouter } from "next/navigation";
 
@@ -45,6 +52,18 @@ export interface StudentProfileData {
   id: string;
   admissionNumber: string;
   rollNumber?: string | null;
+  loginId?: string | null;
+  portalAccessStatus?: string | null;
+  portalAccessGrantedAt?: Date | string | null;
+  portalAccessSuspendedAt?: Date | string | null;
+  user?: {
+    id: string;
+    email: string;
+    roleCode: string;
+    isActive: boolean;
+    lastLoginAt?: Date | string | null;
+    createdAt: Date | string;
+  } | null;
   universityRegNumber?: string | null;
   firstName: string;
   middleName?: string | null;
@@ -104,6 +123,12 @@ export interface StudentProfileData {
       phone: string;
       email?: string | null;
       occupation?: string | null;
+      user?: {
+        id: string;
+        email: string;
+        isActive: boolean;
+        lastLoginAt?: Date | string | null;
+      } | null;
     };
   }>;
   customFieldValues: Array<{
@@ -167,7 +192,7 @@ export function StudentProfileClient({
     (propStudent || initialStudent)!
   );
   const [activeCustomFields, setActiveCustomFields] = useState<CustomFieldOption[]>(customFields);
-  const [activeTab, setActiveTab] = useState<"overview" | "academic" | "fees" | "custom_fields">("overview");
+  const [activeTab, setActiveTab] = useState<"overview" | "academic" | "fees" | "portal_access" | "custom_fields">("overview");
 
   // Modals state
   const [isRollModalOpen, setIsRollModalOpen] = useState(false);
@@ -176,8 +201,12 @@ export function StudentProfileClient({
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [isManageFieldsModalOpen, setIsManageFieldsModalOpen] = useState(false);
   const [isAddFieldValueModalOpen, setIsAddFieldValueModalOpen] = useState(false);
+  const [isAccessModalOpen, setIsAccessModalOpen] = useState(false);
+  const [isLinkGuardianModalOpen, setIsLinkGuardianModalOpen] = useState(false);
   const [selectedCustomFieldKey, setSelectedCustomFieldKey] = useState<string | null>(null);
   const [isRestoring, setIsRestoring] = useState(false);
+  const [copiedLoginId, setCopiedLoginId] = useState(false);
+  const [portalAuditLogs, setPortalAuditLogs] = useState<any[]>([]);
 
   const router = useRouter();
 
@@ -313,6 +342,14 @@ export function StudentProfileClient({
             <Button
               variant="outline"
               size="sm"
+              onClick={() => setIsAccessModalOpen(true)}
+              leftIcon={<KeyRound className="h-3.5 w-3.5 text-primary" />}
+            >
+              Manage Portal Access
+            </Button>
+            <Button
+              variant="outline"
+              size="sm"
               onClick={() => setIsRollModalOpen(true)}
               leftIcon={<Hash className="h-3.5 w-3.5 text-muted-foreground" />}
             >
@@ -354,7 +391,7 @@ export function StudentProfileClient({
 
       {/* Deactivated Notice Banner if applicable */}
       {isDeactivated && (
-        <div className="rounded-2xl border border-destructive/30 bg-destructive/10 p-4 text-xs text-destructive flex items-center justify-between">
+        <div className="rounded-xl border border-destructive/30 bg-destructive/10 p-4 text-xs text-destructive flex items-center justify-between">
           <div className="flex items-center gap-2.5">
             <UserX className="h-4 w-4 shrink-0 text-destructive" />
             <div>
@@ -373,7 +410,7 @@ export function StudentProfileClient({
 
       {/* Quick Metrics Bar */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        <div className="p-4 rounded-2xl border border-border bg-card space-y-1 shadow-2xs">
+        <div className="p-4 rounded-xl border border-border bg-card space-y-1 shadow-2xs">
           <span className="text-[10px] font-mono uppercase tracking-wider text-muted-foreground font-bold block">
             Roll Number
           </span>
@@ -385,7 +422,7 @@ export function StudentProfileClient({
           <span className="text-[10px] text-muted-foreground">Institution Roll Identifier</span>
         </div>
 
-        <div className="p-4 rounded-2xl border border-border bg-card space-y-1 shadow-2xs">
+        <div className="p-4 rounded-xl border border-border bg-card space-y-1 shadow-2xs">
           <span className="text-[10px] font-mono uppercase tracking-wider text-muted-foreground font-bold block">
             Attendance Rate
           </span>
@@ -397,7 +434,7 @@ export function StudentProfileClient({
           </span>
         </div>
 
-        <div className="p-4 rounded-2xl border border-border bg-card space-y-1 shadow-2xs">
+        <div className="p-4 rounded-xl border border-border bg-card space-y-1 shadow-2xs">
           <span className="text-[10px] font-mono uppercase tracking-wider text-muted-foreground font-bold block">
             Fee Ledger Balance
           </span>
@@ -409,7 +446,7 @@ export function StudentProfileClient({
           </span>
         </div>
 
-        <div className="p-4 rounded-2xl border border-border bg-card space-y-1 shadow-2xs">
+        <div className="p-4 rounded-xl border border-border bg-card space-y-1 shadow-2xs">
           <span className="text-[10px] font-mono uppercase tracking-wider text-muted-foreground font-bold block">
             Enrollment Status
           </span>
@@ -458,6 +495,32 @@ export function StudentProfileClient({
         </button>
         <button
           type="button"
+          onClick={async () => {
+            setActiveTab("portal_access");
+            try {
+              const res = await fetch(`/api/students/${student.id}/access`);
+              if (res.ok) {
+                const data = await res.json();
+                setPortalAuditLogs(data.recentActivity || []);
+              }
+            } catch (err) {
+              console.error("Failed to fetch portal activity:", err);
+            }
+          }}
+          className={`pb-3 font-bold uppercase tracking-wider transition-colors border-b-2 cursor-pointer flex items-center gap-1.5 whitespace-nowrap ${
+            activeTab === "portal_access"
+              ? "border-primary text-foreground"
+              : "border-transparent text-muted-foreground hover:text-foreground"
+          }`}
+        >
+          <KeyRound className="w-3.5 h-3.5" />
+          <span>Portal Access & Security</span>
+          {student.portalAccessStatus === "ACTIVE" && (
+            <span className="w-1.5 h-1.5 rounded-full bg-success" />
+          )}
+        </button>
+        <button
+          type="button"
           onClick={() => setActiveTab("custom_fields")}
           className={`pb-3 font-bold uppercase tracking-wider transition-colors border-b-2 cursor-pointer flex items-center gap-1.5 whitespace-nowrap ${
             activeTab === "custom_fields"
@@ -476,7 +539,7 @@ export function StudentProfileClient({
           {/* Col 1 & 2: Personal & Guardian Details */}
           <div className="md:col-span-2 space-y-6">
             {/* Identity & Personal */}
-            <div className="rounded-3xl border border-border bg-card p-5 shadow-2xs space-y-4">
+            <div className="rounded-xl border border-border bg-card p-5 shadow-2xs space-y-4">
               <span className="text-[11px] font-mono font-bold uppercase tracking-wider text-primary block">
                 Biographical & Identity Information
               </span>
@@ -524,7 +587,7 @@ export function StudentProfileClient({
             </div>
 
             {/* Guardian & Contact */}
-            <div className="rounded-3xl border border-border bg-card p-5 shadow-2xs space-y-4">
+            <div className="rounded-xl border border-border bg-card p-5 shadow-2xs space-y-4">
               <span className="text-[11px] font-mono font-bold uppercase tracking-wider text-primary block">
                 Guardian & Emergency Relations
               </span>
@@ -536,7 +599,7 @@ export function StudentProfileClient({
                   {student.guardians.map((g) => (
                     <div
                       key={g.id}
-                      className="p-3.5 rounded-2xl bg-muted/40 border border-border flex items-center justify-between text-xs"
+                      className="p-3.5 rounded-xl bg-muted/40 border border-border flex items-center justify-between text-xs"
                     >
                       <div>
                         <div className="flex items-center gap-2">
@@ -561,7 +624,7 @@ export function StudentProfileClient({
             </div>
 
             {/* Institution Custom Fields Summary Snippet */}
-            <div className="rounded-3xl border border-border bg-card p-5 shadow-2xs space-y-4">
+            <div className="rounded-xl border border-border bg-card p-5 shadow-2xs space-y-4">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
                   <Sparkles className="h-4 w-4 text-primary" />
@@ -616,7 +679,7 @@ export function StudentProfileClient({
 
           {/* Col 3: Residential & Academic Summary */}
           <div className="space-y-6">
-            <div className="rounded-3xl border border-border bg-card p-5 shadow-2xs space-y-3">
+            <div className="rounded-xl border border-border bg-card p-5 shadow-2xs space-y-3">
               <span className="text-[11px] font-mono font-bold uppercase tracking-wider text-primary block">
                 Residential Location
               </span>
@@ -625,7 +688,7 @@ export function StudentProfileClient({
               </p>
             </div>
 
-            <div className="rounded-3xl border border-border bg-card p-5 shadow-2xs space-y-3">
+            <div className="rounded-xl border border-border bg-card p-5 shadow-2xs space-y-3">
               <span className="text-[11px] font-mono font-bold uppercase tracking-wider text-primary block">
                 Academic Registration Identifiers
               </span>
@@ -657,7 +720,7 @@ export function StudentProfileClient({
       {/* TAB 2: ACADEMIC */}
       {activeTab === "academic" && (
         <div className="space-y-6">
-          <div className="rounded-3xl border border-border bg-card p-5 shadow-2xs space-y-4">
+          <div className="rounded-xl border border-border bg-card p-5 shadow-2xs space-y-4">
             <span className="text-[11px] font-mono font-bold uppercase tracking-wider text-primary block">
               Program & Cohort Enrollment
             </span>
@@ -684,7 +747,7 @@ export function StudentProfileClient({
             </div>
           </div>
 
-          <div className="rounded-3xl border border-border bg-card p-5 shadow-2xs space-y-4">
+          <div className="rounded-xl border border-border bg-card p-5 shadow-2xs space-y-4">
             <span className="text-[11px] font-mono font-bold uppercase tracking-wider text-primary block">
               Recent Attendance History (Last 60 Records)
             </span>
@@ -722,7 +785,7 @@ export function StudentProfileClient({
       {activeTab === "fees" && (
         <div className="space-y-6">
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-            <div className="p-4 rounded-2xl border border-border bg-card space-y-1 shadow-2xs">
+            <div className="p-4 rounded-xl border border-border bg-card space-y-1 shadow-2xs">
               <span className="text-[10px] font-mono uppercase tracking-wider text-muted-foreground font-bold block">
                 Total Invoiced
               </span>
@@ -730,7 +793,7 @@ export function StudentProfileClient({
                 ₹{totalFees.toLocaleString("en-IN")}
               </div>
             </div>
-            <div className="p-4 rounded-2xl border border-border bg-card space-y-1 shadow-2xs">
+            <div className="p-4 rounded-xl border border-border bg-card space-y-1 shadow-2xs">
               <span className="text-[10px] font-mono uppercase tracking-wider text-muted-foreground font-bold block">
                 Total Paid
               </span>
@@ -738,7 +801,7 @@ export function StudentProfileClient({
                 ₹{totalPaid.toLocaleString("en-IN")}
               </div>
             </div>
-            <div className="p-4 rounded-2xl border border-border bg-card space-y-1 shadow-2xs">
+            <div className="p-4 rounded-xl border border-border bg-card space-y-1 shadow-2xs">
               <span className="text-[10px] font-mono uppercase tracking-wider text-muted-foreground font-bold block">
                 Outstanding Balance
               </span>
@@ -748,7 +811,7 @@ export function StudentProfileClient({
             </div>
           </div>
 
-          <div className="rounded-3xl border border-border bg-card p-5 shadow-2xs space-y-4">
+          <div className="rounded-xl border border-border bg-card p-5 shadow-2xs space-y-4">
             <div className="flex items-center justify-between">
               <span className="text-[11px] font-mono font-bold uppercase tracking-wider text-primary">
                 Assigned Fee Structure Breakdown
@@ -761,7 +824,7 @@ export function StudentProfileClient({
             </div>
 
             {student.fees.length === 0 ? (
-              <div className="p-6 rounded-2xl bg-muted/40 text-center text-xs text-muted-foreground">
+              <div className="p-6 rounded-xl bg-muted/40 text-center text-xs text-muted-foreground">
                 No specific fee accounts generated for this student.
               </div>
             ) : (
@@ -791,7 +854,7 @@ export function StudentProfileClient({
       {/* TAB 4: CUSTOM FIELDS */}
       {activeTab === "custom_fields" && (
         <div className="space-y-6">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-5 rounded-3xl border border-border bg-card shadow-2xs">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-5 rounded-xl border border-border bg-card shadow-2xs">
             <div>
               <h3 className="text-sm font-bold text-foreground flex items-center gap-2">
                 <Sparkles className="w-4 h-4 text-primary" />
@@ -826,7 +889,7 @@ export function StudentProfileClient({
 
           {/* Populated Custom Fields Table / List */}
           {student.customFieldValues && student.customFieldValues.filter((cfv) => cfv.value !== null && cfv.value !== undefined && cfv.value !== "").length > 0 ? (
-            <div className="rounded-3xl border border-border bg-card overflow-hidden shadow-2xs divide-y divide-border">
+            <div className="rounded-xl border border-border bg-card overflow-hidden shadow-2xs divide-y divide-border">
               {student.customFieldValues
                 .filter((cfv) => cfv.value !== null && cfv.value !== undefined && cfv.value !== "")
                 .map((cfv) => {
@@ -885,8 +948,8 @@ export function StudentProfileClient({
                 })}
             </div>
           ) : (
-            <div className="p-10 rounded-3xl border border-dashed border-border bg-card text-center space-y-3 shadow-2xs">
-              <div className="w-12 h-12 rounded-2xl bg-primary/10 border border-primary/20 text-primary flex items-center justify-center mx-auto">
+            <div className="p-10 rounded-xl border border-dashed border-border bg-card text-center space-y-3 shadow-2xs">
+              <div className="w-12 h-12 rounded-xl bg-primary/10 border border-primary/20 text-primary flex items-center justify-center mx-auto">
                 <Sparkles className="w-6 h-6" />
               </div>
               <div>
@@ -918,6 +981,286 @@ export function StudentProfileClient({
               </div>
             </div>
           )}
+        </div>
+      )}
+
+      {/* TAB: PORTAL ACCESS & SECURITY */}
+      {activeTab === "portal_access" && (
+        <div className="space-y-6">
+          {/* Top Row: Identity Overview & Credential Handoff */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {/* Identity Card */}
+            <div className="md:col-span-2 rounded-xl border border-border bg-card p-6 shadow-2xs space-y-5">
+              <div className="flex items-center justify-between pb-3 border-b border-border">
+                <div className="flex items-center gap-2.5">
+                  <div className="w-8 h-8 rounded-xl bg-primary/10 border border-primary/20 text-primary flex items-center justify-center">
+                    <KeyRound className="w-4 h-4" />
+                  </div>
+                  <div>
+                    <h3 className="text-sm font-bold text-foreground">Student Portal Identity</h3>
+                    <p className="text-[11px] text-muted-foreground font-mono">Independent authentication identity for student workspace login</p>
+                  </div>
+                </div>
+
+                <Button
+                  size="sm"
+                  variant="outline"
+                  onClick={() => setIsAccessModalOpen(true)}
+                  leftIcon={<KeyRound className="w-3.5 h-3.5 text-primary" />}
+                >
+                  Manage Access
+                </Button>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
+                <div className="p-3.5 rounded-xl bg-muted/30 border border-border space-y-1">
+                  <span className="text-[10px] font-mono uppercase text-muted-foreground font-bold block">
+                    Institution-Issued Student Login ID
+                  </span>
+                  <div className="flex items-center gap-2">
+                    <span className="font-mono font-extrabold text-base text-foreground">
+                      {student.loginId || "Not Issued"}
+                    </span>
+                    {student.loginId && (
+                      <button
+                        type="button"
+                        onClick={() => {
+                          navigator.clipboard.writeText(student.loginId!);
+                          setCopiedLoginId(true);
+                          setTimeout(() => setCopiedLoginId(false), 2000);
+                        }}
+                        className="p-1 rounded text-muted-foreground hover:text-foreground transition-colors cursor-pointer"
+                        title="Copy Login ID"
+                      >
+                        {copiedLoginId ? <Check className="w-3.5 h-3.5 text-success" /> : <Copy className="w-3.5 h-3.5" />}
+                      </button>
+                    )}
+                  </div>
+                  <span className="text-[10px] text-muted-foreground">Immutable identifier used for sign-in</span>
+                </div>
+
+                <div className="p-3.5 rounded-xl bg-muted/30 border border-border space-y-1">
+                  <span className="text-[10px] font-mono uppercase text-muted-foreground font-bold block">
+                    Access Status
+                  </span>
+                  <div className="flex items-center gap-2 pt-0.5">
+                    {student.portalAccessStatus === "ACTIVE" && (
+                      <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-bold bg-success/15 text-success border border-success/30 font-mono">
+                        <span className="w-2 h-2 rounded-full bg-success animate-pulse" />
+                        ACTIVE
+                      </span>
+                    )}
+                    {student.portalAccessStatus === "SETUP_PENDING" && (
+                      <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-bold bg-amber-500/15 text-amber-700 dark:text-amber-400 border border-amber-500/30 font-mono">
+                        SETUP PENDING
+                      </span>
+                    )}
+                    {student.portalAccessStatus === "SUSPENDED" && (
+                      <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-bold bg-amber-500/15 text-amber-700 dark:text-amber-400 border border-amber-500/30 font-mono">
+                        <ShieldAlert className="w-3.5 h-3.5" />
+                        SUSPENDED
+                      </span>
+                    )}
+                    {student.portalAccessStatus === "REVOKED" && (
+                      <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-bold bg-destructive/15 text-destructive border border-destructive/30 font-mono">
+                        <UserX className="w-3.5 h-3.5" />
+                        REVOKED
+                      </span>
+                    )}
+                    {(!student.portalAccessStatus || student.portalAccessStatus === "NOT_ENABLED") && (
+                      <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-bold bg-muted text-muted-foreground border border-border font-mono">
+                        NOT ENABLED
+                      </span>
+                    )}
+                  </div>
+                  <span className="text-[10px] text-muted-foreground">Governs portal authentication rights</span>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 pt-2 text-[11px] text-muted-foreground font-mono">
+                <div>
+                  <span className="block text-[10px] text-muted-foreground">Permanent Student ID:</span>
+                  <span className="font-semibold text-foreground truncate block">{student.id.slice(0, 8)}...</span>
+                </div>
+                <div>
+                  <span className="block text-[10px] text-muted-foreground">Admission Number:</span>
+                  <span className="font-semibold text-foreground">{student.admissionNumber}</span>
+                </div>
+                <div>
+                  <span className="block text-[10px] text-muted-foreground">Current Roll Number:</span>
+                  <span className="font-semibold text-foreground">{student.rollNumber || "Unassigned"}</span>
+                </div>
+                <div>
+                  <span className="block text-[10px] text-muted-foreground">Portal Account User:</span>
+                  <span className="font-semibold text-foreground truncate block">{student.user?.email || "No user link"}</span>
+                </div>
+                <div>
+                  <span className="block text-[10px] text-muted-foreground">Access Granted Date:</span>
+                  <span className="font-semibold text-foreground">{student.portalAccessGrantedAt ? formatDate(student.portalAccessGrantedAt) : "—"}</span>
+                </div>
+                <div>
+                  <span className="block text-[10px] text-muted-foreground">Last Portal Login:</span>
+                  <span className="font-semibold text-foreground">{student.user?.lastLoginAt ? formatDate(student.user.lastLoginAt) : "Never"}</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Credential Handoff Card */}
+            <div className="rounded-xl border border-border bg-card p-6 shadow-2xs space-y-4 flex flex-col justify-between">
+              <div className="space-y-3">
+                <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-primary block">
+                  Institutional Credential Handoff
+                </span>
+                <p className="text-xs text-muted-foreground leading-relaxed">
+                  Provide the Login ID to the student or family. On the sign-in page, students enter their Login ID directly in the identifier field.
+                </p>
+
+                <div className="p-3 rounded-xl bg-muted/40 border border-border space-y-2 text-xs">
+                  <div>
+                    <span className="text-[10px] font-mono uppercase text-muted-foreground block">Sign-in Identifier</span>
+                    <span className="font-mono font-bold text-foreground">{student.loginId || "Enable access first"}</span>
+                  </div>
+                  <div>
+                    <span className="text-[10px] font-mono uppercase text-muted-foreground block">Portal URL</span>
+                    <span className="font-mono text-muted-foreground text-[11px] truncate block">/login</span>
+                  </div>
+                </div>
+              </div>
+
+              <div className="pt-2">
+                <Button
+                  size="sm"
+                  className="w-full"
+                  variant="primary"
+                  onClick={() => setIsAccessModalOpen(true)}
+                >
+                  <KeyRound className="w-3.5 h-3.5 mr-1.5" />
+                  {student.loginId ? "Manage Access / Password" : "Enable Student Portal Access"}
+                </Button>
+              </div>
+            </div>
+          </div>
+
+          {/* Linked Guardians & Family Portal Accounts */}
+          <div className="rounded-xl border border-border bg-card p-6 shadow-2xs space-y-4">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-border">
+              <div>
+                <h3 className="text-sm font-bold text-foreground">Linked Parent / Family Guardians</h3>
+                <p className="text-[11px] text-muted-foreground font-mono">
+                  Verified parents who have authorized access to view this child&apos;s attendance, timetable, and marks
+                </p>
+              </div>
+
+              <Button
+                size="sm"
+                variant="outline"
+                onClick={() => setIsLinkGuardianModalOpen(true)}
+                leftIcon={<Plus className="w-3.5 h-3.5" />}
+              >
+                Link Guardian
+              </Button>
+            </div>
+
+            {student.guardians.length === 0 ? (
+              <div className="p-8 text-center text-muted-foreground font-mono text-xs border border-dashed border-border rounded-xl">
+                No guardians linked to this student record. Click &ldquo;Link Guardian&rdquo; to add a verified parent.
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {student.guardians.map((sg) => (
+                  <div
+                    key={sg.guardian.id}
+                    className="p-4 rounded-xl border border-border bg-muted/20 space-y-3"
+                  >
+                    <div className="flex items-start justify-between">
+                      <div>
+                        <div className="flex items-center gap-2">
+                          <h4 className="font-bold text-foreground text-xs">{sg.guardian.fullName}</h4>
+                          <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-muted border border-border text-muted-foreground font-bold">
+                            {sg.guardian.relation}
+                          </span>
+                          {sg.isPrimary && (
+                            <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-primary/10 text-primary border border-primary/20 font-bold">
+                              Primary
+                            </span>
+                          )}
+                        </div>
+                        <p className="text-[11px] text-muted-foreground font-mono mt-1">
+                          Phone: {sg.guardian.phone} {sg.guardian.email ? `• ${sg.guardian.email}` : ""}
+                        </p>
+                      </div>
+
+                      <button
+                        type="button"
+                        onClick={async () => {
+                          if (!confirm(`Unlink guardian ${sg.guardian.fullName} from ${student.fullName}?`)) return;
+                          try {
+                            const res = await fetch(`/api/students/${student.id}/guardians?guardianId=${sg.guardian.id}`, {
+                              method: "DELETE",
+                            });
+                            if (res.ok) {
+                              await refreshStudent();
+                            } else {
+                              const err = await res.json();
+                              alert(err.error || "Failed to unlink guardian");
+                            }
+                          } catch (e) {
+                            console.error("Unlink error:", e);
+                          }
+                        }}
+                        className="text-[11px] font-bold text-destructive hover:underline cursor-pointer"
+                      >
+                        Unlink
+                      </button>
+                    </div>
+
+                    <div className="pt-2 border-t border-border flex items-center justify-between text-[11px] font-mono">
+                      <span className="text-muted-foreground">Parent Portal Access:</span>
+                      {sg.guardian.user ? (
+                        <span className="text-success font-bold flex items-center gap-1">
+                          <Check className="w-3 h-3" />
+                          <span>Active ({sg.guardian.user.email})</span>
+                        </span>
+                      ) : (
+                        <span className="text-muted-foreground">No portal account provisioned</span>
+                      )}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+
+          {/* Portal Access Audit Activity */}
+          <div className="rounded-xl border border-border bg-card p-6 shadow-2xs space-y-4">
+            <div className="flex items-center justify-between pb-3 border-b border-border">
+              <div>
+                <h3 className="text-sm font-bold text-foreground">Access Management Audit Trail</h3>
+                <p className="text-[11px] text-muted-foreground font-mono">Tamper-evident logs of portal credential generation, suspension, and linking</p>
+              </div>
+            </div>
+
+            {portalAuditLogs.length === 0 ? (
+              <div className="p-6 text-center text-muted-foreground font-mono text-xs border border-dashed border-border rounded-xl">
+                No recent portal access transactions recorded for this student.
+              </div>
+            ) : (
+              <div className="divide-y divide-border text-xs font-mono">
+                {portalAuditLogs.map((log) => (
+                  <div key={log.id} className="py-2.5 flex items-center justify-between gap-4">
+                    <div>
+                      <span className="font-bold text-foreground block">{log.action}</span>
+                      <p className="text-[11px] text-muted-foreground">{log.details}</p>
+                    </div>
+                    <div className="text-right text-[11px] text-muted-foreground shrink-0">
+                      <span>{log.userName}</span>
+                      <span className="block text-[10px]">{formatDate(log.createdAt)}</span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
         </div>
       )}
 
@@ -1012,6 +1355,39 @@ export function StudentProfileClient({
           }}
           onOpenManageFields={() => {
             setIsManageFieldsModalOpen(true);
+          }}
+        />
+      )}
+      {/* Manage Student Portal Access Modal */}
+      {isAccessModalOpen && (
+        <ManageStudentAccessModal
+          isOpen={isAccessModalOpen}
+          onClose={() => setIsAccessModalOpen(false)}
+          student={student}
+          onSuccess={async () => {
+            await refreshStudent();
+            try {
+              const res = await fetch(`/api/students/${student.id}/access`);
+              if (res.ok) {
+                const data = await res.json();
+                setPortalAuditLogs(data.recentActivity || []);
+              }
+            } catch (err) {
+              console.error("Failed to refresh portal access audit logs:", err);
+            }
+          }}
+        />
+      )}
+
+      {/* Link Guardian Modal */}
+      {isLinkGuardianModalOpen && (
+        <LinkGuardianModal
+          isOpen={isLinkGuardianModalOpen}
+          onClose={() => setIsLinkGuardianModalOpen(false)}
+          studentId={student.id}
+          studentName={student.fullName}
+          onSuccess={async () => {
+            await refreshStudent();
           }}
         />
       )}

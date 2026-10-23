@@ -78,84 +78,84 @@ export default async function ReportsPage() {
 
       {/* Reports Directory */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div className="rounded-xl border border-[#E8E7DF] bg-white p-5 shadow-2xs space-y-3 hover:border-slate-400 transition-colors">
+        <div className="rounded-xl border border-border bg-card p-5 shadow-2xs space-y-3 hover:border-primary/40 transition-colors">
           <div className="flex items-center gap-3">
-            <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-[#FAF9F5] border border-[#E8E7DF] text-slate-900 font-bold">
+            <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-surface-subtle border border-border text-foreground font-bold">
               <Receipt className="h-4 w-4" />
             </div>
             <div>
-              <h3 className="text-sm font-bold text-slate-900">
+              <h3 className="text-sm font-bold text-foreground">
                 Term Fee Collection & Dues Ledger
               </h3>
-              <p className="text-[11px] text-slate-500">
+              <p className="text-[11px] text-muted-foreground">
                 Detailed breakdowns by Grade, Section, Category (Tuition/Transport/Hostel), and payment mode.
               </p>
             </div>
           </div>
-          <div className="flex justify-end pt-2 border-t border-[#E8E7DF]">
+          <div className="flex justify-end pt-2 border-t border-border">
             <Button size="xs" variant="outline">
               Download CSV Report →
             </Button>
           </div>
         </div>
 
-        <div className="rounded-xl border border-[#E8E7DF] bg-white p-5 shadow-2xs space-y-3 hover:border-slate-400 transition-colors">
+        <div className="rounded-xl border border-border bg-card p-5 shadow-2xs space-y-3 hover:border-primary/40 transition-colors">
           <div className="flex items-center gap-3">
-            <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-[#FAF9F5] border border-[#E8E7DF] text-slate-900 font-bold">
+            <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-surface-subtle border border-border text-foreground font-bold">
               <CalendarCheck className="h-4 w-4" />
             </div>
             <div>
-              <h3 className="text-sm font-bold text-slate-900">
+              <h3 className="text-sm font-bold text-foreground">
                 Student Attendance & Punctuality Audit
               </h3>
-              <p className="text-[11px] text-slate-500">
+              <p className="text-[11px] text-muted-foreground">
                 30-day classwise attendance matrices with low attendance (&lt;75%) exception flagging.
               </p>
             </div>
           </div>
-          <div className="flex justify-end pt-2 border-t border-[#E8E7DF]">
+          <div className="flex justify-end pt-2 border-t border-border">
             <Button size="xs" variant="outline">
               Download CSV Report →
             </Button>
           </div>
         </div>
 
-        <div className="rounded-xl border border-[#E8E7DF] bg-white p-5 shadow-2xs space-y-3 hover:border-slate-400 transition-colors">
+        <div className="rounded-xl border border-border bg-card p-5 shadow-2xs space-y-3 hover:border-primary/40 transition-colors">
           <div className="flex items-center gap-3">
-            <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-[#FAF9F5] border border-[#E8E7DF] text-slate-900 font-bold">
+            <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-surface-subtle border border-border text-foreground font-bold">
               <BarChart3 className="h-4 w-4" />
             </div>
             <div>
-              <h3 className="text-sm font-bold text-slate-900">
+              <h3 className="text-sm font-bold text-foreground">
                 Scholastic Marks & Grade Distribution
               </h3>
-              <p className="text-[11px] text-slate-500">
+              <p className="text-[11px] text-muted-foreground">
                 Subject-wise mean scores, highest marks, pass percentages, and bell curve distribution.
               </p>
             </div>
           </div>
-          <div className="flex justify-end pt-2 border-t border-[#E8E7DF]">
+          <div className="flex justify-end pt-2 border-t border-border">
             <Button size="xs" variant="outline">
               Download CSV Report →
             </Button>
           </div>
         </div>
 
-        <div className="rounded-xl border border-[#E8E7DF] bg-white p-5 shadow-2xs space-y-3 hover:border-slate-400 transition-colors">
+        <div className="rounded-xl border border-border bg-card p-5 shadow-2xs space-y-3 hover:border-primary/40 transition-colors">
           <div className="flex items-center gap-3">
-            <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-[#FAF9F5] border border-[#E8E7DF] text-slate-900 font-bold">
+            <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-surface-subtle border border-border text-foreground font-bold">
               <TrendingUp className="h-4 w-4" />
             </div>
             <div>
-              <h3 className="text-sm font-bold text-slate-900">
+              <h3 className="text-sm font-bold text-foreground">
                 Monthly Staff Compensation & PF Statement
               </h3>
-              <p className="text-[11px] text-slate-500">
+              <p className="text-[11px] text-muted-foreground">
                 Statutory deductions, tax compliance, HRA/DA disbursement sheets for 35 faculty.
               </p>
             </div>
           </div>
-          <div className="flex justify-end pt-2 border-t border-[#E8E7DF]">
+          <div className="flex justify-end pt-2 border-t border-border">
             <Button size="xs" variant="outline">
               Download CSV Report →
             </Button>

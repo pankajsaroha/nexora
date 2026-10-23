@@ -54,14 +54,14 @@ export function Modal({
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 overflow-y-auto animate-in fade-in duration-150">
       {/* Backdrop */}
       <div
-        className="fixed inset-0 bg-foreground/40 backdrop-blur-xs transition-opacity"
+        className="fixed inset-0 bg-black/40 dark:bg-black/60 backdrop-blur-xs transition-opacity"
         onClick={onClose}
       />
 
       {/* Modal Dialog */}
       <div
         className={cn(
-          "relative w-full rounded-2xl bg-card text-card-foreground shadow-2xl border border-border z-10 overflow-hidden flex flex-col max-h-[90vh] animate-in zoom-in-95 duration-150",
+          "relative w-full rounded-xl bg-card text-card-foreground shadow-2xl border border-border z-10 overflow-hidden flex flex-col max-h-[90vh] animate-in zoom-in-95 duration-150",
           sizeClasses[size],
           className
         )}
@@ -71,7 +71,7 @@ export function Modal({
         {/* Header */}
         <div className="flex items-center justify-between border-b border-border bg-muted/40 px-6 py-4">
           <div>
-            <h2 className="text-base font-extrabold text-foreground tracking-tight">
+            <h2 className="text-base font-semibold text-foreground tracking-tight">
               {title}
             </h2>
             {description && (

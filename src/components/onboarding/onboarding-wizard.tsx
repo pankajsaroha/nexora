@@ -206,20 +206,20 @@ export function OnboardingWizard() {
     <div className="max-w-4xl mx-auto py-4">
       {/* Header */}
       <div className="mb-8">
-        <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-indigo-600 dark:text-indigo-400 mb-1">
+        <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-primary mb-1">
           <Sparkles className="w-3.5 h-3.5" />
           <span>Enterprise Setup Wizard</span>
         </div>
-        <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-slate-900 dark:text-slate-100">
+        <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-foreground">
           Onboard New Educational Institution
         </h1>
-        <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">
+        <p className="text-sm text-muted-foreground mt-1">
           Provision a dedicated high-performance tenancy with automated academic structures, fee frameworks, and root administrator credentials.
         </p>
       </div>
 
       {/* Step Indicator */}
-      <div className="mb-8 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-4 shadow-sm">
+      <div className="mb-8 bg-card border border-border rounded-xl p-4 shadow-2xs">
         <div className="grid grid-cols-2 sm:grid-cols-5 gap-3">
           {STEPS.map((step) => {
             const isCurrent = currentStep === step.id;
@@ -229,9 +229,9 @@ export function OnboardingWizard() {
                 key={step.id}
                 className={`flex flex-col gap-1 p-2.5 rounded-lg transition-all ${
                   isCurrent
-                    ? "bg-indigo-50 dark:bg-indigo-950/40 border border-indigo-200 dark:border-indigo-800"
+                    ? "bg-primary-subtle border border-primary/20"
                     : isDone
-                    ? "bg-slate-50 dark:bg-slate-800/40"
+                    ? "bg-muted/40"
                     : "opacity-60"
                 }`}
               >
@@ -239,23 +239,23 @@ export function OnboardingWizard() {
                   <span
                     className={`w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-bold ${
                       isDone
-                        ? "bg-emerald-600 text-white"
+                        ? "bg-success text-white"
                         : isCurrent
-                        ? "bg-indigo-600 text-white"
-                        : "bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-300"
+                        ? "bg-primary text-primary-foreground"
+                        : "bg-muted text-muted-foreground"
                     }`}
                   >
                     {isDone ? "✓" : step.id}
                   </span>
-                  <span className="text-[10px] uppercase font-bold tracking-wider text-slate-400">
+                  <span className="text-[10px] uppercase font-bold tracking-wider text-muted-foreground">
                     Step {step.id}
                   </span>
                 </div>
                 <p
                   className={`text-xs font-semibold mt-1 truncate ${
                     isCurrent
-                      ? "text-indigo-900 dark:text-indigo-300"
-                      : "text-slate-700 dark:text-slate-300"
+                      ? "text-primary font-bold"
+                      : "text-foreground"
                   }`}
                 >
                   {step.title}
@@ -275,15 +275,15 @@ export function OnboardingWizard() {
       )}
 
       {/* Main Body */}
-      <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-6 sm:p-8 shadow-sm">
+      <div className="bg-card border border-border rounded-xl p-6 sm:p-8 shadow-2xs">
         {/* STEP 1: INSTITUTION TYPE */}
         {currentStep === 1 && (
           <div className="space-y-6">
             <div>
-              <h2 className="text-lg font-semibold text-slate-900 dark:text-slate-100">
+              <h2 className="text-lg font-semibold text-foreground">
                 Choose Institutional Architecture
               </h2>
-              <p className="text-xs text-slate-500 mt-0.5">
+              <p className="text-xs text-muted-foreground mt-0.5">
                 Nexora automatically tunes timetable grids, attendance policies, and terminology based on the selected institution archetype.
               </p>
             </div>
@@ -321,8 +321,8 @@ export function OnboardingWizard() {
                     onClick={() => handleTypeSelect(item.id)}
                     className={`text-left p-5 rounded-xl border transition-all relative flex flex-col justify-between ${
                       isSelected
-                        ? "border-indigo-600 ring-2 ring-indigo-500/20 bg-indigo-50/40 dark:bg-indigo-950/20"
-                        : "border-slate-200 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-700 bg-white dark:bg-slate-900/50"
+                        ? "border-primary ring-2 ring-primary/20 bg-primary-subtle"
+                        : "border-border hover:border-primary/40 bg-card"
                     }`}
                   >
                     <div>
@@ -330,27 +330,27 @@ export function OnboardingWizard() {
                         <div
                           className={`w-10 h-10 rounded-lg flex items-center justify-center ${
                             isSelected
-                              ? "bg-indigo-600 text-white"
-                              : "bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400"
+                              ? "bg-primary text-primary-foreground"
+                              : "bg-muted text-muted-foreground"
                           }`}
                         >
                           <Icon className="w-5 h-5" />
                         </div>
-                        <Badge variant={isSelected ? "default" : "outline"} className="text-[10px]">
+                        <Badge variant={isSelected ? "champagne" : "outline"} className="text-[10px]">
                           {item.badge}
                         </Badge>
                       </div>
-                      <h3 className="text-sm font-bold text-slate-900 dark:text-slate-100">{item.title}</h3>
-                      <p className="text-xs text-slate-500 dark:text-slate-400 mt-2 leading-relaxed">
+                      <h3 className="text-sm font-bold text-foreground">{item.title}</h3>
+                      <p className="text-xs text-muted-foreground mt-2 leading-relaxed">
                         {item.desc}
                       </p>
                     </div>
 
-                    <div className="mt-4 pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between text-xs font-medium">
-                      <span className={isSelected ? "text-indigo-600 dark:text-indigo-400 font-semibold" : "text-slate-400"}>
+                    <div className="mt-4 pt-3 border-t border-border flex items-center justify-between text-xs font-medium">
+                      <span className={isSelected ? "text-primary font-semibold" : "text-muted-foreground"}>
                         {isSelected ? "Selected Model" : "Click to Select"}
                       </span>
-                      {isSelected && <CheckCircle2 className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />}
+                      {isSelected && <CheckCircle2 className="w-4 h-4 text-primary" />}
                     </div>
                   </button>
                 );
@@ -363,10 +363,10 @@ export function OnboardingWizard() {
         {currentStep === 2 && (
           <div className="space-y-6">
             <div>
-              <h2 className="text-lg font-semibold text-slate-900 dark:text-slate-100">
+              <h2 className="text-lg font-semibold text-foreground">
                 Institutional Profile & Headquarters
               </h2>
-              <p className="text-xs text-slate-500 mt-0.5">
+              <p className="text-xs text-muted-foreground mt-0.5">
                 Official details rendered on fee receipts, student identity cards, and academic transcripts.
               </p>
             </div>
@@ -396,7 +396,7 @@ export function OnboardingWizard() {
                   onChange={(e) => updateField("code", e.target.value.toUpperCase())}
                   className="h-9 text-xs font-mono uppercase"
                 />
-                <span className="text-[10px] text-slate-400">Used for tenant isolation and roll number prefixes.</span>
+                <span className="text-[10px] text-muted-foreground">Used for tenant isolation and roll number prefixes.</span>
               </div>
 
               <div className="space-y-1.5">
@@ -485,20 +485,20 @@ export function OnboardingWizard() {
         {currentStep === 3 && (
           <div className="space-y-6">
             <div>
-              <h2 className="text-lg font-semibold text-slate-900 dark:text-slate-100">
+              <h2 className="text-lg font-semibold text-foreground">
                 Academic Framework & Classes
               </h2>
-              <p className="text-xs text-slate-500 mt-0.5">
+              <p className="text-xs text-muted-foreground mt-0.5">
                 Set active session terms and provision default classes/cohorts. You can add or modify sections anytime after onboarding.
               </p>
             </div>
 
-            <div className="p-4 bg-slate-50 dark:bg-slate-800/40 rounded-xl border border-slate-200 dark:border-slate-800 flex items-center justify-between gap-4">
+            <div className="p-4 bg-muted/30 rounded-xl border border-border flex items-center justify-between gap-4">
               <div className="flex items-center gap-3">
-                <Calendar className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />
+                <Calendar className="w-5 h-5 text-primary" />
                 <div>
-                  <h4 className="text-xs font-bold text-slate-900 dark:text-slate-100">Active Academic Session</h4>
-                  <p className="text-[11px] text-slate-500">Current fiscal and academic enrollment period</p>
+                  <h4 className="text-xs font-bold text-foreground">Active Academic Session</h4>
+                  <p className="text-[11px] text-muted-foreground">Current fiscal and academic enrollment period</p>
                 </div>
               </div>
               <Input
@@ -510,9 +510,9 @@ export function OnboardingWizard() {
             </div>
 
             <div className="space-y-3">
-              <Label className="text-xs font-semibold text-slate-900 dark:text-slate-100 flex items-center justify-between">
+              <Label className="text-xs font-semibold text-foreground flex items-center justify-between">
                 <span>{formData.institutionType === "COLLEGE" ? "Initial Programs / Departments" : "Initial Classes / Grades"}</span>
-                <span className="text-[11px] font-normal text-slate-400">{formData.classesList.length} defined</span>
+                <span className="text-[11px] font-normal text-muted-foreground">{formData.classesList.length} defined</span>
               </Label>
 
               <div className="flex gap-2">
@@ -533,10 +533,10 @@ export function OnboardingWizard() {
                 {formData.classesList.map((cls, idx) => (
                   <div
                     key={idx}
-                    className="flex items-center justify-between p-2.5 rounded-lg border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/50 text-xs font-medium"
+                    className="flex items-center justify-between p-2.5 rounded-lg border border-border bg-card text-xs font-medium"
                   >
                     <div className="flex items-center gap-2">
-                      <span className="w-5 h-5 rounded bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-[10px] text-slate-500 font-bold">
+                      <span className="w-5 h-5 rounded bg-muted flex items-center justify-center text-[10px] text-muted-foreground font-bold">
                         {idx + 1}
                       </span>
                       <span>{cls}</span>
@@ -544,7 +544,7 @@ export function OnboardingWizard() {
                     <button
                       type="button"
                       onClick={() => removeClassItem(idx)}
-                      className="text-slate-400 hover:text-rose-500 transition-colors p-1"
+                      className="text-muted-foreground hover:text-destructive transition-colors p-1"
                     >
                       <Trash2 className="w-3.5 h-3.5" />
                     </button>
@@ -559,10 +559,10 @@ export function OnboardingWizard() {
         {currentStep === 4 && (
           <div className="space-y-6">
             <div>
-              <h2 className="text-lg font-semibold text-slate-900 dark:text-slate-100">
+              <h2 className="text-lg font-semibold text-foreground">
                 Master Executive Administrator Account
               </h2>
-              <p className="text-xs text-slate-500 mt-0.5">
+              <p className="text-xs text-muted-foreground mt-0.5">
                 This root administrator will have full governance permissions across all institution modules, financial ledgers, and staff configurations.
               </p>
             </div>
@@ -619,7 +619,7 @@ export function OnboardingWizard() {
                   onChange={(e) => updateField("adminPassword", e.target.value)}
                   className="h-9 text-xs"
                 />
-                <span className="text-[10px] text-slate-400">Can be reset immediately after first security login.</span>
+                <span className="text-[10px] text-muted-foreground">Can be reset immediately after first security login.</span>
               </div>
             </div>
           </div>
@@ -629,41 +629,41 @@ export function OnboardingWizard() {
         {currentStep === 5 && !isCompleted && (
           <div className="space-y-6">
             <div>
-              <h2 className="text-lg font-semibold text-slate-900 dark:text-slate-100">
+              <h2 className="text-lg font-semibold text-foreground">
                 Review & Confirm Deployment
               </h2>
-              <p className="text-xs text-slate-500 mt-0.5">
+              <p className="text-xs text-muted-foreground mt-0.5">
                 Inspect institutional configuration before committing records to the live database cluster.
               </p>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 p-5 rounded-xl bg-slate-50 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-800 text-xs">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 p-5 rounded-xl bg-surface-subtle border border-border text-xs">
               <div>
-                <span className="text-slate-400 uppercase tracking-wider text-[10px] font-bold">Institution Name</span>
-                <p className="font-bold text-slate-900 dark:text-slate-100 text-sm mt-0.5">{formData.name || "—"}</p>
-                <p className="text-slate-500 font-mono text-[11px] mt-0.5">Code: {formData.code || "—"}</p>
+                <span className="text-muted-foreground uppercase tracking-wider text-[10px] font-bold">Institution Name</span>
+                <p className="font-bold text-foreground text-sm mt-0.5">{formData.name || "—"}</p>
+                <p className="text-muted-foreground font-mono text-[11px] mt-0.5">Code: {formData.code || "—"}</p>
               </div>
 
               <div>
-                <span className="text-slate-400 uppercase tracking-wider text-[10px] font-bold">Operating Archetype</span>
-                <p className="font-semibold text-indigo-600 dark:text-indigo-400 text-sm mt-0.5">{formData.institutionType}</p>
-                <p className="text-slate-500 text-[11px] mt-0.5">Session: {formData.academicYearName}</p>
+                <span className="text-muted-foreground uppercase tracking-wider text-[10px] font-bold">Operating Archetype</span>
+                <p className="font-semibold text-primary text-sm mt-0.5">{formData.institutionType}</p>
+                <p className="text-muted-foreground text-[11px] mt-0.5">Session: {formData.academicYearName}</p>
               </div>
 
               <div>
-                <span className="text-slate-400 uppercase tracking-wider text-[10px] font-bold">Official Contact</span>
-                <p className="font-medium text-slate-800 dark:text-slate-200 mt-0.5">{formData.email}</p>
-                <p className="text-slate-500 text-[11px]">{formData.city}, {formData.state}</p>
+                <span className="text-muted-foreground uppercase tracking-wider text-[10px] font-bold">Official Contact</span>
+                <p className="font-medium text-foreground mt-0.5">{formData.email}</p>
+                <p className="text-muted-foreground text-[11px]">{formData.city}, {formData.state}</p>
               </div>
 
               <div>
-                <span className="text-slate-400 uppercase tracking-wider text-[10px] font-bold">Root Administrator</span>
-                <p className="font-medium text-slate-800 dark:text-slate-200 mt-0.5">{formData.adminName}</p>
-                <p className="text-slate-500 text-[11px]">{formData.adminEmail}</p>
+                <span className="text-muted-foreground uppercase tracking-wider text-[10px] font-bold">Root Administrator</span>
+                <p className="font-medium text-foreground mt-0.5">{formData.adminName}</p>
+                <p className="text-muted-foreground text-[11px]">{formData.adminEmail}</p>
               </div>
 
-              <div className="sm:col-span-2 pt-2 border-t border-slate-200 dark:border-slate-700">
-                <span className="text-slate-400 uppercase tracking-wider text-[10px] font-bold">Configured Academic Cohorts ({formData.classesList.length})</span>
+              <div className="sm:col-span-2 pt-2 border-t border-border">
+                <span className="text-muted-foreground uppercase tracking-wider text-[10px] font-bold">Configured Academic Cohorts ({formData.classesList.length})</span>
                 <div className="flex flex-wrap gap-1.5 mt-2">
                   {formData.classesList.map((c, i) => (
                     <Badge key={i} variant="secondary" className="text-[10px]">
@@ -675,9 +675,9 @@ export function OnboardingWizard() {
             </div>
 
             {isSubmitting && (
-              <div className="p-4 rounded-xl bg-indigo-50 dark:bg-indigo-950/40 border border-indigo-200 dark:border-indigo-800 flex items-center gap-3">
-                <Loader2 className="w-5 h-5 text-indigo-600 animate-spin" />
-                <span className="text-xs font-semibold text-indigo-900 dark:text-indigo-300">
+              <div className="p-4 rounded-xl bg-primary-subtle border border-primary/20 flex items-center gap-3">
+                <Loader2 className="w-5 h-5 text-primary animate-spin" />
+                <span className="text-xs font-semibold text-primary">
                   {provisionProgress || "Provisioning institution schema..."}
                 </span>
               </div>
@@ -688,32 +688,32 @@ export function OnboardingWizard() {
         {/* STEP 5: SUCCESS STATE */}
         {isCompleted && (
           <div className="text-center py-8 space-y-4">
-            <div className="w-16 h-16 rounded-full bg-emerald-100 dark:bg-emerald-950/60 border border-emerald-300 dark:border-emerald-700 text-emerald-600 dark:text-emerald-400 flex items-center justify-center mx-auto shadow-sm">
+            <div className="w-16 h-16 rounded-full bg-success-subtle border border-success/20 text-success flex items-center justify-center mx-auto shadow-sm">
               <CheckCircle2 className="w-8 h-8" />
             </div>
 
             <div>
-              <h2 className="text-xl font-bold text-slate-900 dark:text-slate-100">
+              <h2 className="text-xl font-bold text-foreground">
                 Institution Successfully Provisioned!
               </h2>
-              <p className="text-xs text-slate-500 max-w-md mx-auto mt-1">
+              <p className="text-xs text-muted-foreground max-w-md mx-auto mt-1">
                 <strong>{formData.name}</strong> has been configured with campus records, academic hierarchies, and root executive permissions.
               </p>
             </div>
 
-            <div className="p-4 max-w-md mx-auto bg-slate-50 dark:bg-slate-800/50 rounded-xl border border-slate-200 dark:border-slate-800 text-left text-xs space-y-2">
+            <div className="p-4 max-w-md mx-auto bg-muted/30 rounded-xl border border-border text-left text-xs space-y-2">
               <div className="flex justify-between">
-                <span className="text-slate-400">Institution Code:</span>
-                <span className="font-mono font-bold text-indigo-600 dark:text-indigo-400">{formData.code}</span>
+                <span className="text-muted-foreground">Institution Code:</span>
+                <span className="font-mono font-bold text-primary">{formData.code}</span>
               </div>
               <div className="flex justify-between">
-                <span className="text-slate-400">Administrator:</span>
-                <span className="font-semibold text-slate-800 dark:text-slate-200">{formData.adminEmail}</span>
+                <span className="text-muted-foreground">Administrator:</span>
+                <span className="font-semibold text-foreground">{formData.adminEmail}</span>
               </div>
               <div className="flex justify-between">
-                <span className="text-slate-400">Tenancy Status:</span>
-                <span className="text-emerald-600 font-semibold flex items-center gap-1">
-                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+                <span className="text-muted-foreground">Tenancy Status:</span>
+                <span className="text-success font-semibold flex items-center gap-1">
+                  <span className="w-1.5 h-1.5 rounded-full bg-success"></span>
                   Active & Operational
                 </span>
               </div>
@@ -722,7 +722,7 @@ export function OnboardingWizard() {
             <div className="pt-4 flex justify-center gap-3">
               <Button
                 onClick={() => router.push("/dashboard")}
-                className="bg-indigo-600 hover:bg-indigo-700 text-white text-xs h-9"
+                className="bg-primary hover:bg-primary-hover text-primary-foreground text-xs h-9 font-medium"
               >
                 Launch Dashboard
                 <ArrowRight className="w-3.5 h-3.5 ml-1.5" />
@@ -733,7 +733,7 @@ export function OnboardingWizard() {
 
         {/* Footer Actions */}
         {!isCompleted && (
-          <div className="mt-8 pt-6 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between">
+          <div className="mt-8 pt-6 border-t border-border flex items-center justify-between">
             <Button
               type="button"
               variant="outline"
@@ -752,7 +752,7 @@ export function OnboardingWizard() {
                   type="button"
                   size="sm"
                   onClick={handleNext}
-                  className="bg-indigo-600 hover:bg-indigo-700 text-white text-xs h-9"
+                  className="bg-primary hover:bg-primary-hover text-primary-foreground text-xs h-9 font-medium"
                 >
                   Continue
                   <ArrowRight className="w-3.5 h-3.5 ml-1.5" />
@@ -763,7 +763,7 @@ export function OnboardingWizard() {
                   size="sm"
                   onClick={handleProvision}
                   disabled={isSubmitting}
-                  className="bg-emerald-600 hover:bg-emerald-700 text-white text-xs h-9"
+                  className="bg-primary hover:bg-primary-hover text-primary-foreground text-xs h-9 font-medium"
                 >
                   {isSubmitting ? (
                     <>

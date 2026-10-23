@@ -18,7 +18,7 @@ export default function ExamsLoading() {
       {/* KPI Stats Grid Skeleton */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
         {[...Array(4)].map((_, i) => (
-          <div key={i} className="p-4 rounded-xl border border-border bg-white shadow-xs space-y-2">
+          <div key={i} className="p-4 rounded-xl border border-border bg-card shadow-xs space-y-2">
             <div className="h-3 w-24 bg-muted/60 rounded" />
             <div className="h-7 w-16 bg-muted rounded" />
             <div className="h-3 w-32 bg-muted/40 rounded" />
@@ -27,7 +27,7 @@ export default function ExamsLoading() {
       </div>
 
       {/* Search & Filter Bar Skeleton */}
-      <div className="p-3 rounded-xl border border-border bg-white shadow-xs flex items-center justify-between gap-3">
+      <div className="p-3 rounded-xl border border-border bg-card shadow-xs flex items-center justify-between gap-3">
         <div className="h-9 flex-1 max-w-md bg-muted/50 rounded-lg" />
         <div className="h-9 w-24 bg-muted/50 rounded-lg" />
       </div>
@@ -37,7 +37,7 @@ export default function ExamsLoading() {
         {[...Array(6)].map((_, i) => (
           <div
             key={i}
-            className="p-5 rounded-xl border border-border bg-white shadow-xs space-y-4"
+            className="p-5 rounded-xl border border-border bg-card shadow-xs space-y-4"
           >
             <div className="flex items-center justify-between">
               <div className="h-4 w-28 bg-muted/70 rounded" />

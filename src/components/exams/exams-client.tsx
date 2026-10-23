@@ -945,14 +945,14 @@ export function ExamsClient({
 
       {/* Metrics Row */}
       <div className="grid grid-cols-1 gap-3 sm:grid-cols-4">
-        <div className="rounded-xl border border-border bg-white p-4 shadow-xs">
+        <div className="rounded-xl border border-border bg-card p-4 shadow-xs">
           <div className="text-[11px] font-mono uppercase tracking-wider text-muted-foreground">
             Total Examinations
           </div>
           <div className="mt-1 text-2xl font-bold text-foreground">{stats.totalExams}</div>
           <div className="mt-0.5 text-[11px] text-muted-foreground">Configured assessment cycles</div>
         </div>
-        <div className="rounded-xl border border-border bg-white p-4 shadow-xs">
+        <div className="rounded-xl border border-border bg-card p-4 shadow-xs">
           <div className="text-[11px] font-mono uppercase tracking-wider text-muted-foreground">
             Scheduled & Upcoming
           </div>
@@ -961,7 +961,7 @@ export function ExamsClient({
           </div>
           <div className="mt-0.5 text-[11px] text-muted-foreground">Papers on academic timetable</div>
         </div>
-        <div className="rounded-xl border border-border bg-white p-4 shadow-xs">
+        <div className="rounded-xl border border-border bg-card p-4 shadow-xs">
           <div className="text-[11px] font-mono uppercase tracking-wider text-muted-foreground">
             Active / Ongoing
           </div>
@@ -970,21 +970,21 @@ export function ExamsClient({
           </div>
           <div className="mt-0.5 text-[11px] text-muted-foreground">Currently administered cycles</div>
         </div>
-        <div className="rounded-xl border border-border bg-white p-4 shadow-xs">
+        <div className="rounded-xl border border-border bg-card p-4 shadow-xs">
           <div className="text-[11px] font-mono uppercase tracking-wider text-muted-foreground">
             Results Status
           </div>
           <div className="mt-1 text-base font-bold text-foreground flex items-center gap-1.5 pt-1">
-            <span className="text-amber-600">{stats.resultsPending ?? 0} Pending</span>
+            <span className="text-warning font-mono">{stats.resultsPending ?? 0} Pending</span>
             <span>·</span>
-            <span className="text-emerald-700">{stats.resultsPublished ?? 0} Published</span>
+            <span className="text-success font-mono">{stats.resultsPublished ?? 0} Published</span>
           </div>
           <div className="mt-0.5 text-[11px] text-muted-foreground">Evaluation & report status</div>
         </div>
       </div>
 
       {/* Filter and Search Bar */}
-      <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5 bg-white p-2.5 rounded-xl border border-border shadow-xs">
+      <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5 bg-card p-2.5 rounded-xl border border-border shadow-xs">
         {/* Dominant Search Input */}
         <div className="relative flex-1">
           <Search className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted-foreground" />
@@ -1055,7 +1055,7 @@ export function ExamsClient({
                   onClick={() => setIsFilterOpen(false)}
                 />
                 <div
-                  className="absolute right-0 top-full mt-2 w-72 rounded-xl bg-white border border-border shadow-2xl z-40 p-4 space-y-4 text-xs"
+                  className="absolute right-0 top-full mt-2 w-72 rounded-xl bg-popover border border-border shadow-2xl z-40 p-4 space-y-4 text-xs"
                   onClick={(e) => e.stopPropagation()}
                 >
                   <div className="flex items-center justify-between border-b border-border pb-2">
@@ -1217,7 +1217,7 @@ export function ExamsClient({
                 <div
                   key={exam.id}
                   onClick={() => handleOpenManageExam(exam)}
-                  className={`cursor-pointer rounded-xl border border-border bg-white shadow-2xs hover:border-primary/50 hover:shadow-sm transition-all duration-150 p-4 flex flex-col justify-between gap-3 group relative ${
+                  className={`cursor-pointer rounded-xl border border-border bg-card shadow-2xs hover:border-accent/40 hover:shadow-sm transition-all duration-150 p-4 flex flex-col justify-between gap-3 group relative ${
                     isNavigating ? "ring-2 ring-primary/40 opacity-80" : ""
                   }`}
                 >
@@ -1247,12 +1247,12 @@ export function ExamsClient({
                             : exam.status === "ONGOING"
                             ? "bg-amber-50 text-amber-800 border-amber-300"
                             : exam.status === "COMPLETED"
-                            ? "bg-slate-100 text-slate-800 border-slate-300"
+                            ? "bg-muted text-foreground border-border"
                             : exam.status === "POSTPONED"
                             ? "bg-purple-50 text-purple-800 border-purple-300"
                             : exam.status === "CANCELLED"
                             ? "bg-rose-50 text-rose-800 border-rose-300"
-                            : "bg-slate-50 text-slate-800 border-slate-300"
+                            : "bg-muted/60 text-muted-foreground border-border"
                         }`}
                       >
                         <span className="w-1.5 h-1.5 rounded-full bg-current" />
@@ -1340,7 +1340,7 @@ export function ExamsClient({
                           e.stopPropagation();
                           setOpenMenuExamId(openMenuExamId === exam.id ? null : exam.id);
                         }}
-                        className="p-1.5 rounded-lg border border-border bg-white hover:bg-muted text-muted-foreground hover:text-foreground transition-all cursor-pointer shadow-2xs"
+                        className="p-1.5 rounded-lg border border-border bg-card hover:bg-muted text-muted-foreground hover:text-foreground transition-all cursor-pointer shadow-2xs"
                         title="More Options"
                       >
                         <MoreVertical className="w-3.5 h-3.5" />
@@ -1356,7 +1356,7 @@ export function ExamsClient({
                             }}
                           />
                           <div
-                            className="absolute right-0 bottom-full mb-1 w-52 rounded-xl bg-white border border-border shadow-xl z-30 py-1 text-xs divide-y divide-border"
+                            className="absolute right-0 bottom-full mb-1 w-52 rounded-xl bg-popover border border-border shadow-xl z-30 py-1 text-xs divide-y divide-border"
                             onClick={(e) => e.stopPropagation()}
                           >
                             <div className="py-1">
@@ -1369,7 +1369,7 @@ export function ExamsClient({
                                   }}
                                   className="w-full text-left px-3 py-1.5 hover:bg-muted flex items-center gap-2 text-foreground font-medium cursor-pointer"
                                 >
-                                  <BookOpen className="w-3.5 h-3.5 text-slate-600" />
+                                  <BookOpen className="w-3.5 h-3.5 text-muted-foreground" />
                                   Enter Subject Marks
                                 </button>
                               )}
@@ -1567,7 +1567,7 @@ export function ExamsClient({
                         newStartDate: e.target.value,
                       }))
                     }
-                    className="w-full rounded border border-border bg-white p-1.5 text-xs text-foreground"
+                    className="w-full rounded border border-border bg-background p-1.5 text-xs text-foreground focus:ring-1 focus:ring-accent"
                   />
                 </div>
                 <div>
@@ -1583,7 +1583,7 @@ export function ExamsClient({
                         newEndDate: e.target.value,
                       }))
                     }
-                    className="w-full rounded border border-border bg-white p-1.5 text-xs text-foreground"
+                    className="w-full rounded border border-border bg-background p-1.5 text-xs text-foreground focus:ring-1 focus:ring-accent"
                   />
                 </div>
               </div>
@@ -1684,7 +1684,7 @@ export function ExamsClient({
                 <select
                   value={selectedSectionFilter}
                   onChange={(e) => setSelectedSectionFilter(e.target.value)}
-                  className="rounded-md border border-border bg-white px-2 py-1 text-xs text-foreground font-mono"
+                  className="rounded-md border border-border bg-background px-2 py-1 text-xs text-foreground font-mono"
                 >
                   <option value="ALL">All Sections</option>
                   {activePaper.sections.map((sec) => (
@@ -1702,14 +1702,14 @@ export function ExamsClient({
 
             {/* Notification messages */}
             {marksSaveMessage && (
-              <div className="p-3 rounded-lg bg-emerald-50 text-emerald-800 border border-emerald-200 text-xs flex items-center gap-2">
-                <CheckCircle2 className="w-4 h-4 shrink-0 text-emerald-600" />
+              <div className="p-3 rounded-lg bg-success/15 text-success border border-success/30 text-xs flex items-center gap-2">
+                <CheckCircle2 className="w-4 h-4 shrink-0 text-success" />
                 <span>{marksSaveMessage}</span>
               </div>
             )}
             {marksErrorMessage && (
-              <div className="p-3 rounded-lg bg-rose-50 text-rose-800 border border-rose-200 text-xs flex items-center gap-2">
-                <AlertCircle className="w-4 h-4 shrink-0 text-rose-600" />
+              <div className="p-3 rounded-lg bg-destructive/15 text-destructive border border-destructive/30 text-xs flex items-center gap-2">
+                <AlertCircle className="w-4 h-4 shrink-0 text-destructive" />
                 <span>{marksErrorMessage}</span>
               </div>
             )}
@@ -1771,10 +1771,10 @@ export function ExamsClient({
                                 handleStudentMarkChange(student.studentId, e.target.value)
                               }
                               placeholder="—"
-                              className={`w-20 text-center font-mono font-bold py-1 px-2 rounded border focus:outline-none focus:ring-1 focus:ring-primary ${
+                              className={`w-20 text-center font-mono font-bold py-1 px-2 rounded border focus:outline-none focus:ring-1 focus:ring-accent ${
                                 student.isAbsent
                                   ? "bg-muted text-muted-foreground border-border opacity-50"
-                                  : "border-border bg-white text-foreground"
+                                  : "border-border bg-background text-foreground"
                               }`}
                             />
                           </td>
@@ -1782,8 +1782,8 @@ export function ExamsClient({
                             <span
                               className={`font-mono font-bold text-xs ${
                                 student.grade === "F" || student.grade === "AB"
-                                  ? "text-rose-600"
-                                  : "text-emerald-700"
+                                  ? "text-destructive"
+                                  : "text-success"
                               }`}
                             >
                               {student.grade || "—"}
@@ -1795,7 +1795,7 @@ export function ExamsClient({
                               onClick={() => handleAbsentToggle(student.studentId)}
                               className={`px-2 py-0.5 rounded font-mono text-[10px] font-semibold border transition-colors ${
                                 student.isAbsent
-                                  ? "bg-rose-100 text-rose-800 border-rose-300"
+                                  ? "bg-destructive/15 text-destructive border-destructive/30"
                                   : "bg-card text-muted-foreground border-border hover:bg-muted"
                               }`}
                             >
@@ -1810,7 +1810,7 @@ export function ExamsClient({
                                 handleRemarksChange(student.studentId, e.target.value)
                               }
                               placeholder="Optional evaluation note..."
-                              className="w-full text-xs py-1 px-2 rounded border border-border bg-white text-foreground focus:outline-none focus:ring-1 focus:ring-primary"
+                              className="w-full text-xs py-1 px-2 rounded border border-border bg-background text-foreground focus:outline-none focus:ring-1 focus:ring-accent"
                             />
                           </td>
                         </tr>
@@ -1876,7 +1876,7 @@ export function ExamsClient({
                     setRcSelectedExamId(e.target.value);
                     handleOpenReportCard(e.target.value, rcSelectedStudentId);
                   }}
-                  className="w-full rounded border border-border bg-white p-1.5 text-xs text-foreground font-semibold"
+                  className="w-full rounded border border-border bg-background p-1.5 text-xs text-foreground font-semibold"
                 >
                   {exams.map((ex) => (
                     <option key={ex.id} value={ex.id}>
@@ -1896,7 +1896,7 @@ export function ExamsClient({
                     setRcSelectedStudentId(e.target.value);
                     handleOpenReportCard(rcSelectedExamId, e.target.value);
                   }}
-                  className="w-full rounded border border-border bg-white p-1.5 text-xs text-foreground font-semibold"
+                  className="w-full rounded border border-border bg-background p-1.5 text-xs text-foreground font-semibold"
                 >
                   {students.map((st) => (
                     <option key={st.id} value={st.id}>
@@ -1917,7 +1917,7 @@ export function ExamsClient({
               </div>
             ) : (
               /* Printable Report Card */
-              <div className="p-6 rounded-xl border border-border bg-white space-y-6">
+              <div className="p-6 rounded-xl border border-border bg-card space-y-6">
                 {/* Institution Header */}
                 <div className="text-center border-b border-foreground pb-4 space-y-1">
                   <div className="text-base font-extrabold tracking-tight text-foreground uppercase">
@@ -2315,13 +2315,13 @@ export function ExamsClient({
                                 ),
                               }));
                             }}
-                            className="w-full px-2.5 py-1.5 rounded border border-border bg-white text-xs font-mono font-medium text-foreground focus:outline-none focus:ring-1 focus:ring-primary"
+                            className="w-full px-2.5 py-1.5 rounded border border-border bg-background text-xs font-mono font-medium text-foreground focus:outline-none focus:ring-1 focus:ring-accent"
                           />
                         </div>
 
                         <div>
                           <label className="block font-mono text-[10px] uppercase text-muted-foreground mb-1">
-                            Start Time <span className="text-rose-500">*</span>
+                            Start Time <span className="text-destructive">*</span>
                           </label>
                           <input
                             type="time"
@@ -2335,13 +2335,13 @@ export function ExamsClient({
                                 ),
                               }));
                             }}
-                            className="w-full px-2.5 py-1.5 rounded border border-border bg-white text-xs font-mono font-medium text-foreground focus:outline-none focus:ring-1 focus:ring-primary"
+                            className="w-full px-2.5 py-1.5 rounded border border-border bg-background text-xs font-mono font-medium text-foreground focus:outline-none focus:ring-1 focus:ring-accent"
                           />
                         </div>
 
                         <div>
                           <label className="block font-mono text-[10px] uppercase text-muted-foreground mb-1">
-                            End Time <span className="text-rose-500">*</span>
+                            End Time <span className="text-destructive">*</span>
                           </label>
                           <input
                             type="time"
@@ -2355,7 +2355,7 @@ export function ExamsClient({
                                 ),
                               }));
                             }}
-                            className="w-full px-2.5 py-1.5 rounded border border-border bg-white text-xs font-mono font-medium text-foreground focus:outline-none focus:ring-1 focus:ring-primary"
+                            className="w-full px-2.5 py-1.5 rounded border border-border bg-background text-xs font-mono font-medium text-foreground focus:outline-none focus:ring-1 focus:ring-accent"
                           />
                         </div>
                       </div>

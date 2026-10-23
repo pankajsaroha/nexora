@@ -109,6 +109,8 @@ export default async function StudentsPage({
       id: st.id,
       admissionNumber: st.admissionNumber,
       rollNumber: st.rollNumber,
+      loginId: st.loginId,
+      portalAccessStatus: st.portalAccessStatus || "NOT_ENABLED",
       universityRegNumber: st.universityRegNumber,
       firstName: st.firstName,
       middleName: st.middleName,

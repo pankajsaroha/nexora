@@ -13,12 +13,12 @@ export function InstitutionTypes() {
         {/* Section Header */}
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
           <div className="max-w-3xl space-y-4">
-            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-primary/40 bg-warm/15 text-[11px] font-mono uppercase tracking-widest text-primary shadow-2xs">
-              <Sparkles className="w-3.5 h-3.5 text-primary" />
+            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-accent/20 bg-accent-subtle text-[11px] uppercase tracking-wider text-accent shadow-2xs font-medium">
+              <Sparkles className="w-3.5 h-3.5 text-accent" />
               <span>Tailored Academic Tiers</span>
             </div>
 
-            <h2 className="text-3xl sm:text-4xl font-extrabold text-foreground tracking-tight">
+            <h2 className="text-3xl sm:text-4xl font-bold text-foreground tracking-tight">
               Engineered for both K-12 Schools and Higher Education Colleges.
             </h2>
 
@@ -28,11 +28,11 @@ export function InstitutionTypes() {
           </div>
 
           {/* Interactive Tier Toggle */}
-          <div className="flex items-center gap-1.5 p-1.5 rounded-2xl bg-white border border-border shadow-xs shrink-0">
+          <div className="flex items-center gap-1.5 p-1.5 rounded-xl bg-muted/60 border border-border shadow-xs shrink-0">
             <button
               type="button"
               onClick={() => setSelectedTier("school")}
-              className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-bold transition-all ${
+              className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-semibold transition-all ${
                 selectedTier === "school"
                   ? "bg-primary text-primary-foreground shadow-xs"
                   : "text-muted-foreground hover:text-foreground"
@@ -44,7 +44,7 @@ export function InstitutionTypes() {
             <button
               type="button"
               onClick={() => setSelectedTier("college")}
-              className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-bold transition-all ${
+              className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-semibold transition-all ${
                 selectedTier === "college"
                   ? "bg-primary text-primary-foreground shadow-xs"
                   : "text-muted-foreground hover:text-foreground"
@@ -59,24 +59,24 @@ export function InstitutionTypes() {
         {/* Dynamic Architectural Comparison View */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           {/* Active Interactive Tier Card */}
-          <div className="rounded-3xl border border-border bg-white p-7 sm:p-9 space-y-6 shadow-xl flex flex-col justify-between">
+          <div className="rounded-xl border border-border bg-card p-7 sm:p-9 space-y-6 shadow-xs flex flex-col justify-between">
             <div className="space-y-6">
               <div className="flex items-center justify-between border-b border-border pb-4">
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-xl bg-warm/15 border border-warm/30 flex items-center justify-center text-primary font-bold shadow-2xs">
+                  <div className="w-10 h-10 rounded-xl bg-accent-subtle border border-accent/20 flex items-center justify-center text-accent font-bold shadow-2xs">
                     {selectedTier === "school" ? <School className="w-5 h-5" /> : <Building2 className="w-5 h-5" />}
                   </div>
                   <div>
-                    <h3 className="font-extrabold text-lg text-foreground">
+                    <h3 className="font-bold text-lg text-foreground">
                       {selectedTier === "school" ? "K-12 Schools & Academies" : "Colleges & Higher Education"}
                     </h3>
-                    <div className="text-[11px] font-mono text-muted-foreground">
+                    <div className="text-[11px] text-muted-foreground">
                       {selectedTier === "school" ? "Primary, Middle & High Schools" : "Undergraduate, Postgraduate & Autonomous"}
                     </div>
                   </div>
                 </div>
 
-                <span className="font-mono text-[10px] uppercase font-bold text-success bg-success/15 px-2.5 py-1 rounded-md border border-success/30">
+                <span className="text-[10px] uppercase font-semibold text-success bg-success-subtle px-2.5 py-1 rounded-md border border-success-border">
                   {selectedTier === "school" ? "Grade-Division Model" : "Semester-Credit Model"}
                 </span>
               </div>
@@ -109,61 +109,61 @@ export function InstitutionTypes() {
             <div className="pt-5 border-t border-border flex items-center justify-between">
               <Link
                 href="/onboarding"
-                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-primary text-primary-foreground text-xs font-bold uppercase tracking-wider hover:bg-primary-hover hover:border-primary border border-primary transition-all shadow-xs"
+                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-primary text-primary-foreground text-xs font-semibold hover:bg-primary-hover border border-primary/20 transition-all shadow-xs"
               >
                 <span>Onboard {selectedTier === "school" ? "School" : "College"}</span>
-                <ArrowRight className="w-3.5 h-3.5 text-primary" />
+                <ArrowRight className="w-3.5 h-3.5 text-primary-foreground" />
               </Link>
-              <span className="text-[11px] font-mono text-muted-foreground">Takes ~3 minutes</span>
+              <span className="text-[11px] text-muted-foreground">Takes ~3 minutes</span>
             </div>
           </div>
 
           {/* Visual Architecture Preview Box */}
-          <div className="rounded-3xl border border-border bg-card p-7 sm:p-9 space-y-5 shadow-xs flex flex-col justify-between">
+          <div className="rounded-xl border border-border bg-card p-7 sm:p-9 space-y-5 shadow-xs flex flex-col justify-between">
             <div className="space-y-4">
               <div className="flex items-center justify-between pb-3 border-b border-border">
-                <span className="text-xs font-bold text-foreground font-mono uppercase tracking-wider">
+                <span className="text-xs font-semibold text-foreground uppercase tracking-wider">
                   Live System Hierarchy
                 </span>
-                <span className="text-[10px] font-mono text-primary font-bold bg-warm/15 px-2 py-0.5 rounded border border-warm/30">
+                <span className="text-[10px] text-accent font-semibold bg-accent-subtle px-2 py-0.5 rounded border border-accent/20">
                   {selectedTier === "school" ? "K-12 SCHEME" : "COLLEGIATE SCHEME"}
                 </span>
               </div>
 
               {selectedTier === "school" ? (
-                <div className="space-y-2.5 font-mono text-xs">
-                  <div className="p-3.5 rounded-2xl bg-white border border-border shadow-2xs">
-                    <div className="font-bold text-foreground">Institution: Northstar International Academy</div>
+                <div className="space-y-2.5 text-xs">
+                  <div className="p-3.5 rounded-xl bg-background border border-border shadow-2xs">
+                    <div className="font-semibold text-foreground">Institution: Exemplar K-12 Academy</div>
                     <div className="text-[10px] text-muted-foreground mt-0.5">Academic Year: 2026-2027 (Term 1 & Term 2)</div>
                   </div>
-                  <div className="p-3.5 rounded-2xl bg-white border border-border ml-4 shadow-2xs">
-                    <div className="font-bold text-foreground">Class: Grade 8 (Secondary Level)</div>
-                    <div className="text-[10px] text-muted-foreground mt-0.5">Section A • 32 Students • Homeroom Tutor: Mrs. Ananya Sharma</div>
+                  <div className="p-3.5 rounded-xl bg-background border border-border ml-4 shadow-2xs">
+                    <div className="font-semibold text-foreground">Class: Grade 8 (Secondary Level)</div>
+                    <div className="text-[10px] text-muted-foreground mt-0.5">Section A • 32 Students • Homeroom Faculty</div>
                   </div>
-                  <div className="p-3.5 rounded-2xl bg-white border border-border ml-8 shadow-2xs">
-                    <div className="font-bold text-foreground">Scholar: Aarav Sharma (Roll #12)</div>
-                    <div className="text-[10px] text-success font-bold mt-0.5">Parent: Mr. Rahul Sharma (Linked) • 94.2% Attendance</div>
+                  <div className="p-3.5 rounded-xl bg-background border border-border ml-8 shadow-2xs">
+                    <div className="font-semibold text-foreground">Scholar: Aarav Sharma (Roll #12)</div>
+                    <div className="text-[10px] text-success font-semibold mt-0.5">Parent: Mr. Rahul Sharma (Linked) • 94.2% Attendance</div>
                   </div>
                 </div>
               ) : (
-                <div className="space-y-2.5 font-mono text-xs">
-                  <div className="p-3.5 rounded-2xl bg-white border border-border shadow-2xs">
-                    <div className="font-bold text-foreground">Institution: Riverside College of Arts & Science</div>
+                <div className="space-y-2.5 text-xs">
+                  <div className="p-3.5 rounded-xl bg-background border border-border shadow-2xs">
+                    <div className="font-semibold text-foreground">Institution: Inzivoo Group of Colleges</div>
                     <div className="text-[10px] text-muted-foreground mt-0.5">Faculty of Computer Science & Engineering</div>
                   </div>
-                  <div className="p-3.5 rounded-2xl bg-white border border-border ml-4 shadow-2xs">
-                    <div className="font-bold text-foreground">Program: Bachelor of Computer Applications (BCA)</div>
+                  <div className="p-3.5 rounded-xl bg-background border border-border ml-4 shadow-2xs">
+                    <div className="font-semibold text-foreground">Program: Bachelor of Computer Applications (BCA)</div>
                     <div className="text-[10px] text-muted-foreground mt-0.5">Semester 1 • 60 Students • 24 Course Credits</div>
                   </div>
-                  <div className="p-3.5 rounded-2xl bg-white border border-border ml-8 shadow-2xs">
-                    <div className="font-bold text-foreground">Course: CS-101 Data Structures & Algorithms</div>
-                    <div className="text-[10px] text-primary font-bold mt-0.5">HOD: Dr. K. Ramanujan • Theory & Lab Included</div>
+                  <div className="p-3.5 rounded-xl bg-background border border-border ml-8 shadow-2xs">
+                    <div className="font-semibold text-foreground">Course: CS-101 Data Structures & Algorithms</div>
+                    <div className="text-[10px] text-accent font-semibold mt-0.5">HOD: Dr. K. Ramanujan • Theory & Lab Included</div>
                   </div>
                 </div>
               )}
             </div>
 
-            <div className="p-3.5 rounded-2xl bg-white border border-border text-[11px] text-muted-foreground flex items-center gap-2 shadow-2xs">
+            <div className="p-3.5 rounded-xl bg-background border border-border text-[11px] text-muted-foreground flex items-center gap-2 shadow-2xs">
               <span className="w-2 h-2 rounded-full bg-accent shrink-0" />
               <span>Database schema automatically structures tables to match chosen tier.</span>
             </div>

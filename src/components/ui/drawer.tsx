@@ -53,10 +53,10 @@ export function Drawer({
 
   const effectiveSize = width || size;
   const sizeClasses: Record<string, string> = {
-    sm: "max-w-sm",
-    md: "max-w-md",
-    lg: "max-w-lg",
-    xl: "max-w-xl",
+    sm: "w-full max-w-full sm:max-w-sm",
+    md: "w-full max-w-full sm:max-w-md",
+    lg: "w-full max-w-full sm:max-w-lg",
+    xl: "w-full max-w-full sm:max-w-2xl",
   };
 
   const positionClasses = {
@@ -70,7 +70,7 @@ export function Drawer({
     <div className="fixed inset-0 z-50 overflow-hidden">
       {/* Backdrop */}
       <div
-        className="fixed inset-0 bg-foreground/40 backdrop-blur-xs transition-opacity animate-in fade-in"
+        className="fixed inset-0 bg-black/40 dark:bg-black/60 backdrop-blur-xs transition-opacity animate-in fade-in"
         onClick={onClose}
       />
 
@@ -79,7 +79,7 @@ export function Drawer({
         className={cn(
           "fixed flex w-full flex-col bg-card text-card-foreground shadow-2xl border-l border-border",
           positionClasses[position],
-          sizeClasses[effectiveSize] || "max-w-md",
+          sizeClasses[effectiveSize] || "w-full max-w-full sm:max-w-md",
           className
         )}
       >

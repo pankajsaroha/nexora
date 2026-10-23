@@ -141,7 +141,7 @@ export function TeacherDashboard({
 
       {/* Key Metrics Strip (Hairline Blocks) */}
       <section className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-        <div className="p-5 rounded-2xl border border-border bg-card space-y-1 shadow-2xs hover:border-primary/40 transition-all">
+        <div className="p-5 rounded-xl border border-border bg-card space-y-1 shadow-2xs hover:border-primary/40 transition-all">
           <span className="text-[11px] font-mono uppercase tracking-wider text-muted-foreground font-bold block">
             01 / TODAY&apos;S LECTURES
           </span>
@@ -153,7 +153,7 @@ export function TeacherDashboard({
           </span>
         </div>
 
-        <div className="p-5 rounded-2xl border border-border bg-card space-y-1 shadow-2xs hover:border-primary/40 transition-all">
+        <div className="p-5 rounded-xl border border-border bg-card space-y-1 shadow-2xs hover:border-primary/40 transition-all">
           <span className="text-[11px] font-mono uppercase tracking-wider text-muted-foreground font-bold block">
             02 / SECTION ROSTER
           </span>
@@ -165,7 +165,7 @@ export function TeacherDashboard({
           </span>
         </div>
 
-        <div className="p-5 rounded-2xl border border-border bg-card space-y-1 shadow-2xs hover:border-primary/40 transition-all">
+        <div className="p-5 rounded-xl border border-border bg-card space-y-1 shadow-2xs hover:border-primary/40 transition-all">
           <span className="text-[11px] font-mono uppercase tracking-wider text-muted-foreground font-bold block">
             03 / PENDING TASKS
           </span>
@@ -179,7 +179,7 @@ export function TeacherDashboard({
 
         <Link
           href="/attendance/leaves"
-          className="p-5 rounded-2xl border border-border bg-card space-y-1 shadow-2xs hover:border-primary/40 transition-all group block"
+          className="p-5 rounded-xl border border-border bg-card space-y-1 shadow-2xs hover:border-primary/40 transition-all group block"
         >
           <span className="text-[11px] font-mono uppercase tracking-wider text-muted-foreground font-bold block">
             04 / LEAVE BALANCE
@@ -187,7 +187,7 @@ export function TeacherDashboard({
           <div className="text-2xl sm:text-3xl font-extrabold text-foreground tracking-tight group-hover:text-primary transition-colors">
             {totalAvailable} Days
           </div>
-          <span className="text-[11px] text-emerald-600 block font-bold truncate">
+          <span className="text-[11px] text-success block font-medium truncate">
             {categoriesBreakdown}
           </span>
         </Link>
@@ -213,7 +213,7 @@ export function TeacherDashboard({
               </Link>
             </div>
 
-            <div className="divide-y divide-border border border-border rounded-2xl bg-card overflow-hidden shadow-2xs">
+            <div className="divide-y divide-border border border-border rounded-xl bg-card overflow-hidden shadow-2xs">
               {todaySchedule.length === 0 ? (
                 <div className="p-6 text-center text-xs text-muted-foreground">
                   No lecture slots scheduled for today.
@@ -266,7 +266,7 @@ export function TeacherDashboard({
               </Link>
             </div>
 
-            <div className="divide-y divide-border border border-border rounded-2xl bg-card overflow-hidden shadow-2xs">
+            <div className="divide-y divide-border border border-border rounded-xl bg-card overflow-hidden shadow-2xs">
               {assignedTasks.length === 0 ? (
                 <div className="p-6 text-center text-xs text-muted-foreground">
                   No pending tasks assigned.
@@ -312,7 +312,7 @@ export function TeacherDashboard({
               </Link>
             </div>
 
-            <div className="divide-y divide-border border border-border rounded-2xl bg-card overflow-hidden shadow-2xs">
+            <div className="divide-y divide-border border border-border rounded-xl bg-card overflow-hidden shadow-2xs">
               {activeAssignments.length === 0 ? (
                 <div className="p-6 text-center text-xs text-muted-foreground">
                   No active assignments currently awaiting grading.

@@ -44,9 +44,9 @@ export default async function AuditLogsPage() {
         }
       />
 
-      <div className="overflow-hidden rounded-xl border border-[#E8E7DF] bg-white shadow-2xs">
+      <div className="overflow-hidden rounded-xl border border-border bg-card shadow-2xs">
         <table className="w-full text-left text-xs">
-          <thead className="border-b border-[#E8E7DF] bg-[#FAF9F5] text-slate-500 font-mono text-[11px] uppercase tracking-wider">
+          <thead className="border-b border-border bg-muted/40 text-muted-foreground font-mono text-[11px] uppercase tracking-wider">
             <tr>
               <th className="py-3 px-4">Timestamp</th>
               <th className="py-3 px-4">Action Event</th>
@@ -55,10 +55,10 @@ export default async function AuditLogsPage() {
               <th className="py-3 px-4">Operational Details</th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-[#E8E7DF]">
+          <tbody className="divide-y divide-border">
             {logs.map((l) => (
-              <tr key={l.id} className="hover:bg-[#FAF9F5] transition-colors">
-                <td className="py-3 px-4 text-slate-500 font-mono text-[11px]">
+              <tr key={l.id} className="hover:bg-muted/30 transition-colors">
+                <td className="py-3 px-4 text-muted-foreground font-mono text-[11px]">
                   {formatDate(l.createdAt, "dd MMM yyyy, HH:mm:ss")}
                 </td>
                 <td className="py-3 px-4">
@@ -66,16 +66,16 @@ export default async function AuditLogsPage() {
                     {l.action}
                   </Badge>
                 </td>
-                <td className="py-3 px-4 font-mono font-medium text-slate-900">
+                <td className="py-3 px-4 font-mono font-medium text-foreground">
                   {l.entity}
                 </td>
                 <td className="py-3 px-4">
-                  <div className="font-medium text-slate-900">
+                  <div className="font-medium text-foreground">
                     {l.userName || "System Administrator"}
                   </div>
-                  <div className="text-[10px] font-mono text-slate-400">{l.userEmail || "system@nexora.internal"}</div>
+                  <div className="text-[10px] font-mono text-muted-foreground">{l.userEmail || "system@nexora.internal"}</div>
                 </td>
-                <td className="py-3 px-4 text-slate-600 max-w-sm truncate text-[11px] font-mono">
+                <td className="py-3 px-4 text-muted-foreground max-w-sm truncate text-[11px] font-mono">
                   {l.details || `Operation executed on ${l.entity} (ID: ${l.entityId || "-"})`}
                 </td>
               </tr>

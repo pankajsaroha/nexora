@@ -114,38 +114,38 @@ export function TransportClient({ routes }: { routes: RouteItem[] }) {
 
       {/* Metrics Row */}
       <div className="grid grid-cols-1 gap-3 sm:grid-cols-4">
-        <div className="rounded-xl border border-border bg-white p-4 shadow-xs">
-          <div className="text-[11px] font-mono uppercase tracking-wider text-accent">Active Routes</div>
+        <div className="rounded-xl border border-border bg-card p-4 shadow-2xs">
+          <div className="text-[11px] font-mono uppercase tracking-wider text-muted-foreground font-semibold">Active Routes</div>
           <div className="mt-1 text-2xl font-bold text-foreground">{routes.length}</div>
-          <div className="mt-0.5 text-[11px] text-accent">Scheduled transit corridors</div>
+          <div className="mt-0.5 text-[11px] text-muted-foreground">Scheduled transit corridors</div>
         </div>
-        <div className="rounded-xl border border-border bg-white p-4 shadow-xs">
-          <div className="text-[11px] font-mono uppercase tracking-wider text-accent">Total Checkpoints</div>
+        <div className="rounded-xl border border-border bg-card p-4 shadow-2xs">
+          <div className="text-[11px] font-mono uppercase tracking-wider text-muted-foreground font-semibold">Total Checkpoints</div>
           <div className="mt-1 text-2xl font-bold text-foreground">{totalStops}</div>
-          <div className="mt-0.5 text-[11px] text-accent">Pick-up & drop locations</div>
+          <div className="mt-0.5 text-[11px] text-muted-foreground">Pick-up & drop locations</div>
         </div>
-        <div className="rounded-xl border border-border bg-white p-4 shadow-xs">
-          <div className="text-[11px] font-mono uppercase tracking-wider text-accent">Fleet Capacity</div>
+        <div className="rounded-xl border border-border bg-card p-4 shadow-2xs">
+          <div className="text-[11px] font-mono uppercase tracking-wider text-muted-foreground font-semibold">Fleet Capacity</div>
           <div className="mt-1 text-2xl font-bold text-foreground">{totalFleetCapacity}</div>
-          <div className="mt-0.5 text-[11px] text-accent">Total bus seats</div>
+          <div className="mt-0.5 text-[11px] text-muted-foreground">Total bus seats</div>
         </div>
-        <div className="rounded-xl border border-border bg-white p-4 shadow-xs">
-          <div className="text-[11px] font-mono uppercase tracking-wider text-accent">Fleet Status</div>
+        <div className="rounded-xl border border-border bg-card p-4 shadow-2xs">
+          <div className="text-[11px] font-mono uppercase tracking-wider text-muted-foreground font-semibold">Fleet Status</div>
           <div className="mt-1 text-2xl font-bold text-accent">100% Operational</div>
-          <div className="mt-0.5 text-[11px] text-accent">GPS & speed limiter active</div>
+          <div className="mt-0.5 text-[11px] text-muted-foreground">GPS & speed limiter active</div>
         </div>
       </div>
 
       {/* Search Bar */}
-      <div className="flex flex-col sm:flex-row items-center gap-3 bg-white p-3 rounded-xl border border-border shadow-xs">
+      <div className="flex flex-col sm:flex-row items-center gap-3 bg-card p-3 rounded-xl border border-border shadow-2xs">
         <div className="relative flex-1 w-full">
-          <Search className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-accent" />
+          <Search className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted-foreground" />
           <input
             type="search"
             placeholder="Search route name, bus number, stop, or driver..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full rounded-lg border border-border bg-card py-2 pl-9 pr-3 text-xs text-foreground placeholder:text-accent focus:outline-none focus:ring-1 focus:ring-[#171614] transition-colors"
+            className="w-full rounded-lg border border-border bg-background py-2 pl-9 pr-3 text-xs text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-accent transition-colors"
           />
         </div>
       </div>
@@ -153,35 +153,35 @@ export function TransportClient({ routes }: { routes: RouteItem[] }) {
       {/* Routes Grid */}
       <div className="space-y-4">
         {filteredRoutes.length === 0 ? (
-          <div className="p-8 text-center rounded-xl border border-dashed border-border bg-card text-xs text-accent">
+          <div className="p-8 text-center rounded-xl border border-dashed border-border bg-card text-xs text-muted-foreground">
             No transit routes found matching query.
           </div>
         ) : (
           filteredRoutes.map((route) => (
             <div
               key={route.id}
-              className="rounded-xl border border-border bg-white p-5 shadow-xs space-y-4 hover:border-[#171614] transition-colors"
+              className="rounded-xl border border-border bg-card p-5 shadow-2xs space-y-4 hover:border-accent/40 transition-colors"
             >
               <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 border-b border-border pb-3">
                 <div className="flex items-center gap-3">
-                  <div className="p-2.5 rounded-lg bg-card border border-border text-foreground">
+                  <div className="p-2.5 rounded-lg bg-surface-subtle border border-border text-foreground">
                     <Bus className="h-5 w-5" />
                   </div>
                   <div>
-                    <h3 className="text-sm font-bold text-foreground">
+                    <h3 className="text-sm font-semibold text-foreground">
                       {route.routeName}
                     </h3>
-                    <div className="text-[11px] font-mono text-accent">
-                      Vehicle: <span className="text-foreground font-semibold">{route.vehicleNumber}</span> • Capacity: {route.capacity} Seats
+                    <div className="text-[11px] font-mono text-muted-foreground">
+                      Vehicle: <span className="text-foreground font-medium">{route.vehicleNumber}</span> • Capacity: {route.capacity} Seats
                     </div>
                   </div>
                 </div>
 
                 <div className="text-xs space-y-0.5 sm:text-right">
-                  <div className="font-semibold text-foreground">
+                  <div className="font-medium text-foreground">
                     {route.driverName} (Driver)
                   </div>
-                  <div className="text-[11px] font-mono text-accent">
+                  <div className="text-[11px] font-mono text-muted-foreground">
                     {route.driverPhone}
                   </div>
                 </div>
@@ -189,26 +189,26 @@ export function TransportClient({ routes }: { routes: RouteItem[] }) {
 
               {/* Stops Timeline */}
               <div className="space-y-2">
-                <div className="text-[10px] font-mono uppercase tracking-wider text-accent font-bold">
+                <div className="text-[10px] font-mono uppercase tracking-wider text-muted-foreground font-semibold">
                   Designated Boarding Checkpoints ({route.stops.length})
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-2.5">
                   {route.stops.map((stop) => (
                     <div
                       key={stop.id}
-                      className="rounded-lg bg-card border border-border p-3 text-xs space-y-1"
+                      className="rounded-lg bg-surface-subtle border border-border p-3 text-xs space-y-1"
                     >
                       <div className="flex items-center justify-between">
-                        <span className="font-semibold text-foreground">{stop.stopName}</span>
+                        <span className="font-medium text-foreground">{stop.stopName}</span>
                         <span className="text-[10px] font-mono font-bold text-accent">
                           #{stop.stopOrder}
                         </span>
                       </div>
-                      <div className="flex items-center justify-between text-[11px] font-mono text-accent pt-1 border-t border-border">
+                      <div className="flex items-center justify-between text-[11px] font-mono text-muted-foreground pt-1 border-t border-border">
                         <span>Pickup: {stop.pickupTime}</span>
                         <span>Drop: {stop.dropTime}</span>
                       </div>
-                      <div className="text-[10px] font-mono text-foreground font-semibold pt-0.5">
+                      <div className="text-[10px] font-mono text-foreground font-medium pt-0.5">
                         Term Fee: {formatCurrency(stop.feeAmount)}
                       </div>
                     </div>
@@ -231,11 +231,11 @@ export function TransportClient({ routes }: { routes: RouteItem[] }) {
         >
           {addSuccess ? (
             <div className="p-6 text-center space-y-3">
-              <div className="w-12 h-12 rounded-full bg-card border border-primary text-primary flex items-center justify-center mx-auto">
+              <div className="w-12 h-12 rounded-full bg-surface-subtle border border-accent/40 text-accent flex items-center justify-center mx-auto shadow-2xs">
                 <CheckCircle2 className="w-6 h-6" />
               </div>
               <h4 className="text-sm font-bold text-foreground">Route Registered</h4>
-              <p className="text-xs text-accent">
+              <p className="text-xs text-muted-foreground">
                 New transit corridor initialized and available for student stop allocations.
               </p>
             </div>
@@ -249,7 +249,7 @@ export function TransportClient({ routes }: { routes: RouteItem[] }) {
                   placeholder="e.g. Route 05 - Golf Course & Cyber Hub"
                   value={formData.routeName}
                   onChange={(e) => setFormData({ ...formData, routeName: e.target.value })}
-                  className="w-full rounded-lg border border-border bg-card p-2.5 text-xs text-foreground focus:outline-none focus:ring-1 focus:ring-[#171614]"
+                  className="w-full rounded-lg border border-border bg-background p-2.5 text-xs text-foreground focus:outline-none focus:ring-1 focus:ring-accent"
                 />
               </div>
 
@@ -262,7 +262,7 @@ export function TransportClient({ routes }: { routes: RouteItem[] }) {
                     placeholder="UP 16 AT 9028"
                     value={formData.vehicleNumber}
                     onChange={(e) => setFormData({ ...formData, vehicleNumber: e.target.value })}
-                    className="w-full rounded-lg border border-border bg-card p-2.5 text-xs text-foreground"
+                    className="w-full rounded-lg border border-border bg-background p-2.5 text-xs text-foreground focus:outline-none focus:ring-1 focus:ring-accent"
                   />
                 </div>
                 <div>
@@ -274,7 +274,7 @@ export function TransportClient({ routes }: { routes: RouteItem[] }) {
                     max={80}
                     value={formData.capacity}
                     onChange={(e) => setFormData({ ...formData, capacity: Number(e.target.value) })}
-                    className="w-full rounded-lg border border-border bg-card p-2.5 text-xs text-foreground"
+                    className="w-full rounded-lg border border-border bg-background p-2.5 text-xs text-foreground focus:outline-none focus:ring-1 focus:ring-accent"
                   />
                 </div>
               </div>
@@ -288,7 +288,7 @@ export function TransportClient({ routes }: { routes: RouteItem[] }) {
                     placeholder="Mr. Suresh Kumar"
                     value={formData.driverName}
                     onChange={(e) => setFormData({ ...formData, driverName: e.target.value })}
-                    className="w-full rounded-lg border border-border bg-card p-2.5 text-xs text-foreground"
+                    className="w-full rounded-lg border border-border bg-background p-2.5 text-xs text-foreground focus:outline-none focus:ring-1 focus:ring-accent"
                   />
                 </div>
                 <div>
@@ -299,7 +299,7 @@ export function TransportClient({ routes }: { routes: RouteItem[] }) {
                     placeholder="+91 98110 44556"
                     value={formData.driverPhone}
                     onChange={(e) => setFormData({ ...formData, driverPhone: e.target.value })}
-                    className="w-full rounded-lg border border-border bg-card p-2.5 text-xs text-foreground"
+                    className="w-full rounded-lg border border-border bg-background p-2.5 text-xs text-foreground focus:outline-none focus:ring-1 focus:ring-accent"
                   />
                 </div>
               </div>

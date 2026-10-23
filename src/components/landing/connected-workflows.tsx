@@ -1,140 +1,119 @@
 "use client";
 
 import React from "react";
-import { Sparkles } from "lucide-react";
+import { Sparkles, ArrowRight } from "lucide-react";
 
 export function ConnectedWorkflows() {
-  const workflows = [
+  const steps = [
     {
-      id: "workflow-core",
-      title: "Task Delegation to Class Roll-Call & Parent Dispatch",
-      subtitle: "See how a single leadership decision cascades across all 4 stakeholders in real time",
-      steps: [
-        {
-          role: "01 / PRINCIPAL",
-          title: "Principal Assigns Task",
-          desc: "Dr. Arvind Menon creates task 'Prepare Grade 8A Assessment Blueprint' assigned to Mrs. Ananya Sharma with a 3-day deadline.",
-          tag: "Task Delegated",
-          badgeColor: "bg-[#2E281F] text-primary border-primary/40",
-          cardBorder: "border-border hover:border-primary",
-          cardGlow: "group-hover:shadow-[0_0_30px_-5px_rgba(184,155,98,0.2)]",
-          cardUI: {
-            header: "Task: Assessment Blueprint",
-            sub: "Assigned: Mrs. Ananya Sharma • High Priority",
-            status: "Delegated",
-            statusColor: "text-primary bg-[#2E281F] border-primary/40",
-          },
-        },
-        {
-          role: "02 / TEACHER",
-          title: "Teacher Marks Roll-Call",
-          desc: "Mrs. Sharma accepts the task, publishes the polynomial problem set, and takes 45-second morning attendance for Grade 8A.",
-          tag: "Roll-Call Finalized",
-          badgeColor: "bg-[#232B22] text-[#A3B19B] border-success/30/40",
-          cardBorder: "border-border hover:border-[#7A8068]",
-          cardGlow: "group-hover:shadow-[0_0_30px_-5px_rgba(101,112,91,0.2)]",
-          cardUI: {
-            header: "Grade 8A Roll-Call: 30 / 32",
-            sub: "Period 1 Maths • Timetable Grid Active",
-            status: "Synced",
-            statusColor: "text-[#A3B19B] bg-[#232B22] border-success/30/40",
-          },
-        },
-        {
-          role: "03 / STUDENT",
-          title: "Student Receives Homework",
-          desc: "Aarav Sharma receives homework alert on tablet, submits lab report, and sees updated 92.4% term attendance.",
-          tag: "Homework Synced",
-          badgeColor: "bg-[#2B2925] text-[#DCD7CB] border-[#7A756B]/40",
-          cardBorder: "border-border hover:border-[#9A958A]",
-          cardGlow: "group-hover:shadow-[0_0_30px_-5px_rgba(154,149,138,0.2)]",
-          cardUI: {
-            header: "Assignment: Polynomials",
-            sub: "Due in 3 Days • Max Marks: 25",
-            status: "Active",
-            statusColor: "text-[#DCD7CB] bg-[#2B2925] border-[#7A756B]/40",
-          },
-        },
-        {
-          role: "04 / PARENT",
-          title: "Parent Receives Alert & Pays",
-          desc: "Mr. Rahul Sharma gets WhatsApp absence confirmation and pays the Term 1 tuition invoice via UPI with 1-click receipt.",
-          tag: "Parent Dispatched",
-          badgeColor: "bg-[#2C1F1F] text-[#E0A8A5] border-[#8C4A47]/40",
-          cardBorder: "border-border hover:border-[#8C4A47]",
-          cardGlow: "group-hover:shadow-[0_0_30px_-5px_rgba(140,74,71,0.2)]",
-          cardUI: {
-            header: "WhatsApp Notice: Attendance & Fee",
-            sub: "Receipt REC-0891 (₹38,000 Paid)",
-            status: "Delivered",
-            statusColor: "text-[#A3B19B] bg-[#232B22] border-success/30/40",
-          },
-        },
-      ],
+      role: "01 · Principal",
+      title: "Leadership Assigns Task",
+      desc: "Principal delegates Assessment Blueprint preparation to faculty with automated tracking and calendar deadlines.",
+      badge: "Delegated",
+      badgeVariant: "accent",
+      cardUI: {
+        header: "Task: Assessment Blueprint",
+        sub: "Assigned: Mrs. Ananya Sharma · High Priority",
+        status: "Active",
+        statusClass: "text-accent bg-accent-subtle border-accent/20",
+      },
+    },
+    {
+      role: "02 · Teacher",
+      title: "Teacher Marks Roll-Call",
+      desc: "Faculty accepts syllabus tasks, takes 45-second morning attendance, and publishes today's coursework.",
+      badge: "Roll-Call Finalized",
+      badgeVariant: "success",
+      cardUI: {
+        header: "Grade 8A Attendance: 30 / 32",
+        sub: "Period 1 Maths · Timetable Active",
+        status: "Synced",
+        statusClass: "text-success bg-success-subtle border-success-border",
+      },
+    },
+    {
+      role: "03 · Student",
+      title: "Student Receives Homework",
+      desc: "Scholar accesses assignments on portal, tracks deadlines, and reviews live 92.4% term attendance integrity.",
+      badge: "Homework Synced",
+      badgeVariant: "info",
+      cardUI: {
+        header: "Assignment: Polynomials",
+        sub: "Due in 3 Days · Max Marks: 25",
+        status: "Submitted",
+        statusClass: "text-foreground bg-muted border-border",
+      },
+    },
+    {
+      role: "04 · Parent",
+      title: "Parent Receives Alert & Pays",
+      desc: "Guardian receives real-time roll-call alerts, reviews report cards, and settles term tuition fees online.",
+      badge: "Fee Settled",
+      badgeVariant: "success",
+      cardUI: {
+        header: "Tuition Invoice Settled",
+        sub: "Receipt REC-0891 · ₹38,000 via UPI",
+        status: "Paid",
+        statusClass: "text-success bg-success-subtle border-success-border",
+      },
     },
   ];
 
-  const currentWf = workflows[0];
-
   return (
-    <section id="workflows" className="py-20 sm:py-28 bg-primary text-primary-foreground border-b border-border relative overflow-hidden">
-      {/* Subtle Warm Amber / Olive Glows */}
-      <div className="absolute top-0 right-1/4 w-96 h-96 bg-[#B89B62]/5 rounded-full blur-3xl pointer-events-none" />
-      <div className="absolute bottom-0 left-1/4 w-96 h-96 bg-accent/5 rounded-full blur-3xl pointer-events-none" />
-
-      <div className="max-w-7xl mx-auto px-6 sm:px-8 space-y-14 relative z-10">
+    <section id="workflows" className="py-20 sm:py-28 bg-card text-foreground border-b border-border">
+      <div className="max-w-7xl mx-auto px-6 sm:px-8 space-y-12">
         {/* Section Header */}
-        <div className="max-w-3xl space-y-4">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-primary/30 bg-muted text-[11px] font-mono uppercase tracking-widest text-[#C4AA76] shadow-2xs">
-            <Sparkles className="w-3.5 h-3.5 text-primary" />
-            <span>Everything Connected</span>
+        <div className="max-w-3xl space-y-3">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-accent/20 bg-accent-subtle text-xs font-medium text-accent">
+            <Sparkles className="w-3.5 h-3.5 text-accent" />
+            <span>Integrated Workflows</span>
           </div>
 
-          <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-white tracking-tight">
+          <h2 className="text-3xl sm:text-4xl font-bold text-foreground tracking-tight">
             See how Nexora connects the entire institution.
           </h2>
 
-          <p className="text-sm sm:text-base text-[#C5C0B6] leading-relaxed max-w-2xl font-normal">
+          <p className="text-sm sm:text-base text-muted-foreground leading-relaxed max-w-2xl">
             When leadership delegates, teachers act, scholars learn, and parents stay informed — without data silos, paper slips, or manual reconciliations.
           </p>
         </div>
 
         {/* 4-Step Cascading Flow Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 relative">
-          {currentWf.steps.map((step, idx) => (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
+          {steps.map((step, idx) => (
             <div
               key={idx}
-              className={`p-6 rounded-3xl border ${step.cardBorder} bg-muted backdrop-blur-md transition-all duration-200 flex flex-col justify-between shadow-lg space-y-6 group hover:translate-y-[-3px] ${step.cardGlow}`}
+              className="p-5 rounded-xl border border-border bg-background flex flex-col justify-between shadow-2xs hover:border-accent/40 hover:shadow-card-hover transition-all duration-150 space-y-5"
             >
-              <div className="space-y-4">
+              <div className="space-y-3">
                 <div className="flex items-center justify-between">
-                  <span className={`text-[10px] font-mono font-bold uppercase tracking-wider px-2.5 py-1 rounded-md border ${step.badgeColor}`}>
+                  <span className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
                     {step.role}
                   </span>
-                  <span className="text-[11px] font-mono text-muted-foreground font-bold">
-                    STEP 0{idx + 1}
+                  <span className="text-[10px] font-medium text-muted-foreground bg-surface-subtle px-2 py-0.5 rounded border border-border">
+                    Step {idx + 1}
                   </span>
                 </div>
 
                 <div>
-                  <h3 className="font-extrabold text-base text-primary-foreground group-hover:text-white transition-colors">
+                  <h3 className="font-semibold text-sm text-foreground">
                     {step.title}
                   </h3>
-                  <p className="text-xs text-[#A6A095] mt-2 leading-relaxed">
+                  <p className="text-xs text-muted-foreground mt-1 leading-relaxed">
                     {step.desc}
                   </p>
                 </div>
               </div>
 
               {/* Mini UI Card Representation */}
-              <div className="p-3.5 rounded-2xl bg-primary border border-[#2F2C26] space-y-1.5 shadow-inner font-mono text-[11px]">
-                <div className="flex justify-between items-center pb-1.5 border-b border-border">
-                  <span className="font-bold text-primary-foreground truncate">{step.cardUI.header}</span>
-                  <span className={`text-[9px] font-bold px-1.5 py-0.5 rounded border ${step.cardUI.statusColor}`}>
+              <div className="p-3 rounded-lg bg-card border border-border space-y-1 text-xs">
+                <div className="flex justify-between items-center pb-1 border-b border-border/60">
+                  <span className="font-medium text-foreground truncate text-[11px]">{step.cardUI.header}</span>
+                  <span className={`text-[10px] font-semibold px-1.5 py-0.5 rounded border ${step.cardUI.statusClass}`}>
                     {step.cardUI.status}
                   </span>
                 </div>
-                <div className="text-[10px] text-muted-foreground leading-snug">
+                <div className="text-[10px] text-muted-foreground leading-tight pt-0.5">
                   {step.cardUI.sub}
                 </div>
               </div>

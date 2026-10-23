@@ -105,7 +105,7 @@ export const DEMO_PERSONAS: DemoPersona[] = [
     designation: "Platform Administrator",
     email: "admin@nexora.demo",
     avatarInitials: "SA",
-    avatarBg: "from-slate-700 to-slate-900",
+    avatarBg: "from-zinc-800 to-zinc-950",
     contextNote: "Full system control, institutional onboarding wizard, CSV data migration, RBAC permissions.",
     relationships: {
       institution: "Northstar International Academy",

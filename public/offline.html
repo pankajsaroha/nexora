@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Offline — NEXORA Campus Operating System</title>
+  <style>
+    :root {
+      --bg: #FAF8F5;
+      --surface: #FFFFFF;
+      --text: #25212A;
+      --text-muted: #716B75;
+      --border: #E9E2D9;
+      --primary: #2B1238;
+      --primary-text: #FFFFFF;
+      --accent: #D4AF37;
+      --accent-subtle: #FAF5E8;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #17121B;
+        --surface: #241C29;
+        --text: #F7F2F8;
+        --text-muted: #B8AFBE;
+        --border: #403447;
+        --primary: #D4AF37;
+        --primary-text: #17121B;
+        --accent: #D4AF37;
+        --accent-subtle: #332717;
+      }
+    }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', Roboto, sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: max(24px, env(safe-area-inset-top)) max(24px, env(safe-area-inset-right)) max(24px, env(safe-area-inset-bottom)) max(24px, env(safe-area-inset-left));
+      text-align: center;
+    }
+    .card {
+      background-color: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      padding: 40px 32px;
+      max-width: 480px;
+      width: 100%;
+      box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.05);
+    }
+    .logo {
+      width: 48px;
+      height: 48px;
+      border-radius: 12px;
+      background: var(--primary);
+      color: var(--primary-text);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 18px;
+      letter-spacing: -1px;
+      margin-bottom: 24px;
+    }
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 12px;
+      border-radius: 9999px;
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      background: var(--accent-subtle);
+      color: var(--accent);
+      border: 1px solid var(--border);
+      margin-bottom: 16px;
+    }
+    .badge-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--accent);
+    }
+    h1 {
+      font-size: 22px;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      margin-bottom: 12px;
+    }
+    p {
+      font-size: 14px;
+      line-height: 1.6;
+      color: var(--text-muted);
+      margin-bottom: 28px;
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      width: 100%;
+      padding: 14px 20px;
+      border-radius: 12px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      border: none;
+      background: var(--primary);
+      color: var(--primary-text);
+      transition: opacity 0.15s ease, transform 0.15s ease;
+      text-decoration: none;
+    }
+    .btn:hover {
+      opacity: 0.92;
+      transform: translateY(-1px);
+    }
+    .btn:active {
+      transform: translateY(0);
+    }
+    .security-note {
+      margin-top: 24px;
+      font-size: 11px;
+      color: var(--text-muted);
+      line-height: 1.4;
+    }
+  </style>
+</head>
+<body>
+  <main class="card">
+    <div class="logo">NX</div>
+    <div class="badge">
+      <span class="badge-dot"></span>
+      <span>Connection Paused</span>
+    </div>
+    <h1>You are currently offline</h1>
+    <p>
+      NEXORA protects institutional records, marks, and financial ledgers with end-to-end tenant security. Live data operations will resume as soon as your device reconnects.
+    </p>
+    <button class="btn" onclick="window.location.reload()">
+      <span>Check Connection & Retry</span>
+      <span>→</span>
+    </button>
+    <div class="security-note">
+      Multi-Tenant Institutional Security • Offline Protection Active
+    </div>
+  </main>
+</body>
+</html>

@@ -89,12 +89,12 @@ export function ProductPillars() {
       <div className="max-w-7xl mx-auto px-6 sm:px-8 space-y-14">
         {/* Section Heading */}
         <div className="max-w-3xl space-y-4">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-primary/40 bg-warm/15 text-[11px] font-mono uppercase tracking-widest text-primary shadow-2xs">
-            <Sparkles className="w-3.5 h-3.5 text-primary" />
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-accent/20 bg-accent-subtle text-[11px] uppercase tracking-wider text-accent shadow-2xs font-medium">
+            <Sparkles className="w-3.5 h-3.5 text-accent" />
             <span>Core Product Capabilities</span>
           </div>
 
-          <h2 className="text-3xl sm:text-4xl font-extrabold text-foreground tracking-tight">
+          <h2 className="text-3xl sm:text-4xl font-bold text-foreground tracking-tight">
             Everything your institution needs. Grouped with precision.
           </h2>
 
@@ -108,14 +108,14 @@ export function ProductPillars() {
           {pillars.map((p, idx) => (
             <div
               key={idx}
-              className="rounded-3xl border border-border bg-white p-6 sm:p-8 space-y-6 hover:border-primary transition-all shadow-2xs flex flex-col justify-between"
+              className="rounded-xl border border-border bg-card p-6 sm:p-8 space-y-6 hover:border-accent/40 transition-all shadow-2xs flex flex-col justify-between"
             >
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
-                  <span className="text-xs font-mono font-bold uppercase tracking-widest text-muted-foreground">
+                  <span className="text-xs uppercase tracking-wider text-muted-foreground font-medium">
                     0{idx + 1} / {p.title}
                   </span>
-                  <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded-md bg-warm/15 border border-warm/30 text-primary">
+                  <span className="text-[10px] font-medium px-2 py-0.5 rounded-md bg-accent-subtle border border-accent/20 text-accent">
                     {p.previewSnippet.badge}
                   </span>
                 </div>
@@ -126,13 +126,13 @@ export function ProductPillars() {
                 </div>
 
                 {/* Visual Metric Snippet Card */}
-                <div className="p-3.5 rounded-2xl bg-card border border-border flex items-center justify-between">
+                <div className="p-3.5 rounded-xl bg-background border border-border flex items-center justify-between">
                   <div className="space-y-0.5">
-                    <span className="text-[10px] font-mono uppercase text-muted-foreground font-semibold">Live Operational Status</span>
-                    <div className="text-sm font-extrabold text-foreground">{p.previewSnippet.metric}</div>
+                    <span className="text-[10px] uppercase text-muted-foreground font-medium">Live Operational Status</span>
+                    <div className="text-sm font-bold text-foreground">{p.previewSnippet.metric}</div>
                   </div>
                   <div className="text-right">
-                    <span className="text-[11px] font-bold text-success bg-success/15 px-2.5 py-1 rounded-md border border-success/30">
+                    <span className="text-[11px] font-medium text-success bg-success-subtle px-2.5 py-1 rounded-md border border-success-border">
                       {p.previewSnippet.subtext}
                     </span>
                   </div>
@@ -146,13 +146,13 @@ export function ProductPillars() {
                   return (
                     <div
                       key={itemIdx}
-                      className="p-3.5 rounded-2xl bg-card border border-border space-y-1 hover:border-primary hover:bg-white transition-all"
+                      className="p-3.5 rounded-xl bg-background border border-border space-y-1 hover:border-accent/40 transition-all"
                     >
-                      <div className="flex items-center gap-2 font-bold text-xs text-foreground">
-                        <Icon className="w-3.5 h-3.5 text-[#1B1916] shrink-0" />
+                      <div className="flex items-center gap-2 font-semibold text-xs text-foreground">
+                        <Icon className="w-3.5 h-3.5 text-accent shrink-0" />
                         <span className="truncate">{item.label}</span>
                       </div>
-                      <p className="text-[10px] font-mono text-muted-foreground leading-tight">
+                      <p className="text-[10px] text-muted-foreground leading-tight">
                         {item.note}
                       </p>
                     </div>

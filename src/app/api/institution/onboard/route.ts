@@ -119,7 +119,7 @@ export async function POST(req: NextRequest) {
         currency,
         currencySymbol,
         timezone,
-        brandingColor: "#171614",
+        brandingColor: "#18181B",
         campuses: {
           create: {
             name: "Main Campus",

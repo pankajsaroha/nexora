@@ -105,6 +105,7 @@ export function Sidebar({
             { label: "Fee Invoices", href: "/finance/fees", icon: Receipt },
             { label: "Announcements", href: "/announcements", icon: Megaphone },
             { label: "Calendar", href: "/calendar", icon: CalendarDays },
+            { label: "My Profile", href: "/profile", icon: GraduationCap },
           ],
         },
       ];
@@ -123,6 +124,7 @@ export function Sidebar({
             { label: "Term Results", href: "/academics/exams", icon: FileCheck2 },
             { label: "Fee Invoices", href: "/finance/fees", icon: Receipt },
             { label: "Announcements", href: "/announcements", icon: Megaphone },
+            { label: "Family Profile", href: "/profile", icon: Users },
           ],
         },
       ];
@@ -214,6 +216,9 @@ export function Sidebar({
       {
         title: "Insights & Admin",
         items: [
+          ...(roleCode === "SUPER_ADMIN"
+            ? [{ label: "Institutions & Tenants", href: "/institutions", icon: Building2 }]
+            : []),
           { label: "Reports & Analytics", href: "/reports", icon: BarChart3 },
           { label: "CSV Data Import", href: "/import", icon: UploadCloud },
           { label: "Security Audit Logs", href: "/audit-logs", icon: ShieldAlert },
@@ -230,13 +235,14 @@ export function Sidebar({
       {/* Mobile Backdrop */}
       {isOpenMobile && (
         <div
-          className="fixed inset-0 z-40 bg-foreground/40 backdrop-blur-xs lg:hidden transition-opacity"
+          className="fixed inset-0 z-40 bg-black/40 dark:bg-black/60 backdrop-blur-xs lg:hidden transition-opacity"
           onClick={onCloseMobile}
         />
       )}
 
       {/* Sidebar Container */}
       <aside
+        data-sidebar="true"
         className={cn(
           "fixed inset-y-0 left-0 z-40 flex w-64 flex-col bg-sidebar text-sidebar-foreground border-r border-sidebar-border transition-all duration-200 ease-in-out lg:static lg:translate-x-0",
           isOpenMobile ? "translate-x-0 shadow-2xl" : "-translate-x-full"
@@ -245,14 +251,14 @@ export function Sidebar({
         {/* Brand Header */}
         <div className="flex h-16 shrink-0 items-center justify-between px-5 border-b border-sidebar-border">
           <Link href="/dashboard" className="flex items-center gap-3 group">
-            <div className="w-8 h-8 rounded-xl bg-primary text-primary-foreground flex items-center justify-center font-bold text-xs tracking-wider shadow-2xs group-hover:scale-105 transition-transform">
+            <div className="w-8 h-8 rounded-lg bg-primary text-primary-foreground flex items-center justify-center font-bold text-xs tracking-wider shadow-2xs group-hover:opacity-90 transition-opacity">
               NX
             </div>
             <div className="overflow-hidden">
-              <span className="font-bold text-sm tracking-tight text-foreground block leading-none font-sans">
+              <span className="font-bold text-sm tracking-tight text-sidebar-foreground block leading-none font-sans">
                 NEXORA
               </span>
-              <span className="text-[10px] text-muted-foreground font-mono truncate block mt-1">
+              <span className="text-[10px] text-sidebar-muted-foreground truncate block mt-1">
                 {institutionName || "Academic Portal"}
               </span>
             </div>
@@ -260,10 +266,10 @@ export function Sidebar({
         </div>
 
         {/* Scrollable Nav Groups */}
-        <div className="flex-1 overflow-y-auto px-3.5 py-5 space-y-5">
+        <div className="flex-1 overflow-y-auto px-3 py-5 space-y-5">
           {navGroups.map((group, gIdx) => (
-            <div key={gIdx} className="space-y-1">
-              <span className="px-3 text-[10px] font-mono font-semibold uppercase tracking-wider text-muted-foreground/70 block mb-1.5">
+            <div key={gIdx} className="space-y-0.5">
+              <span className="px-3 text-[10px] font-semibold uppercase tracking-wider text-sidebar-muted-foreground block mb-1.5">
                 {group.title}
               </span>
 
@@ -277,24 +283,24 @@ export function Sidebar({
                     href={item.href}
                     onClick={onCloseMobile}
                     className={cn(
-                      "flex items-center justify-between rounded-xl px-3 py-2 text-xs font-medium transition-all duration-150",
+                      "flex items-center justify-between rounded-lg px-3 py-2 text-xs font-medium transition-all duration-150 group focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent",
                       isActive
-                        ? "bg-sidebar-accent text-sidebar-accent-foreground font-semibold shadow-2xs border-l-2 border-primary"
-                        : "text-muted-foreground hover:text-foreground hover:bg-muted/60"
+                        ? "bg-sidebar-active text-sidebar-active-foreground font-semibold shadow-2xs border-l-2 border-accent"
+                        : "text-sidebar-muted-foreground hover:text-sidebar-foreground hover:bg-sidebar-accent/50"
                     )}
                   >
                     <div className="flex items-center gap-3 min-w-0">
                       <Icon
                         className={cn(
                           "h-4 w-4 shrink-0 transition-colors",
-                          isActive ? "text-primary" : "text-muted-foreground"
+                          isActive ? "text-accent" : "text-sidebar-muted-foreground group-hover:text-sidebar-foreground"
                         )}
                       />
                       <span className="truncate">{item.label}</span>
                     </div>
 
                     {item.badge && (
-                      <span className="rounded-md bg-muted px-1.5 py-0.5 text-[9px] font-mono text-muted-foreground border border-border">
+                      <span className="rounded-md bg-sidebar-accent px-1.5 py-0.5 text-[9px] font-mono text-sidebar-foreground border border-sidebar-border">
                         {item.badge}
                       </span>
                     )}
@@ -308,12 +314,12 @@ export function Sidebar({
         {/* User Identity Footer */}
         <div className="p-3.5 border-t border-sidebar-border bg-sidebar flex items-center justify-between">
           <div className="flex items-center gap-2.5 overflow-hidden">
-            <div className="w-8 h-8 rounded-xl bg-primary/10 border border-primary/20 flex items-center justify-center text-xs font-bold text-primary shrink-0 shadow-2xs">
+            <div className="w-8 h-8 rounded-lg bg-surface-subtle border border-sidebar-border flex items-center justify-center text-xs font-semibold text-sidebar-foreground shrink-0 shadow-2xs">
               {formattedName ? formattedName[0] : "U"}
             </div>
             <div className="overflow-hidden">
-              <p className="text-xs font-semibold text-foreground truncate leading-none">{formattedName}</p>
-              <p className="text-[10px] font-mono text-muted-foreground mt-0.5 truncate">{formattedRole}</p>
+              <p className="text-xs font-semibold text-sidebar-foreground truncate leading-none">{formattedName}</p>
+              <p className="text-[10px] text-muted-foreground mt-0.5 truncate font-medium">{formattedRole}</p>
             </div>
           </div>
         </div>

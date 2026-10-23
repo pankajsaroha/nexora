@@ -124,8 +124,8 @@ export function Topbar({
         )}
 
         {/* Academic Session Context */}
-        <div className="hidden xl:flex items-center gap-1.5 text-xs text-muted-foreground font-mono px-2.5 py-1.5 rounded-xl border border-border bg-card/80 shadow-2xs">
-          <Calendar className="h-3.5 w-3.5 text-primary" />
+        <div className="hidden xl:flex items-center gap-1.5 text-xs text-muted-foreground px-2.5 py-1.5 rounded-xl border border-border bg-card/80 shadow-2xs">
+          <Calendar className="h-3.5 w-3.5 text-accent" />
           <span>AY 2026–27 · Term 1</span>
         </div>
 
@@ -152,10 +152,10 @@ export function Topbar({
                 className="fixed inset-0 z-40"
                 onClick={() => setShowNotifications(false)}
               />
-              <div className="absolute right-0 top-full mt-2 w-80 sm:w-96 rounded-2xl border border-border bg-card p-4 shadow-2xl z-50 animate-in fade-in zoom-in-95 duration-100 space-y-3">
+              <div className="absolute right-0 top-full mt-2 w-80 sm:w-96 rounded-xl border border-border bg-card p-4 shadow-2xl z-50 animate-in fade-in zoom-in-95 duration-100 space-y-3">
                 <div className="flex items-center justify-between border-b border-border/80 pb-3">
-                  <span className="text-xs font-bold text-foreground">Notifications</span>
-                  <span className="text-[11px] font-mono text-muted-foreground">{unreadCount} unread</span>
+                  <span className="text-xs font-semibold text-foreground">Notifications</span>
+                  <span className="text-[11px] text-muted-foreground">{unreadCount} unread</span>
                 </div>
 
                 <div className="max-h-80 overflow-y-auto space-y-2">
@@ -169,11 +169,11 @@ export function Topbar({
                         key={n.id}
                         href={n.linkUrl || "/attendance/leaves"}
                         onClick={() => setShowNotifications(false)}
-                        className="block p-3 rounded-xl border border-border bg-muted/30 text-xs space-y-1 hover:border-primary/50 transition-colors"
+                        className="block p-3 rounded-xl border border-border bg-muted/30 text-xs space-y-1 hover:border-accent/40 transition-colors"
                       >
                         <div className="flex items-center justify-between">
                           <p className="font-semibold text-foreground">{n.title}</p>
-                          <span className="text-[10px] font-mono text-muted-foreground">{formatDate(n.createdAt)}</span>
+                          <span className="text-[10px] text-muted-foreground">{formatDate(n.createdAt)}</span>
                         </div>
                         <p className="text-muted-foreground text-[11px] leading-relaxed">{n.message}</p>
                       </Link>
@@ -193,15 +193,15 @@ export function Topbar({
           <button
             type="button"
             onClick={() => setShowUserMenu(!showUserMenu)}
-            className="flex items-center gap-2 rounded-xl p-1.5 hover:bg-muted/80 border border-border bg-card/90 transition-all shadow-2xs cursor-pointer"
+            className="flex items-center gap-2 rounded-lg p-1.5 hover:bg-muted/80 border border-border bg-card/90 transition-all shadow-2xs cursor-pointer"
             aria-label="User profile and settings"
           >
-            <div className="w-7 h-7 rounded-lg bg-primary text-primary-foreground flex items-center justify-center text-xs font-bold shadow-2xs shrink-0">
+            <div className="w-7 h-7 rounded-lg bg-surface-subtle border border-border text-foreground flex items-center justify-center text-xs font-semibold shadow-2xs shrink-0">
               {formattedName ? formattedName[0] : "U"}
             </div>
             <div className="hidden sm:block text-left mr-0.5">
               <p className="text-xs font-semibold text-foreground leading-none">{formattedName}</p>
-              <p className="text-[10px] text-muted-foreground font-mono mt-0.5">{formattedRole}</p>
+              <p className="text-[10px] text-muted-foreground mt-0.5">{formattedRole}</p>
             </div>
             <ChevronDown className="h-3.5 w-3.5 text-muted-foreground hidden sm:block" />
           </button>
@@ -212,16 +212,16 @@ export function Topbar({
                 className="fixed inset-0 z-40"
                 onClick={() => setShowUserMenu(false)}
               />
-              <div className="absolute right-0 top-full mt-2 w-64 rounded-2xl border border-border bg-card p-2 shadow-2xl z-50 animate-in fade-in zoom-in-95 duration-100 space-y-1">
+              <div className="absolute right-0 top-full mt-2 w-64 rounded-xl border border-border bg-card p-2 shadow-2xl z-50 animate-in fade-in zoom-in-95 duration-100 space-y-1">
                 <div className="px-3 py-2.5 border-b border-border/80">
                   <div className="flex items-center justify-between">
-                    <p className="text-xs font-bold text-foreground">{formattedName}</p>
-                    <span className="text-[10px] font-mono px-1.5 py-0.5 rounded-md bg-muted text-muted-foreground border border-border">
+                    <p className="text-xs font-semibold text-foreground">{formattedName}</p>
+                    <span className="text-[10px] px-1.5 py-0.5 rounded-md bg-muted text-muted-foreground border border-border">
                       {formattedRole}
                     </span>
                   </div>
                   <p className="text-[11px] text-muted-foreground font-mono truncate mt-0.5">{user.email}</p>
-                  <p className="text-[10px] text-primary font-medium truncate mt-1">{user.institutionName}</p>
+                  <p className="text-[10px] text-accent font-medium truncate mt-1">{user.institutionName}</p>
                 </div>
 
                 {/* Appearance Switcher */}

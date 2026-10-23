@@ -498,33 +498,33 @@ export function ClassesClient({
 
       {/* Metrics Row */}
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-4">
-        <div className="rounded-2xl border border-border bg-white p-5 shadow-2xs hover:border-primary transition-all">
-          <div className="text-[11px] font-mono uppercase tracking-wider text-muted-foreground font-bold">Programs / Courses</div>
-          <div className="mt-1 text-2xl sm:text-3xl font-extrabold text-foreground tracking-tight">{classes.length}</div>
+        <div className="rounded-xl border border-border bg-card p-5 shadow-2xs hover:border-accent/40 transition-all">
+          <div className="text-[11px] font-mono uppercase tracking-wider text-muted-foreground font-semibold">Programs / Courses</div>
+          <div className="mt-1 text-2xl sm:text-3xl font-bold text-foreground tracking-tight">{classes.length}</div>
           <div className="mt-0.5 text-[11px] text-muted-foreground font-medium">Configured institution courses</div>
         </div>
 
-        <div className="rounded-2xl border border-border bg-white p-5 shadow-2xs hover:border-primary transition-all">
-          <div className="text-[11px] font-mono uppercase tracking-wider text-muted-foreground font-bold">Total Sections</div>
-          <div className="mt-1 text-2xl sm:text-3xl font-extrabold text-foreground tracking-tight">{totalSections}</div>
+        <div className="rounded-xl border border-border bg-card p-5 shadow-2xs hover:border-accent/40 transition-all">
+          <div className="text-[11px] font-mono uppercase tracking-wider text-muted-foreground font-semibold">Total Sections</div>
+          <div className="mt-1 text-2xl sm:text-3xl font-bold text-foreground tracking-tight">{totalSections}</div>
           <div className="mt-0.5 text-[11px] text-muted-foreground font-medium">Operational cohorts</div>
         </div>
 
-        <div className="rounded-2xl border border-border bg-white p-5 shadow-2xs hover:border-primary transition-all">
-          <div className="text-[11px] font-mono uppercase tracking-wider text-muted-foreground font-bold">Total Enrolled</div>
-          <div className="mt-1 text-2xl sm:text-3xl font-extrabold text-foreground tracking-tight">{totalEnrolled}</div>
+        <div className="rounded-xl border border-border bg-card p-5 shadow-2xs hover:border-accent/40 transition-all">
+          <div className="text-[11px] font-mono uppercase tracking-wider text-muted-foreground font-semibold">Total Enrolled</div>
+          <div className="mt-1 text-2xl sm:text-3xl font-bold text-foreground tracking-tight">{totalEnrolled}</div>
           <div className="mt-0.5 text-[11px] text-muted-foreground font-medium">Admitted learners</div>
         </div>
 
-        <div className="rounded-2xl border border-border bg-white p-5 shadow-2xs hover:border-primary transition-all">
-          <div className="text-[11px] font-mono uppercase tracking-wider text-muted-foreground font-bold">Departments</div>
-          <div className="mt-1 text-2xl sm:text-3xl font-extrabold text-foreground tracking-tight">{departments.length}</div>
+        <div className="rounded-xl border border-border bg-card p-5 shadow-2xs hover:border-accent/40 transition-all">
+          <div className="text-[11px] font-mono uppercase tracking-wider text-muted-foreground font-semibold">Departments</div>
+          <div className="mt-1 text-2xl sm:text-3xl font-bold text-foreground tracking-tight">{departments.length}</div>
           <div className="mt-0.5 text-[11px] text-muted-foreground font-medium">Faculty divisions</div>
         </div>
       </div>
 
       {/* Filter and Search Bar */}
-      <div className="flex flex-col sm:flex-row items-center gap-3 bg-white p-3 rounded-2xl border border-border shadow-2xs">
+      <div className="flex flex-col sm:flex-row items-center gap-3 bg-card p-3 rounded-xl border border-border shadow-2xs">
         <div className="relative flex-1 w-full">
           <Search className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted-foreground" />
           <input
@@ -532,7 +532,7 @@ export function ClassesClient({
             placeholder="Search programs, codes, departments, sections, tutors..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full rounded-xl border border-border bg-card py-2 pl-9 pr-3 text-xs text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/20"
+            className="w-full rounded-lg border border-border bg-background py-2 pl-9 pr-3 text-xs text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-accent"
           />
         </div>
 
@@ -540,7 +540,7 @@ export function ClassesClient({
           <select
             value={selectedLevel}
             onChange={(e) => setSelectedLevel(e.target.value)}
-            className="rounded-xl border border-border bg-card px-3 py-2 text-xs font-semibold text-foreground focus:outline-none focus:ring-2 focus:ring-primary/20 cursor-pointer"
+            className="rounded-lg border border-border bg-background px-3 py-2 text-xs font-medium text-foreground focus:outline-none focus:ring-1 focus:ring-accent cursor-pointer"
           >
             <option value="ALL">All Academic Levels</option>
             {levels.map((lvl) => (
@@ -553,7 +553,7 @@ export function ClassesClient({
           <select
             value={selectedStatus}
             onChange={(e) => setSelectedStatus(e.target.value)}
-            className="rounded-xl border border-border bg-card px-3 py-2 text-xs font-semibold text-foreground focus:outline-none focus:ring-2 focus:ring-primary/20 cursor-pointer"
+            className="rounded-lg border border-border bg-background px-3 py-2 text-xs font-medium text-foreground focus:outline-none focus:ring-1 focus:ring-accent cursor-pointer"
           >
             <option value="ALL">All Statuses</option>
             <option value="ACTIVE">Active Only</option>
@@ -565,7 +565,7 @@ export function ClassesClient({
       {/* Program Cards Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {filteredClasses.length === 0 ? (
-          <div className="col-span-full py-16 text-center text-xs text-muted-foreground border border-dashed border-border rounded-3xl bg-white space-y-3">
+          <div className="col-span-full py-16 text-center text-xs text-muted-foreground border border-dashed border-border rounded-xl bg-card space-y-3">
             <FolderOpen className="w-8 h-8 text-muted-foreground mx-auto" />
             <p className="font-bold text-foreground text-sm">No Programs or Courses Found</p>
             <p className="text-xs text-muted-foreground">Try adjusting your search criteria or add a new academic program.</p>
@@ -586,16 +586,16 @@ export function ClassesClient({
               <div
                 key={cls.id}
                 onClick={() => handleOpenManageDrawer(cls, "sections")}
-                className={`group cursor-pointer rounded-3xl border ${
-                  cls.isActive === false ? "border-border/60 bg-muted/20 opacity-80" : "border-border bg-white"
-                } p-6 shadow-2xs hover:border-primary hover:shadow-md transition-all flex flex-col justify-between space-y-4`}
+                className={`group cursor-pointer rounded-xl border ${
+                  cls.isActive === false ? "border-border/60 bg-surface-subtle opacity-80" : "border-border bg-card"
+                } p-5 shadow-2xs hover:border-accent/40 hover:shadow-xs transition-all flex flex-col justify-between space-y-4`}
               >
                 <div className="space-y-4">
                   {/* Card Header with Level, Code, Name, Badges and 3-Dot Overflow Menu */}
                   <div className="flex items-start justify-between gap-2">
                     <div className="space-y-1">
                       <div className="flex items-center gap-1.5 flex-wrap">
-                        <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-primary">
+                        <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-accent">
                           {cls.code} • {cls.level}
                         </span>
                         {cls.isActive === false && (
@@ -604,18 +604,18 @@ export function ClassesClient({
                           </Badge>
                         )}
                       </div>
-                      <h3 className="text-base font-bold text-foreground group-hover:text-primary transition-colors">
+                      <h3 className="text-base font-semibold text-foreground group-hover:text-accent transition-colors">
                         {cls.name}
                       </h3>
                       {cls.departmentName && (
                         <p className="text-xs text-muted-foreground">
-                          Dept: <span className="font-semibold text-foreground">{cls.departmentName}</span>
+                          Dept: <span className="font-medium text-foreground">{cls.departmentName}</span>
                         </p>
                       )}
                     </div>
 
                     <div className="flex items-center gap-1.5 shrink-0" onClick={(e) => e.stopPropagation()}>
-                      <span className="text-xs font-mono font-extrabold px-2.5 py-1 rounded-xl bg-warm/15 text-primary border border-warm/30 whitespace-nowrap">
+                      <span className="text-xs font-mono font-medium px-2 py-0.5 rounded-md bg-surface-subtle text-foreground border border-border whitespace-nowrap">
                         {cls.totalFee > 0 ? `₹${cls.totalFee.toLocaleString("en-IN")}` : "No fee"}
                       </span>
 
@@ -628,7 +628,7 @@ export function ClassesClient({
                             setOpenSectionMenuId(null);
                             setOpenMenuId(openMenuId === cls.id ? null : cls.id);
                           }}
-                          className="p-1.5 rounded-xl border border-border bg-card hover:bg-muted text-muted-foreground hover:text-foreground transition-colors cursor-pointer"
+                          className="p-1.5 rounded-lg border border-border bg-card hover:bg-muted text-muted-foreground hover:text-foreground transition-colors cursor-pointer"
                           title="Program Actions"
                         >
                           <MoreVertical className="w-4 h-4" />
@@ -644,7 +644,7 @@ export function ClassesClient({
                               }}
                             />
                             <div
-                              className="absolute right-0 top-full mt-1.5 w-56 rounded-2xl bg-white border border-border shadow-xl z-30 py-1.5 text-xs divide-y divide-border"
+                              className="absolute right-0 top-full mt-1.5 w-56 rounded-lg bg-popover border border-border shadow-md z-30 py-1 text-xs divide-y divide-border"
                               onClick={(e) => e.stopPropagation()}
                             >
                               {/* PROGRAM ACTIONS */}
@@ -913,7 +913,7 @@ export function ClassesClient({
                                       }}
                                     />
                                     <div
-                                      className="absolute right-0 top-full mt-1 w-44 rounded-xl bg-white border border-border shadow-lg z-30 py-1 text-xs divide-y divide-border"
+                                      className="absolute right-0 top-full mt-1 w-44 rounded-lg bg-popover border border-border shadow-md z-30 py-1 text-xs divide-y divide-border"
                                       onClick={(e) => e.stopPropagation()}
                                     >
                                       <div className="py-0.5">
@@ -1279,7 +1279,7 @@ export function ClassesClient({
                         setFormData({ ...formData, feeItems: updated });
                       }}
                       placeholder="Fee Title (e.g. Tuition Fee, Lab Fee)"
-                      className="flex-1 rounded-xl border border-border bg-white p-2 text-xs text-foreground"
+                      className="flex-1 rounded-lg border border-border bg-background p-2 text-xs text-foreground"
                     />
                     <div className="relative w-32">
                       <span className="absolute left-2.5 top-1/2 -translate-y-1/2 text-xs text-muted-foreground">₹</span>
@@ -1292,7 +1292,7 @@ export function ClassesClient({
                           updated[idx].amount = Number(e.target.value);
                           setFormData({ ...formData, feeItems: updated });
                         }}
-                        className="w-full rounded-xl border border-border bg-white p-2 pl-6 text-xs font-mono font-bold text-foreground"
+                        className="w-full rounded-lg border border-border bg-background p-2 pl-6 text-xs font-mono font-bold text-foreground"
                       />
                     </div>
                     {formData.feeItems.length > 1 && (

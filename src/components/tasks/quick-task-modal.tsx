@@ -107,8 +107,8 @@ export function QuickTaskModal({
           <div className="w-12 h-12 rounded-full bg-success/10 text-success flex items-center justify-center mx-auto">
             <CheckCircle2 className="w-6 h-6" />
           </div>
-          <h4 className="text-sm font-bold text-foreground font-serif">Task Assigned Successfully</h4>
-          <p className="text-xs text-accent">
+          <h4 className="text-sm font-bold text-foreground">Task Assigned Successfully</h4>
+          <p className="text-xs text-muted-foreground">
             The task and activity timeline have been initialized and recorded in the audit log.
           </p>
         </div>
@@ -129,7 +129,7 @@ export function QuickTaskModal({
               value={formData.title}
               onChange={(e) => setFormData({ ...formData, title: e.target.value })}
               placeholder="e.g. Science Laboratory Inventory Audit Q3"
-              className="w-full rounded-lg border border-border bg-card p-2.5 text-xs text-foreground focus:outline-none focus:ring-1 focus:ring-[#171614]"
+              className="w-full rounded-lg border border-border bg-background p-2.5 text-xs text-foreground focus:outline-none focus:ring-1 focus:ring-accent focus:border-accent"
             />
           </div>
 
@@ -139,7 +139,7 @@ export function QuickTaskModal({
               <select
                 value={formData.assigneeUserId}
                 onChange={(e) => setFormData({ ...formData, assigneeUserId: e.target.value })}
-                className="w-full rounded-lg border border-border bg-card p-2.5 text-xs text-foreground"
+                className="w-full rounded-lg border border-border bg-background p-2.5 text-xs text-foreground focus:outline-none focus:ring-1 focus:ring-accent focus:border-accent"
               >
                 {isLoadingStaff ? (
                   <option value="">Loading faculty roster...</option>
@@ -160,7 +160,7 @@ export function QuickTaskModal({
               <select
                 value={formData.priority}
                 onChange={(e) => setFormData({ ...formData, priority: e.target.value })}
-                className="w-full rounded-lg border border-border bg-card p-2.5 text-xs text-foreground"
+                className="w-full rounded-lg border border-border bg-background p-2.5 text-xs text-foreground focus:outline-none focus:ring-1 focus:ring-accent focus:border-accent"
               >
                 <option value="LOW">Low</option>
                 <option value="MEDIUM">Medium</option>
@@ -176,7 +176,7 @@ export function QuickTaskModal({
               type="date"
               value={formData.dueDate}
               onChange={(e) => setFormData({ ...formData, dueDate: e.target.value })}
-              className="w-full rounded-lg border border-border bg-card p-2.5 text-xs text-foreground"
+              className="w-full rounded-lg border border-border bg-background p-2.5 text-xs text-foreground focus:outline-none focus:ring-1 focus:ring-accent focus:border-accent"
             />
           </div>
 
@@ -188,7 +188,7 @@ export function QuickTaskModal({
               value={formData.description}
               onChange={(e) => setFormData({ ...formData, description: e.target.value })}
               placeholder="Outline specific objectives, checklist items, and institutional deliverables..."
-              className="w-full rounded-lg border border-border bg-card p-2.5 text-xs text-foreground focus:outline-none focus:ring-1 focus:ring-[#171614]"
+              className="w-full rounded-lg border border-border bg-background p-2.5 text-xs text-foreground focus:outline-none focus:ring-1 focus:ring-accent focus:border-accent"
             />
           </div>
 

@@ -207,7 +207,7 @@ export function ParentDashboard({ parentName, childrenList }: ParentDashboardPro
             </Link>
           </div>
 
-          <div className="divide-y divide-border border border-border rounded-2xl bg-card overflow-hidden shadow-2xs">
+          <div className="divide-y divide-border border border-border rounded-xl bg-card overflow-hidden shadow-2xs">
             {currentChild.assignments.length === 0 ? (
               <div className="p-6 text-center text-xs text-muted-foreground">
                 No pending coursework for {currentChild.fullName}.
@@ -217,7 +217,7 @@ export function ParentDashboard({ parentName, childrenList }: ParentDashboardPro
                 <div key={a.id} className="p-4 space-y-1 hover:bg-muted/40 transition-colors">
                   <div className="flex items-center justify-between">
                     <p className="text-xs font-bold text-foreground">{a.title}</p>
-                    <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded-md bg-warm/15 border border-warm/30 text-foreground">
+                    <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded-md bg-muted border border-border text-foreground">
                       {a.status}
                     </span>
                   </div>

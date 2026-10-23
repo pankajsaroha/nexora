@@ -341,11 +341,11 @@ export function StudentAdmissionDialog({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-xs p-4 overflow-y-auto">
-      <div className="relative w-full max-w-4xl rounded-3xl border border-border bg-card shadow-2xl overflow-hidden my-8">
+      <div className="relative w-full max-w-4xl rounded-xl border border-border bg-card shadow-2xl overflow-hidden my-8">
         {/* Header */}
         <div className="flex items-center justify-between border-b border-border bg-card px-6 py-5">
           <div className="flex items-center gap-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-primary text-primary-foreground shadow-xs">
+            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary text-primary-foreground shadow-2xs">
               <UserPlus className="h-5 w-5" />
             </div>
             <div>
@@ -417,7 +417,7 @@ export function StudentAdmissionDialog({
 
         {/* Error Banner */}
         {errorMessage && (
-          <div className="mx-6 mt-4 flex items-center gap-2.5 rounded-2xl border border-destructive/30 bg-destructive/10 p-3.5 text-xs text-destructive">
+          <div className="mx-6 mt-4 flex items-center gap-2.5 rounded-xl border border-destructive/30 bg-destructive/10 p-3.5 text-xs text-destructive">
             <AlertCircle className="h-4 w-4 shrink-0" />
             <span className="font-semibold">{errorMessage}</span>
           </div>
@@ -447,7 +447,7 @@ export function StudentAdmissionDialog({
                 </p>
               </div>
 
-              <div className="rounded-2xl border border-border bg-card p-4 text-xs space-y-2.5 text-left shadow-2xs">
+              <div className="rounded-xl border border-border bg-card p-4 text-xs space-y-2.5 text-left shadow-2xs">
                 <div className="flex justify-between">
                   <span className="text-muted-foreground">Program / Course:</span>
                   <span className="font-bold text-foreground">{selectedProgram?.name}</span>
@@ -765,7 +765,7 @@ export function StudentAdmissionDialog({
                     <p className="text-xs text-muted-foreground">Emergency point of contact and primary parent/guardian linkage.</p>
                   </div>
 
-                  <div className="rounded-2xl border border-border bg-card p-4 space-y-4 shadow-2xs">
+                  <div className="rounded-xl border border-border bg-card p-4 space-y-4 shadow-2xs">
                     <span className="text-[11px] font-mono font-bold uppercase tracking-wider text-primary block">
                       Primary Guardian
                     </span>
@@ -873,7 +873,7 @@ export function StudentAdmissionDialog({
                     </label>
 
                     {formData.hasSecondaryGuardian && (
-                      <div className="mt-3 rounded-2xl border border-border bg-card p-4 space-y-4 shadow-2xs">
+                      <div className="mt-3 rounded-xl border border-border bg-card p-4 space-y-4 shadow-2xs">
                         <span className="text-[11px] font-mono font-bold uppercase tracking-wider text-muted-foreground block">
                           Secondary Guardian
                         </span>
@@ -1010,7 +1010,7 @@ export function StudentAdmissionDialog({
                   </div>
 
                   {/* ROLL NUMBER & ADMISSION NUMBER EXPLICIT FIELDS */}
-                  <div className="rounded-2xl border border-border bg-muted/20 p-4 space-y-3">
+                  <div className="rounded-xl border border-border bg-muted/20 p-4 space-y-3">
                     <div className="flex items-center gap-2">
                       <Sparkles className="h-4 w-4 text-primary" />
                       <span className="text-xs font-bold text-foreground">
@@ -1076,7 +1076,7 @@ export function StudentAdmissionDialog({
                       </span>
                     </div>
 
-                    <div className="rounded-2xl border border-border bg-card p-4 shadow-2xs space-y-3">
+                    <div className="rounded-xl border border-border bg-card p-4 shadow-2xs space-y-3">
                       {applicableFees.length === 0 ? (
                         <div className="rounded-xl bg-muted/40 p-3 text-center text-xs text-muted-foreground">
                           No specific fee breakdown is pre-configured for this course. You can configure fee structures under Finance & Fees anytime.
@@ -1119,7 +1119,7 @@ export function StudentAdmissionDialog({
                         )}
                       </div>
 
-                      <div className="rounded-2xl border border-border bg-card p-4 shadow-2xs">
+                      <div className="rounded-xl border border-border bg-card p-4 shadow-2xs">
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
                           {sortedCustomFields.map((field) => (
                             <div
@@ -1271,7 +1271,7 @@ export function StudentAdmissionDialog({
                   )}
 
                   {/* Final Review Summary Card */}
-                  <div className="rounded-2xl border border-border bg-muted/20 p-4 text-xs space-y-2">
+                  <div className="rounded-xl border border-border bg-muted/20 p-4 text-xs space-y-2">
                     <span className="text-[11px] font-mono font-bold uppercase tracking-wider text-primary block">
                       Admission Candidate Summary
                     </span>

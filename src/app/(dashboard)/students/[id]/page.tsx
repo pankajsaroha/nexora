@@ -34,9 +34,30 @@ export default async function StudentDetailPage({
           },
         },
         academicYear: true,
+        user: {
+          select: {
+            id: true,
+            email: true,
+            roleCode: true,
+            isActive: true,
+            lastLoginAt: true,
+            createdAt: true,
+          },
+        },
         guardians: {
           include: {
-            guardian: true,
+            guardian: {
+              include: {
+                user: {
+                  select: {
+                    id: true,
+                    email: true,
+                    isActive: true,
+                    lastLoginAt: true,
+                  },
+                },
+              },
+            },
           },
         },
         fees: {

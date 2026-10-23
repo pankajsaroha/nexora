@@ -15,7 +15,7 @@ export function Skeleton({
 
 export function StatCardSkeleton() {
   return (
-    <div className="p-5 rounded-2xl border border-border bg-card space-y-3 shadow-2xs">
+    <div className="p-5 rounded-xl border border-border bg-card space-y-3 shadow-2xs">
       <div className="flex justify-between items-center">
         <Skeleton className="h-3.5 w-24" />
         <Skeleton className="h-7 w-7 rounded-lg" />
@@ -41,7 +41,7 @@ export function TableRowSkeleton({ columns = 5 }: { columns?: number }) {
 
 export function TableSkeleton({ rows = 5, columns = 5 }: { rows?: number; columns?: number }) {
   return (
-    <div className="rounded-2xl border border-border bg-card overflow-hidden shadow-2xs">
+    <div className="rounded-xl border border-border bg-card overflow-hidden shadow-2xs">
       <div className="flex items-center gap-4 py-3.5 px-4 bg-muted/40 border-b border-border">
         {Array.from({ length: columns }).map((_, i) => (
           <Skeleton key={i} className="h-3.5 w-20" />

@@ -121,8 +121,8 @@ export function AddCustomFieldValueModal({
         )}
 
         {activeFields.length === 0 ? (
-          <div className="p-6 rounded-2xl border border-dashed border-border bg-card text-center space-y-3">
-            <div className="w-10 h-10 rounded-2xl bg-primary/10 border border-primary/20 text-primary flex items-center justify-center mx-auto">
+          <div className="p-6 rounded-xl border border-dashed border-border bg-card text-center space-y-3">
+            <div className="w-10 h-10 rounded-xl bg-primary/10 border border-primary/20 text-primary flex items-center justify-center mx-auto">
               <Sparkles className="w-5 h-5" />
             </div>
             <div>

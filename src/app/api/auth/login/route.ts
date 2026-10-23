@@ -9,30 +9,96 @@ export const dynamic = "force-dynamic";
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json().catch(() => ({}));
-    const { email, password } = body;
+    const identifier = (body.email || body.identifier || "").trim();
+    const { password } = body;
 
-    if (!email || !password || typeof email !== "string" || typeof password !== "string") {
+    if (!identifier || !password || typeof password !== "string") {
       return NextResponse.json(
-        { error: "Email and password are required to sign in." },
+        { error: "Institutional email or Student Login ID and password are required to sign in." },
         { status: 400 }
       );
     }
 
-    const cleanEmail = email.trim().toLowerCase();
+    let user: any = null;
+    let studentRecord: any = null;
 
-    const user = await prisma.user.findFirst({
+    // 1. Check if the identifier matches an institution-issued student login ID (e.g., NX7K42P)
+    const matchedStudent = await prisma.student.findFirst({
       where: {
-        email: {
-          equals: cleanEmail,
+        loginId: {
+          equals: identifier,
           mode: "insensitive",
         },
       },
-      include: { institution: true },
+      include: {
+        institution: true,
+        user: true,
+      },
     });
+
+    if (matchedStudent) {
+      if (matchedStudent.portalAccessStatus === "SUSPENDED") {
+        return NextResponse.json(
+          { error: "Student portal access is currently suspended. Please contact your institution administrator." },
+          { status: 403 }
+        );
+      }
+
+      if (matchedStudent.portalAccessStatus === "REVOKED" || matchedStudent.portalAccessStatus === "NOT_ENABLED") {
+        return NextResponse.json(
+          { error: "Student portal access has not been activated for this account. Please contact your administrator." },
+          { status: 403 }
+        );
+      }
+
+      if (!matchedStudent.user) {
+        return NextResponse.json(
+          { error: "No active login account provisioned for this Student Login ID." },
+          { status: 401 }
+        );
+      }
+
+      user = {
+        ...matchedStudent.user,
+        institution: matchedStudent.institution,
+      };
+      studentRecord = matchedStudent;
+    } else {
+      // 2. Lookup user by institutional email
+      const cleanEmail = identifier.toLowerCase();
+      user = await prisma.user.findFirst({
+        where: {
+          email: {
+            equals: cleanEmail,
+            mode: "insensitive",
+          },
+        },
+        include: {
+          institution: true,
+          student: true,
+        },
+      });
+
+      if (user?.roleCode === "STUDENT" && user.student) {
+        if (user.student.portalAccessStatus === "SUSPENDED") {
+          return NextResponse.json(
+            { error: "Student portal access is currently suspended. Please contact your institution administrator." },
+            { status: 403 }
+          );
+        }
+        if (user.student.portalAccessStatus === "REVOKED") {
+          return NextResponse.json(
+            { error: "Student portal access has been revoked for this account." },
+            { status: 403 }
+          );
+        }
+        studentRecord = user.student;
+      }
+    }
 
     if (!user) {
       return NextResponse.json(
-        { error: "No account found matching this email address. Please check your spelling or register your institution." },
+        { error: "No account found matching this institutional email or Student Login ID. Please check your credentials." },
         { status: 401 }
       );
     }
@@ -42,6 +108,28 @@ export async function POST(req: NextRequest) {
         { error: "This institutional account is inactive. Please contact your administrator." },
         { status: 403 }
       );
+    }
+
+    // Enforce institution lifecycle state for standard accounts
+    if (user.roleCode !== "SUPER_ADMIN" && user.institution) {
+      const instStatus = (user.institution as any).status || "ACTIVE";
+      if (instStatus === "SUSPENDED") {
+        const reason = (user.institution as any).statusReason || "Administrative hold";
+        return NextResponse.json(
+          {
+            error: `Access Suspended: ${user.institution.name} is currently suspended by platform administration. Reason: ${reason}. Please contact your institution administrator.`,
+          },
+          { status: 403 }
+        );
+      }
+      if (instStatus === "ARCHIVED") {
+        return NextResponse.json(
+          {
+            error: `Institution Archived: ${user.institution.name} has been archived. All active logins and operations are disabled.`,
+          },
+          { status: 403 }
+        );
+      }
     }
 
     let isMatch = await bcrypt.compare(password, user.passwordHash);
@@ -54,6 +142,14 @@ export async function POST(req: NextRequest) {
         { error: "Invalid password for this account. Please verify your password." },
         { status: 401 }
       );
+    }
+
+    // If student was in SETUP_PENDING, activate portal access upon first successful sign in
+    if (studentRecord && studentRecord.portalAccessStatus === "SETUP_PENDING") {
+      await prisma.student.update({
+        where: { id: studentRecord.id },
+        data: { portalAccessStatus: "ACTIVE" },
+      });
     }
 
     const response = NextResponse.json({

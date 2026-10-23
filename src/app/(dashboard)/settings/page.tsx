@@ -52,7 +52,7 @@ export default async function SettingsPage() {
       />
 
       {/* Schema Extensions Quick Link Banner */}
-      <div className="rounded-2xl border border-border bg-card p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-2xs">
+      <div className="rounded-xl border border-border bg-card p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-2xs">
         <div className="flex items-center gap-3">
           <div className="h-9 w-9 rounded-xl bg-primary text-primary-foreground flex items-center justify-center font-bold shadow-2xs">
             <Sparkles className="h-4 w-4" />
@@ -69,7 +69,7 @@ export default async function SettingsPage() {
         </Link>
       </div>
 
-      <div className="rounded-2xl border border-border bg-card p-6 shadow-2xs space-y-6">
+      <div className="rounded-xl border border-border bg-card p-6 shadow-2xs space-y-6">
         <div className="flex items-center justify-between border-b border-border pb-4">
           <div className="flex items-center gap-3">
             <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary text-primary-foreground font-mono font-bold text-sm shadow-2xs">

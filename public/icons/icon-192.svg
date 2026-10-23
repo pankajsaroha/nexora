@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 192 192" width="192" height="192">
+  <rect width="192" height="192" rx="40" fill="#2B1238"/>
+  <rect x="2" y="2" width="188" height="188" rx="38" fill="none" stroke="#3B1D4A" stroke-width="2"/>
+  <text x="96" y="112" font-family="-apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', sans-serif" font-weight="900" font-size="72" fill="#FFFFFF" text-anchor="middle" letter-spacing="-3">NX</text>
+  <circle cx="148" cy="68" r="8" fill="#D4AF37"/>
+</svg>

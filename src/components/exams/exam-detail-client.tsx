@@ -118,8 +118,8 @@ function formatAuditEventDetails(
       return {
         title: "Examination Created",
         summary: `Created in Draft with ${details.papersCount || exam.papersCount} configured subject papers`,
-        badgeColor: "bg-slate-100 text-slate-800 border-slate-200",
-        dotColor: "bg-slate-400",
+        badgeColor: "bg-muted text-foreground border-border",
+        dotColor: "bg-muted-foreground",
         parsedFields: fields,
       };
 
@@ -175,8 +175,8 @@ function formatAuditEventDetails(
       return {
         title: "Results Published",
         summary: "Official academic report cards and records declared",
-        badgeColor: "bg-emerald-50 text-emerald-800 border-emerald-200",
-        dotColor: "bg-emerald-600",
+        badgeColor: "bg-success-subtle text-success border-success/20",
+        dotColor: "bg-success",
         parsedFields: fields,
       };
 
@@ -203,8 +203,8 @@ function formatAuditEventDetails(
       return {
         title: action === "SUBMIT_MARKS" ? "Marks Submitted" : "Marks Draft Saved",
         summary: `${details.subjectName || "Subject"} (${details.className || ""}): ${details.studentsCount || 0} candidate marks recorded`,
-        badgeColor: "bg-indigo-50 text-indigo-800 border-indigo-200",
-        dotColor: "bg-indigo-500",
+        badgeColor: "bg-primary-subtle text-primary border-primary/20",
+        dotColor: "bg-primary",
         parsedFields: fields,
       };
 
@@ -221,8 +221,8 @@ function formatAuditEventDetails(
       return {
         title: action.replace(/_/g, " "),
         summary: typeof rawDetails === "string" ? rawDetails : "Operational audit entry recorded",
-        badgeColor: "bg-slate-50 text-slate-700 border-slate-200",
-        dotColor: "bg-slate-400",
+        badgeColor: "bg-muted text-foreground border-border",
+        dotColor: "bg-muted-foreground",
         parsedFields: fields,
       };
   }
@@ -792,7 +792,7 @@ export function ExamDetailClient({
   return (
     <div className="space-y-6">
       {/* 1. Header & Breadcrumbs */}
-      <div className="rounded-xl border border-border bg-white p-5 shadow-xs space-y-4">
+      <div className="rounded-xl border border-border bg-card p-5 shadow-xs space-y-4">
         <div className="flex items-center justify-between gap-3">
           <Link
             href="/academics/exams"
@@ -816,14 +816,14 @@ export function ExamDetailClient({
                   : exam.status === "ONGOING"
                   ? "bg-amber-50 text-amber-800 border-amber-300"
                   : exam.status === "COMPLETED"
-                  ? "bg-slate-100 text-slate-800 border-slate-300"
+                  ? "bg-muted text-foreground border-border"
                   : exam.status === "SCHEDULED"
                   ? "bg-blue-50 text-blue-800 border-blue-300"
                   : exam.status === "POSTPONED"
                   ? "bg-purple-50 text-purple-800 border-purple-300"
                   : exam.status === "CANCELLED"
                   ? "bg-rose-50 text-rose-800 border-rose-300"
-                  : "bg-slate-50 text-slate-800 border-slate-300"
+                  : "bg-muted/60 text-muted-foreground border-border"
               }`}
             >
               <span className="w-2 h-2 rounded-full bg-current" />
@@ -838,7 +838,7 @@ export function ExamDetailClient({
                   ? "bg-teal-50 text-teal-800 border-teal-200"
                   : exam.totalEnteredMarks > 0
                   ? "bg-sky-50 text-sky-800 border-sky-200"
-                  : "bg-slate-50 text-slate-600 border-slate-200"
+                  : "bg-muted/60 text-muted-foreground border-border"
               }`}
             >
               <span className="w-1.5 h-1.5 rounded-full bg-current opacity-70" />
@@ -1117,7 +1117,7 @@ export function ExamDetailClient({
               <button
                 type="button"
                 onClick={() => setIsMenuOpen(!isMenuOpen)}
-                className="p-2 rounded-lg border border-border bg-white hover:bg-muted text-muted-foreground hover:text-foreground transition-all cursor-pointer shadow-2xs"
+                className="p-2 rounded-lg border border-border bg-card hover:bg-muted text-muted-foreground hover:text-foreground transition-all cursor-pointer shadow-2xs"
                 title="More Options"
               >
                 <MoreVertical className="w-4 h-4" />
@@ -1130,7 +1130,7 @@ export function ExamDetailClient({
                     onClick={() => setIsMenuOpen(false)}
                   />
                   <div
-                    className="absolute right-0 top-full mt-1.5 w-56 rounded-xl bg-white border border-border shadow-xl z-40 py-1 text-xs divide-y divide-border"
+                    className="absolute right-0 top-full mt-1.5 w-56 rounded-xl bg-popover border border-border shadow-xl z-40 py-1 text-xs divide-y divide-border"
                     onClick={(e) => e.stopPropagation()}
                   >
                     <div className="py-1">
@@ -1145,7 +1145,7 @@ export function ExamDetailClient({
                         }}
                         className="w-full text-left px-3 py-2 hover:bg-muted flex items-center gap-2 text-foreground font-medium cursor-pointer"
                       >
-                        <BookOpen className="w-3.5 h-3.5 text-slate-600" />
+                        <BookOpen className="w-3.5 h-3.5 text-muted-foreground" />
                         Enter Subject Marks
                       </button>
                       <button
@@ -1171,7 +1171,7 @@ export function ExamDetailClient({
                           }}
                           className="w-full text-left px-3 py-2 hover:bg-muted flex items-center gap-2 text-foreground font-medium cursor-pointer"
                         >
-                          <RotateCcw className="w-3.5 h-3.5 text-slate-600" />
+                          <RotateCcw className="w-3.5 h-3.5 text-muted-foreground" />
                           Return to Draft
                         </button>
                       </div>
@@ -1259,7 +1259,7 @@ export function ExamDetailClient({
         <div className="space-y-6">
           {/* Key Metrics */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
-            <div className="rounded-xl border border-border bg-white p-4 shadow-xs">
+            <div className="rounded-xl border border-border bg-card p-4 shadow-xs">
               <div className="text-[11px] font-mono uppercase tracking-wider text-muted-foreground">
                 Examination Status
               </div>
@@ -1271,7 +1271,7 @@ export function ExamDetailClient({
               </div>
             </div>
 
-            <div className="rounded-xl border border-border bg-white p-4 shadow-xs">
+            <div className="rounded-xl border border-border bg-card p-4 shadow-xs">
               <div className="text-[11px] font-mono uppercase tracking-wider text-muted-foreground">
                 Result & Evaluation
               </div>
@@ -1289,7 +1289,7 @@ export function ExamDetailClient({
               </div>
             </div>
 
-            <div className="rounded-xl border border-border bg-white p-4 shadow-xs">
+            <div className="rounded-xl border border-border bg-card p-4 shadow-xs">
               <div className="text-[11px] font-mono uppercase tracking-wider text-muted-foreground">
                 Average Score
               </div>
@@ -1299,7 +1299,7 @@ export function ExamDetailClient({
               <div className="mt-0.5 text-[11px] text-muted-foreground">Cohort mean performance</div>
             </div>
 
-            <div className="rounded-xl border border-border bg-white p-4 shadow-xs">
+            <div className="rounded-xl border border-border bg-card p-4 shadow-xs">
               <div className="text-[11px] font-mono uppercase tracking-wider text-muted-foreground">
                 Target Classes
               </div>
@@ -1311,7 +1311,7 @@ export function ExamDetailClient({
           </div>
 
           {/* Lifecycle & Operational Status Box */}
-          <div className="p-5 rounded-xl border border-border bg-white shadow-xs space-y-4">
+          <div className="p-5 rounded-xl border border-border bg-card shadow-xs space-y-4">
             <div className="flex items-center justify-between border-b border-border pb-3">
               <div>
                 <h3 className="text-sm font-bold text-foreground">Lifecycle State & Semantics</h3>
@@ -1549,7 +1549,7 @@ export function ExamDetailClient({
           </div>
 
           {/* Quick Paper Summary */}
-          <div className="rounded-xl border border-border bg-white p-5 shadow-xs space-y-3">
+          <div className="rounded-xl border border-border bg-card p-5 shadow-xs space-y-3">
             <div className="flex items-center justify-between">
               <h3 className="text-sm font-bold text-foreground">
                 Configured Papers ({exam.subjects?.length || 0})
@@ -1630,7 +1630,7 @@ export function ExamDetailClient({
           </div>
 
           {(!exam.subjects || exam.subjects.length === 0) ? (
-            <div className="p-12 text-center rounded-xl border border-dashed border-border bg-white text-muted-foreground text-xs">
+            <div className="p-12 text-center rounded-xl border border-dashed border-border bg-card text-muted-foreground text-xs">
               No papers configured for this examination.
             </div>
           ) : (
@@ -1638,7 +1638,7 @@ export function ExamDetailClient({
               {exam.subjects.map((paper) => (
                 <div
                   key={paper.id}
-                  className="p-4 rounded-xl border border-border bg-white shadow-2xs hover:border-primary/40 transition-all flex flex-col md:flex-row md:items-center justify-between gap-4 text-xs"
+                  className="p-4 rounded-xl border border-border bg-card shadow-2xs hover:border-primary/40 transition-all flex flex-col md:flex-row md:items-center justify-between gap-4 text-xs"
                 >
                   <div className="space-y-1">
                     <div className="flex items-center gap-2">
@@ -1676,7 +1676,7 @@ export function ExamDetailClient({
                             ? "bg-emerald-500"
                             : paper.evaluationStatus === "DRAFT"
                             ? "bg-amber-500"
-                            : "bg-slate-300"
+                            : "bg-muted-foreground/40"
                         }`}
                       />
                       <span>
@@ -1712,7 +1712,7 @@ export function ExamDetailClient({
       {activeTab === "MARKS" && (
         <div className="space-y-4">
           {/* Paper Selector & Roster Toolbar */}
-          <div className="p-4 rounded-xl border border-border bg-white shadow-xs flex flex-col md:flex-row md:items-center justify-between gap-4 text-xs">
+          <div className="p-4 rounded-xl border border-border bg-card shadow-xs flex flex-col md:flex-row md:items-center justify-between gap-4 text-xs">
             <div className="flex items-center gap-3 flex-wrap">
               <label className="font-mono text-[11px] font-bold uppercase tracking-wider text-muted-foreground">
                 Select Paper:
@@ -1783,15 +1783,15 @@ export function ExamDetailClient({
 
           {/* Marks Table */}
           {isLoadingRoster ? (
-            <div className="p-12 text-center rounded-xl border border-border bg-white text-muted-foreground text-xs">
+            <div className="p-12 text-center rounded-xl border border-border bg-card text-muted-foreground text-xs">
               Loading student roster...
             </div>
           ) : filteredRoster.length === 0 ? (
-            <div className="p-12 text-center rounded-xl border border-dashed border-border bg-white text-muted-foreground text-xs">
+            <div className="p-12 text-center rounded-xl border border-dashed border-border bg-card text-muted-foreground text-xs">
               No active candidates found for this paper.
             </div>
           ) : (
-            <div className="rounded-xl border border-border bg-white shadow-xs overflow-hidden">
+            <div className="rounded-xl border border-border bg-card shadow-xs overflow-hidden">
               <div className="overflow-x-auto">
                 <table className="w-full text-xs text-left">
                   <thead className="bg-muted/60 text-[11px] font-mono uppercase text-muted-foreground border-b border-border">
@@ -1848,7 +1848,7 @@ export function ExamDetailClient({
                                 ? "bg-emerald-100 text-emerald-800"
                                 : student.grade === "F"
                                 ? "bg-rose-100 text-rose-800"
-                                : "bg-slate-100 text-slate-800"
+                                : "bg-muted text-foreground"
                             }`}
                           >
                             {student.grade || "—"}
@@ -1891,7 +1891,7 @@ export function ExamDetailClient({
       {/* 5. TAB: REPORT CARDS */}
       {activeTab === "RESULTS" && (
         <div className="space-y-4">
-          <div className="p-4 rounded-xl border border-border bg-white shadow-xs flex flex-col md:flex-row md:items-center justify-between gap-4 text-xs">
+          <div className="p-4 rounded-xl border border-border bg-card shadow-xs flex flex-col md:flex-row md:items-center justify-between gap-4 text-xs">
             <div className="flex items-center gap-3 flex-wrap">
               <label className="font-mono text-[11px] font-bold uppercase tracking-wider text-muted-foreground">
                 Select Candidate:
@@ -1920,15 +1920,15 @@ export function ExamDetailClient({
           </div>
 
           {isLoadingReportCard ? (
-            <div className="p-12 text-center rounded-xl border border-border bg-white text-muted-foreground text-xs">
+            <div className="p-12 text-center rounded-xl border border-border bg-card text-muted-foreground text-xs">
               Loading report card...
             </div>
           ) : !reportCardData ? (
-            <div className="p-12 text-center rounded-xl border border-dashed border-border bg-white text-muted-foreground text-xs">
+            <div className="p-12 text-center rounded-xl border border-dashed border-border bg-card text-muted-foreground text-xs">
               No report card data available for the selected candidate.
             </div>
           ) : (
-            <div className="p-6 rounded-xl border border-border bg-white shadow-xs space-y-6 max-w-3xl mx-auto">
+            <div className="p-6 rounded-xl border border-border bg-card shadow-xs space-y-6 max-w-3xl mx-auto">
               {/* Report Header */}
               <div className="text-center border-b border-border pb-4 space-y-1">
                 <h2 className="text-lg font-bold text-foreground uppercase tracking-wide">
@@ -2036,7 +2036,7 @@ export function ExamDetailClient({
           {/* Top Status Cards: Current Examination Status & Results Progress */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {/* 1. Examination Status Card */}
-            <div className="rounded-xl border border-border bg-white p-4 shadow-2xs space-y-3">
+            <div className="rounded-xl border border-border bg-card p-4 shadow-2xs space-y-3">
               <div className="text-[11px] font-mono uppercase tracking-wider text-muted-foreground font-semibold flex items-center justify-between">
                 <span>Current Examination Status</span>
                 <span className="inline-flex items-center gap-1.5 text-[10px] font-mono text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200">
@@ -2054,14 +2054,14 @@ export function ExamDetailClient({
                       : exam.status === "ONGOING"
                       ? "bg-amber-50 text-amber-800 border-amber-300"
                       : exam.status === "COMPLETED"
-                      ? "bg-slate-100 text-slate-800 border-slate-300"
+                      ? "bg-muted text-foreground border-border"
                       : exam.status === "SCHEDULED"
                       ? "bg-blue-50 text-blue-800 border-blue-300"
                       : exam.status === "POSTPONED"
                       ? "bg-purple-50 text-purple-800 border-purple-300"
                       : exam.status === "CANCELLED"
                       ? "bg-rose-50 text-rose-800 border-rose-300"
-                      : "bg-slate-50 text-slate-800 border-slate-300"
+                      : "bg-muted/60 text-muted-foreground border-border"
                   }`}
                 >
                   {exam.status}
@@ -2084,7 +2084,7 @@ export function ExamDetailClient({
             </div>
 
             {/* 2. Results & Evaluation Card */}
-            <div className="rounded-xl border border-border bg-white p-4 shadow-2xs space-y-3">
+            <div className="rounded-xl border border-border bg-card p-4 shadow-2xs space-y-3">
               <div className="text-[11px] font-mono uppercase tracking-wider text-muted-foreground font-semibold flex items-center justify-between">
                 <span>Results & Evaluation Status</span>
                 <span className="text-[11px] font-mono font-bold text-primary">
@@ -2100,7 +2100,7 @@ export function ExamDetailClient({
                       ? "bg-teal-50 text-teal-800 border-teal-300"
                       : exam.totalEnteredMarks > 0
                       ? "bg-sky-50 text-sky-800 border-sky-300"
-                      : "bg-slate-50 text-slate-700 border-slate-200"
+                      : "bg-muted/60 text-muted-foreground border-border"
                   }`}
                 >
                   {exam.status === "PUBLISHED"
@@ -2131,7 +2131,7 @@ export function ExamDetailClient({
           </div>
 
           {/* Results & Evaluation Stage Pipeline */}
-          <div className="rounded-xl border border-border bg-white p-4 shadow-2xs space-y-3">
+          <div className="rounded-xl border border-border bg-card p-4 shadow-2xs space-y-3">
             <h4 className="text-[11px] font-bold text-muted-foreground uppercase tracking-wider font-mono">
               Evaluation & Result Pipeline
             </h4>
@@ -2174,7 +2174,7 @@ export function ExamDetailClient({
             </h4>
 
             {(!exam.auditLogs || exam.auditLogs.length === 0) ? (
-              <div className="p-12 text-center rounded-xl border border-dashed border-border bg-white text-muted-foreground text-xs">
+              <div className="p-12 text-center rounded-xl border border-dashed border-border bg-card text-muted-foreground text-xs">
                 No audit records recorded yet for this examination cycle.
               </div>
             ) : (
@@ -2190,7 +2190,7 @@ export function ExamDetailClient({
                         className={`absolute -left-[27px] sm:-left-[31px] top-1.5 w-3.5 h-3.5 rounded-full border-2 border-white ring-2 ring-border/50 ${event.dotColor}`}
                       />
 
-                      <div className="p-4 rounded-xl border border-border bg-white shadow-2xs hover:border-primary/30 transition-all space-y-2">
+                      <div className="p-4 rounded-xl border border-border bg-card shadow-2xs hover:border-primary/30 transition-all space-y-2">
                         {/* Event Header */}
                         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1">
                           <div className="flex items-center gap-2 flex-wrap">
@@ -2299,7 +2299,7 @@ export function ExamDetailClient({
                         newStartDate: e.target.value,
                       }))
                     }
-                    className="mt-1 w-full px-2.5 py-1.5 rounded border border-border bg-white text-xs font-mono font-semibold text-foreground focus:outline-none focus:ring-1 focus:ring-primary"
+                    className="mt-1 w-full px-2.5 py-1.5 rounded border border-border bg-background text-xs font-mono font-semibold text-foreground focus:outline-none focus:ring-1 focus:ring-accent"
                   />
                 </div>
                 <div>
@@ -2315,7 +2315,7 @@ export function ExamDetailClient({
                         newEndDate: e.target.value,
                       }))
                     }
-                    className="mt-1 w-full px-2.5 py-1.5 rounded border border-border bg-white text-xs font-mono font-semibold text-foreground focus:outline-none focus:ring-1 focus:ring-primary"
+                    className="mt-1 w-full px-2.5 py-1.5 rounded border border-border bg-background text-xs font-mono font-semibold text-foreground focus:outline-none focus:ring-1 focus:ring-accent"
                   />
                 </div>
               </div>
@@ -2478,13 +2478,13 @@ export function ExamDetailClient({
                                 ),
                               }));
                             }}
-                            className="w-full px-2.5 py-1.5 rounded border border-border bg-white text-xs font-mono font-medium text-foreground focus:outline-none focus:ring-1 focus:ring-primary"
+                            className="w-full px-2.5 py-1.5 rounded border border-border bg-background text-xs font-mono font-medium text-foreground focus:outline-none focus:ring-1 focus:ring-accent"
                           />
                         </div>
 
                         <div>
                           <label className="block font-mono text-[10px] uppercase text-muted-foreground mb-1">
-                            Start Time <span className="text-rose-500">*</span>
+                            Start Time <span className="text-destructive">*</span>
                           </label>
                           <input
                             type="time"
@@ -2498,13 +2498,13 @@ export function ExamDetailClient({
                                 ),
                               }));
                             }}
-                            className="w-full px-2.5 py-1.5 rounded border border-border bg-white text-xs font-mono font-medium text-foreground focus:outline-none focus:ring-1 focus:ring-primary"
+                            className="w-full px-2.5 py-1.5 rounded border border-border bg-background text-xs font-mono font-medium text-foreground focus:outline-none focus:ring-1 focus:ring-accent"
                           />
                         </div>
 
                         <div>
                           <label className="block font-mono text-[10px] uppercase text-muted-foreground mb-1">
-                            End Time <span className="text-rose-500">*</span>
+                            End Time <span className="text-destructive">*</span>
                           </label>
                           <input
                             type="time"
@@ -2518,7 +2518,7 @@ export function ExamDetailClient({
                                 ),
                               }));
                             }}
-                            className="w-full px-2.5 py-1.5 rounded border border-border bg-white text-xs font-mono font-medium text-foreground focus:outline-none focus:ring-1 focus:ring-primary"
+                            className="w-full px-2.5 py-1.5 rounded border border-border bg-background text-xs font-mono font-medium text-foreground focus:outline-none focus:ring-1 focus:ring-accent"
                           />
                         </div>
                       </div>

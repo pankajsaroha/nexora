@@ -5,6 +5,11 @@ export interface BadgeProps extends React.HTMLAttributes<HTMLSpanElement> {
   variant?:
     | "default"
     | "secondary"
+    | "accent"
+    | "gold"
+    | "amethyst"
+    | "plum"
+    | "indigo"
     | "champagne"
     | "olive"
     | "burgundy"
@@ -27,22 +32,27 @@ export function Badge({
   ...props
 }: BadgeProps) {
   const sizeStyles = {
-    sm: "text-[10px] font-mono uppercase tracking-wider px-2 py-0.5 font-bold",
-    md: "text-[11px] font-mono uppercase tracking-wider px-2.5 py-1 font-bold",
+    sm: "text-[10px] font-medium tracking-wide px-2 py-0.5",
+    md: "text-[11px] font-medium tracking-wide px-2.5 py-0.5",
   };
 
   const variantStyles = {
     default: "bg-muted text-foreground border border-border",
-    secondary: "bg-muted/60 text-muted-foreground border border-border",
-    champagne: "bg-warm/15 text-foreground border border-warm/30",
-    olive: "bg-accent/15 text-foreground border border-accent/30",
-    burgundy: "bg-destructive/15 text-destructive border border-destructive/30",
+    secondary: "bg-surface-subtle text-foreground-secondary border border-border",
+    accent: "bg-accent-subtle text-accent border border-accent/20 font-medium",
+    gold: "bg-accent-subtle text-accent border border-accent/30 font-medium",
+    amethyst: "bg-accent-subtle text-accent border border-accent/20 font-medium",
+    plum: "bg-accent-subtle text-accent border border-accent/20 font-medium",
+    indigo: "bg-accent-subtle text-accent border border-accent/20 font-medium",
+    champagne: "bg-accent-subtle text-accent border border-accent/20 font-medium",
+    olive: "bg-muted text-muted-foreground border border-border",
+    burgundy: "bg-destructive-subtle text-destructive border border-destructive-border font-medium",
     stone: "bg-muted text-muted-foreground border border-border",
-    espresso: "bg-primary text-primary-foreground border border-primary",
-    success: "bg-success/15 text-success border border-success/30",
-    warning: "bg-warning/15 text-warning border border-warning/30",
-    danger: "bg-destructive/15 text-destructive border border-destructive/30",
-    info: "bg-primary-subtle text-primary border border-primary/25",
+    espresso: "bg-card text-foreground border border-border font-semibold",
+    success: "bg-success-subtle text-success border border-success-border font-medium",
+    warning: "bg-warning-subtle text-warning border border-warning-border font-medium",
+    danger: "bg-destructive-subtle text-destructive border border-destructive-border font-medium",
+    info: "bg-info-subtle text-info border border-info-border font-medium",
     neutral: "bg-muted text-muted-foreground border border-border",
     outline: "bg-transparent text-muted-foreground border border-border",
   };

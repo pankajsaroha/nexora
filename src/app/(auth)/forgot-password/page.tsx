@@ -72,11 +72,11 @@ export default function ForgotPasswordPage() {
       <header className="border-b border-border bg-background/90 backdrop-blur-md px-6 sm:px-10 py-4">
         <div className="max-w-7xl mx-auto flex items-center justify-between">
           <Link href="/" className="flex items-center gap-3 group">
-            <div className="w-8 h-8 rounded-lg bg-primary text-primary-foreground border border-border flex items-center justify-center font-bold text-xs tracking-wider shadow-2xs group-hover:border-primary transition-colors">
+            <div className="w-8 h-8 rounded-lg bg-primary text-primary-foreground flex items-center justify-center font-bold text-xs tracking-wider shadow-2xs group-hover:opacity-90 transition-opacity">
               NX
             </div>
             <div>
-              <span className="font-extrabold text-sm tracking-tight text-foreground block leading-none font-serif">
+              <span className="font-extrabold text-sm tracking-tight text-foreground block leading-none">
                 NEXORA
               </span>
               <span className="text-[10px] font-mono uppercase tracking-widest text-muted-foreground block mt-0.5">
@@ -88,7 +88,7 @@ export default function ForgotPasswordPage() {
           <div className="flex items-center gap-3 text-xs">
             <Link
               href="/login"
-              className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-bold uppercase tracking-wider text-foreground hover:bg-[#EAE4D7] border border-border transition-all shadow-2xs"
+              className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-semibold text-foreground hover:bg-muted border border-border transition-all shadow-2xs"
             >
               <ArrowLeft className="w-3 h-3 text-muted-foreground" />
               <span>Back to Sign In</span>
@@ -101,12 +101,12 @@ export default function ForgotPasswordPage() {
       <main className="flex-1 max-w-6xl w-full mx-auto px-6 py-10 sm:py-16 grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16 items-center">
         {/* Left Column: Brand & Security Narrative */}
         <div className="lg:col-span-6 space-y-6">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-card border border-border text-[11px] font-mono font-semibold text-primary shadow-2xs">
-            <KeyRound className="w-3.5 h-3.5 text-primary" />
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-accent-subtle border border-accent/20 text-[11px] font-mono font-semibold text-accent shadow-2xs">
+            <KeyRound className="w-3.5 h-3.5 text-accent" />
             <span>CREDENTIAL RECOVERY PROTOCOL</span>
           </div>
 
-          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-foreground font-serif leading-[1.15]">
+          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-foreground leading-[1.15]">
             Recover access to your institution.
           </h1>
 
@@ -130,14 +130,14 @@ export default function ForgotPasswordPage() {
 
         {/* Right Column: Card */}
         <div className="lg:col-span-6">
-          <div className="rounded-3xl border border-border bg-white p-8 sm:p-10 shadow-xl space-y-6">
+          <div className="rounded-xl border border-border bg-card p-8 sm:p-10 shadow-card-hover space-y-6">
             {!isSubmitted ? (
               <>
                 <div>
                   <span className="text-[10px] font-mono uppercase tracking-widest text-muted-foreground font-bold block mb-1">
                     PASSWORD RECOVERY
                   </span>
-                  <h2 className="text-2xl font-bold tracking-tight text-foreground font-serif">
+                  <h2 className="text-2xl font-bold tracking-tight text-foreground">
                     Forgot your password?
                   </h2>
                   <p className="text-xs text-muted-foreground mt-1">
@@ -146,7 +146,7 @@ export default function ForgotPasswordPage() {
                 </div>
 
                 {errorMessage && (
-                  <div className="p-3.5 rounded-2xl bg-destructive/15 border border-[#ECCECE] text-xs text-destructive flex items-start gap-2.5">
+                  <div className="p-3.5 rounded-lg bg-destructive/10 border border-destructive/20 text-xs text-destructive flex items-start gap-2.5">
                     <AlertCircle className="w-4 h-4 text-destructive shrink-0 mt-0.5" />
                     <span className="leading-snug">{errorMessage}</span>
                   </div>
@@ -165,7 +165,7 @@ export default function ForgotPasswordPage() {
                         disabled={isLoading}
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
-                        className="w-full rounded-xl border border-border bg-card py-2.5 pl-10 pr-3.5 text-xs text-foreground placeholder-[#A8A398] focus:border-primary focus:bg-white focus:outline-none transition-colors font-mono"
+                        className="w-full rounded-lg border border-border bg-background py-2.5 pl-10 pr-3.5 text-xs text-foreground placeholder:text-muted-foreground focus:border-accent focus:ring-1 focus:ring-accent focus:outline-none transition-colors font-mono"
                         placeholder="admin@institution.edu"
                         autoComplete="email"
                       />
@@ -176,17 +176,16 @@ export default function ForgotPasswordPage() {
                     <Button
                       type="submit"
                       disabled={isLoading}
-                      className="w-full py-3 rounded-xl bg-primary hover:bg-primary-hover text-primary-foreground border border-border font-bold text-xs uppercase tracking-wider shadow-sm transition-all flex items-center justify-center gap-2"
+                      className="w-full py-2.5 rounded-lg bg-primary hover:bg-primary-hover text-primary-foreground border border-primary/20 font-semibold text-xs tracking-wider shadow-sm transition-all flex items-center justify-center gap-2"
                     >
                       {isLoading ? (
                         <>
-                          <Loader2 className="w-4 h-4 animate-spin text-primary" />
-                          <span>SENDING RESET LINK...</span>
+                          <Loader2 className="w-4 h-4 animate-spin text-primary-foreground" />
+                          <span>Sending Reset Link...</span>
                         </>
                       ) : (
                         <>
-                          <span>SEND RESET LINK</span>
-                          <ArrowRight className="w-3.5 h-3.5 text-primary" />
+                          <span>Send Reset Link →</span>
                         </>
                       )}
                     </Button>
@@ -205,7 +204,7 @@ export default function ForgotPasswordPage() {
             ) : (
               /* Success / Dispatched State */
               <div className="space-y-6">
-                <div className="w-12 h-12 rounded-2xl bg-[#F0F6EE] border border-[#C6DFC2] text-[#3B6634] flex items-center justify-center">
+                <div className="w-12 h-12 rounded-xl bg-success-subtle border border-success-border text-success flex items-center justify-center">
                   <CheckCircle2 className="w-6 h-6" />
                 </div>
 
@@ -213,7 +212,7 @@ export default function ForgotPasswordPage() {
                   <span className="text-[10px] font-mono uppercase tracking-widest text-success font-bold block mb-1">
                     EMAIL DISPATCHED
                   </span>
-                  <h2 className="text-2xl font-bold tracking-tight text-foreground font-serif">
+                  <h2 className="text-2xl font-bold tracking-tight text-foreground">
                     Check your email
                   </h2>
                   <p className="text-xs text-muted-foreground mt-1.5 leading-relaxed">
@@ -233,7 +232,7 @@ export default function ForgotPasswordPage() {
                         type="button"
                         onClick={() => handleSubmit()}
                         disabled={isLoading}
-                        className="font-bold text-foreground hover:text-primary hover:underline flex items-center gap-1 transition-colors"
+                        className="font-bold text-foreground hover:text-accent hover:underline flex items-center gap-1 transition-colors"
                       >
                         <RotateCcw className="w-3 h-3" />
                         <span>Resend reset link</span>
@@ -244,7 +243,7 @@ export default function ForgotPasswordPage() {
                   <div className="pt-2">
                     <Link
                       href="/login"
-                      className="block w-full text-center py-2.5 rounded-xl bg-card hover:bg-[#EAE4D7] text-foreground border border-border font-bold text-xs uppercase tracking-wider transition-all"
+                      className="block w-full text-center py-2.5 rounded-xl bg-card hover:bg-muted text-foreground border border-border font-semibold text-xs tracking-wider transition-all"
                     >
                       Back to Sign In
                     </Link>

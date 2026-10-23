@@ -70,72 +70,72 @@ export function PayrollClient({
 
       {/* Metrics Strip */}
       <section className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-        <div className="p-5 rounded-xl border border-border bg-white space-y-1 shadow-xs">
-          <span className="text-[11px] font-mono uppercase tracking-wider text-accent font-bold block">
+        <div className="p-5 rounded-xl border border-border bg-card space-y-1 shadow-2xs">
+          <span className="text-[11px] font-mono uppercase tracking-wider text-muted-foreground font-semibold block">
             01 / TOTAL MONTHLY OUTFLOW
           </span>
           <div className="text-2xl sm:text-3xl font-bold text-foreground tracking-tight">
             {formatCurrency(totalPayroll)}
           </div>
-          <span className="text-[11px] text-accent block font-medium">
+          <span className="text-[11px] text-muted-foreground block font-medium">
             35 Faculty & staff members
           </span>
         </div>
 
-        <div className="p-5 rounded-xl border border-border bg-white space-y-1 shadow-xs">
-          <span className="text-[11px] font-mono uppercase tracking-wider text-accent font-bold block">
+        <div className="p-5 rounded-xl border border-border bg-card space-y-1 shadow-2xs">
+          <span className="text-[11px] font-mono uppercase tracking-wider text-muted-foreground font-semibold block">
             02 / DISBURSED VOUCHERS
           </span>
           <div className="text-2xl sm:text-3xl font-bold text-accent tracking-tight">
             {paidCount} / {payrolls.length}
           </div>
-          <span className="text-[11px] text-accent block font-medium">
+          <span className="text-[11px] text-muted-foreground block font-medium">
             Direct bank transfer settled
           </span>
         </div>
 
-        <div className="p-5 rounded-xl border border-border bg-white space-y-1 shadow-xs">
-          <span className="text-[11px] font-mono uppercase tracking-wider text-accent font-bold block">
+        <div className="p-5 rounded-xl border border-border bg-card space-y-1 shadow-2xs">
+          <span className="text-[11px] font-mono uppercase tracking-wider text-muted-foreground font-semibold block">
             03 / CYCLE PERIOD
           </span>
           <div className="text-2xl sm:text-3xl font-bold text-foreground tracking-tight">
             September 2026
           </div>
-          <span className="text-[11px] text-accent block font-medium">
+          <span className="text-[11px] text-muted-foreground block font-medium">
             AY 2026-27 · Term 1
           </span>
         </div>
 
-        <div className="p-5 rounded-xl border border-border bg-white space-y-1 shadow-xs">
-          <span className="text-[11px] font-mono uppercase tracking-wider text-accent font-bold block">
+        <div className="p-5 rounded-xl border border-border bg-card space-y-1 shadow-2xs">
+          <span className="text-[11px] font-mono uppercase tracking-wider text-muted-foreground font-semibold block">
             04 / COMPLIANCE STATUS
           </span>
           <div className="text-2xl sm:text-3xl font-bold text-accent tracking-tight">
             100%
           </div>
-          <span className="text-[11px] text-accent block font-medium">
+          <span className="text-[11px] text-muted-foreground block font-medium">
             Statutory PF & Tax verified
           </span>
         </div>
       </section>
 
       {/* Filter and Search Bar */}
-      <div className="flex flex-col sm:flex-row items-center gap-3 bg-white p-3 rounded-xl border border-border shadow-xs">
+      <div className="flex flex-col sm:flex-row items-center gap-3 bg-card p-3 rounded-xl border border-border shadow-2xs">
         <div className="relative flex-1 w-full">
-          <Search className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-accent" />
+          <Search className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted-foreground" />
           <input
             type="search"
             placeholder="Search faculty name, employee ID, or department..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full rounded-lg border border-border bg-card py-2 pl-9 pr-3 text-xs text-foreground placeholder:text-accent focus:outline-none focus:ring-1 focus:ring-[#171614]"
+            className="w-full rounded-lg border border-border bg-background py-2 pl-9 pr-3 text-xs text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-accent"
           />
         </div>
 
         <select
           value={selectedMonth}
           onChange={(e) => setSelectedMonth(e.target.value)}
-          className="rounded-lg border border-border bg-white px-3 py-2 text-xs font-semibold text-foreground focus:outline-none w-full sm:w-auto"
+          className="rounded-lg border border-border bg-background px-3 py-2 text-xs font-medium text-foreground focus:outline-none focus:ring-1 focus:ring-accent w-full sm:w-auto"
         >
           <option value="9">September 2026 (Current)</option>
           <option value="8">August 2026</option>
@@ -144,10 +144,10 @@ export function PayrollClient({
       </div>
 
       {/* Payroll Table */}
-      <div className="overflow-hidden rounded-xl border border-border bg-white shadow-xs">
+      <div className="overflow-hidden rounded-xl border border-border bg-card shadow-2xs">
         <div className="overflow-x-auto">
           <table className="w-full text-left text-xs">
-            <thead className="border-b border-border bg-card text-accent font-mono text-[11px] uppercase tracking-wider">
+            <thead className="border-b border-border bg-surface-subtle text-muted-foreground font-mono text-[11px] uppercase tracking-wider">
               <tr>
                 <th className="py-3 px-4 font-bold">Faculty Member</th>
                 <th className="py-3 px-4 font-bold">Designation & Dept</th>
@@ -159,30 +159,30 @@ export function PayrollClient({
                 <th className="py-3 px-4 font-bold text-right">Actions</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-[#E5E0D5]">
+            <tbody className="divide-y divide-border">
               {filteredPayrolls.map((p) => (
                 <tr
                   key={p.id}
-                  className="hover:bg-card transition-colors"
+                  className="hover:bg-muted/30 transition-colors"
                 >
                   <td className="py-3.5 px-4">
-                    <div className="font-bold text-foreground">
+                    <div className="font-semibold text-foreground">
                       {p.teacherName}
                     </div>
-                    <div className="text-[11px] text-accent font-mono mt-0.5">
+                    <div className="text-[11px] text-muted-foreground font-mono mt-0.5">
                       Emp ID: {p.employeeId}
                     </div>
                   </td>
                   <td className="py-3.5 px-4">
                     <div className="text-foreground font-medium">{p.designation}</div>
-                    <div className="text-[11px] text-accent font-mono">
+                    <div className="text-[11px] text-muted-foreground font-mono">
                       {p.departmentName || "General Faculty"}
                     </div>
                   </td>
                   <td className="py-3.5 px-4 font-mono text-foreground">
                     {formatCurrency(p.basicSalary)}
                   </td>
-                  <td className="py-3.5 px-4 font-mono text-accent">
+                  <td className="py-3.5 px-4 font-mono text-muted-foreground">
                     +{formatCurrency(p.allowances)}
                   </td>
                   <td className="py-3.5 px-4 font-mono text-destructive">
@@ -195,10 +195,10 @@ export function PayrollClient({
                     <span
                       className={`text-[10px] font-mono uppercase tracking-wider px-2 py-0.5 rounded font-bold ${
                         p.status === "PAID"
-                          ? "bg-accent/10 text-accent border border-success/30/20"
+                          ? "bg-success/10 text-success border border-success/20"
                           : p.status === "APPROVED"
-                          ? "bg-[#B89B62]/10 text-primary border border-primary/20"
-                          : "bg-card text-accent border border-border"
+                          ? "bg-accent/10 text-accent border border-accent/20"
+                          : "bg-surface-subtle text-muted-foreground border border-border"
                       }`}
                     >
                       {p.status}
@@ -231,13 +231,13 @@ export function PayrollClient({
           size="lg"
         >
           <div className="space-y-6">
-            <div className="p-6 rounded-xl border border-border bg-white space-y-6 text-xs">
+            <div className="p-6 rounded-xl border border-border bg-card space-y-6 text-xs">
               {/* Header */}
-              <div className="text-center border-b border-[#171614] pb-4 space-y-1">
-                <div className="text-base font-extrabold tracking-tight text-foreground uppercase">
+              <div className="text-center border-b border-border pb-4 space-y-1">
+                <div className="text-base font-bold tracking-tight text-foreground uppercase">
                   Northstar International Academy
                 </div>
-                <div className="text-xs text-accent">
+                <div className="text-xs text-muted-foreground">
                   Affiliated to CBSE • Institutional Accounts Wing • Knowledge Park III, Greater Noida
                 </div>
                 <div className="text-xs font-mono font-bold text-foreground uppercase tracking-widest pt-1">
@@ -246,42 +246,42 @@ export function PayrollClient({
               </div>
 
               {/* Employee Info */}
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 bg-card p-3.5 rounded-lg border border-border">
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 bg-surface-subtle p-3.5 rounded-lg border border-border">
                 <div>
-                  <span className="text-[10px] font-mono uppercase text-accent">Faculty Name</span>
-                  <div className="font-bold text-foreground">{selectedPayslip.teacherName}</div>
+                  <span className="text-[10px] font-mono uppercase text-muted-foreground">Faculty Name</span>
+                  <div className="font-semibold text-foreground">{selectedPayslip.teacherName}</div>
                 </div>
                 <div>
-                  <span className="text-[10px] font-mono uppercase text-accent">Employee Code</span>
+                  <span className="text-[10px] font-mono uppercase text-muted-foreground">Employee Code</span>
                   <div className="font-mono font-bold text-foreground">{selectedPayslip.employeeId}</div>
                 </div>
                 <div>
-                  <span className="text-[10px] font-mono uppercase text-accent">Designation</span>
-                  <div className="font-bold text-foreground">{selectedPayslip.designation}</div>
+                  <span className="text-[10px] font-mono uppercase text-muted-foreground">Designation</span>
+                  <div className="font-medium text-foreground">{selectedPayslip.designation}</div>
                 </div>
                 <div>
-                  <span className="text-[10px] font-mono uppercase text-accent">Department</span>
-                  <div className="font-bold text-foreground">{selectedPayslip.departmentName || "Science & Tech"}</div>
+                  <span className="text-[10px] font-mono uppercase text-muted-foreground">Department</span>
+                  <div className="font-medium text-foreground">{selectedPayslip.departmentName || "Science & Tech"}</div>
                 </div>
               </div>
 
               {/* Compensation Breakdown */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div className="border border-border rounded-lg overflow-hidden">
-                  <div className="bg-card p-2.5 font-mono text-[11px] uppercase font-bold text-foreground border-b border-border">
+                  <div className="bg-surface-subtle p-2.5 font-mono text-[11px] uppercase font-bold text-foreground border-b border-border">
                     Earnings & Allowances
                   </div>
                   <div className="p-3 space-y-2">
                     <div className="flex justify-between">
-                      <span className="text-accent">Basic Pay</span>
+                      <span className="text-muted-foreground">Basic Pay</span>
                       <span className="font-mono font-semibold text-foreground">{formatCurrency(selectedPayslip.basicSalary)}</span>
                     </div>
                     <div className="flex justify-between">
-                      <span className="text-accent">House Rent Allowance (HRA)</span>
+                      <span className="text-muted-foreground">House Rent Allowance (HRA)</span>
                       <span className="font-mono font-semibold text-foreground">{formatCurrency(selectedPayslip.allowances * 0.6)}</span>
                     </div>
                     <div className="flex justify-between">
-                      <span className="text-accent">Dearness Allowance (DA)</span>
+                      <span className="text-muted-foreground">Dearness Allowance (DA)</span>
                       <span className="font-mono font-semibold text-foreground">{formatCurrency(selectedPayslip.allowances * 0.4)}</span>
                     </div>
                     <div className="flex justify-between border-t border-border pt-2 font-bold">
@@ -294,16 +294,16 @@ export function PayrollClient({
                 </div>
 
                 <div className="border border-border rounded-lg overflow-hidden">
-                  <div className="bg-card p-2.5 font-mono text-[11px] uppercase font-bold text-foreground border-b border-border">
+                  <div className="bg-surface-subtle p-2.5 font-mono text-[11px] uppercase font-bold text-foreground border-b border-border">
                     Statutory Deductions
                   </div>
                   <div className="p-3 space-y-2">
                     <div className="flex justify-between">
-                      <span className="text-accent">Provident Fund (PF)</span>
+                      <span className="text-muted-foreground">Provident Fund (PF)</span>
                       <span className="font-mono font-semibold text-destructive">-{formatCurrency(selectedPayslip.deductions * 0.7)}</span>
                     </div>
                     <div className="flex justify-between">
-                      <span className="text-accent">Professional Tax (PT)</span>
+                      <span className="text-muted-foreground">Professional Tax (PT)</span>
                       <span className="font-mono font-semibold text-destructive">-{formatCurrency(selectedPayslip.deductions * 0.3)}</span>
                     </div>
                     <div className="flex justify-between border-t border-border pt-2 font-bold">
@@ -315,12 +315,12 @@ export function PayrollClient({
               </div>
 
               {/* Net Disbursed Strip */}
-              <div className="p-4 rounded-xl bg-card border border-border flex justify-between items-center">
+              <div className="p-4 rounded-xl bg-surface-subtle border border-border flex justify-between items-center">
                 <div>
-                  <span className="text-[10px] font-mono uppercase text-accent">Net Salary Disbursed</span>
+                  <span className="text-[10px] font-mono uppercase text-muted-foreground">Net Salary Disbursed</span>
                   <div className="text-xl font-bold text-foreground font-mono">{formatCurrency(selectedPayslip.netSalary)}</div>
                 </div>
-                <div className="text-right text-[11px] font-mono text-accent">
+                <div className="text-right text-[11px] font-mono text-muted-foreground">
                   <div>Disbursed via HDFC NEFT Transfer</div>
                   <div className="text-foreground font-bold">Ref: #TXN-90281-HDFC</div>
                 </div>

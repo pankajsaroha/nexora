@@ -90,15 +90,15 @@ export function TimetableClient({
       </PageHeader>
 
       {/* Selector and Filter Controls */}
-      <div className="flex flex-col sm:flex-row items-center justify-between gap-4 rounded-2xl bg-white p-4 border border-border shadow-2xs no-print">
+      <div className="flex flex-col sm:flex-row items-center justify-between gap-4 rounded-xl bg-card p-4 border border-border shadow-2xs no-print">
         <div className="flex items-center gap-2">
-          <div className="flex rounded-xl bg-card border border-border p-1">
+          <div className="flex rounded-lg bg-surface-subtle border border-border p-0.5">
             <button
               type="button"
               onClick={() => setViewMode("CLASS")}
-              className={`px-3 py-1.5 rounded-lg text-xs font-bold uppercase tracking-wider transition-all ${
+              className={`px-3 py-1.5 rounded-md text-xs font-medium transition-all ${
                 viewMode === "CLASS"
-                  ? "bg-primary text-primary-foreground shadow-xs"
+                  ? "bg-primary text-primary-foreground shadow-2xs"
                   : "text-muted-foreground hover:text-foreground"
               }`}
             >
@@ -107,9 +107,9 @@ export function TimetableClient({
             <button
               type="button"
               onClick={() => setViewMode("TEACHER")}
-              className={`px-3 py-1.5 rounded-lg text-xs font-bold uppercase tracking-wider transition-all ${
+              className={`px-3 py-1.5 rounded-md text-xs font-medium transition-all ${
                 viewMode === "TEACHER"
-                  ? "bg-primary text-primary-foreground shadow-xs"
+                  ? "bg-primary text-primary-foreground shadow-2xs"
                   : "text-muted-foreground hover:text-foreground"
               }`}
             >
@@ -124,7 +124,7 @@ export function TimetableClient({
             <select
               value={selectedSectionId}
               onChange={(e) => setSelectedSectionId(e.target.value)}
-              className="rounded-xl border border-border bg-card px-3.5 py-2 text-xs font-bold text-foreground focus:outline-none focus:ring-2 focus:ring-primary/20"
+              className="rounded-lg border border-border bg-background px-3 py-1.5 text-xs font-medium text-foreground focus:outline-none focus:ring-1 focus:ring-accent"
             >
               {sections.map((s) => (
                 <option key={s.id} value={s.id}>
@@ -139,7 +139,7 @@ export function TimetableClient({
             <select
               value={selectedTeacherId}
               onChange={(e) => setSelectedTeacherId(e.target.value)}
-              className="rounded-xl border border-border bg-card px-3.5 py-2 text-xs font-bold text-foreground focus:outline-none focus:ring-2 focus:ring-primary/20"
+              className="rounded-lg border border-border bg-background px-3 py-1.5 text-xs font-medium text-foreground focus:outline-none focus:ring-1 focus:ring-accent"
             >
               {teachers.map((t) => (
                 <option key={t.id} value={t.id}>
@@ -152,10 +152,10 @@ export function TimetableClient({
       </div>
 
       {/* Grid Matrix Table */}
-      <div className="overflow-hidden rounded-2xl border border-border bg-white shadow-2xs">
+      <div className="overflow-hidden rounded-xl border border-border bg-card shadow-2xs">
         <div className="overflow-x-auto">
           <table className="w-full text-left text-xs border-collapse min-w-[750px]">
-            <thead className="border-b border-border bg-card text-muted-foreground font-mono text-[11px] uppercase tracking-wider">
+            <thead className="border-b border-border bg-surface-subtle text-muted-foreground font-mono text-[11px] uppercase tracking-wider">
               <tr>
                 <th className="py-3.5 px-4 font-bold border-r border-border w-24">Day</th>
                 {periods.map((p) => (
@@ -168,10 +168,10 @@ export function TimetableClient({
                 ))}
               </tr>
             </thead>
-            <tbody className="divide-y divide-[#EFECE3]">
+            <tbody className="divide-y divide-border">
               {days.map((day) => (
                 <tr key={day} className="hover:bg-muted/30 transition-colors">
-                  <td className="py-4 px-4 font-mono font-bold text-foreground border-r border-border bg-muted/20">
+                  <td className="py-4 px-4 font-mono font-bold text-foreground border-r border-border bg-surface-subtle">
                     {day.slice(0, 3)}
                   </td>
                   {periods.map((p) => {
@@ -182,12 +182,12 @@ export function TimetableClient({
                         className="py-2.5 px-2.5 border-r border-border last:border-r-0 align-top"
                       >
                         {slot ? (
-                          <div className="p-2.5 rounded-xl bg-card border border-border space-y-1 hover:border-primary transition-all">
-                            <p className="font-bold text-xs text-foreground truncate">{slot.subjectName}</p>
+                          <div className="p-2.5 rounded-lg bg-background border border-border space-y-1 hover:border-accent/40 transition-all">
+                            <p className="font-semibold text-xs text-foreground truncate">{slot.subjectName}</p>
                             <p className="text-[10px] text-muted-foreground truncate font-mono">
                               {viewMode === "CLASS" ? slot.teacherName : `${slot.className} (${slot.sectionName})`}
                             </p>
-                            <span className="text-[9px] font-mono px-1.5 py-0.5 rounded bg-warm/15 border border-warm/30 text-primary font-bold inline-block">
+                            <span className="text-[9px] font-mono px-1.5 py-0.5 rounded bg-surface-subtle border border-border text-foreground font-medium inline-block">
                               {slot.roomNumber || "Room 104"}
                             </span>
                           </div>

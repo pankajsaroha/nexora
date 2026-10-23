@@ -22,6 +22,7 @@ import {
   RefreshCw,
   Sliders,
   Sparkles,
+  KeyRound,
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -34,11 +35,14 @@ import { useRouter } from "next/navigation";
 import { StudentAdmissionDialog, ProgramOption, AcademicYearOption, CustomFieldOption } from "./student-admission-dialog";
 import { AssignRollNumberModal } from "./assign-roll-number-modal";
 import { ManageCustomFieldsModal } from "./manage-custom-fields-modal";
+import { ManageStudentAccessModal } from "./manage-student-access-modal";
 
 export interface StudentListItem {
   id: string;
   admissionNumber: string;
   rollNumber?: string | null;
+  loginId?: string | null;
+  portalAccessStatus?: string | null;
   universityRegNumber?: string | null;
   firstName: string;
   middleName?: string | null;
@@ -121,6 +125,7 @@ export function StudentListClient({
   const [drawerTab, setDrawerTab] = useState<"overview" | "academic" | "fees">("overview");
   const [isRestoringId, setIsRestoringId] = useState<string | null>(null);
   const [rollModalTarget, setRollModalTarget] = useState<{ id: string; name: string; roll: string | null } | null>(null);
+  const [accessModalTarget, setAccessModalTarget] = useState<StudentListItem | null>(null);
   const [isManageFieldsModalOpen, setIsManageFieldsModalOpen] = useState(false);
 
   const [currentPage, setCurrentPage] = useState(1);
@@ -240,7 +245,7 @@ export function StudentListClient({
       </div>
 
       {/* Filter Bar */}
-      <div className="flex flex-col sm:flex-row items-center gap-3 bg-card p-3 rounded-2xl border border-border shadow-2xs">
+      <div className="flex flex-col sm:flex-row items-center gap-3 bg-card p-3 rounded-xl border border-border shadow-2xs">
         <div className="relative flex-1 w-full">
           <Search className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted-foreground" />
           <input
@@ -289,7 +294,7 @@ export function StudentListClient({
       </div>
 
       {/* Student Registry Table */}
-      <div className="overflow-hidden rounded-2xl border border-border bg-card shadow-2xs">
+      <div className="overflow-hidden rounded-xl border border-border bg-card shadow-2xs">
         <div className="overflow-x-auto">
           <table className="w-full text-left text-xs">
             <thead className="border-b border-border bg-muted/40 text-muted-foreground font-mono text-[11px] uppercase tracking-wider">
@@ -298,7 +303,7 @@ export function StudentListClient({
                 <th className="py-3.5 px-4 font-bold">Program / Course</th>
                 <th className="py-3.5 px-4 font-bold">Roll No.</th>
                 <th className="py-3.5 px-4 font-bold">Primary Guardian</th>
-                <th className="py-3.5 px-4 font-bold">Contact</th>
+                <th className="py-3.5 px-4 font-bold">Portal Access</th>
                 <th className="py-3.5 px-4 font-bold">Status</th>
                 <th className="py-3.5 px-4 font-bold text-right">Actions</th>
               </tr>
@@ -306,7 +311,7 @@ export function StudentListClient({
             <tbody className="divide-y divide-border">
               {paginatedStudents.length === 0 ? (
                 <tr>
-                  <td colSpan={7} className="py-12 text-center text-muted-foreground font-mono text-xs">
+                  <td colSpan={8} className="py-12 text-center text-muted-foreground font-mono text-xs">
                     No enrolled student records found in this view.
                   </td>
                 </tr>
@@ -354,11 +359,62 @@ export function StudentListClient({
                           {st.guardianName || "No guardian linked"}
                         </div>
                         <div className="text-[10px] text-muted-foreground font-mono">
-                          {st.guardianRelation || "Parent"}
+                          {st.guardianPhone || st.guardianRelation || "Parent"}
                         </div>
                       </td>
-                      <td className="py-3.5 px-4 text-muted-foreground font-mono">
-                        {st.guardianPhone || st.phone || "Not provided"}
+                      <td className="py-3.5 px-4">
+                        {st.portalAccessStatus === "ACTIVE" && (
+                          <button
+                            type="button"
+                            onClick={() => setAccessModalTarget(st)}
+                            className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-md font-mono text-[10px] font-bold bg-success/15 text-success border border-success/30 hover:bg-success/25 transition-colors cursor-pointer"
+                            title="Portal Login Active - Click to manage"
+                          >
+                            <span className="w-1.5 h-1.5 rounded-full bg-success animate-pulse" />
+                            <span>{st.loginId || "Active"}</span>
+                          </button>
+                        )}
+                        {st.portalAccessStatus === "SETUP_PENDING" && (
+                          <button
+                            type="button"
+                            onClick={() => setAccessModalTarget(st)}
+                            className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md font-mono text-[10px] font-bold bg-amber-500/15 text-amber-700 dark:text-amber-400 border border-amber-500/30 hover:bg-amber-500/25 transition-colors cursor-pointer"
+                            title="Setup Pending - Click to manage"
+                          >
+                            <span>Pending ({st.loginId || "Issued"})</span>
+                          </button>
+                        )}
+                        {st.portalAccessStatus === "SUSPENDED" && (
+                          <button
+                            type="button"
+                            onClick={() => setAccessModalTarget(st)}
+                            className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md font-mono text-[10px] font-bold bg-amber-500/15 text-amber-700 dark:text-amber-400 border border-amber-500/30 hover:bg-amber-500/25 transition-colors cursor-pointer"
+                            title="Suspended - Click to restore"
+                          >
+                            <span>Suspended</span>
+                          </button>
+                        )}
+                        {st.portalAccessStatus === "REVOKED" && (
+                          <button
+                            type="button"
+                            onClick={() => setAccessModalTarget(st)}
+                            className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md font-mono text-[10px] font-bold bg-destructive/15 text-destructive border border-destructive/30 hover:bg-destructive/25 transition-colors cursor-pointer"
+                            title="Revoked - Click to manage"
+                          >
+                            <span>Revoked</span>
+                          </button>
+                        )}
+                        {(!st.portalAccessStatus || st.portalAccessStatus === "NOT_ENABLED") && (
+                          <button
+                            type="button"
+                            onClick={() => setAccessModalTarget(st)}
+                            className="inline-flex items-center gap-1 text-[11px] font-semibold text-muted-foreground hover:text-foreground hover:underline transition-colors cursor-pointer"
+                            title="Click to enable portal access"
+                          >
+                            <KeyRound className="w-3 h-3 text-muted-foreground" />
+                            <span>Enable</span>
+                          </button>
+                        )}
                       </td>
                       <td className="py-3.5 px-4">
                         <span
@@ -373,12 +429,20 @@ export function StudentListClient({
                       </td>
                       <td className="py-3.5 px-4 text-right">
                         <div className="inline-flex items-center gap-2">
+                          <button
+                            type="button"
+                            onClick={() => setAccessModalTarget(st)}
+                            className="p-1 rounded text-muted-foreground hover:text-foreground hover:bg-muted transition-colors cursor-pointer"
+                            title="Manage Student Portal Access"
+                          >
+                            <KeyRound className="w-3.5 h-3.5" />
+                          </button>
                           {isDeact ? (
                             <button
                               type="button"
                               onClick={() => handleRestoreStudent(st.id, st.fullName)}
                               disabled={isRestoringId === st.id}
-                              className="inline-flex items-center gap-1 text-[11px] font-bold text-success hover:underline"
+                              className="inline-flex items-center gap-1 text-[11px] font-bold text-success hover:underline cursor-pointer"
                             >
                               <RefreshCw className={`w-3 h-3 ${isRestoringId === st.id ? "animate-spin" : ""}`} />
                               <span>Restore</span>
@@ -387,7 +451,7 @@ export function StudentListClient({
                             <button
                               type="button"
                               onClick={() => setSelectedStudent(st)}
-                              className="inline-flex items-center gap-1 text-[11px] font-bold text-primary hover:underline transition-colors"
+                              className="inline-flex items-center gap-1 text-[11px] font-bold text-primary hover:underline transition-colors cursor-pointer"
                             >
                               <span>Profile</span>
                               <ArrowRight className="w-3 h-3" />
@@ -457,7 +521,7 @@ export function StudentListClient({
             {drawerTab === "overview" && (
               <div className="space-y-6">
                 {/* Profile Card Header */}
-                <div className="flex items-center justify-between p-4 rounded-2xl bg-card border border-border shadow-2xs">
+                <div className="flex items-center justify-between p-4 rounded-xl bg-card border border-border shadow-2xs">
                   <div className="flex items-center gap-4">
                     <div className="w-12 h-12 rounded-xl bg-primary text-primary-foreground flex items-center justify-center font-bold text-lg shadow-xs">
                       {selectedStudent.firstName[0]}
@@ -495,7 +559,7 @@ export function StudentListClient({
                   <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-muted-foreground block">
                     Personal Demographics
                   </span>
-                  <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 p-4 rounded-2xl border border-border bg-card text-xs shadow-2xs">
+                  <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 p-4 rounded-xl border border-border bg-card text-xs shadow-2xs">
                     <div>
                       <span className="text-muted-foreground text-[11px]">Gender:</span>
                       <p className="font-bold text-foreground mt-0.5">{selectedStudent.gender}</p>
@@ -535,7 +599,7 @@ export function StudentListClient({
                     <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-primary block">
                       Institutional Custom Fields
                     </span>
-                    <div className="grid grid-cols-2 gap-3 p-4 rounded-2xl border border-border bg-card text-xs shadow-2xs">
+                    <div className="grid grid-cols-2 gap-3 p-4 rounded-xl border border-border bg-card text-xs shadow-2xs">
                       {selectedStudent.customFieldValues.map((cfv) => (
                         <div key={cfv.id}>
                           <span className="text-muted-foreground text-[11px]">{cfv.customField.name}:</span>
@@ -553,7 +617,7 @@ export function StudentListClient({
                   <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-muted-foreground block">
                     Guardian & Family Linkage
                   </span>
-                  <div className="p-4 rounded-2xl border border-border bg-card space-y-2.5 text-xs shadow-2xs">
+                  <div className="p-4 rounded-xl border border-border bg-card space-y-2.5 text-xs shadow-2xs">
                     <div className="flex items-center justify-between">
                       <span className="text-muted-foreground">Primary Guardian:</span>
                       <span className="font-bold text-foreground">{selectedStudent.guardianName || "No guardian linked"}</span>
@@ -578,13 +642,13 @@ export function StudentListClient({
             {/* TAB 2: ACADEMIC & COHORT */}
             {drawerTab === "academic" && (
               <div className="space-y-6">
-                <div className="p-4 rounded-2xl border border-border bg-card text-xs space-y-3 shadow-2xs">
+                <div className="p-4 rounded-xl border border-border bg-card text-xs space-y-3 shadow-2xs">
                   <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-muted-foreground block">
                     Program & Class Assignment
                   </span>
                   <div className="flex items-center justify-between">
                     <span className="font-bold text-foreground">{selectedStudent.className}</span>
-                    <span className="text-[10px] font-mono px-2 py-0.5 rounded-md bg-warm/15 border border-warm/30 text-foreground font-bold">
+                    <span className="text-[10px] font-mono px-2 py-0.5 rounded-md bg-muted border border-border text-foreground font-bold">
                       Section {selectedStudent.sectionName}
                     </span>
                   </div>
@@ -603,12 +667,16 @@ export function StudentListClient({
             {/* TAB 3: FEES & LEDGER */}
             {drawerTab === "fees" && (
               <div className="space-y-6">
-                <div className="p-4 rounded-2xl bg-card border border-border shadow-2xs space-y-1">
+                <div className="p-4 rounded-xl bg-card border border-border shadow-2xs space-y-1">
                   <div className="flex items-center justify-between">
                     <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-muted-foreground">
                       Assigned Fee Balance
                     </span>
-                    <span className="text-[10px] font-mono px-2 py-0.5 rounded-md bg-warm/15 text-foreground border border-warm/30 font-bold">
+                    <span className={`text-[10px] font-mono px-2 py-0.5 rounded-md border font-bold ${
+                      selectedStudent.feesPending > 0
+                        ? "bg-amber-500/10 text-amber-500 border-amber-500/20"
+                        : "bg-emerald-500/10 text-emerald-500 border-emerald-500/20"
+                    }`}>
                       {selectedStudent.feesPending > 0 ? "Pending" : "Settled"}
                     </span>
                   </div>
@@ -621,7 +689,7 @@ export function StudentListClient({
                 </div>
 
                 {selectedStudent.feeBreakdown.length > 0 && (
-                  <div className="p-4 rounded-2xl border border-border bg-card text-xs space-y-2 shadow-2xs">
+                  <div className="p-4 rounded-xl border border-border bg-card text-xs space-y-2 shadow-2xs">
                     <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-primary block">
                       Fee Breakdown
                     </span>
@@ -689,6 +757,18 @@ export function StudentListClient({
           studentId={rollModalTarget.id}
           studentName={rollModalTarget.name}
           currentRollNumber={rollModalTarget.roll}
+          onSuccess={() => {
+            router.refresh();
+          }}
+        />
+      )}
+
+      {/* Manage Student Portal Access Modal */}
+      {accessModalTarget && (
+        <ManageStudentAccessModal
+          isOpen={!!accessModalTarget}
+          onClose={() => setAccessModalTarget(null)}
+          student={accessModalTarget}
           onSuccess={() => {
             router.refresh();
           }}

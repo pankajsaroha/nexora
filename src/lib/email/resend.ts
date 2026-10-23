@@ -34,8 +34,8 @@ export async function sendPasswordResetEmail({
   <style>
     body {
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-      background-color: #F7F4ED;
-      color: #171614;
+      background-color: #FAFAFA;
+      color: #18181B;
       margin: 0;
       padding: 40px 20px;
     }
@@ -43,8 +43,8 @@ export async function sendPasswordResetEmail({
       max-width: 560px;
       margin: 0 auto;
       background-color: #FFFFFF;
-      border: 1px solid #E5E0D5;
-      border-radius: 16px;
+      border: 1px solid #E5E7EB;
+      border-radius: 12px;
       padding: 40px;
       box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
     }
@@ -53,14 +53,14 @@ export async function sendPasswordResetEmail({
       align-items: center;
       gap: 12px;
       margin-bottom: 24px;
-      border-bottom: 1px solid #F0ECE1;
+      border-bottom: 1px solid #E5E7EB;
       padding-bottom: 20px;
     }
     .logo-box {
       width: 36px;
       height: 36px;
-      background-color: #171614;
-      color: #F7F4ED;
+      background-color: #18181B;
+      color: #FAFAFA;
       font-weight: 800;
       font-size: 14px;
       border-radius: 8px;
@@ -69,25 +69,26 @@ export async function sendPasswordResetEmail({
       display: inline-block;
     }
     .brand-title {
-      font-family: Georgia, serif;
-      font-size: 18px;
-      font-weight: bold;
-      color: #171614;
+      font-size: 16px;
+      font-weight: 700;
+      color: #18181B;
       display: inline-block;
       vertical-align: middle;
       margin-left: 10px;
+      letter-spacing: -0.02em;
     }
     h1 {
-      font-family: Georgia, serif;
-      font-size: 24px;
-      color: #171614;
+      font-size: 22px;
+      font-weight: 700;
+      color: #18181B;
       margin: 0 0 12px 0;
       line-height: 1.25;
+      letter-spacing: -0.02em;
     }
     p {
       font-size: 14px;
       line-height: 1.6;
-      color: #555047;
+      color: #71717A;
       margin: 0 0 20px 0;
     }
     .btn-container {
@@ -96,27 +97,26 @@ export async function sendPasswordResetEmail({
     }
     .btn {
       display: inline-block;
-      background-color: #171614;
-      color: #F7F4ED !important;
+      background-color: #18181B;
+      color: #FAFAFA !important;
       text-decoration: none;
-      padding: 14px 32px;
-      border-radius: 10px;
+      padding: 12px 28px;
+      border-radius: 8px;
       font-size: 13px;
-      font-weight: bold;
-      letter-spacing: 1px;
-      text-transform: uppercase;
+      font-weight: 600;
+      letter-spacing: 0.5px;
     }
     .footer-note {
       font-size: 12px;
-      color: #7A756B;
-      border-top: 1px solid #F0ECE1;
+      color: #A1A1AA;
+      border-top: 1px solid #E5E7EB;
       padding-top: 20px;
       margin-top: 30px;
     }
     .link-alt {
       word-break: break-all;
       font-size: 11px;
-      color: #856D3B;
+      color: #6366F1;
     }
   </style>
 </head>
@@ -142,7 +142,7 @@ export async function sendPasswordResetEmail({
 
     <div class="footer-note">
       <p style="margin: 0 0 8px 0;">If you did not request a password reset, please ignore this email. Your password will remain unchanged.</p>
-      <p style="margin: 0; font-size: 11px; color: #A8A398;">© ${new Date().getFullYear()} NEXORA Enterprise Institutional OS. All rights reserved.</p>
+      <p style="margin: 0; font-size: 11px; color: #A1A1AA;">© ${new Date().getFullYear()} NEXORA Enterprise Institutional OS. All rights reserved.</p>
     </div>
   </div>
 </body>

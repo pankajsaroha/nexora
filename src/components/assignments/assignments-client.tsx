@@ -112,7 +112,7 @@ export function AssignmentsClient({
           <Button
             size="sm"
             onClick={() => setIsCreateModalOpen(true)}
-            leftIcon={<Plus className="h-3.5 w-3.5 text-primary" />}
+            leftIcon={<Plus className="h-3.5 w-3.5 text-primary-foreground" />}
           >
             Create Assignment
           </Button>
@@ -122,7 +122,7 @@ export function AssignmentsClient({
       {/* Grid of Assignments */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
         {paginatedAssignments.length === 0 ? (
-          <div className="col-span-full py-16 text-center text-muted-foreground rounded-2xl border border-dashed border-border bg-card">
+          <div className="col-span-full py-16 text-center text-muted-foreground rounded-xl border border-dashed border-border bg-card">
             No coursework assignments published yet.
           </div>
         ) : (
@@ -134,11 +134,11 @@ export function AssignmentsClient({
             return (
               <div
                 key={a.id}
-                className="rounded-2xl border border-border bg-white p-5 shadow-2xs hover:border-primary transition-all space-y-4 flex flex-col justify-between"
+                className="rounded-xl border border-border bg-card p-5 shadow-2xs hover:border-accent/40 transition-all space-y-4 flex flex-col justify-between"
               >
                 <div className="space-y-3">
                   <div className="flex items-center justify-between">
-                    <span className="text-[10px] font-mono font-bold uppercase tracking-wider px-2 py-0.5 rounded-md bg-warm/15 text-primary border border-warm/30">
+                    <span className="text-[10px] font-mono font-bold uppercase tracking-wider px-2 py-0.5 rounded-md bg-accent/10 text-accent border border-accent/20">
                       {a.subjectName}
                     </span>
                     <span className="text-[10px] font-mono text-muted-foreground">
@@ -211,7 +211,7 @@ export function AssignmentsClient({
                 value={formData.title}
                 onChange={(e) => setFormData({ ...formData, title: e.target.value })}
                 placeholder="e.g. Physics: Mechanics & Optics Problem Set #4"
-                className="w-full rounded-xl border border-border bg-card p-2.5 text-xs text-foreground focus:outline-none focus:ring-2 focus:ring-primary/20"
+                className="w-full rounded-lg border border-border bg-background px-3 py-2 text-xs text-foreground focus:outline-none focus:ring-1 focus:ring-accent"
               />
             </div>
 
@@ -224,7 +224,7 @@ export function AssignmentsClient({
                 value={formData.description}
                 onChange={(e) => setFormData({ ...formData, description: e.target.value })}
                 placeholder="Detail the expected solutions, format, and chapter references..."
-                className="w-full rounded-xl border border-border bg-card p-2.5 text-xs text-foreground focus:outline-none focus:ring-2 focus:ring-primary/20 resize-none"
+                className="w-full rounded-lg border border-border bg-background px-3 py-2 text-xs text-foreground focus:outline-none focus:ring-1 focus:ring-accent resize-none"
               />
             </div>
 
@@ -236,7 +236,7 @@ export function AssignmentsClient({
                 <select
                   value={formData.sectionId}
                   onChange={(e) => setFormData({ ...formData, sectionId: e.target.value })}
-                  className="w-full rounded-xl border border-border bg-card p-2.5 text-xs text-foreground font-semibold"
+                  className="w-full rounded-lg border border-border bg-background px-3 py-2 text-xs text-foreground font-semibold focus:outline-none focus:ring-1 focus:ring-accent"
                 >
                   {sections.map((s) => (
                     <option key={s.id} value={s.id}>
@@ -253,7 +253,7 @@ export function AssignmentsClient({
                 <select
                   value={formData.subjectId}
                   onChange={(e) => setFormData({ ...formData, subjectId: e.target.value })}
-                  className="w-full rounded-xl border border-border bg-card p-2.5 text-xs text-foreground font-semibold"
+                  className="w-full rounded-lg border border-border bg-background px-3 py-2 text-xs text-foreground font-semibold focus:outline-none focus:ring-1 focus:ring-accent"
                 >
                   {subjects.map((sub) => (
                     <option key={sub.id} value={sub.id}>
@@ -274,7 +274,7 @@ export function AssignmentsClient({
                   required
                   value={formData.dueDate}
                   onChange={(e) => setFormData({ ...formData, dueDate: e.target.value })}
-                  className="w-full rounded-xl border border-border bg-card p-2.5 text-xs text-foreground"
+                  className="w-full rounded-lg border border-border bg-background px-3 py-2 text-xs text-foreground focus:outline-none focus:ring-1 focus:ring-accent"
                 />
               </div>
 
@@ -288,7 +288,7 @@ export function AssignmentsClient({
                   value={formData.maxMarks}
                   onChange={(e) => setFormData({ ...formData, maxMarks: e.target.value })}
                   placeholder="50"
-                  className="w-full rounded-xl border border-border bg-card p-2.5 text-xs text-foreground"
+                  className="w-full rounded-lg border border-border bg-background px-3 py-2 text-xs text-foreground focus:outline-none focus:ring-1 focus:ring-accent"
                 />
               </div>
             </div>

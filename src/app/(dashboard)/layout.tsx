@@ -24,17 +24,18 @@ export default async function DashboardLayout({
   });
 
   // Fetch authorized institutions for Super Admin
-  let authorizedInstitutions: Array<{ id: string; name: string; code: string; type: string }> = [];
+  let authorizedInstitutions: Array<{ id: string; name: string; code: string; type: string; status?: string }> = [];
   if (user.roleCode === "SUPER_ADMIN") {
-    authorizedInstitutions = await prisma.institution.findMany({
+    authorizedInstitutions = (await prisma.institution.findMany({
       select: {
         id: true,
         name: true,
         code: true,
         type: true,
+        status: true,
       },
       orderBy: { name: "asc" },
-    });
+    })) as any;
   }
 
   return (

@@ -7,15 +7,81 @@ import { AssignmentsClient } from "@/components/assignments/assignments-client";
 
 export const dynamic = "force-dynamic";
 
-export default async function AssignmentsPage() {
+export default async function AssignmentsPage({
+  searchParams,
+}: {
+  searchParams?: { childId?: string };
+}) {
   const user = await getCurrentUser();
   if (!user) {
     redirect("/login");
   }
 
+  let whereClause: any = {
+    institutionId: user.institutionId,
+  };
+
+  // 1. STUDENT: Scope strictly to student's assigned section and published assignments
+  if (user.roleCode === "STUDENT") {
+    const student = await prisma.student.findFirst({
+      where: {
+        OR: [{ userId: user.id }, { email: user.email }, { id: user.studentId }],
+        institutionId: user.institutionId,
+      },
+    });
+
+    if (!student || !student.currentSectionId) {
+      return (
+        <div className="p-8 text-center text-muted-foreground font-mono text-xs">
+          Student section assignment not found.
+        </div>
+      );
+    }
+
+    whereClause = {
+      institutionId: user.institutionId,
+      sectionId: student.currentSectionId,
+      status: "PUBLISHED",
+    };
+  }
+
+  // 2. PARENT: Scope to selected linked child's section and published assignments
+  if (user.roleCode === "PARENT") {
+    const guardian = await prisma.guardian.findFirst({
+      where: {
+        OR: [{ userId: user.id }, { email: user.email }],
+        institutionId: user.institutionId,
+      },
+      include: {
+        students: {
+          include: { student: true },
+        },
+      },
+    });
+
+    const linked = guardian?.students?.map((sg) => sg.student) || [];
+    const child =
+      (searchParams?.childId ? linked.find((c) => c.id === searchParams.childId) : null) ||
+      linked[0];
+
+    if (!child || !child.currentSectionId) {
+      return (
+        <div className="p-8 text-center text-muted-foreground font-mono text-xs">
+          No linked child found for this parent account.
+        </div>
+      );
+    }
+
+    whereClause = {
+      institutionId: user.institutionId,
+      sectionId: child.currentSectionId,
+      status: "PUBLISHED",
+    };
+  }
+
   const [assignments, sections, subjects] = await Promise.all([
     prisma.assignment.findMany({
-      where: { institutionId: user.institutionId },
+      where: whereClause,
       include: {
         subject: true,
         teacher: true,

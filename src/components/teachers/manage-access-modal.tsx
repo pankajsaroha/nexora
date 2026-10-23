@@ -100,8 +100,8 @@ export function ManageAccessModal({
     >
       <div className="space-y-4 py-1 text-xs">
         {hasAccount ? (
-          <div className="p-3.5 bg-emerald-500/10 border border-emerald-500/20 rounded-xl flex items-center justify-between text-xs">
-            <div className="flex items-center gap-2 text-emerald-700 dark:text-emerald-400 font-bold">
+          <div className="p-3.5 bg-success-subtle border border-success/20 rounded-xl flex items-center justify-between text-xs">
+            <div className="flex items-center gap-2 text-success font-semibold">
               <UserCheck className="w-4 h-4" />
               <span>Portal Login Active ({staff.user?.role})</span>
             </div>

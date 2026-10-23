@@ -193,8 +193,8 @@ export function FacultyLeavesClient({
       />
 
       {successMsg && (
-        <div className="flex items-center gap-2 p-3.5 rounded-xl border border-emerald-200 bg-emerald-50 text-xs text-emerald-800">
-          <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
+        <div className="flex items-center gap-2 p-3.5 rounded-xl border border-success/20 bg-success-subtle text-xs text-success">
+          <CheckCircle2 className="w-4 h-4 text-success shrink-0" />
           <span>{successMsg}</span>
         </div>
       )}
@@ -331,7 +331,7 @@ export function FacultyLeavesClient({
       {/* Apply Leave Modal */}
       {isApplyOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs p-4 animate-in fade-in duration-150">
-          <div className="w-full max-w-md bg-card border border-border rounded-2xl shadow-xl overflow-hidden">
+          <div className="w-full max-w-md bg-card border border-border rounded-xl shadow-xl overflow-hidden">
             <div className="p-5 border-b border-border flex items-center justify-between">
               <div>
                 <h3 className="font-bold text-sm text-foreground">Apply for Leave</h3>

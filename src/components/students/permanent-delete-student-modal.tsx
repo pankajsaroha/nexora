@@ -71,7 +71,7 @@ export function PermanentDeleteStudentModal({
       size="md"
     >
       <form onSubmit={handleDelete} className="space-y-4 text-xs">
-        <div className="p-4 rounded-2xl bg-destructive/10 border border-destructive/25 text-destructive space-y-2">
+        <div className="p-4 rounded-xl bg-destructive/10 border border-destructive/25 text-destructive space-y-2">
           <div className="flex items-center gap-2 font-bold text-sm">
             <ShieldAlert className="w-5 h-5 shrink-0 text-destructive" />
             <span>This action cannot be undone</span>

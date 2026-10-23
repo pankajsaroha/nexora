@@ -28,6 +28,10 @@ model Institution {
   workingDays         String               @default("Mon,Tue,Wed,Thu,Fri,Sat")
   workingHours        String               @default("08:00 - 15:30")
   brandingColor       String               @default("#4f46e5")
+  status              String               @default("ACTIVE") // ACTIVE, SUSPENDED, ARCHIVED
+  statusReason        String?
+  suspendedAt         DateTime?
+  archivedAt          DateTime?
   createdAt           DateTime             @default(now())
   updatedAt           DateTime             @updatedAt
 
@@ -197,6 +201,10 @@ model Student {
   campus               Campus?             @relation(fields: [campusId], references: [id])
   userId               String?             @unique
   user                 User?               @relation(fields: [userId], references: [id])
+  loginId              String?             @unique
+  portalAccessStatus   String              @default("NOT_ENABLED") // NOT_ENABLED, SETUP_PENDING, ACTIVE, SUSPENDED, REVOKED
+  portalAccessGrantedAt DateTime?
+  portalAccessSuspendedAt DateTime?
   admissionNumber      String              @unique
   rollNumber           String?
   firstName            String

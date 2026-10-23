@@ -130,8 +130,8 @@ export function QuickPaymentModal({
           <div className="w-12 h-12 rounded-full bg-success/10 text-success flex items-center justify-center mx-auto">
             <CheckCircle2 className="w-6 h-6" />
           </div>
-          <h4 className="text-sm font-bold text-foreground font-serif">Payment Recorded Successfully</h4>
-          <p className="text-xs text-accent">
+          <h4 className="text-sm font-bold text-foreground">Payment Recorded Successfully</h4>
+          <p className="text-xs text-muted-foreground">
             Official institutional receipt generated and financial ledger updated.
           </p>
         </div>
@@ -193,7 +193,7 @@ export function QuickPaymentModal({
                 value={formData.amount}
                 onChange={(e) => setFormData({ ...formData, amount: e.target.value })}
                 placeholder="e.g. 15000"
-                className="w-full rounded-lg border border-border bg-card p-2.5 text-xs text-foreground focus:outline-none focus:ring-1 focus:ring-[#171614]"
+                className="w-full rounded-lg border border-border bg-background p-2.5 text-xs text-foreground focus:outline-none focus:ring-1 focus:ring-accent focus:border-accent"
               />
             </div>
 
@@ -202,7 +202,7 @@ export function QuickPaymentModal({
               <select
                 value={formData.paymentMethod}
                 onChange={(e) => setFormData({ ...formData, paymentMethod: e.target.value })}
-                className="w-full rounded-lg border border-border bg-card p-2.5 text-xs text-foreground"
+                className="w-full rounded-lg border border-border bg-background p-2.5 text-xs text-foreground focus:outline-none focus:ring-1 focus:ring-accent focus:border-accent"
               >
                 <option value="CASH">Cash Counter</option>
                 <option value="UPI">UPI / QR Transfer</option>
@@ -220,7 +220,7 @@ export function QuickPaymentModal({
               value={formData.notes}
               onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
               placeholder="e.g. Term 1 installment received at reception"
-              className="w-full rounded-lg border border-border bg-card p-2.5 text-xs text-foreground focus:outline-none focus:ring-1 focus:ring-[#171614]"
+              className="w-full rounded-lg border border-border bg-background p-2.5 text-xs text-foreground focus:outline-none focus:ring-1 focus:ring-accent focus:border-accent"
             />
           </div>
 

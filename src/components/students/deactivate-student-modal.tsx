@@ -71,9 +71,9 @@ export function DeactivateStudentModal({
         )}
 
         {/* Safety & History Preservation Banner */}
-        <div className="rounded-2xl border border-warm/40 bg-warm/10 p-3.5 space-y-2">
+        <div className="rounded-xl border border-border bg-surface-subtle p-3.5 space-y-2">
           <div className="flex items-center gap-2 text-foreground font-bold">
-            <ShieldCheck className="h-4 w-4 text-primary" />
+            <ShieldCheck className="h-4 w-4 text-accent" />
             <span>Complete Historical Audit Trail Preserved</span>
           </div>
           <p className="text-[11px] text-muted-foreground leading-relaxed">

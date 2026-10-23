@@ -35,7 +35,7 @@ export function ConfirmationDialog({
       case "warning":
         return <AlertTriangle className="h-6 w-6 text-warning" />;
       case "info":
-        return <Info className="h-6 w-6 text-primary" />;
+        return <Info className="h-6 w-6 text-accent" />;
       default:
         return <CheckCircle2 className="h-6 w-6 text-success" />;
     }
@@ -46,7 +46,7 @@ export function ConfirmationDialog({
       case "danger":
         return "danger";
       case "warning":
-        return "champagne";
+        return "primary";
       default:
         return "primary";
     }

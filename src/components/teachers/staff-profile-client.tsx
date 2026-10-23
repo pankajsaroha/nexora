@@ -181,11 +181,11 @@ export function StaffProfileClient({
       )}
 
       {/* Unified Profile Identity Header Card */}
-      <div className="p-6 rounded-2xl bg-card border border-border shadow-2xs relative">
+      <div className="p-6 rounded-xl bg-card border border-border shadow-2xs relative">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
           {/* Identity Left Column */}
           <div className="flex items-start gap-4 sm:gap-5">
-            <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-primary/10 border border-primary/20 flex items-center justify-center font-extrabold text-xl sm:text-2xl text-primary shrink-0 overflow-hidden shadow-2xs">
+            <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-xl bg-primary/10 border border-primary/20 flex items-center justify-center font-extrabold text-xl sm:text-2xl text-primary shrink-0 overflow-hidden shadow-2xs">
               {staff.profilePhoto ? (
                 <img
                   src={staff.profilePhoto}
@@ -222,7 +222,7 @@ export function StaffProfileClient({
                   variant="outline"
                   className={
                     staff.status === "ACTIVE"
-                      ? "bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 border-emerald-500/30 text-[10px]"
+                      ? "bg-success-subtle text-success border-success/20 text-[10px]"
                       : staff.status === "ON_LEAVE"
                       ? "bg-amber-500/15 text-amber-600 dark:text-amber-400 border-amber-500/30 text-[10px]"
                       : "bg-destructive/15 text-destructive border-destructive/30 text-[10px]"
@@ -235,7 +235,7 @@ export function StaffProfileClient({
                   className={
                     isTeaching
                       ? "bg-primary/15 text-primary border-primary/30 text-[10px]"
-                      : "bg-slate-500/15 text-slate-600 dark:text-slate-300 border-slate-500/30 text-[10px]"
+                      : "bg-muted text-muted-foreground border-border text-[10px]"
                   }
                 >
                   {staff.staffType || "TEACHING"}
@@ -269,7 +269,7 @@ export function StaffProfileClient({
                 )}
                 <div className="flex items-center gap-1.5">
                   {staff.user ? (
-                    <span className="flex items-center gap-1 text-emerald-600 dark:text-emerald-400 font-medium">
+                    <span className="flex items-center gap-1 text-success font-medium">
                       <ShieldCheck className="w-3.5 h-3.5 shrink-0" />
                       <span>Portal: Enabled</span>
                     </span>
@@ -382,7 +382,7 @@ export function StaffProfileClient({
                           handleRestore();
                           setHeaderMenuOpen(false);
                         }}
-                        className="w-full flex items-center gap-2.5 px-3.5 py-2 text-emerald-600 dark:text-emerald-400 hover:bg-emerald-500/10 text-left transition-colors font-medium"
+                        className="w-full flex items-center gap-2.5 px-3.5 py-2 text-success hover:bg-success-subtle text-left transition-colors font-medium"
                       >
                         <UserCheck className="w-3.5 h-3.5 shrink-0" />
                         <span>Restore Staff</span>
@@ -411,7 +411,7 @@ export function StaffProfileClient({
       </div>
 
       {/* Clean 6-Tab Navigation with "More ▾" */}
-      <div className="flex flex-wrap items-center gap-1.5 p-1.5 bg-muted/40 rounded-2xl border border-border">
+      <div className="flex flex-wrap items-center gap-1.5 p-1.5 bg-muted/40 rounded-xl border border-border">
         {primaryTabs.map((tab) => {
           const Icon = tab.icon;
           const isActive = activeTab === tab.id;
@@ -489,7 +489,7 @@ export function StaffProfileClient({
         <div className="space-y-6">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {/* Summary Card 1: Employment Snapshot */}
-            <div className="p-5 rounded-2xl bg-card border border-border shadow-2xs space-y-3">
+            <div className="p-5 rounded-xl bg-card border border-border shadow-2xs space-y-3">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2 font-bold text-sm text-foreground">
                   <Briefcase className="w-4 h-4 text-primary" />
@@ -525,7 +525,7 @@ export function StaffProfileClient({
 
             {/* Summary Card 2: Academic / Workload Snapshot */}
             {isTeaching ? (
-              <div className="p-5 rounded-2xl bg-card border border-border shadow-2xs space-y-3">
+              <div className="p-5 rounded-xl bg-card border border-border shadow-2xs space-y-3">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2 font-bold text-sm text-foreground">
                     <BookOpen className="w-4 h-4 text-primary" />
@@ -567,7 +567,7 @@ export function StaffProfileClient({
                 </div>
               </div>
             ) : (
-              <div className="p-5 rounded-2xl bg-card border border-border shadow-2xs space-y-3">
+              <div className="p-5 rounded-xl bg-card border border-border shadow-2xs space-y-3">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2 font-bold text-sm text-foreground">
                     <Briefcase className="w-4 h-4 text-primary" />
@@ -603,7 +603,7 @@ export function StaffProfileClient({
             )}
 
             {/* Summary Card 3: Attendance & Leave Snapshot */}
-            <div className="p-5 rounded-2xl bg-card border border-border shadow-2xs space-y-3">
+            <div className="p-5 rounded-xl bg-card border border-border shadow-2xs space-y-3">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2 font-bold text-sm text-foreground">
                   <CalendarCheck className="w-4 h-4 text-primary" />
@@ -620,7 +620,7 @@ export function StaffProfileClient({
               <div className="space-y-2 text-xs divide-y divide-border/60">
                 <div className="flex justify-between py-1">
                   <span className="text-muted-foreground">Monthly Attendance:</span>
-                  <span className="font-semibold text-emerald-600 dark:text-emerald-400">
+                  <span className="font-semibold text-success">
                     {staff.attendanceStats?.attendancePercentage || 96}% Present
                   </span>
                 </div>
@@ -648,7 +648,7 @@ export function StaffProfileClient({
 
           {/* Quick Active Assignments Strip (if Teaching) */}
           {isTeaching && staff.assignments && staff.assignments.length > 0 && (
-            <div className="p-5 rounded-2xl bg-card border border-border shadow-2xs space-y-4">
+            <div className="p-5 rounded-xl bg-card border border-border shadow-2xs space-y-4">
               <div className="flex items-center justify-between">
                 <div>
                   <h3 className="font-bold text-sm text-foreground">Current Course Teaching Allocations</h3>
@@ -697,7 +697,7 @@ export function StaffProfileClient({
         <div className="space-y-6">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {/* Personal Details */}
-            <div className="p-5 rounded-2xl bg-card border border-border shadow-2xs space-y-3 text-xs">
+            <div className="p-5 rounded-xl bg-card border border-border shadow-2xs space-y-3 text-xs">
               <div className="flex items-center gap-2 font-bold text-sm text-foreground">
                 <User className="w-4 h-4 text-primary" />
                 <span>Personal Identifiers</span>
@@ -739,7 +739,7 @@ export function StaffProfileClient({
             </div>
 
             {/* Contact Details */}
-            <div className="p-5 rounded-2xl bg-card border border-border shadow-2xs space-y-3 text-xs">
+            <div className="p-5 rounded-xl bg-card border border-border shadow-2xs space-y-3 text-xs">
               <div className="flex items-center gap-2 font-bold text-sm text-foreground">
                 <Phone className="w-4 h-4 text-primary" />
                 <span>Contact Details</span>
@@ -765,7 +765,7 @@ export function StaffProfileClient({
             </div>
 
             {/* Addresses */}
-            <div className="p-5 rounded-2xl bg-card border border-border shadow-2xs space-y-2 text-xs">
+            <div className="p-5 rounded-xl bg-card border border-border shadow-2xs space-y-2 text-xs">
               <div className="flex items-center gap-2 font-bold text-sm text-foreground">
                 <MapPin className="w-4 h-4 text-primary" />
                 <span>Current Residential Address</span>
@@ -781,7 +781,7 @@ export function StaffProfileClient({
               )}
             </div>
 
-            <div className="p-5 rounded-2xl bg-card border border-border shadow-2xs space-y-2 text-xs">
+            <div className="p-5 rounded-xl bg-card border border-border shadow-2xs space-y-2 text-xs">
               <div className="flex items-center gap-2 font-bold text-sm text-foreground">
                 <MapPin className="w-4 h-4 text-muted-foreground" />
                 <span>Permanent Address</span>
@@ -798,7 +798,7 @@ export function StaffProfileClient({
             </div>
 
             {/* Emergency Contacts */}
-            <div className="p-5 rounded-2xl bg-card border border-border shadow-2xs space-y-3 text-xs md:col-span-2">
+            <div className="p-5 rounded-xl bg-card border border-border shadow-2xs space-y-3 text-xs md:col-span-2">
               <div className="flex items-center gap-2 font-bold text-sm text-foreground">
                 <HeartHandshake className="w-4 h-4 text-amber-500" />
                 <span>Emergency Contacts</span>
@@ -835,7 +835,7 @@ export function StaffProfileClient({
       {/* TAB 3: EMPLOYMENT                                                         */}
       {/* ========================================================================= */}
       {activeTab === "employment" && (
-        <div className="p-6 rounded-2xl bg-card border border-border shadow-2xs space-y-4 text-xs">
+        <div className="p-6 rounded-xl bg-card border border-border shadow-2xs space-y-4 text-xs">
           <div className="flex items-center gap-2 font-bold text-sm text-foreground">
             <Briefcase className="w-4 h-4 text-primary" />
             <span>Employment & Institutional Parameters</span>
@@ -914,7 +914,7 @@ export function StaffProfileClient({
         <div className="space-y-6">
           {/* Section 1: Academic Teaching Assignments (for Teaching Staff) */}
           {isTeaching && (
-            <div className="p-5 rounded-2xl bg-card border border-border shadow-2xs space-y-4">
+            <div className="p-5 rounded-xl bg-card border border-border shadow-2xs space-y-4">
               <div className="flex items-center justify-between">
                 <div>
                   <h3 className="font-bold text-sm text-foreground flex items-center gap-2">
@@ -991,7 +991,7 @@ export function StaffProfileClient({
           )}
 
           {/* Section 2: Qualifications */}
-          <div className="p-5 rounded-2xl bg-card border border-border shadow-2xs space-y-4">
+          <div className="p-5 rounded-xl bg-card border border-border shadow-2xs space-y-4">
             <div className="flex items-center justify-between">
               <div>
                 <h3 className="font-bold text-sm text-foreground flex items-center gap-2">
@@ -1030,7 +1030,7 @@ export function StaffProfileClient({
           </div>
 
           {/* Section 3: Prior Experience */}
-          <div className="p-5 rounded-2xl bg-card border border-border shadow-2xs space-y-4">
+          <div className="p-5 rounded-xl bg-card border border-border shadow-2xs space-y-4">
             <div className="flex items-center justify-between">
               <div>
                 <h3 className="font-bold text-sm text-foreground flex items-center gap-2">
@@ -1075,12 +1075,12 @@ export function StaffProfileClient({
       {activeTab === "attendance" && (
         <div className="space-y-6">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div className="p-5 rounded-2xl bg-card border border-border shadow-2xs space-y-1">
+            <div className="p-5 rounded-xl bg-card border border-border shadow-2xs space-y-1">
               <span className="text-xs font-semibold text-muted-foreground">Monthly Attendance</span>
               <div className="text-2xl font-extrabold text-foreground">{staff.attendanceStats?.attendancePercentage || 96}%</div>
               <p className="text-[11px] text-muted-foreground">{staff.attendanceStats?.presentDays || 22} Present / {staff.attendanceStats?.workingDays || 24} Total Days</p>
             </div>
-            <div className="p-5 rounded-2xl bg-card border border-border shadow-2xs space-y-1">
+            <div className="p-5 rounded-xl bg-card border border-border shadow-2xs space-y-1">
               <span className="text-xs font-semibold text-muted-foreground">Total Available Quota</span>
               <div className="text-2xl font-extrabold text-foreground">
                 {staff.leaveSummary?.totalAvailableDays ?? 0} Days
@@ -1089,7 +1089,7 @@ export function StaffProfileClient({
                 Leave Year: {staff.leaveSummary?.leaveYear?.name || "Current Session"}
               </p>
             </div>
-            <div className="p-5 rounded-2xl bg-card border border-border shadow-2xs space-y-1">
+            <div className="p-5 rounded-xl bg-card border border-border shadow-2xs space-y-1">
               <span className="text-xs font-semibold text-muted-foreground">Pending Applications</span>
               <div className="text-2xl font-extrabold text-amber-600 dark:text-amber-400">
                 {staff.leaveSummary?.totalPendingDays ?? staff.leaveStats?.pending ?? 0} Days
@@ -1112,7 +1112,7 @@ export function StaffProfileClient({
 
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                 {staff.leaveSummary.accounts.map((acc: any) => (
-                  <div key={acc.leaveTypeId} className="p-4 rounded-2xl bg-card border border-border shadow-2xs space-y-2">
+                  <div key={acc.leaveTypeId} className="p-4 rounded-xl bg-card border border-border shadow-2xs space-y-2">
                     <div className="flex items-center justify-between">
                       <span className="font-bold text-foreground text-xs">{acc.leaveTypeName}</span>
                       <Badge variant="outline" className="text-[10px] font-mono">{acc.leaveTypeCode}</Badge>
@@ -1141,7 +1141,7 @@ export function StaffProfileClient({
             </div>
           )}
 
-          <div className="p-5 rounded-2xl bg-card border border-border shadow-2xs flex items-center justify-between text-xs">
+          <div className="p-5 rounded-xl bg-card border border-border shadow-2xs flex items-center justify-between text-xs">
             <div>
               <h3 className="font-bold text-foreground">Institutional Attendance System</h3>
               <p className="text-muted-foreground mt-0.5">Biometric / RFID synchronization active for {staff.employeeCode}</p>
@@ -1160,7 +1160,7 @@ export function StaffProfileClient({
       {/* TAB 6: DOCUMENTS                                                          */}
       {/* ========================================================================= */}
       {activeTab === "documents" && (
-        <div className="p-6 rounded-2xl bg-card border border-border shadow-2xs space-y-5 text-xs">
+        <div className="p-6 rounded-xl bg-card border border-border shadow-2xs space-y-5 text-xs">
           <div className="flex items-center justify-between">
             <div>
               <h3 className="font-bold text-sm text-foreground flex items-center gap-2">
@@ -1228,7 +1228,7 @@ export function StaffProfileClient({
       {/* SECONDARY TAB: PAYROLL (Under More ▾)                                     */}
       {/* ========================================================================= */}
       {canViewPayroll && activeTab === "payroll" && (
-        <div className="p-6 rounded-2xl bg-card border border-border shadow-2xs space-y-6 text-xs">
+        <div className="p-6 rounded-xl bg-card border border-border shadow-2xs space-y-6 text-xs">
           <div className="flex items-center justify-between">
             <div>
               <h3 className="font-bold text-sm text-foreground flex items-center gap-2">
@@ -1293,7 +1293,7 @@ export function StaffProfileClient({
       {/* SECONDARY TAB: SYSTEM ACCESS (Under More ▾)                               */}
       {/* ========================================================================= */}
       {activeTab === "access" && (
-        <div className="p-6 rounded-2xl bg-card border border-border shadow-2xs space-y-4 text-xs">
+        <div className="p-6 rounded-xl bg-card border border-border shadow-2xs space-y-4 text-xs">
           <div className="flex items-center justify-between">
             <div>
               <h3 className="font-bold text-sm text-foreground flex items-center gap-2">
@@ -1309,8 +1309,8 @@ export function StaffProfileClient({
           </div>
 
           {staff.user ? (
-            <div className="p-4 bg-emerald-500/10 border border-emerald-500/20 rounded-xl space-y-3">
-              <div className="flex items-center gap-2 font-bold text-emerald-800 dark:text-emerald-400">
+            <div className="p-4 bg-success-subtle border border-success/20 rounded-xl space-y-3">
+              <div className="flex items-center gap-2 font-bold text-success">
                 <ShieldCheck className="w-5 h-5" />
                 <span>Active User Account Linked</span>
               </div>
@@ -1341,7 +1341,7 @@ export function StaffProfileClient({
       {/* SECONDARY TAB: ACTIVITY (Under More ▾)                                    */}
       {/* ========================================================================= */}
       {activeTab === "activity" && (
-        <div className="p-6 rounded-2xl bg-card border border-border shadow-2xs space-y-4 text-xs">
+        <div className="p-6 rounded-xl bg-card border border-border shadow-2xs space-y-4 text-xs">
           <div className="flex items-center gap-2 font-bold text-sm text-foreground">
             <History className="w-4 h-4 text-primary" />
             <span>Historical Mutation & Activity Log</span>

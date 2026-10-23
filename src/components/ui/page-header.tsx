@@ -31,11 +31,11 @@ export function PageHeader({
     >
       <div>
         {label && (
-          <span className="text-[11px] font-mono uppercase tracking-widest text-muted-foreground font-bold block mb-1">
+          <span className="text-[11px] font-medium uppercase tracking-wider text-muted-foreground block mb-1">
             {label}
           </span>
         )}
-        <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-foreground">
+        <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-foreground">
           {title}
         </h1>
         {description && (

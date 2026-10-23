@@ -78,7 +78,7 @@ export function ThemeDropdownItem() {
   return (
     <div className="px-3 py-2 border-t border-border mt-1">
       <div className="flex items-center justify-between mb-2">
-        <span className="text-[11px] font-mono uppercase tracking-wider text-muted-foreground font-bold">
+        <span className="text-[11px] font-medium uppercase tracking-wider text-muted-foreground">
           Appearance
         </span>
         <span className="text-[10px] font-mono text-muted-foreground capitalize">

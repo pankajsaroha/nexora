@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import { Building2, ChevronDown, Check, Loader2, Search } from "lucide-react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 import { cn } from "@/lib/utils";
 
 export interface InstitutionItem {
@@ -10,6 +11,7 @@ export interface InstitutionItem {
   name: string;
   code: string;
   type?: string;
+  status?: string;
 }
 
 export interface InstitutionSelectorProps {
@@ -99,9 +101,9 @@ export function InstitutionSelector({
       {isOpen && (
         <>
           <div className="fixed inset-0 z-40" onClick={() => setIsOpen(false)} />
-          <div className="absolute right-0 top-full mt-2 w-72 sm:w-80 rounded-2xl border border-border bg-card p-2.5 shadow-2xl z-50 animate-in fade-in zoom-in-95 duration-100 space-y-2">
+          <div className="absolute right-0 top-full mt-2 w-72 sm:w-80 rounded-xl border border-border bg-card p-2.5 shadow-2xl z-50 animate-in fade-in zoom-in-95 duration-100 space-y-2">
             <div className="px-2 py-1 flex items-center justify-between border-b border-border/70 pb-2">
-              <span className="text-[10px] font-mono uppercase tracking-widest text-muted-foreground font-bold">
+              <span className="text-[10px] font-medium uppercase tracking-wider text-muted-foreground">
                 Authorized Institutions
               </span>
               <span className="text-[10px] font-mono text-primary font-semibold">
@@ -138,7 +140,21 @@ export function InstitutionSelector({
                     )}
                   >
                     <div className="overflow-hidden mr-2">
-                      <p className="font-semibold text-foreground truncate">{inst.name}</p>
+                      <div className="flex items-center gap-1.5">
+                        <p className="font-semibold text-foreground truncate">{inst.name}</p>
+                        {inst.status && inst.status !== "ACTIVE" && (
+                          <span
+                            className={cn(
+                              "text-[9px] px-1.5 py-0.5 rounded font-medium uppercase tracking-wide shrink-0",
+                              inst.status === "SUSPENDED"
+                                ? "bg-warning-subtle text-warning border border-warning-border"
+                                : "bg-muted text-muted-foreground border border-border"
+                            )}
+                          >
+                            {inst.status}
+                          </span>
+                        )}
+                      </div>
                       <p className="text-[10px] font-mono text-muted-foreground mt-0.5">
                         {inst.code} {inst.type ? `· ${inst.type}` : ""}
                       </p>
@@ -154,6 +170,16 @@ export function InstitutionSelector({
                   No matching institutions found
                 </p>
               )}
+            </div>
+
+            <div className="pt-2 border-t border-border mt-1">
+              <Link
+                href="/institutions"
+                onClick={() => setIsOpen(false)}
+                className="flex items-center justify-center gap-1 text-[11px] font-semibold text-primary hover:underline p-1"
+              >
+                Manage All Institutions &rarr;
+              </Link>
             </div>
           </div>
         </>

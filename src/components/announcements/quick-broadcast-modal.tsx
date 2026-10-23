@@ -79,8 +79,8 @@ export function QuickBroadcastModal({
           <div className="w-12 h-12 rounded-full bg-success/10 text-success flex items-center justify-center mx-auto">
             <CheckCircle2 className="w-6 h-6" />
           </div>
-          <h4 className="text-sm font-bold text-foreground font-serif">Notice Broadcast Dispatched</h4>
-          <p className="text-xs text-accent">
+          <h4 className="text-sm font-bold text-foreground">Notice Broadcast Dispatched</h4>
+          <p className="text-xs text-muted-foreground">
             Your announcement has been published to all selected channels and logged in institutional audit registers.
           </p>
         </div>
@@ -101,7 +101,7 @@ export function QuickBroadcastModal({
               value={formData.title}
               onChange={(e) => setFormData({ ...formData, title: e.target.value })}
               placeholder="e.g. Schedule Revision for Mid-Term Examination 2026"
-              className="w-full rounded-lg border border-border bg-card p-2.5 text-xs text-foreground focus:outline-none focus:ring-1 focus:ring-[#171614]"
+              className="w-full rounded-lg border border-border bg-background p-2.5 text-xs text-foreground focus:outline-none focus:ring-1 focus:ring-accent focus:border-accent"
             />
           </div>
 
@@ -111,7 +111,7 @@ export function QuickBroadcastModal({
               <select
                 value={formData.targetAudience}
                 onChange={(e) => setFormData({ ...formData, targetAudience: e.target.value })}
-                className="w-full rounded-lg border border-border bg-card p-2.5 text-xs text-foreground"
+                className="w-full rounded-lg border border-border bg-background p-2.5 text-xs text-foreground focus:outline-none focus:ring-1 focus:ring-accent focus:border-accent"
               >
                 <option value="EVERYONE">All Campus (Scholars, Faculty & Parents)</option>
                 <option value="PARENTS">Guardians & Parents Only</option>
@@ -125,7 +125,7 @@ export function QuickBroadcastModal({
               <select
                 value={formData.priority}
                 onChange={(e) => setFormData({ ...formData, priority: e.target.value })}
-                className="w-full rounded-lg border border-border bg-card p-2.5 text-xs text-foreground"
+                className="w-full rounded-lg border border-border bg-background p-2.5 text-xs text-foreground focus:outline-none focus:ring-1 focus:ring-accent focus:border-accent"
               >
                 <option value="NORMAL">Normal Advisory</option>
                 <option value="HIGH">High Importance</option>
@@ -142,12 +142,12 @@ export function QuickBroadcastModal({
               value={formData.content}
               onChange={(e) => setFormData({ ...formData, content: e.target.value })}
               placeholder="Write official circular text, timing guidelines, and instructions..."
-              className="w-full rounded-lg border border-border bg-card p-2.5 text-xs text-foreground focus:outline-none focus:ring-1 focus:ring-[#171614]"
+              className="w-full rounded-lg border border-border bg-background p-2.5 text-xs text-foreground focus:outline-none focus:ring-1 focus:ring-accent focus:border-accent"
             />
           </div>
 
-          <div className="p-3 rounded-lg bg-card border border-border flex items-center justify-between">
-            <div className="flex items-center gap-2 text-accent">
+          <div className="p-3 rounded-lg bg-surface-subtle border border-border flex items-center justify-between">
+            <div className="flex items-center gap-2 text-muted-foreground">
               <MessageSquare className="w-3.5 h-3.5" />
               <span>Multi-channel distribution enabled</span>
             </div>

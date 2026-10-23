@@ -43,6 +43,11 @@ export async function getCurrentUser(): Promise<SessionUser | null> {
       return null;
     }
 
+    // Enforce institution lifecycle: block non-Super Admin users if institution is SUSPENDED or ARCHIVED
+    if (user.roleCode !== "SUPER_ADMIN" && (user.institution as any)?.status && (user.institution as any).status !== "ACTIVE") {
+      return null;
+    }
+
     // Combine role default permissions + any custom role permissions
     const permissions = Array.from(
       new Set(ROLE_DEFAULT_PERMISSIONS[user.roleCode] || [])

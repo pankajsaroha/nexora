@@ -111,7 +111,7 @@ export function StudentDashboard({
 
       {/* Key Metrics Strip (Hairline Blocks) */}
       <section className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-        <div className="p-5 rounded-2xl border border-border bg-card space-y-1 shadow-2xs hover:border-primary/40 transition-all">
+        <Link href="/attendance" className="p-5 rounded-xl border border-border bg-card space-y-1 shadow-2xs hover:border-primary/40 transition-all block">
           <span className="text-[11px] font-mono uppercase tracking-wider text-muted-foreground font-bold block">
             01 / ATTENDANCE RATE
           </span>
@@ -121,9 +121,9 @@ export function StudentDashboard({
           <span className="text-[11px] text-success block font-bold">
             {attendanceSummary.presentCount} / {attendanceSummary.totalDays} Days Present
           </span>
-        </div>
+        </Link>
 
-        <div className="p-5 rounded-2xl border border-border bg-card space-y-1 shadow-2xs hover:border-primary/40 transition-all">
+        <Link href="/academics/assignments" className="p-5 rounded-xl border border-border bg-card space-y-1 shadow-2xs hover:border-primary/40 transition-all block">
           <span className="text-[11px] font-mono uppercase tracking-wider text-muted-foreground font-bold block">
             02 / PENDING HOMEWORK
           </span>
@@ -131,11 +131,11 @@ export function StudentDashboard({
             {pendingAssignments.length} Tasks
           </div>
           <span className="text-[11px] text-warning block font-bold">
-            Due this academic week
+            Due this academic term
           </span>
-        </div>
+        </Link>
 
-        <div className="p-5 rounded-2xl border border-border bg-card space-y-1 shadow-2xs hover:border-primary/40 transition-all">
+        <Link href="/academics/timetable" className="p-5 rounded-xl border border-border bg-card space-y-1 shadow-2xs hover:border-primary/40 transition-all block">
           <span className="text-[11px] font-mono uppercase tracking-wider text-muted-foreground font-bold block">
             03 / TODAY&apos;S SCHEDULE
           </span>
@@ -143,21 +143,21 @@ export function StudentDashboard({
             {todaySchedule.length} Periods
           </div>
           <span className="text-[11px] text-muted-foreground block font-medium">
-            Room 104 • Secondary Block
+            Active class schedule
           </span>
-        </div>
+        </Link>
 
-        <div className="p-5 rounded-2xl border border-border bg-card space-y-1 shadow-2xs hover:border-primary/40 transition-all">
+        <Link href="/finance/fees" className="p-5 rounded-xl border border-border bg-card space-y-1 shadow-2xs hover:border-primary/40 transition-all block">
           <span className="text-[11px] font-mono uppercase tracking-wider text-muted-foreground font-bold block">
-            04 / TERM 1 FEE
+            04 / FEE LEDGER
           </span>
-          <div className="text-2xl sm:text-3xl font-extrabold text-success tracking-tight">
+          <div className={`text-2xl sm:text-3xl font-extrabold tracking-tight ${feeStatus.status === "PAID" ? "text-success" : "text-amber-600 dark:text-amber-400"}`}>
             {feeStatus.status}
           </div>
           <span className="text-[11px] text-muted-foreground block font-mono">
-            Receipt: REC-2026-0891
+            {feeStatus.pending > 0 ? `₹${feeStatus.pending.toLocaleString("en-IN")} Pending` : `₹${feeStatus.paid.toLocaleString("en-IN")} Paid`}
           </span>
-        </div>
+        </Link>
       </section>
 
       {/* Main Grid: Today's Timetable & Pending Homework */}
@@ -177,7 +177,7 @@ export function StudentDashboard({
               </Link>
             </div>
 
-            <div className="divide-y divide-border border border-border rounded-2xl bg-card overflow-hidden shadow-2xs">
+            <div className="divide-y divide-border border border-border rounded-xl bg-card overflow-hidden shadow-2xs">
               {todaySchedule.length === 0 ? (
                 <div className="p-6 text-center text-xs text-muted-foreground">No classes scheduled for today.</div>
               ) : (
@@ -218,7 +218,7 @@ export function StudentDashboard({
               </Link>
             </div>
 
-            <div className="divide-y divide-border border border-border rounded-2xl bg-card overflow-hidden shadow-2xs">
+            <div className="divide-y divide-border border border-border rounded-xl bg-card overflow-hidden shadow-2xs">
               {pendingAssignments.length === 0 ? (
                 <div className="p-6 text-center text-xs text-muted-foreground">
                   No pending assignments in your queue.
@@ -228,7 +228,7 @@ export function StudentDashboard({
                   <div key={a.id} className="p-4 space-y-1.5 hover:bg-muted/40 transition-colors">
                     <div className="flex items-center justify-between">
                       <p className="text-xs font-bold text-foreground">{a.title}</p>
-                      <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded-md bg-warm/15 border border-warm/30 text-foreground">
+                      <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded-md bg-accent/10 border border-accent/20 text-accent">
                         {a.maxMarks} Marks
                       </span>
                     </div>

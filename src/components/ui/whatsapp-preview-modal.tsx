@@ -50,10 +50,10 @@ export function WhatsAppPreviewModal({
     >
       <div className="space-y-4">
         {/* Banner */}
-        <div className="flex items-center justify-between rounded-lg bg-emerald-50 dark:bg-emerald-950/40 p-3 border border-emerald-200 dark:border-emerald-800">
+        <div className="flex items-center justify-between rounded-lg bg-success-subtle p-3 border border-success/20">
           <div className="flex items-center gap-2">
-            <MessageSquare className="h-4 w-4 text-emerald-600 dark:text-emerald-400" />
-            <span className="text-xs font-semibold text-emerald-800 dark:text-emerald-300">
+            <MessageSquare className="h-4 w-4 text-success" />
+            <span className="text-xs font-semibold text-success">
               Mock WhatsApp Dispatcher
             </span>
           </div>
@@ -63,7 +63,7 @@ export function WhatsAppPreviewModal({
         </div>
 
         {/* WhatsApp Phone Mockup Window */}
-        <div className="rounded-xl border border-slate-200 dark:border-slate-800 bg-[#e5ddd5] dark:bg-slate-950 p-4 shadow-inner">
+        <div className="rounded-xl border border-border bg-[#e5ddd5] dark:bg-background p-4 shadow-inner">
           {/* Header */}
           <div className="flex items-center justify-between rounded-t-lg bg-[#075e54] p-3 text-white">
             <div className="flex items-center gap-2">
@@ -86,17 +86,17 @@ export function WhatsAppPreviewModal({
 
           {/* Chat Bubble */}
           <div className="mt-3 flex justify-start">
-            <div className="relative max-w-[85%] rounded-lg bg-white dark:bg-slate-900 p-3 shadow-sm border border-slate-200/50 dark:border-slate-800 text-xs text-slate-800 dark:text-slate-100">
+            <div className="relative max-w-[85%] rounded-lg bg-card p-3 shadow-sm border border-border text-xs text-foreground">
               <div className="mb-1 text-[11px] font-bold text-emerald-700 dark:text-emerald-400">
                 {templateTitle}
               </div>
               <p className="whitespace-pre-line leading-relaxed">{messageContent}</p>
-              <div className="mt-2 flex items-center justify-end gap-1 text-[10px] text-slate-400">
+              <div className="mt-2 flex items-center justify-end gap-1 text-[10px] text-muted-foreground">
                 <span>10:45 AM</span>
                 {status === "DELIVERED" ? (
                   <CheckCheck className="h-3 w-3 text-sky-500" />
                 ) : (
-                  <CheckCheck className="h-3 w-3 text-slate-400" />
+                  <CheckCheck className="h-3 w-3 text-muted-foreground" />
                 )}
               </div>
             </div>
@@ -104,8 +104,8 @@ export function WhatsAppPreviewModal({
         </div>
 
         {/* Status Tracker */}
-        <div className="flex items-center justify-between rounded-lg bg-slate-50 dark:bg-slate-850 p-3 text-xs">
-          <span className="text-slate-500">Delivery Status:</span>
+        <div className="flex items-center justify-between rounded-lg bg-surface-subtle border border-border p-3 text-xs">
+          <span className="text-muted-foreground">Delivery Status:</span>
           {status === "IDLE" && (
             <Badge variant="neutral" size="sm">
               Ready to Dispatch
@@ -124,7 +124,7 @@ export function WhatsAppPreviewModal({
         </div>
 
         {/* Footer actions */}
-        <div className="flex items-center justify-end gap-2 pt-2 border-t border-slate-100 dark:border-slate-800">
+        <div className="flex items-center justify-end gap-2 pt-2 border-t border-border">
           <Button variant="outline" size="sm" onClick={onClose}>
             Dismiss
           </Button>

@@ -10,7 +10,16 @@ const config: Config = {
     extend: {
       colors: {
         background: "var(--background)",
-        foreground: "var(--foreground)",
+        foreground: {
+          DEFAULT: "var(--foreground)",
+          secondary: "var(--foreground-secondary)",
+          muted: "var(--foreground-muted)",
+        },
+        surface: {
+          DEFAULT: "var(--surface)",
+          subtle: "var(--surface-subtle)",
+          muted: "var(--surface-muted)",
+        },
         card: {
           DEFAULT: "var(--card)",
           foreground: "var(--card-foreground)",
@@ -39,6 +48,7 @@ const config: Config = {
         accent: {
           DEFAULT: "var(--accent)",
           foreground: "var(--accent-foreground)",
+          hover: "var(--accent-hover)",
           subtle: "var(--accent-subtle)",
         },
         warm: {
@@ -47,10 +57,12 @@ const config: Config = {
         },
         border: {
           DEFAULT: "var(--border)",
+          strong: "var(--border-strong)",
           subtle: "var(--border-subtle)",
         },
         input: "var(--input)",
         ring: "var(--ring)",
+        "focus-ring": "var(--focus-ring)",
         success: {
           DEFAULT: "var(--success)",
           foreground: "var(--success-foreground)",
@@ -69,13 +81,44 @@ const config: Config = {
           subtle: "var(--destructive-subtle)",
           border: "var(--destructive-border)",
         },
+        info: {
+          DEFAULT: "var(--info)",
+          foreground: "var(--info-foreground)",
+          subtle: "var(--info-subtle)",
+          border: "var(--info-border)",
+        },
         sidebar: {
           DEFAULT: "var(--sidebar-background)",
+          background: "var(--sidebar-background)",
           foreground: "var(--sidebar-foreground)",
           border: "var(--sidebar-border)",
-          accent: "var(--sidebar-accent)",
-          "accent-foreground": "var(--sidebar-accent-foreground)",
-          muted: "var(--sidebar-muted)",
+          accent: "var(--sidebar-active-background)",
+          "accent-foreground": "var(--sidebar-active-foreground)",
+          active: "var(--sidebar-active-background)",
+          "active-foreground": "var(--sidebar-active-foreground)",
+          muted: "var(--sidebar-muted-foreground)",
+          "muted-foreground": "var(--sidebar-muted-foreground)",
+          gold: "var(--sidebar-gold)",
+        },
+        royal: {
+          amethyst: "var(--royal-amethyst)",
+          plum: "var(--deep-plum)",
+          "soft-plum": "var(--soft-plum)",
+        },
+        gold: {
+          DEFAULT: "var(--champagne-gold)",
+          champagne: "var(--champagne-gold)",
+          muted: "var(--muted-gold)",
+        },
+        amethyst: {
+          DEFAULT: "var(--royal-amethyst)",
+          deep: "#21132B",
+          soft: "var(--soft-plum)",
+        },
+        plum: {
+          DEFAULT: "var(--deep-plum)",
+          soft: "var(--soft-plum)",
+          dark: "#21132B",
         },
         chart: {
           1: "var(--chart-1)",
@@ -86,16 +129,20 @@ const config: Config = {
         },
       },
       boxShadow: {
-        '2xs': '0 1px 2px 0 rgba(0, 0, 0, 0.03)',
-        'xs': '0 1px 3px 0 rgba(0, 0, 0, 0.04), 0 1px 2px 0 rgba(0, 0, 0, 0.02)',
-        'subtle': '0 1px 3px 0 rgba(0, 0, 0, 0.04), 0 1px 2px 0 rgba(0, 0, 0, 0.02)',
-        'card': '0 0 0 1px var(--border), 0 1px 3px rgba(0, 0, 0, 0.03)',
-        'card-hover': '0 0 0 1px var(--primary-muted), 0 4px 12px rgba(0, 0, 0, 0.05)',
-        'premium': '0 10px 30px -10px rgba(0, 0, 0, 0.08), 0 4px 6px -2px rgba(0, 0, 0, 0.03)',
+        '2xs': '0 1px 2px 0 rgba(0, 0, 0, 0.04)',
+        'xs': '0 1px 3px 0 rgba(0, 0, 0, 0.06), 0 1px 2px 0 rgba(0, 0, 0, 0.03)',
+        'subtle': '0 1px 3px 0 rgba(0, 0, 0, 0.06), 0 1px 2px 0 rgba(0, 0, 0, 0.03)',
+        'card': '0 1px 3px 0 rgba(0, 0, 0, 0.04), 0 1px 2px -1px rgba(0, 0, 0, 0.04)',
+        'card-hover': '0 4px 12px -2px rgba(43, 18, 56, 0.08), 0 2px 4px -2px rgba(0, 0, 0, 0.04)',
+        'premium': '0 10px 30px -10px rgba(43, 18, 56, 0.12), 0 4px 6px -2px rgba(0, 0, 0, 0.03)',
+        'gold-glow': '0 0 15px -3px rgba(212, 175, 55, 0.25)',
+        'amethyst-glow': '0 0 15px -3px rgba(43, 18, 56, 0.25)',
+        'accent-glow': '0 0 15px -3px rgba(212, 175, 55, 0.25)',
       },
       fontFamily: {
         sans: ['Inter', 'system-ui', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'sans-serif'],
-        serif: ['Playfair Display', 'Georgia', 'serif'],
+        serif: ['Inter', 'system-ui', 'sans-serif'],
+        mono: ['JetBrains Mono', 'Menlo', 'Monaco', 'Courier New', 'monospace'],
       }
     },
   },

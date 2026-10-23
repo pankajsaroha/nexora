@@ -104,11 +104,11 @@ export function CommandPalette() {
       <button
         type="button"
         onClick={() => setIsOpen(true)}
-        className="flex items-center justify-between w-full max-w-[260px] sm:max-w-[320px] rounded-xl border border-border bg-card/90 hover:bg-card py-2 px-3 text-xs text-muted-foreground hover:text-foreground hover:border-primary/50 transition-all shadow-2xs group cursor-pointer"
+        className="flex items-center justify-between w-full max-w-[260px] sm:max-w-[320px] rounded-xl border border-border bg-card/90 hover:bg-card py-2 px-3 text-xs text-muted-foreground hover:text-foreground hover:border-accent/50 transition-all shadow-2xs group cursor-pointer"
         aria-label="Search students, faculty, classes and tasks"
       >
         <span className="flex items-center gap-2 overflow-hidden mr-2">
-          <Search className="h-3.5 w-3.5 text-muted-foreground group-hover:text-primary shrink-0 transition-colors" />
+          <Search className="h-3.5 w-3.5 text-muted-foreground group-hover:text-accent shrink-0 transition-colors" />
           <span className="truncate whitespace-nowrap text-left text-[11px] sm:text-xs">
             Search students, faculty, classes...
           </span>
@@ -122,11 +122,11 @@ export function CommandPalette() {
       {isOpen && (
         <div className="fixed inset-0 z-50 flex items-start justify-center pt-20 sm:pt-24 px-4 animate-in fade-in duration-150">
           <div
-            className="fixed inset-0 bg-foreground/40 backdrop-blur-xs transition-opacity"
+            className="fixed inset-0 bg-black/40 dark:bg-black/60 backdrop-blur-xs transition-opacity"
             onClick={() => setIsOpen(false)}
           />
 
-          <div className="relative w-full max-w-2xl rounded-2xl border border-border bg-card shadow-2xl overflow-hidden z-10 animate-in zoom-in-95 duration-150">
+          <div className="relative w-full max-w-2xl rounded-xl border border-border bg-card shadow-2xl overflow-hidden z-10 animate-in zoom-in-95 duration-150">
             {/* Search Input */}
             <div className="flex items-center px-4 border-b border-border bg-muted/40">
               <Search className="w-4 h-4 text-muted-foreground shrink-0" />
@@ -137,7 +137,7 @@ export function CommandPalette() {
                 placeholder="Type student name, admission #, teacher, subject, or task..."
                 className="w-full py-4 px-3 text-xs text-foreground bg-transparent placeholder:text-muted-foreground focus:outline-none"
               />
-              {loading && <Loader2 className="w-4 h-4 text-primary animate-spin shrink-0" />}
+              {loading && <Loader2 className="w-4 h-4 text-accent animate-spin shrink-0" />}
               {query && !loading && (
                 <button
                   onClick={() => setQuery("")}
@@ -153,7 +153,7 @@ export function CommandPalette() {
               {/* If no query, show quick navigation */}
               {!query.trim() && (
                 <div className="p-2">
-                  <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-muted-foreground px-2 block mb-2">
+                  <span className="text-[10px] font-medium uppercase tracking-wider text-muted-foreground px-2 block mb-2">
                     Quick Jump Navigation
                   </span>
                   <div className="grid grid-cols-2 gap-2">
@@ -174,7 +174,7 @@ export function CommandPalette() {
                           onClick={() => handleSelect(item.url)}
                           className="flex items-center gap-2.5 p-2.5 rounded-xl text-left text-xs font-semibold text-foreground hover:bg-muted border border-transparent hover:border-border transition-all"
                         >
-                          <Icon className="w-3.5 h-3.5 text-primary" />
+                          <Icon className="w-3.5 h-3.5 text-accent" />
                           <span className="truncate">{item.title}</span>
                         </button>
                       );

@@ -4,7 +4,7 @@ export default function ExamDetailLoading() {
   return (
     <div className="space-y-6 animate-pulse">
       {/* Header & Breadcrumbs Skeleton */}
-      <div className="rounded-xl border border-border bg-white p-5 shadow-xs space-y-4">
+      <div className="rounded-xl border border-border bg-card p-5 shadow-xs space-y-4">
         <div className="flex items-center justify-between gap-3">
           <div className="h-4 w-20 bg-muted/70 rounded" />
           <div className="flex items-center gap-2">
@@ -36,7 +36,7 @@ export default function ExamDetailLoading() {
       {/* KPI Cards Skeleton */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
         {[...Array(4)].map((_, i) => (
-          <div key={i} className="p-4 rounded-xl border border-border bg-white shadow-xs space-y-2">
+          <div key={i} className="p-4 rounded-xl border border-border bg-card shadow-xs space-y-2">
             <div className="h-3 w-28 bg-muted/60 rounded" />
             <div className="h-7 w-20 bg-muted rounded" />
             <div className="h-3 w-36 bg-muted/40 rounded" />
@@ -45,7 +45,7 @@ export default function ExamDetailLoading() {
       </div>
 
       {/* Main Content Skeleton */}
-      <div className="rounded-xl border border-border bg-white p-5 shadow-xs space-y-4">
+      <div className="rounded-xl border border-border bg-card p-5 shadow-xs space-y-4">
         <div className="flex items-center justify-between border-b border-border pb-3">
           <div className="space-y-1">
             <div className="h-4 w-40 bg-muted rounded" />

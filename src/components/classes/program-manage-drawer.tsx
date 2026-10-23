@@ -156,7 +156,7 @@ export function ProgramManageDrawer({
     >
       <div className="space-y-6 text-xs font-sans">
         {/* Top Summary Banner */}
-        <div className="p-4 rounded-2xl bg-card border border-border shadow-2xs flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div className="p-4 rounded-xl bg-card border border-border shadow-2xs flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div className="flex flex-wrap items-center gap-3">
             <div className="w-12 h-12 rounded-xl bg-primary/10 border border-primary/20 text-primary flex items-center justify-center font-bold text-base shadow-xs">
               <GraduationCap className="w-6 h-6" />
@@ -204,7 +204,7 @@ export function ProgramManageDrawer({
 
         {/* Quick KPI Stats Bar */}
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-          <div className="p-3.5 rounded-2xl border border-border bg-card shadow-2xs space-y-0.5">
+          <div className="p-3.5 rounded-xl border border-border bg-card shadow-2xs space-y-0.5">
             <span className="text-[10px] font-mono uppercase tracking-wider text-muted-foreground font-bold block">
               Sections
             </span>
@@ -212,7 +212,7 @@ export function ProgramManageDrawer({
             <span className="text-[10px] text-muted-foreground">Configured cohorts</span>
           </div>
 
-          <div className="p-3.5 rounded-2xl border border-border bg-card shadow-2xs space-y-0.5">
+          <div className="p-3.5 rounded-xl border border-border bg-card shadow-2xs space-y-0.5">
             <span className="text-[10px] font-mono uppercase tracking-wider text-muted-foreground font-bold block">
               Enrolled Students
             </span>
@@ -220,7 +220,7 @@ export function ProgramManageDrawer({
             <span className="text-[10px] text-muted-foreground">Active learner roster</span>
           </div>
 
-          <div className="p-3.5 rounded-2xl border border-border bg-card shadow-2xs space-y-0.5">
+          <div className="p-3.5 rounded-xl border border-border bg-card shadow-2xs space-y-0.5">
             <span className="text-[10px] font-mono uppercase tracking-wider text-muted-foreground font-bold block">
               Subjects / Courses
             </span>
@@ -228,7 +228,7 @@ export function ProgramManageDrawer({
             <span className="text-[10px] text-muted-foreground">Curriculum units</span>
           </div>
 
-          <div className="p-3.5 rounded-2xl border border-border bg-card shadow-2xs space-y-0.5">
+          <div className="p-3.5 rounded-xl border border-border bg-card shadow-2xs space-y-0.5">
             <span className="text-[10px] font-mono uppercase tracking-wider text-muted-foreground font-bold block">
               Fee Blueprint
             </span>
@@ -315,8 +315,8 @@ export function ProgramManageDrawer({
             </div>
 
             {program.sections.length === 0 ? (
-              <div className="p-8 rounded-3xl border border-dashed border-border bg-card text-center space-y-3 shadow-2xs">
-                <div className="w-10 h-10 rounded-2xl bg-primary/10 border border-primary/20 text-primary flex items-center justify-center mx-auto">
+              <div className="p-8 rounded-xl border border-dashed border-border bg-card text-center space-y-3 shadow-2xs">
+                <div className="w-10 h-10 rounded-xl bg-primary/10 border border-primary/20 text-primary flex items-center justify-center mx-auto">
                   <Layers className="w-5 h-5" />
                 </div>
                 <div>
@@ -335,7 +335,7 @@ export function ProgramManageDrawer({
                 </Button>
               </div>
             ) : (
-              <div className="rounded-2xl border border-border bg-card overflow-hidden divide-y divide-border shadow-2xs">
+              <div className="rounded-xl border border-border bg-card overflow-hidden divide-y divide-border shadow-2xs">
                 {program.sections.map((sec) => (
                   <div
                     key={sec.id}
@@ -439,7 +439,7 @@ export function ProgramManageDrawer({
             </div>
 
             {filteredStudents.length === 0 ? (
-              <div className="p-8 rounded-3xl border border-dashed border-border bg-card text-center space-y-2">
+              <div className="p-8 rounded-xl border border-dashed border-border bg-card text-center space-y-2">
                 <Users className="w-8 h-8 text-muted-foreground mx-auto" />
                 <p className="font-bold text-foreground text-xs">No Enrolled Students Found</p>
                 <p className="text-[11px] text-muted-foreground">
@@ -447,7 +447,7 @@ export function ProgramManageDrawer({
                 </p>
               </div>
             ) : (
-              <div className="border border-border rounded-2xl overflow-hidden bg-card shadow-2xs">
+              <div className="border border-border rounded-xl overflow-hidden bg-card shadow-2xs">
                 <table className="w-full text-left text-xs border-collapse">
                   <thead>
                     <tr className="border-b border-border bg-muted/40 text-[10px] font-mono uppercase tracking-wider text-muted-foreground">
@@ -515,7 +515,7 @@ export function ProgramManageDrawer({
             </div>
 
             {(!program.subjects || program.subjects.length === 0) ? (
-              <div className="p-8 rounded-3xl border border-dashed border-border bg-card text-center space-y-2">
+              <div className="p-8 rounded-xl border border-dashed border-border bg-card text-center space-y-2">
                 <BookOpen className="w-8 h-8 text-muted-foreground mx-auto" />
                 <p className="font-bold text-foreground text-xs">No Curriculum Subjects Assigned</p>
                 <p className="text-[11px] text-muted-foreground">
@@ -523,7 +523,7 @@ export function ProgramManageDrawer({
                 </p>
               </div>
             ) : (
-              <div className="rounded-2xl border border-border bg-card overflow-hidden divide-y divide-border shadow-2xs">
+              <div className="rounded-xl border border-border bg-card overflow-hidden divide-y divide-border shadow-2xs">
                 {program.subjects.map((sub) => (
                   <div key={sub.id} className="p-3.5 flex items-center justify-between">
                     <div>
@@ -565,7 +565,7 @@ export function ProgramManageDrawer({
             </div>
 
             {program.feeStructures.length === 0 ? (
-              <div className="p-8 rounded-3xl border border-dashed border-border bg-card text-center space-y-2">
+              <div className="p-8 rounded-xl border border-dashed border-border bg-card text-center space-y-2">
                 <CreditCard className="w-8 h-8 text-muted-foreground mx-auto" />
                 <p className="font-bold text-foreground text-xs">No Fee Structure Configured</p>
                 <p className="text-[11px] text-muted-foreground">
@@ -573,7 +573,7 @@ export function ProgramManageDrawer({
                 </p>
               </div>
             ) : (
-              <div className="rounded-2xl border border-border bg-card overflow-hidden divide-y divide-border shadow-2xs">
+              <div className="rounded-xl border border-border bg-card overflow-hidden divide-y divide-border shadow-2xs">
                 {program.feeStructures.map((fee) => (
                   <div key={fee.id} className="p-3.5 flex items-center justify-between">
                     <div>

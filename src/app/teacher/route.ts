@@ -3,5 +3,5 @@ import { redirect } from "next/navigation";
 export const dynamic = "force-dynamic";
 
 export async function GET() {
-  redirect("/demo/teacher/dashboard");
+  redirect("/dashboard");
 }

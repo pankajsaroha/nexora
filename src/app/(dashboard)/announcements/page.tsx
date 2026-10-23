@@ -13,8 +13,18 @@ export default async function AnnouncementsPage() {
     redirect("/login");
   }
 
+  let whereClause: any = {
+    institutionId: user.institutionId,
+  };
+
+  if (user.roleCode === "STUDENT") {
+    whereClause.targetAudience = { in: ["EVERYONE", "STUDENTS"] };
+  } else if (user.roleCode === "PARENT") {
+    whereClause.targetAudience = { in: ["EVERYONE", "PARENTS"] };
+  }
+
   const announcements = await prisma.announcement.findMany({
-    where: { institutionId: user.institutionId },
+    where: whereClause,
     include: { authorUser: true },
     orderBy: { publishedAt: "desc" },
   });

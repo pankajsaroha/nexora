@@ -36,10 +36,10 @@ export function CapabilityStrip() {
   ];
 
   return (
-    <div className="border-y border-[#E8E7DF] bg-white py-6">
+    <div className="border-y border-border bg-card py-6">
       <div className="max-w-7xl mx-auto px-6 sm:px-8">
         <div className="text-center mb-4">
-          <span className="text-[10px] font-mono uppercase tracking-widest text-slate-400 font-semibold">
+          <span className="text-[10px] font-mono uppercase tracking-widest text-muted-foreground font-semibold">
             One Connected Architecture Across All Departments
           </span>
         </div>
@@ -50,14 +50,14 @@ export function CapabilityStrip() {
             return (
               <div
                 key={idx}
-                className="p-3 rounded-xl border border-[#E8E7DF] bg-[#FAF9F5] hover:bg-white hover:border-slate-400 transition-all text-left space-y-1.5 shadow-2xs group"
+                className="p-3 rounded-xl border border-border bg-surface-subtle hover:bg-card hover:border-accent/40 transition-all text-left space-y-1.5 shadow-2xs group"
               >
-                <div className="w-7 h-7 rounded-lg bg-white border border-[#E8E7DF] flex items-center justify-center text-slate-900 group-hover:bg-[#0F172A] group-hover:text-white transition-colors">
+                <div className="w-7 h-7 rounded-lg bg-card border border-border flex items-center justify-center text-foreground group-hover:bg-primary group-hover:text-primary-foreground transition-colors">
                   <Icon className="w-3.5 h-3.5" />
                 </div>
                 <div>
-                  <div className="font-bold text-xs text-slate-900 leading-tight">{c.label}</div>
-                  <div className="text-[10px] font-mono text-slate-500 leading-tight mt-0.5">{c.detail}</div>
+                  <div className="font-bold text-xs text-foreground leading-tight">{c.label}</div>
+                  <div className="text-[10px] font-mono text-muted-foreground leading-tight mt-0.5">{c.detail}</div>
                 </div>
               </div>
             );

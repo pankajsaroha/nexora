@@ -281,56 +281,56 @@ export function EditStudentModal({
 
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
               <div>
-                <label className="block text-xs font-bold text-foreground mb-1">First Name *</label>
+                <label className="block text-xs font-semibold text-foreground mb-1">First Name *</label>
                 <input
                   type="text"
                   required
                   value={formData.firstName}
                   onChange={(e) => setFormData({ ...formData, firstName: e.target.value })}
-                  className="w-full rounded-xl border border-border bg-white p-2.5 text-xs text-foreground focus:outline-none focus:ring-2 focus:ring-primary/20"
+                  className="w-full rounded-lg border border-border bg-background p-2.5 text-xs text-foreground focus:outline-none focus:ring-1 focus:ring-accent"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-foreground mb-1">Middle Name</label>
+                <label className="block text-xs font-semibold text-foreground mb-1">Middle Name</label>
                 <input
                   type="text"
                   value={formData.middleName}
                   onChange={(e) => setFormData({ ...formData, middleName: e.target.value })}
-                  className="w-full rounded-xl border border-border bg-white p-2.5 text-xs text-foreground focus:outline-none focus:ring-2 focus:ring-primary/20"
+                  className="w-full rounded-lg border border-border bg-background p-2.5 text-xs text-foreground focus:outline-none focus:ring-1 focus:ring-accent"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-foreground mb-1">Last Name *</label>
+                <label className="block text-xs font-semibold text-foreground mb-1">Last Name *</label>
                 <input
                   type="text"
                   required
                   value={formData.lastName}
                   onChange={(e) => setFormData({ ...formData, lastName: e.target.value })}
-                  className="w-full rounded-xl border border-border bg-white p-2.5 text-xs text-foreground focus:outline-none focus:ring-2 focus:ring-primary/20"
+                  className="w-full rounded-lg border border-border bg-background p-2.5 text-xs text-foreground focus:outline-none focus:ring-1 focus:ring-accent"
                 />
               </div>
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
               <div>
-                <label className="block text-xs font-bold text-foreground mb-1">Date of Birth *</label>
+                <label className="block text-xs font-semibold text-foreground mb-1">Date of Birth *</label>
                 <input
                   type="date"
                   required
                   value={formData.dateOfBirth}
                   onChange={(e) => setFormData({ ...formData, dateOfBirth: e.target.value })}
-                  className="w-full rounded-xl border border-border bg-white p-2.5 text-xs text-foreground focus:outline-none focus:ring-2 focus:ring-primary/20"
+                  className="w-full rounded-lg border border-border bg-background p-2.5 text-xs text-foreground focus:outline-none focus:ring-1 focus:ring-accent"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-foreground mb-1">Gender *</label>
+                <label className="block text-xs font-semibold text-foreground mb-1">Gender *</label>
                 <select
                   value={formData.gender}
                   onChange={(e) => setFormData({ ...formData, gender: e.target.value })}
-                  className="w-full rounded-xl border border-border bg-white p-2.5 text-xs font-semibold text-foreground"
+                  className="w-full rounded-lg border border-border bg-background p-2.5 text-xs font-medium text-foreground focus:outline-none focus:ring-1 focus:ring-accent"
                 >
                   <option value="MALE">Male</option>
                   <option value="FEMALE">Female</option>
@@ -339,11 +339,11 @@ export function EditStudentModal({
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-foreground mb-1">Blood Group</label>
+                <label className="block text-xs font-semibold text-foreground mb-1">Blood Group</label>
                 <select
                   value={formData.bloodGroup}
                   onChange={(e) => setFormData({ ...formData, bloodGroup: e.target.value })}
-                  className="w-full rounded-xl border border-border bg-white p-2.5 text-xs font-semibold text-foreground"
+                  className="w-full rounded-lg border border-border bg-background p-2.5 text-xs font-medium text-foreground focus:outline-none focus:ring-1 focus:ring-accent"
                 >
                   <option value="">Select (Optional)</option>
                   <option value="A+">A+</option>
@@ -365,16 +365,16 @@ export function EditStudentModal({
                   type="text"
                   value={formData.nationality}
                   onChange={(e) => setFormData({ ...formData, nationality: e.target.value })}
-                  className="w-full rounded-xl border border-border bg-white p-2.5 text-xs text-foreground"
+                  className="w-full rounded-lg border border-border bg-background p-2.5 text-xs text-foreground focus:outline-none focus:ring-1 focus:ring-accent"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-foreground mb-1">Social Category</label>
+                <label className="block text-xs font-semibold text-foreground mb-1">Social Category</label>
                 <select
                   value={formData.category}
                   onChange={(e) => setFormData({ ...formData, category: e.target.value })}
-                  className="w-full rounded-xl border border-border bg-white p-2.5 text-xs font-semibold text-foreground"
+                  className="w-full rounded-lg border border-border bg-background p-2.5 text-xs font-medium text-foreground focus:outline-none focus:ring-1 focus:ring-accent"
                 >
                   <option value="GENERAL">General</option>
                   <option value="OBC">OBC</option>
@@ -385,43 +385,43 @@ export function EditStudentModal({
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-foreground mb-1">Aadhaar / National ID</label>
+                <label className="block text-xs font-semibold text-foreground mb-1">Aadhaar / National ID</label>
                 <input
                   type="text"
                   value={formData.aadhaarNumber}
                   onChange={(e) => setFormData({ ...formData, aadhaarNumber: e.target.value })}
-                  className="w-full rounded-xl border border-border bg-white p-2.5 text-xs font-mono text-foreground"
+                  className="w-full rounded-lg border border-border bg-background p-2.5 text-xs font-mono text-foreground focus:outline-none focus:ring-1 focus:ring-accent"
                 />
               </div>
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
               <div>
-                <label className="block text-xs font-bold text-foreground mb-1">Direct Student Email</label>
+                <label className="block text-xs font-semibold text-foreground mb-1">Direct Student Email</label>
                 <input
                   type="email"
                   value={formData.email}
                   onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                  className="w-full rounded-xl border border-border bg-white p-2.5 text-xs text-foreground"
+                  className="w-full rounded-lg border border-border bg-background p-2.5 text-xs text-foreground focus:outline-none focus:ring-1 focus:ring-accent"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-foreground mb-1">Direct Student Phone</label>
+                <label className="block text-xs font-semibold text-foreground mb-1">Direct Student Phone</label>
                 <input
                   type="tel"
                   value={formData.phone}
                   onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                  className="w-full rounded-xl border border-border bg-white p-2.5 text-xs font-mono text-foreground"
+                  className="w-full rounded-lg border border-border bg-background p-2.5 text-xs font-mono text-foreground focus:outline-none focus:ring-1 focus:ring-accent"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-foreground mb-1">Enrollment Status</label>
+                <label className="block text-xs font-semibold text-foreground mb-1">Enrollment Status</label>
                 <select
                   value={formData.status}
                   onChange={(e) => setFormData({ ...formData, status: e.target.value })}
-                  className="w-full rounded-xl border border-border bg-white p-2.5 text-xs font-bold text-foreground"
+                  className="w-full rounded-lg border border-border bg-background p-2.5 text-xs font-medium text-foreground focus:outline-none focus:ring-1 focus:ring-accent"
                 >
                   <option value="ACTIVE">Active</option>
                   <option value="INACTIVE">Inactive</option>
@@ -444,65 +444,65 @@ export function EditStudentModal({
             </div>
 
             <div>
-              <label className="block text-xs font-bold text-foreground mb-1">Address Line 1</label>
+              <label className="block text-xs font-semibold text-foreground mb-1">Address Line 1</label>
               <input
                 type="text"
                 value={formData.addressLine1}
                 onChange={(e) => setFormData({ ...formData, addressLine1: e.target.value })}
                 placeholder="House / Flat No., Society / Building"
-                className="w-full rounded-xl border border-border bg-white p-2.5 text-xs text-foreground"
+                className="w-full rounded-lg border border-border bg-background p-2.5 text-xs text-foreground focus:outline-none focus:ring-1 focus:ring-accent"
               />
             </div>
 
             <div>
-              <label className="block text-xs font-bold text-foreground mb-1">Address Line 2</label>
+              <label className="block text-xs font-semibold text-foreground mb-1">Address Line 2</label>
               <input
                 type="text"
                 value={formData.addressLine2}
                 onChange={(e) => setFormData({ ...formData, addressLine2: e.target.value })}
                 placeholder="Sector, Landmark, Area"
-                className="w-full rounded-xl border border-border bg-white p-2.5 text-xs text-foreground"
+                className="w-full rounded-lg border border-border bg-background p-2.5 text-xs text-foreground focus:outline-none focus:ring-1 focus:ring-accent"
               />
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-4 gap-4">
               <div>
-                <label className="block text-xs font-bold text-foreground mb-1">City</label>
+                <label className="block text-xs font-semibold text-foreground mb-1">City</label>
                 <input
                   type="text"
                   value={formData.city}
                   onChange={(e) => setFormData({ ...formData, city: e.target.value })}
-                  className="w-full rounded-xl border border-border bg-white p-2.5 text-xs text-foreground"
+                  className="w-full rounded-lg border border-border bg-background p-2.5 text-xs text-foreground focus:outline-none focus:ring-1 focus:ring-accent"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-foreground mb-1">State</label>
+                <label className="block text-xs font-semibold text-foreground mb-1">State</label>
                 <input
                   type="text"
                   value={formData.state}
                   onChange={(e) => setFormData({ ...formData, state: e.target.value })}
-                  className="w-full rounded-xl border border-border bg-white p-2.5 text-xs text-foreground"
+                  className="w-full rounded-lg border border-border bg-background p-2.5 text-xs text-foreground focus:outline-none focus:ring-1 focus:ring-accent"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-foreground mb-1">PIN / Postal Code</label>
+                <label className="block text-xs font-semibold text-foreground mb-1">PIN / Postal Code</label>
                 <input
                   type="text"
                   value={formData.pincode}
                   onChange={(e) => setFormData({ ...formData, pincode: e.target.value })}
-                  className="w-full rounded-xl border border-border bg-white p-2.5 text-xs font-mono text-foreground"
+                  className="w-full rounded-lg border border-border bg-background p-2.5 text-xs font-mono text-foreground focus:outline-none focus:ring-1 focus:ring-accent"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-foreground mb-1">Country</label>
+                <label className="block text-xs font-semibold text-foreground mb-1">Country</label>
                 <input
                   type="text"
                   value={formData.country}
                   onChange={(e) => setFormData({ ...formData, country: e.target.value })}
-                  className="w-full rounded-xl border border-border bg-white p-2.5 text-xs text-foreground"
+                  className="w-full rounded-lg border border-border bg-background p-2.5 text-xs text-foreground focus:outline-none focus:ring-1 focus:ring-accent"
                 />
               </div>
             </div>
@@ -524,9 +524,9 @@ export function EditStudentModal({
         {activeTab === "GUARDIAN" && (
           <div className="space-y-6">
             {/* Primary Guardian */}
-            <div className="p-4 rounded-2xl border border-border bg-white space-y-4 shadow-2xs">
+            <div className="p-4 rounded-xl border border-border bg-card space-y-4 shadow-2xs">
               <div className="flex items-center justify-between border-b border-border pb-2">
-                <span className="text-[11px] font-mono font-bold uppercase tracking-wider text-primary">
+                <span className="text-[11px] font-mono font-bold uppercase tracking-wider text-accent">
                   Primary Legal Guardian
                 </span>
                 <span className="text-[10px] font-mono text-success bg-success/10 px-2 py-0.5 rounded font-bold">
@@ -606,7 +606,7 @@ export function EditStudentModal({
             </div>
 
             {/* Secondary Guardian */}
-            <div className="p-4 rounded-2xl border border-border bg-white space-y-4 shadow-2xs">
+            <div className="p-4 rounded-xl border border-border bg-card space-y-4 shadow-2xs">
               <span className="text-[11px] font-mono font-bold uppercase tracking-wider text-muted-foreground block">
                 Secondary Guardian / Co-Parent (Optional)
               </span>
@@ -659,11 +659,11 @@ export function EditStudentModal({
 
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
               <div>
-                <label className="block text-xs font-bold text-foreground mb-1">Academic Session *</label>
+                <label className="block text-xs font-semibold text-foreground mb-1">Academic Session *</label>
                 <select
                   value={formData.academicYearId}
                   onChange={(e) => setFormData({ ...formData, academicYearId: e.target.value })}
-                  className="w-full rounded-xl border border-border bg-white p-2.5 text-xs font-bold text-foreground"
+                  className="w-full rounded-lg border border-border bg-background p-2.5 text-xs font-medium text-foreground focus:outline-none focus:ring-1 focus:ring-accent"
                 >
                   {academicYears.map((ay) => (
                     <option key={ay.id} value={ay.id}>
@@ -674,7 +674,7 @@ export function EditStudentModal({
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-foreground mb-1">Program / Class *</label>
+                <label className="block text-xs font-semibold text-foreground mb-1">Program / Class *</label>
                 <select
                   value={formData.classId}
                   onChange={(e) => {
@@ -686,7 +686,7 @@ export function EditStudentModal({
                       sectionId: prog?.sections[0]?.id || "",
                     });
                   }}
-                  className="w-full rounded-xl border border-border bg-white p-2.5 text-xs font-bold text-foreground"
+                  className="w-full rounded-lg border border-border bg-background p-2.5 text-xs font-medium text-foreground focus:outline-none focus:ring-1 focus:ring-accent"
                 >
                   {programs.map((p) => (
                     <option key={p.id} value={p.id}>
@@ -697,11 +697,11 @@ export function EditStudentModal({
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-foreground mb-1">Assigned Section *</label>
+                <label className="block text-xs font-semibold text-foreground mb-1">Assigned Section *</label>
                 <select
                   value={formData.sectionId}
                   onChange={(e) => setFormData({ ...formData, sectionId: e.target.value })}
-                  className="w-full rounded-xl border border-border bg-white p-2.5 text-xs font-bold text-foreground"
+                  className="w-full rounded-lg border border-border bg-background p-2.5 text-xs font-medium text-foreground focus:outline-none focus:ring-1 focus:ring-accent"
                 >
                   {availableSections.length > 0 ? (
                     availableSections.map((s) => (
@@ -718,45 +718,45 @@ export function EditStudentModal({
 
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
               <div>
-                <label className="block text-xs font-bold text-foreground mb-1">Official Roll Number</label>
+                <label className="block text-xs font-semibold text-foreground mb-1">Official Roll Number</label>
                 <input
                   type="text"
                   value={formData.rollNumber}
                   onChange={(e) => setFormData({ ...formData, rollNumber: e.target.value })}
                   placeholder="e.g. 24-CSE-042 (Optional)"
-                  className="w-full rounded-xl border border-border bg-white p-2.5 text-xs font-mono text-foreground focus:outline-none focus:ring-2 focus:ring-primary/20"
+                  className="w-full rounded-lg border border-border bg-background p-2.5 text-xs font-mono text-foreground focus:outline-none focus:ring-1 focus:ring-accent"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-foreground mb-1">Admission Number</label>
+                <label className="block text-xs font-semibold text-foreground mb-1">Admission Number</label>
                 <input
                   type="text"
                   value={formData.admissionNumber}
                   onChange={(e) => setFormData({ ...formData, admissionNumber: e.target.value })}
-                  className="w-full rounded-xl border border-border bg-white p-2.5 text-xs font-mono font-bold text-foreground"
+                  className="w-full rounded-lg border border-border bg-background p-2.5 text-xs font-mono font-medium text-foreground focus:outline-none focus:ring-1 focus:ring-accent"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-foreground mb-1">University Enrollment No.</label>
+                <label className="block text-xs font-semibold text-foreground mb-1">University Enrollment No.</label>
                 <input
                   type="text"
                   value={formData.universityRegNumber}
                   onChange={(e) => setFormData({ ...formData, universityRegNumber: e.target.value })}
                   placeholder="e.g. UNV-2026-9912"
-                  className="w-full rounded-xl border border-border bg-white p-2.5 text-xs font-mono text-foreground"
+                  className="w-full rounded-lg border border-border bg-background p-2.5 text-xs font-mono text-foreground focus:outline-none focus:ring-1 focus:ring-accent"
                 />
               </div>
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
               <div>
-                <label className="block text-xs font-bold text-foreground mb-1">Admission Type</label>
+                <label className="block text-xs font-semibold text-foreground mb-1">Admission Type</label>
                 <select
                   value={formData.admissionType}
                   onChange={(e) => setFormData({ ...formData, admissionType: e.target.value })}
-                  className="w-full rounded-xl border border-border bg-white p-2.5 text-xs font-semibold text-foreground"
+                  className="w-full rounded-lg border border-border bg-background p-2.5 text-xs font-medium text-foreground focus:outline-none focus:ring-1 focus:ring-accent"
                 >
                   <option value="REGULAR">Regular Admission</option>
                   <option value="LATERAL_ENTRY">Lateral Entry</option>
@@ -766,36 +766,36 @@ export function EditStudentModal({
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-foreground mb-1">Previous School / College</label>
+                <label className="block text-xs font-semibold text-foreground mb-1">Previous School / College</label>
                 <input
                   type="text"
                   value={formData.previousSchool}
                   onChange={(e) => setFormData({ ...formData, previousSchool: e.target.value })}
                   placeholder="e.g. St. Xavier's Senior School"
-                  className="w-full rounded-xl border border-border bg-white p-2.5 text-xs text-foreground"
+                  className="w-full rounded-lg border border-border bg-background p-2.5 text-xs text-foreground focus:outline-none focus:ring-1 focus:ring-accent"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-foreground mb-1">Previous Qualification</label>
+                <label className="block text-xs font-semibold text-foreground mb-1">Previous Qualification</label>
                 <input
                   type="text"
                   value={formData.previousQualification}
                   onChange={(e) => setFormData({ ...formData, previousQualification: e.target.value })}
                   placeholder="e.g. Class 10 CBSE Board (92%)"
-                  className="w-full rounded-xl border border-border bg-white p-2.5 text-xs text-foreground"
+                  className="w-full rounded-lg border border-border bg-background p-2.5 text-xs text-foreground focus:outline-none focus:ring-1 focus:ring-accent"
                 />
               </div>
             </div>
 
             <div>
-              <label className="block text-xs font-bold text-foreground mb-1">Academic & Administrative Notes</label>
+              <label className="block text-xs font-semibold text-foreground mb-1">Academic & Administrative Notes</label>
               <textarea
                 rows={2}
                 value={formData.notes}
                 onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
                 placeholder="Special learning accommodations, sports achievements, or administrative remarks..."
-                className="w-full rounded-xl border border-border bg-white p-2.5 text-xs text-foreground"
+                className="w-full rounded-lg border border-border bg-background p-2.5 text-xs text-foreground focus:outline-none focus:ring-1 focus:ring-accent"
               />
             </div>
           </div>
@@ -810,7 +810,7 @@ export function EditStudentModal({
             </div>
 
             {customFields.length === 0 ? (
-              <div className="p-8 text-center bg-card rounded-2xl border border-dashed border-border">
+              <div className="p-8 text-center bg-card rounded-xl border border-dashed border-border">
                 <Sparkles className="w-6 h-6 mx-auto mb-2 text-primary" />
                 <p className="font-bold text-foreground text-xs">No Custom Fields Configured</p>
                 <p className="text-muted-foreground text-[11px] mt-0.5">
@@ -980,7 +980,7 @@ export function EditStudentModal({
             </div>
 
             {(!student.fees || student.fees.length === 0) ? (
-              <div className="p-8 text-center bg-card rounded-2xl border border-dashed border-border">
+              <div className="p-8 text-center bg-card rounded-xl border border-dashed border-border">
                 <CreditCard className="w-6 h-6 mx-auto mb-2 text-primary" />
                 <p className="font-bold text-foreground text-xs">No Fee Structure Assigned Yet</p>
                 <p className="text-muted-foreground text-[11px] mt-0.5">
@@ -992,12 +992,12 @@ export function EditStudentModal({
                 {student.fees.map((fee: any) => (
                   <div
                     key={fee.id}
-                    className="p-4 rounded-2xl border border-border bg-white space-y-3 shadow-2xs"
+                    className="p-4 rounded-xl border border-border bg-card space-y-3 shadow-2xs"
                   >
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-2">
-                        <CreditCard className="w-4 h-4 text-primary" />
-                        <span className="font-bold text-foreground text-xs">
+                        <CreditCard className="w-4 h-4 text-accent" />
+                        <span className="font-semibold text-foreground text-xs">
                           {fee.feeStructure?.feeCategory?.name || "Term Tuition Fee"}
                         </span>
                       </div>
@@ -1006,7 +1006,7 @@ export function EditStudentModal({
                           fee.status === "PAID"
                             ? "bg-success/10 text-success"
                             : fee.status === "PARTIAL"
-                            ? "bg-[#B89B62]/10 text-primary"
+                            ? "bg-accent/10 text-accent"
                             : "bg-destructive/10 text-destructive"
                         }`}
                       >
