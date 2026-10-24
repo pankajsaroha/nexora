@@ -39,6 +39,7 @@
     --accent-foreground: #FFFFFF;
     --accent-hover: #3B1D4A;
     --accent-subtle: #F5EDF7;
+    --accent-plum: #563A65;
 
     /* Champagne Gold Accents */
     --gold: #D4AF37; /* Champagne Gold */
@@ -117,48 +118,49 @@
   }
 
   .dark {
-    /* Royal Amethyst & Gold: Dark Theme */
-    --background: #17121B; /* Deep Aubergine-Charcoal */
-    --foreground: #F7F2F8; /* Warm Off-White */
-    --foreground-secondary: #DAD2DF;
-    --foreground-muted: #B8AFBE; /* Muted Lavender-Gray */
-    --subtle-foreground: #8A7E90;
+    /* Royal Amethyst & Gold: Refined Neutral Charcoal & Graphite Dark Theme */
+    --background: #111114; /* Neutral Graphite / Charcoal Page Background */
+    --foreground: #F5F3F7; /* Crisp Warm Off-White Primary Text */
+    --foreground-secondary: #B6B2BD; /* Refined Secondary Text */
+    --foreground-muted: #8E8A96; /* Muted Supporting Text */
+    --subtle-foreground: #6E6A76; /* Disabled & placeholder text */
 
-    /* Surfaces */
-    --surface: #241C29; /* Elevated Cards and Panels */
-    --surface-subtle: #2D2333; /* Subtly lighter aubergine */
-    --surface-muted: #362A3D;
-    --card: #241C29;
-    --card-foreground: #F7F2F8;
-    --card-elevated: #2D2333;
-    --popover: #2D2333;
-    --popover-foreground: #F7F2F8;
+    /* Neutral Charcoal Surfaces */
+    --surface: #1B1B20; /* Elevated Cards and Panels */
+    --surface-subtle: #222228; /* Secondary surface / subtle containers */
+    --surface-muted: #2A2A32; /* Muted backgrounds & active rows */
+    --card: #1B1B20;
+    --card-foreground: #F5F3F7;
+    --card-elevated: #222228;
+    --popover: #222228;
+    --popover-foreground: #F5F3F7;
 
-    /* Primary Actions (Soft Plum with high-contrast text) */
-    --primary: #563A65; /* Soft Plum */
+    /* Primary Actions (Royal Amethyst Plum with crisp text) */
+    --primary: #794D8E; /* Royal Amethyst Plum */
     --primary-foreground: #FFFFFF;
-    --primary-hover: #68487C;
-    --primary-subtle: #2C1E38;
-    --primary-muted: #422B50;
+    --primary-hover: #8D5EA3;
+    --primary-subtle: #271A30;
+    --primary-muted: #3E294C;
 
     /* Secondary & Muted Surfaces */
-    --secondary: #241C29;
-    --secondary-foreground: #F7F2F8;
-    --muted: #2D2333;
-    --muted-foreground: #B8AFBE;
+    --secondary: #222228;
+    --secondary-foreground: #F5F3F7;
+    --muted: #222228;
+    --muted-foreground: #B6B2BD;
 
     /* Accents (Champagne Gold Highlights) */
     --accent: #D4AF37;
-    --accent-foreground: #17121B;
+    --accent-foreground: #111114;
     --accent-hover: #E2BF4D;
-    --accent-subtle: #2B2313;
+    --accent-subtle: #272113;
+    --accent-plum: #B99ACB;
 
     /* Champagne Gold Accents */
     --gold: #D4AF37; /* Champagne Gold */
-    --gold-foreground: #17121B;
+    --gold-foreground: #111114;
     --gold-hover: #E2BF4D;
-    --gold-subtle: #2B2313;
-    --gold-border: #52431E;
+    --gold-subtle: #272113;
+    --gold-border: #4D3F1B;
     --gold-text: #E8C862;
     --accent-gold: #D4AF37;
     --champagne-gold: #D4AF37;
@@ -167,64 +169,64 @@
 
     /* Supporting Light Accent */
     --warm-accent: #D4AF37;
-    --warm-subtle: #2B2313;
+    --warm-subtle: #272113;
 
     /* Brand Tokens */
-    --royal-amethyst: #2B1238;
-    --deep-amethyst: #21132B;
-    --deep-plum: #3B1D4A;
-    --soft-plum: #563A65;
+    --royal-amethyst: #B99ACB;
+    --deep-amethyst: #1B1224;
+    --deep-plum: #2D1A3B;
+    --soft-plum: #B99ACB;
     --warm-alabaster: #FAF8F5;
-    --warm-stone: #403447;
-    --deep-ink: #F7F2F8;
-    --muted-charcoal: #B8AFBE;
-    --muted-graphite: #B8AFBE;
+    --warm-stone: #303038;
+    --deep-ink: #F5F3F7;
+    --muted-charcoal: #B6B2BD;
+    --muted-graphite: #8E8A96;
 
     /* Borders & Form Inputs */
-    --border: #403447; /* Subtle Plum-Gray */
-    --border-strong: #55465F;
-    --border-subtle: #302536;
-    --input: #403447;
-    --ring: #D4AF37; /* Champagne Gold focus ring */
-    --focus-ring: #D4AF37;
+    --border: #303038; /* Subtle Charcoal Border */
+    --border-strong: #40404C;
+    --border-subtle: #24242C;
+    --input: #303038;
+    --ring: #B99ACB; /* Muted Plum Focus Ring */
+    --focus-ring: #B99ACB;
 
     /* Semantic Status Tokens */
     --success: #22C55E;
-    --success-foreground: #17121B;
-    --success-subtle: #162B1D;
-    --success-border: #1F422C;
+    --success-foreground: #111114;
+    --success-subtle: #13271B;
+    --success-border: #1E442B;
 
     --warning: #F59E0B;
-    --warning-foreground: #17121B;
-    --warning-subtle: #332410;
-    --warning-border: #4D3716;
+    --warning-foreground: #111114;
+    --warning-subtle: #2B1D0E;
+    --warning-border: #4A3316;
 
     --destructive: #EF4444;
     --destructive-foreground: #FFFFFF;
-    --destructive-subtle: #331518;
-    --destructive-border: #4D2024;
+    --destructive-subtle: #2D1316;
+    --destructive-border: #4E2026;
 
     --info: #3B82F6;
-    --info-foreground: #17121B;
-    --info-subtle: #17243B;
-    --info-border: #223759;
+    --info-foreground: #111114;
+    --info-subtle: #122137;
+    --info-border: #1E375C;
 
-    /* Sidebar Semantic Tokens (Deep Royal Amethyst in Dark Mode) */
-    --sidebar-background: #21132B; /* Deep Royal Amethyst */
-    --sidebar-foreground: #F7F2F8;
-    --sidebar-border: #351F45;
-    --sidebar-muted: #B8AFBE;
-    --sidebar-muted-foreground: #B8AFBE;
-    --sidebar-active-background: #563A65; /* Soft Plum */
+    /* Sidebar Semantic Tokens (Restrained Deep Royal Amethyst in Dark Mode) */
+    --sidebar-background: #181120; /* Deep Royal Amethyst */
+    --sidebar-foreground: #F5F3F7;
+    --sidebar-border: #2B1D38;
+    --sidebar-muted: #B6B2BD;
+    --sidebar-muted-foreground: #B6B2BD;
+    --sidebar-active-background: #3B234C; /* Soft Plum */
     --sidebar-active-foreground: #FFFFFF;
-    --sidebar-accent: #563A65;
-    --sidebar-accent-foreground: #F7F2F8;
+    --sidebar-accent: #3B234C;
+    --sidebar-accent-foreground: #F5F3F7;
     --sidebar-gold: #D4AF37;
 
     /* Charts */
-    --chart-1: #68487C;
+    --chart-1: #B99ACB;
     --chart-2: #D4AF37;
-    --chart-3: #9674AA;
+    --chart-3: #794D8E;
     --chart-4: #F59E0B;
     --chart-5: #22C55E;
   }
@@ -316,3 +318,77 @@ aside.bg-sidebar,
     display: none !important;
   }
 }
+
+/* ==========================================================================
+   NEXORA Standardized Typography System (Inter / Royal Amethyst)
+   ========================================================================== */
+
+@layer components {
+  /* Page Titles */
+  .heading-page {
+    @apply text-xl sm:text-2xl lg:text-3xl font-bold tracking-tight text-foreground;
+  }
+
+  /* Section Headings */
+  .heading-section {
+    @apply text-base sm:text-lg font-semibold tracking-tight text-foreground;
+  }
+
+  /* Card Headings */
+  .heading-card {
+    @apply text-sm sm:text-base font-semibold text-foreground;
+  }
+
+  /* Compact Category / Eyebrow Labels (Restrained Uppercase) */
+  .text-eyebrow {
+    @apply text-[10px] sm:text-[11px] font-semibold uppercase tracking-wider text-muted-foreground;
+  }
+
+  /* KPI / Metric Labels */
+  .text-kpi-label {
+    @apply text-xs font-medium text-muted-foreground;
+  }
+
+  /* KPI / Metric Values */
+  .text-kpi-value {
+    @apply text-2xl sm:text-3xl font-bold tracking-tight text-foreground;
+  }
+
+  /* Standard Body Typography */
+  .text-body-primary {
+    @apply text-sm text-foreground leading-relaxed;
+  }
+
+  .text-body-secondary {
+    @apply text-xs sm:text-sm text-muted-foreground leading-relaxed;
+  }
+
+  /* Captions & Subtext */
+  .text-caption {
+    @apply text-[11px] text-muted-foreground leading-normal;
+  }
+
+  /* Table Headers & Cells */
+  .text-table-header {
+    @apply text-xs font-semibold text-muted-foreground;
+  }
+
+  .text-table-cell {
+    @apply text-xs text-foreground;
+  }
+
+  /* Form Labels */
+  .text-form-label {
+    @apply block text-xs font-semibold text-foreground tracking-wide mb-1.5;
+  }
+
+  /* Technical Identifiers & Timestamps (Monospace preserved) */
+  .text-technical-id {
+    @apply font-mono text-xs font-medium text-foreground tracking-normal;
+  }
+
+  .text-technical-badge {
+    @apply font-mono text-[11px] font-medium text-muted-foreground;
+  }
+}
+

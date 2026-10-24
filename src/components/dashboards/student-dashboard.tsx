@@ -109,52 +109,52 @@ export function StudentDashboard({
         </div>
       </div>
 
-      {/* Key Metrics Strip (Hairline Blocks) */}
-      <section className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-        <Link href="/attendance" className="p-5 rounded-xl border border-border bg-card space-y-1 shadow-2xs hover:border-primary/40 transition-all block">
-          <span className="text-[11px] font-mono uppercase tracking-wider text-muted-foreground font-bold block">
-            01 / ATTENDANCE RATE
+      {/* Key Metrics Strip */}
+      <section className="grid grid-cols-2 lg:grid-cols-4 gap-2.5 sm:gap-4">
+        <Link href="/attendance" className="p-3.5 sm:p-5 rounded-2xl border border-border bg-card space-y-1 shadow-2xs hover:border-primary/40 transition-all block min-w-0">
+          <span className="text-kpi-label block truncate">
+            Attendance Rate
           </span>
-          <div className="text-2xl sm:text-3xl font-extrabold text-foreground tracking-tight">
+          <div className="text-xl sm:text-2xl lg:text-3xl font-bold tracking-tight text-foreground tabular-nums truncate">
             {attendanceSummary.percentage}%
           </div>
-          <span className="text-[11px] text-success block font-bold">
+          <span className="text-[10px] sm:text-[11px] text-success block font-semibold line-clamp-1 leading-snug">
             {attendanceSummary.presentCount} / {attendanceSummary.totalDays} Days Present
           </span>
         </Link>
 
-        <Link href="/academics/assignments" className="p-5 rounded-xl border border-border bg-card space-y-1 shadow-2xs hover:border-primary/40 transition-all block">
-          <span className="text-[11px] font-mono uppercase tracking-wider text-muted-foreground font-bold block">
-            02 / PENDING HOMEWORK
+        <Link href="/academics/assignments" className="p-3.5 sm:p-5 rounded-2xl border border-border bg-card space-y-1 shadow-2xs hover:border-primary/40 transition-all block min-w-0">
+          <span className="text-kpi-label block truncate">
+            Pending Homework
           </span>
-          <div className="text-2xl sm:text-3xl font-extrabold text-foreground tracking-tight">
+          <div className="text-xl sm:text-2xl lg:text-3xl font-bold tracking-tight text-foreground tabular-nums truncate">
             {pendingAssignments.length} Tasks
           </div>
-          <span className="text-[11px] text-warning block font-bold">
-            Due this academic term
+          <span className="text-[10px] sm:text-[11px] text-warning block font-semibold line-clamp-1 leading-snug">
+            Due this term
           </span>
         </Link>
 
-        <Link href="/academics/timetable" className="p-5 rounded-xl border border-border bg-card space-y-1 shadow-2xs hover:border-primary/40 transition-all block">
-          <span className="text-[11px] font-mono uppercase tracking-wider text-muted-foreground font-bold block">
-            03 / TODAY&apos;S SCHEDULE
+        <Link href="/academics/timetable" className="p-3.5 sm:p-5 rounded-2xl border border-border bg-card space-y-1 shadow-2xs hover:border-primary/40 transition-all block min-w-0">
+          <span className="text-kpi-label block truncate">
+            Today&apos;s Schedule
           </span>
-          <div className="text-2xl sm:text-3xl font-extrabold text-foreground tracking-tight">
+          <div className="text-xl sm:text-2xl lg:text-3xl font-bold tracking-tight text-foreground tabular-nums truncate">
             {todaySchedule.length} Periods
           </div>
-          <span className="text-[11px] text-muted-foreground block font-medium">
+          <span className="text-[10px] sm:text-[11px] text-muted-foreground block font-medium line-clamp-1 leading-snug">
             Active class schedule
           </span>
         </Link>
 
-        <Link href="/finance/fees" className="p-5 rounded-xl border border-border bg-card space-y-1 shadow-2xs hover:border-primary/40 transition-all block">
-          <span className="text-[11px] font-mono uppercase tracking-wider text-muted-foreground font-bold block">
-            04 / FEE LEDGER
+        <Link href="/finance/fees" className="p-3.5 sm:p-5 rounded-2xl border border-border bg-card space-y-1 shadow-2xs hover:border-primary/40 transition-all block min-w-0">
+          <span className="text-kpi-label block truncate">
+            Fee Ledger
           </span>
-          <div className={`text-2xl sm:text-3xl font-extrabold tracking-tight ${feeStatus.status === "PAID" ? "text-success" : "text-amber-600 dark:text-amber-400"}`}>
+          <div className={`text-xl sm:text-2xl lg:text-3xl font-bold tracking-tight tabular-nums truncate ${feeStatus.status === "PAID" ? "text-success" : "text-amber-600 dark:text-amber-400"}`}>
             {feeStatus.status}
           </div>
-          <span className="text-[11px] text-muted-foreground block font-mono">
+          <span className="text-[10px] sm:text-[11px] text-muted-foreground block font-medium line-clamp-1 leading-snug">
             {feeStatus.pending > 0 ? `₹${feeStatus.pending.toLocaleString("en-IN")} Pending` : `₹${feeStatus.paid.toLocaleString("en-IN")} Paid`}
           </span>
         </Link>
@@ -167,12 +167,12 @@ export function StudentDashboard({
           <section className="space-y-3">
             <div className="flex items-center justify-between">
               <div>
-                <h2 className="text-sm font-extrabold uppercase tracking-wider text-foreground">
+                <h2 className="heading-section">
                   Today&apos;s Class Timetable
                 </h2>
                 <p className="text-xs text-muted-foreground">Scheduled lecture periods and subject teachers</p>
               </div>
-              <Link href="/academics/timetable" className="text-[11px] font-mono font-bold text-primary hover:underline">
+              <Link href="/academics/timetable" className="text-xs font-semibold text-primary hover:underline">
                 Full Week →
               </Link>
             </div>
@@ -187,18 +187,18 @@ export function StudentDashboard({
                     className="p-4 flex items-center justify-between hover:bg-muted/40 transition-colors"
                   >
                     <div className="flex items-center gap-4">
-                      <div className="w-9 h-9 rounded-xl bg-primary text-primary-foreground flex items-center justify-center font-mono font-bold text-xs shrink-0">
+                      <div className="w-9 h-9 rounded-xl bg-primary text-primary-foreground flex items-center justify-center font-bold text-xs shrink-0">
                         P{slot.period}
                       </div>
                       <div>
-                        <p className="text-xs font-bold text-foreground">{slot.subjectName}</p>
-                        <p className="text-[11px] text-muted-foreground mt-0.5 font-mono">
+                        <p className="text-xs font-semibold text-foreground">{slot.subjectName}</p>
+                        <p className="text-[11px] text-muted-foreground mt-0.5">
                           {slot.startTime} – {slot.endTime} · {slot.teacherName} · Room {slot.roomNumber}
                         </p>
                       </div>
                     </div>
 
-                    <span className="text-[11px] font-mono text-muted-foreground font-medium">Lecture</span>
+                    <span className="text-[11px] text-muted-foreground font-medium">Lecture</span>
                   </div>
                 ))
               )}
@@ -210,10 +210,10 @@ export function StudentDashboard({
         <div className="space-y-8">
           <section className="space-y-3">
             <div className="flex items-center justify-between">
-              <h2 className="text-sm font-extrabold uppercase tracking-wider text-foreground">
+              <h2 className="heading-section">
                 Pending Homework
               </h2>
-              <Link href="/academics/assignments" className="text-[11px] font-mono font-bold text-primary hover:underline">
+              <Link href="/academics/assignments" className="text-xs font-semibold text-primary hover:underline">
                 All Tasks →
               </Link>
             </div>

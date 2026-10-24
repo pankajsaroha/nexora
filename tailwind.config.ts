@@ -50,6 +50,7 @@ const config: Config = {
           foreground: "var(--accent-foreground)",
           hover: "var(--accent-hover)",
           subtle: "var(--accent-subtle)",
+          plum: "var(--accent-plum)",
         },
         warm: {
           DEFAULT: "var(--warm-accent)",

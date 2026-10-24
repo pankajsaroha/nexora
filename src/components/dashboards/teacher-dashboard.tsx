@@ -139,55 +139,55 @@ export function TeacherDashboard({
         </div>
       </div>
 
-      {/* Key Metrics Strip (Hairline Blocks) */}
-      <section className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-        <div className="p-5 rounded-xl border border-border bg-card space-y-1 shadow-2xs hover:border-primary/40 transition-all">
-          <span className="text-[11px] font-mono uppercase tracking-wider text-muted-foreground font-bold block">
-            01 / TODAY&apos;S LECTURES
+      {/* Key Metrics Strip (Standardized KPI Cards) */}
+      <section className="grid grid-cols-2 lg:grid-cols-4 gap-2.5 sm:gap-4">
+        <div className="p-3.5 sm:p-5 rounded-2xl border border-border bg-card space-y-1 shadow-2xs hover:border-primary/40 transition-all min-w-0">
+          <span className="text-kpi-label block truncate">
+            Today&apos;s Lectures
           </span>
-          <div className="text-2xl sm:text-3xl font-extrabold text-foreground tracking-tight">
+          <div className="text-xl sm:text-2xl lg:text-3xl font-bold tracking-tight text-foreground tabular-nums truncate">
             {todaySchedule.length} Periods
           </div>
-          <span className="text-[11px] text-muted-foreground block font-medium">
+          <span className="text-[10px] sm:text-[11px] text-muted-foreground block font-medium line-clamp-1 leading-snug">
             Next: {todaySchedule[0]?.subjectName || "Planning Period"}
           </span>
         </div>
 
-        <div className="p-5 rounded-xl border border-border bg-card space-y-1 shadow-2xs hover:border-primary/40 transition-all">
-          <span className="text-[11px] font-mono uppercase tracking-wider text-muted-foreground font-bold block">
-            02 / SECTION ROSTER
+        <div className="p-3.5 sm:p-5 rounded-2xl border border-border bg-card space-y-1 shadow-2xs hover:border-primary/40 transition-all min-w-0">
+          <span className="text-kpi-label block truncate">
+            Section Roster
           </span>
-          <div className="text-2xl sm:text-3xl font-extrabold text-foreground tracking-tight">
+          <div className="text-xl sm:text-2xl lg:text-3xl font-bold tracking-tight text-foreground tabular-nums truncate">
             {teacher.classTeacherSection?.studentsCount || 35} Students
           </div>
-          <span className="text-[11px] text-muted-foreground block font-medium">
+          <span className="text-[10px] sm:text-[11px] text-muted-foreground block font-medium line-clamp-1 leading-snug">
             {teacher.classTeacherSection?.className || "Grade 8"} ({teacher.classTeacherSection?.sectionName || "A"})
           </span>
         </div>
 
-        <div className="p-5 rounded-xl border border-border bg-card space-y-1 shadow-2xs hover:border-primary/40 transition-all">
-          <span className="text-[11px] font-mono uppercase tracking-wider text-muted-foreground font-bold block">
-            03 / PENDING TASKS
+        <div className="p-3.5 sm:p-5 rounded-2xl border border-border bg-card space-y-1 shadow-2xs hover:border-primary/40 transition-all min-w-0">
+          <span className="text-kpi-label block truncate">
+            Pending Tasks
           </span>
-          <div className="text-2xl sm:text-3xl font-extrabold text-foreground tracking-tight">
+          <div className="text-xl sm:text-2xl lg:text-3xl font-bold tracking-tight text-foreground tabular-nums truncate">
             {pendingTasks.length} Active
           </div>
-          <span className="text-[11px] text-warning block font-bold">
+          <span className="text-[10px] sm:text-[11px] text-warning block font-semibold line-clamp-1 leading-snug">
             Assigned by Principal
           </span>
         </div>
 
         <Link
           href="/attendance/leaves"
-          className="p-5 rounded-xl border border-border bg-card space-y-1 shadow-2xs hover:border-primary/40 transition-all group block"
+          className="p-3.5 sm:p-5 rounded-2xl border border-border bg-card space-y-1 shadow-2xs hover:border-primary/40 transition-all group block min-w-0"
         >
-          <span className="text-[11px] font-mono uppercase tracking-wider text-muted-foreground font-bold block">
-            04 / LEAVE BALANCE
+          <span className="text-kpi-label block truncate">
+            Leave Balance
           </span>
-          <div className="text-2xl sm:text-3xl font-extrabold text-foreground tracking-tight group-hover:text-primary transition-colors">
+          <div className="text-xl sm:text-2xl lg:text-3xl font-bold tracking-tight text-foreground tabular-nums truncate group-hover:text-primary transition-colors">
             {totalAvailable} Days
           </div>
-          <span className="text-[11px] text-success block font-medium truncate">
+          <span className="text-[10px] sm:text-[11px] text-success block font-semibold line-clamp-1 leading-snug" title={categoriesBreakdown}>
             {categoriesBreakdown}
           </span>
         </Link>
@@ -200,14 +200,14 @@ export function TeacherDashboard({
           <section className="space-y-3">
             <div className="flex items-center justify-between">
               <div>
-                <h2 className="text-sm font-extrabold uppercase tracking-wider text-foreground">
+                <h2 className="heading-section">
                   Today&apos;s Lecture Schedule
                 </h2>
                 <p className="text-xs text-muted-foreground">Timetable slots and room allocations</p>
               </div>
               <Link
                 href="/academics/timetable"
-                className="text-[11px] font-bold font-mono text-primary hover:underline"
+                className="text-xs font-semibold text-primary hover:underline"
               >
                 Full Matrix →
               </Link>
@@ -237,13 +237,13 @@ export function TeacherDashboard({
                             {slot.className}
                           </span>
                         </div>
-                        <p className="text-[11px] text-muted-foreground mt-0.5 font-mono">
+                        <p className="text-xs text-muted-foreground mt-0.5">
                           {slot.startTime} – {slot.endTime} · Room {slot.roomNumber}
                         </p>
                       </div>
                     </div>
 
-                    <span className="text-[11px] font-mono text-muted-foreground font-medium">
+                    <span className="text-xs text-muted-foreground font-medium">
                       Lecture
                     </span>
                   </div>
@@ -256,12 +256,12 @@ export function TeacherDashboard({
           <section className="space-y-3">
             <div className="flex items-center justify-between">
               <div>
-                <h2 className="text-sm font-extrabold uppercase tracking-wider text-foreground">
-                  Administrative & Department Tasks
+                <h2 className="heading-section">
+                  Administrative &amp; Department Tasks
                 </h2>
                 <p className="text-xs text-muted-foreground">Institutional action items assigned to you</p>
               </div>
-              <Link href="/tasks" className="text-[11px] font-mono font-bold text-primary hover:underline">
+              <Link href="/tasks" className="text-xs font-semibold text-primary hover:underline">
                 View All Tasks →
               </Link>
             </div>
@@ -284,13 +284,13 @@ export function TeacherDashboard({
                       />
                       <div>
                         <p className="text-xs font-bold text-foreground">{t.title}</p>
-                        <p className="text-[11px] text-muted-foreground font-mono">
+                        <p className="text-xs text-muted-foreground">
                           Due: {t.dueDate ? formatDate(t.dueDate) : "No deadline"}
                         </p>
                       </div>
                     </div>
 
-                    <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded-md bg-muted border border-border text-foreground">
+                    <span className="text-[10px] font-medium px-2 py-0.5 rounded-md bg-muted border border-border text-foreground">
                       {t.status}
                     </span>
                   </div>
@@ -304,10 +304,10 @@ export function TeacherDashboard({
         <div className="space-y-8">
           <section className="space-y-3">
             <div className="flex items-center justify-between">
-              <h2 className="text-sm font-extrabold uppercase tracking-wider text-foreground">
+              <h2 className="heading-section">
                 Coursework Submissions
               </h2>
-              <Link href="/academics/assignments" className="text-[11px] font-mono font-bold text-primary hover:underline">
+              <Link href="/academics/assignments" className="text-xs font-semibold text-primary hover:underline">
                 All HW →
               </Link>
             </div>
@@ -322,12 +322,12 @@ export function TeacherDashboard({
                   <div key={a.id} className="p-4 space-y-2">
                     <div className="flex items-center justify-between">
                       <p className="text-xs font-bold text-foreground">{a.title}</p>
-                      <span className="text-[10px] font-mono text-primary font-bold">
+                      <span className="text-xs font-medium text-primary">
                         {a.submissionsCount} / {a.totalStudents} Turned In
                       </span>
                     </div>
 
-                    <div className="flex items-center justify-between text-[11px] font-mono text-muted-foreground">
+                    <div className="flex items-center justify-between text-xs text-muted-foreground">
                       <span>{a.className} • {a.subjectName}</span>
                       <span>Due {formatDate(a.dueDate)}</span>
                     </div>

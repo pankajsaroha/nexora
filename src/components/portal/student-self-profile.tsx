@@ -15,8 +15,13 @@ import {
   Check,
   KeyRound,
   FileText,
+  LogOut,
+  Shield,
+  Info,
 } from "lucide-react";
 import { formatDate } from "@/lib/utils";
+import { ChangePasswordCard } from "./change-password-card";
+import { Button } from "@/components/ui/button";
 
 export interface StudentSelfProfileProps {
   student: {
@@ -296,6 +301,42 @@ export function StudentSelfProfile({ student }: StudentSelfProfileProps) {
               ))}
             </div>
           )}
+        </div>
+
+        {/* Account Security & Password Management */}
+        <div className="md:col-span-2">
+          <ChangePasswordCard />
+        </div>
+
+        {/* Active Session & Sign Out */}
+        <div className="md:col-span-2 rounded-xl border border-border bg-card p-6 shadow-2xs flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-xl bg-muted/60 border border-border flex items-center justify-center text-muted-foreground">
+              <Shield className="w-5 h-5 text-primary" />
+            </div>
+            <div>
+              <h4 className="text-xs font-bold text-foreground">Active Portal Session</h4>
+              <p className="text-[11px] text-muted-foreground">
+                Signed in with Student credentials. Sign out from this device to end your session.
+              </p>
+            </div>
+          </div>
+          <Button
+            type="button"
+            variant="outline"
+            size="sm"
+            onClick={async () => {
+              try {
+                await fetch("/api/auth/logout", { method: "POST" });
+              } finally {
+                window.location.href = "/login";
+              }
+            }}
+            className="text-destructive border-destructive/30 hover:bg-destructive/10 text-xs font-semibold gap-2 shrink-0"
+          >
+            <LogOut className="w-3.5 h-3.5" />
+            <span>Sign Out of Nexora</span>
+          </Button>
         </div>
       </div>
     </div>

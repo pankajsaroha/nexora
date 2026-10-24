@@ -211,14 +211,16 @@ export function StudentProfileClient({
   const router = useRouter();
 
   // Financial summary
-  const totalFees = student.fees.reduce((acc, f) => acc + f.totalAmount, 0);
-  const totalPaid = student.fees.reduce((acc, f) => acc + f.paidAmount, 0);
+  const studentFees = student?.fees || [];
+  const totalFees = studentFees.reduce((acc, f) => acc + (f?.totalAmount || 0), 0);
+  const totalPaid = studentFees.reduce((acc, f) => acc + (f?.paidAmount || 0), 0);
   const totalOutstanding = Math.max(0, totalFees - totalPaid);
 
   // Attendance summary
-  const totalAttendanceDays = student.attendance.length;
-  const presentDays = student.attendance.filter(
-    (a) => a.status === "PRESENT" || a.status === "LATE" || a.status === "HALF_DAY"
+  const studentAttendance = student?.attendance || [];
+  const totalAttendanceDays = studentAttendance.length;
+  const presentDays = studentAttendance.filter(
+    (a) => a?.status === "PRESENT" || a?.status === "LATE" || a?.status === "HALF_DAY"
   ).length;
   const attendanceRate = totalAttendanceDays > 0 ? Math.round((presentDays / totalAttendanceDays) * 100) : null;
 
@@ -328,7 +330,7 @@ export function StudentProfileClient({
         <PageHeader
           eyebrow={`ADMISSION ID: ${student.admissionNumber}`}
           title={student.fullName}
-          description={`Program: ${student.currentClass.name} (${student.currentSection.name}) • Academic Year: ${student.academicYear.name}`}
+          description={`Program: ${student.currentClass?.name || "General"} (${student.currentSection?.name || "A"}) • Academic Year: ${student.academicYear?.name || "Current"}`}
         >
           <div className="flex flex-wrap items-center gap-2">
             <Button
@@ -411,50 +413,52 @@ export function StudentProfileClient({
       {/* Quick Metrics Bar */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         <div className="p-4 rounded-xl border border-border bg-card space-y-1 shadow-2xs">
-          <span className="text-[10px] font-mono uppercase tracking-wider text-muted-foreground font-bold block">
+          <span className="text-kpi-label block">
             Roll Number
           </span>
-          <div className="font-mono text-base font-bold text-foreground">
-            {student.rollNumber || (
+          <div className="text-base font-bold text-foreground">
+            {student.rollNumber ? (
+              <span className="font-mono">{student.rollNumber}</span>
+            ) : (
               <span className="text-xs font-sans text-primary font-semibold">Unassigned</span>
             )}
           </div>
-          <span className="text-[10px] text-muted-foreground">Institution Roll Identifier</span>
+          <span className="text-caption">Institution Roll Identifier</span>
         </div>
 
         <div className="p-4 rounded-xl border border-border bg-card space-y-1 shadow-2xs">
-          <span className="text-[10px] font-mono uppercase tracking-wider text-muted-foreground font-bold block">
+          <span className="text-kpi-label block">
             Attendance Rate
           </span>
-          <div className="text-base font-bold text-foreground font-mono">
+          <div className="text-base font-bold text-foreground">
             {attendanceRate !== null ? `${attendanceRate}%` : "No Records"}
           </div>
-          <span className="text-[10px] text-muted-foreground">
+          <span className="text-caption">
             {totalAttendanceDays > 0 ? `${presentDays}/${totalAttendanceDays} days present` : "Term register"}
           </span>
         </div>
 
         <div className="p-4 rounded-xl border border-border bg-card space-y-1 shadow-2xs">
-          <span className="text-[10px] font-mono uppercase tracking-wider text-muted-foreground font-bold block">
+          <span className="text-kpi-label block">
             Fee Ledger Balance
           </span>
-          <div className="text-base font-bold text-foreground font-mono">
+          <div className="text-base font-bold text-foreground">
             ₹{totalOutstanding.toLocaleString("en-IN")}
           </div>
-          <span className="text-[10px] text-primary">
+          <span className="text-caption text-primary">
             {totalFees > 0 ? `₹${totalPaid.toLocaleString("en-IN")} Paid of ₹${totalFees.toLocaleString("en-IN")}` : "No dues invoiced"}
           </span>
         </div>
 
         <div className="p-4 rounded-xl border border-border bg-card space-y-1 shadow-2xs">
-          <span className="text-[10px] font-mono uppercase tracking-wider text-muted-foreground font-bold block">
+          <span className="text-kpi-label block">
             Enrollment Status
           </span>
           <div className="flex items-center gap-1.5 pt-0.5">
             <span className={`w-2 h-2 rounded-full ${student.status === "ACTIVE" ? "bg-success" : "bg-destructive"}`} />
-            <span className="font-bold text-foreground text-sm uppercase font-mono">{student.status}</span>
+            <span className="font-semibold text-foreground text-xs uppercase font-mono">{student.status}</span>
           </div>
-          <span className="text-[10px] text-muted-foreground">Since {formatDate(student.admissionDate)}</span>
+          <span className="text-caption">Since {formatDate(student.admissionDate)}</span>
         </div>
       </div>
 
@@ -491,7 +495,7 @@ export function StudentProfileClient({
               : "border-transparent text-muted-foreground hover:text-foreground"
           }`}
         >
-          Financial Ledgers & Receipts ({student.fees.length})
+          Financial Ledgers & Receipts ({studentFees.length})
         </button>
         <button
           type="button"
@@ -658,7 +662,7 @@ export function StudentProfileClient({
               ) : (
                 <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 text-xs">
                   {activeCustomFields.slice(0, 6).map((field) => {
-                    const match = student.customFieldValues?.find((cfv) => cfv.customField.key === field.key);
+                    const match = student.customFieldValues?.find((cfv) => cfv.customField?.key === field.key);
                     return (
                       <div key={field.id} className="space-y-0.5">
                         <span className="text-muted-foreground block text-[11px] truncate">{field.name}</span>
@@ -728,20 +732,20 @@ export function StudentProfileClient({
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 text-xs">
               <div>
                 <span className="text-muted-foreground block">Program / Grade</span>
-                <span className="font-bold text-foreground text-sm">{student.currentClass.name}</span>
+                <span className="font-bold text-foreground text-sm">{student.currentClass?.name || "General"}</span>
               </div>
               <div>
                 <span className="text-muted-foreground block">Section</span>
-                <span className="font-bold text-foreground text-sm">Section {student.currentSection.name}</span>
+                <span className="font-bold text-foreground text-sm">Section {student.currentSection?.name || "A"}</span>
               </div>
               <div>
                 <span className="text-muted-foreground block">Academic Year</span>
-                <span className="font-mono font-bold text-foreground text-sm">{student.academicYear.name}</span>
+                <span className="font-mono font-bold text-foreground text-sm">{student.academicYear?.name || "Current"}</span>
               </div>
               <div>
                 <span className="text-muted-foreground block">Class Mentor / Teacher</span>
                 <span className="font-bold text-foreground text-sm">
-                  {student.currentSection.classTeacher?.fullName || "Administrative Roster"}
+                  {student.currentSection?.classTeacher?.fullName || "Administrative Roster"}
                 </span>
               </div>
             </div>
@@ -823,18 +827,18 @@ export function StudentProfileClient({
               </Link>
             </div>
 
-            {student.fees.length === 0 ? (
+            {studentFees.length === 0 ? (
               <div className="p-6 rounded-xl bg-muted/40 text-center text-xs text-muted-foreground">
                 No specific fee accounts generated for this student.
               </div>
             ) : (
               <div className="divide-y divide-border text-xs">
-                {student.fees.map((fee) => (
+                {studentFees.map((fee) => (
                   <div key={fee.id} className="py-3 first:pt-0 last:pb-0 flex items-center justify-between">
                     <div>
-                      <p className="font-bold text-foreground">{fee.feeStructure.feeCategory.name}</p>
+                      <p className="font-bold text-foreground">{fee.feeStructure?.feeCategory?.name || "General Fee"}</p>
                       <p className="text-[11px] text-muted-foreground font-mono">
-                        Frequency: {fee.feeStructure.frequency} • Due: {formatDate(fee.dueDate)}
+                        Frequency: {fee.feeStructure?.frequency || "TERM"} • Due: {formatDate(fee.dueDate)}
                       </p>
                     </div>
                     <div className="text-right font-mono">

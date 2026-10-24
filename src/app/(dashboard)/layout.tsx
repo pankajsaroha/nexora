@@ -16,27 +16,26 @@ export default async function DashboardLayout({
     redirect("/login");
   }
 
-  // Fetch recent notifications for user
-  const notifications = await prisma.notification.findMany({
-    where: { userId: user.id },
-    orderBy: { createdAt: "desc" },
-    take: 5,
-  });
-
-  // Fetch authorized institutions for Super Admin
-  let authorizedInstitutions: Array<{ id: string; name: string; code: string; type: string; status?: string }> = [];
-  if (user.roleCode === "SUPER_ADMIN") {
-    authorizedInstitutions = (await prisma.institution.findMany({
-      select: {
-        id: true,
-        name: true,
-        code: true,
-        type: true,
-        status: true,
-      },
-      orderBy: { name: "asc" },
-    })) as any;
-  }
+  // Concurrently fetch recent notifications and authorized institutions
+  const [notifications, authorizedInstitutions] = await Promise.all([
+    prisma.notification.findMany({
+      where: { userId: user.id },
+      orderBy: { createdAt: "desc" },
+      take: 5,
+    }),
+    user.roleCode === "SUPER_ADMIN"
+      ? (prisma.institution.findMany({
+          select: {
+            id: true,
+            name: true,
+            code: true,
+            type: true,
+            status: true,
+          },
+          orderBy: { name: "asc" },
+        }) as Promise<Array<{ id: string; name: string; code: string; type: string; status?: string }>>)
+      : Promise.resolve([] as Array<{ id: string; name: string; code: string; type: string; status?: string }>),
+  ]);
 
   return (
     <DashboardShell

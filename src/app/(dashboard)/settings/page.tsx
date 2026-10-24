@@ -16,6 +16,12 @@ export default async function SettingsPage() {
     redirect("/login");
   }
 
+  // Non-administrative roles (STUDENT, TEACHER, PARENT) must not access institution configuration.
+  const allowedRoles = ["SUPER_ADMIN", "ADMIN", "PRINCIPAL"];
+  if (!allowedRoles.includes(user.roleCode || "")) {
+    redirect("/profile");
+  }
+
   const institution = await prisma.institution.findUnique({
     where: { id: user.institutionId },
   });

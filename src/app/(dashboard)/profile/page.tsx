@@ -3,7 +3,11 @@ import { getCurrentUser } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { redirect } from "next/navigation";
 import { StudentSelfProfile } from "@/components/portal/student-self-profile";
-import { Users, GraduationCap, Phone, Mail, ShieldCheck, CheckCircle2 } from "lucide-react";
+import { TeacherSelfProfile } from "@/components/portal/teacher-self-profile";
+import { AdminSelfProfile } from "@/components/portal/admin-self-profile";
+import { ChangePasswordCard } from "@/components/portal/change-password-card";
+import { Users, GraduationCap, Phone, Mail, ShieldCheck, CheckCircle2, Shield, LogOut } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 export const dynamic = "force-dynamic";
 
@@ -13,7 +17,7 @@ export default async function ProfilePage() {
     redirect("/login");
   }
 
-  // 1. STUDENT PROFILE
+  // 1. STUDENT PROFILE & ACCOUNT SETTINGS
   if (user.roleCode === "STUDENT") {
     const student = await prisma.student.findFirst({
       where: {
@@ -37,7 +41,7 @@ export default async function ProfilePage() {
     if (!student) {
       return (
         <div className="p-8 text-center text-muted-foreground font-mono text-xs">
-          Student profile record not found.
+          Student profile record not found for this institution.
         </div>
       );
     }
@@ -107,7 +111,86 @@ export default async function ProfilePage() {
     );
   }
 
-  // 2. PARENT PROFILE
+  // 2. TEACHER / FACULTY PROFILE & ACCOUNT SETTINGS
+  if (user.roleCode === "TEACHER") {
+    const teacher = await prisma.teacher.findFirst({
+      where: {
+        OR: [{ userId: user.id }, { email: user.email }, { id: user.teacherId }],
+        institutionId: user.institutionId,
+      },
+      include: {
+        department: true,
+        institution: true,
+        sectionsAsClassTeacher: {
+          include: { class: true },
+        },
+        teacherAssignments: {
+          include: {
+            subject: true,
+            section: { include: { class: true } },
+          },
+        },
+      },
+    });
+
+    if (!teacher) {
+      return (
+        <div className="max-w-4xl mx-auto space-y-6">
+          <div className="rounded-xl border border-border bg-card p-6 shadow-2xs space-y-3">
+            <h2 className="text-lg font-bold text-foreground">{user.fullName}</h2>
+            <p className="text-xs text-muted-foreground font-mono">
+              Faculty Account • Email: {user.email} • Institution: {user.institutionName}
+            </p>
+          </div>
+          <ChangePasswordCard />
+        </div>
+      );
+    }
+
+    const casual = teacher.casualLeaveBalance || 0;
+    const sick = teacher.sickLeaveBalance || 0;
+    const earned = teacher.earnedLeaveBalance || 0;
+    const totalAvail = casual + sick + earned;
+
+    return (
+      <TeacherSelfProfile
+        teacher={{
+          id: teacher.id,
+          employeeId: teacher.employeeId,
+          fullName: teacher.fullName,
+          firstName: teacher.firstName,
+          lastName: teacher.lastName,
+          email: teacher.email,
+          phone: teacher.phone,
+          designation: teacher.designation,
+          departmentName: teacher.department?.name || "General Department",
+          employmentStatus: teacher.employmentStatus,
+          joiningDate: teacher.joiningDate,
+          institutionName: teacher.institution.name,
+          classTeacherOf: teacher.sectionsAsClassTeacher.map((s) => ({
+            id: s.id,
+            name: s.class.name,
+            section: s.name,
+            roomNumber: s.roomNumber,
+          })),
+          assignments: teacher.teacherAssignments.map((a) => ({
+            id: a.id,
+            subjectName: a.subject.name,
+            className: a.section.class.name,
+            sectionName: a.section.name,
+          })),
+          leaveBalances: {
+            casual,
+            sick,
+            earned,
+            totalAvailable: totalAvail,
+          },
+        }}
+      />
+    );
+  }
+
+  // 3. PARENT / GUARDIAN PROFILE & ACCOUNT SETTINGS
   if (user.roleCode === "PARENT") {
     const guardian = await prisma.guardian.findFirst({
       where: {
@@ -132,7 +215,8 @@ export default async function ProfilePage() {
     const children = guardian?.students?.map((sg) => sg.student) || [];
 
     return (
-      <div className="space-y-6 max-w-4xl mx-auto font-sans">
+      <div className="space-y-6 max-w-5xl mx-auto font-sans">
+        {/* Banner */}
         <div className="rounded-xl border border-border bg-card p-6 shadow-2xs space-y-4">
           <div className="flex items-center gap-4">
             <div className="w-14 h-14 rounded-xl bg-primary text-primary-foreground flex items-center justify-center font-bold text-lg shadow-xs">
@@ -179,10 +263,43 @@ export default async function ProfilePage() {
             </div>
           )}
         </div>
+
+        {/* Password Management */}
+        <ChangePasswordCard />
       </div>
     );
   }
 
-  // 3. FACULTY / ADMIN FALLBACK
-  redirect("/dashboard");
+  // 4. PRINCIPAL, ADMIN, SUPER_ADMIN & OTHER ADMINISTRATIVE STAFF
+  const institution = await prisma.institution.findUnique({
+    where: { id: user.institutionId },
+  });
+
+  return (
+    <AdminSelfProfile
+      user={{
+        id: user.id,
+        fullName: user.fullName || "Administrator",
+        email: user.email,
+        phone: user.phone,
+        roleCode: user.roleCode || "ADMIN",
+        roleName:
+          user.roleCode === "SUPER_ADMIN"
+            ? "Super Administrator"
+            : user.roleCode === "PRINCIPAL"
+            ? "Principal"
+            : user.roleCode === "ADMIN"
+            ? "Institution Administrator"
+            : user.roleCode === "ACCOUNTANT"
+            ? "Financial Accountant"
+            : user.roleCode === "HR_ADMIN"
+            ? "Human Resources Administrator"
+            : "Staff Member",
+        institutionId: user.institutionId,
+        institutionName: user.institutionName || institution?.name || "Nexora Institution",
+        institutionCode: institution?.code,
+        isSuperAdmin: user.roleCode === "SUPER_ADMIN",
+      }}
+    />
+  );
 }

@@ -141,51 +141,51 @@ export function ParentDashboard({ parentName, childrenList }: ParentDashboardPro
       </div>
 
       {/* Key Metrics Strip */}
-      <section className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-        <div className="p-5 rounded-2xl border border-border bg-card space-y-1 shadow-2xs hover:border-primary/40 transition-all">
-          <span className="text-[11px] font-mono uppercase tracking-wider text-muted-foreground font-bold block">
-            01 / ATTENDANCE RATE
+      <section className="grid grid-cols-2 lg:grid-cols-4 gap-2.5 sm:gap-4">
+        <div className="p-3.5 sm:p-5 rounded-2xl border border-border bg-card space-y-1 shadow-2xs hover:border-primary/40 transition-all min-w-0">
+          <span className="text-kpi-label block truncate">
+            Attendance Rate
           </span>
-          <div className="text-2xl sm:text-3xl font-extrabold text-foreground tracking-tight">
+          <div className="text-xl sm:text-2xl lg:text-3xl font-bold tracking-tight text-foreground tabular-nums truncate">
             {currentChild.attendancePct}%
           </div>
-          <span className="text-[11px] text-success block font-bold">
+          <span className="text-[10px] sm:text-[11px] text-success block font-semibold line-clamp-1 leading-snug">
             {currentChild.presentCount} / {currentChild.totalClasses} Days Present
           </span>
         </div>
 
-        <div className="p-5 rounded-2xl border border-border bg-card space-y-1 shadow-2xs hover:border-primary/40 transition-all">
-          <span className="text-[11px] font-mono uppercase tracking-wider text-muted-foreground font-bold block">
-            02 / ACTIVE HOMEWORK
+        <div className="p-3.5 sm:p-5 rounded-2xl border border-border bg-card space-y-1 shadow-2xs hover:border-primary/40 transition-all min-w-0">
+          <span className="text-kpi-label block truncate">
+            Active Homework
           </span>
-          <div className="text-2xl sm:text-3xl font-extrabold text-foreground tracking-tight">
+          <div className="text-xl sm:text-2xl lg:text-3xl font-bold tracking-tight text-foreground tabular-nums truncate">
             {currentChild.assignments.length} Tasks
           </div>
-          <span className="text-[11px] text-warning block font-bold">
+          <span className="text-[10px] sm:text-[11px] text-warning block font-semibold line-clamp-1 leading-snug">
             Synced with syllabus
           </span>
         </div>
 
-        <div className="p-5 rounded-2xl border border-border bg-card space-y-1 shadow-2xs hover:border-primary/40 transition-all">
-          <span className="text-[11px] font-mono uppercase tracking-wider text-muted-foreground font-bold block">
-            03 / TERM 1 FEE
+        <div className="p-3.5 sm:p-5 rounded-2xl border border-border bg-card space-y-1 shadow-2xs hover:border-primary/40 transition-all min-w-0">
+          <span className="text-kpi-label block truncate">
+            Term 1 Fee
           </span>
-          <div className="text-2xl sm:text-3xl font-extrabold text-success tracking-tight">
+          <div className="text-xl sm:text-2xl lg:text-3xl font-bold tracking-tight text-success tabular-nums truncate">
             {currentChild.fees.status}
           </div>
-          <span className="text-[11px] text-muted-foreground block font-mono">
+          <span className="text-[10px] sm:text-[11px] text-muted-foreground block font-mono line-clamp-1 leading-snug">
             {formatCurrency(currentChild.fees.paid || 38000)} paid
           </span>
         </div>
 
-        <div className="p-5 rounded-2xl border border-border bg-card space-y-1 shadow-2xs hover:border-primary/40 transition-all">
-          <span className="text-[11px] font-mono uppercase tracking-wider text-muted-foreground font-bold block">
-            04 / ROLL-CALL TODAY
+        <div className="p-3.5 sm:p-5 rounded-2xl border border-border bg-card space-y-1 shadow-2xs hover:border-primary/40 transition-all min-w-0">
+          <span className="text-kpi-label block truncate">
+            Today&apos;s Roll Call
           </span>
-          <div className="text-2xl sm:text-3xl font-extrabold text-success tracking-tight">
-            PRESENT
+          <div className="text-xl sm:text-2xl lg:text-3xl font-bold tracking-tight text-success tabular-nums truncate">
+            Present
           </div>
-          <span className="text-[11px] text-muted-foreground block font-medium">
+          <span className="text-[10px] sm:text-[11px] text-muted-foreground block font-medium line-clamp-1 leading-snug">
             08:15 AM Roll Call
           </span>
         </div>
@@ -197,12 +197,12 @@ export function ParentDashboard({ parentName, childrenList }: ParentDashboardPro
         <section className="space-y-3">
           <div className="flex items-center justify-between">
             <div>
-              <h2 className="text-sm font-extrabold uppercase tracking-wider text-foreground">
-                Homework & Coursework
+              <h2 className="heading-section">
+                Homework &amp; Coursework
               </h2>
               <p className="text-xs text-muted-foreground">Assigned class assignments and due dates</p>
             </div>
-            <Link href="/academics/assignments" className="text-[11px] font-mono font-bold text-primary hover:underline">
+            <Link href="/academics/assignments" className="text-xs font-semibold text-primary hover:underline">
               View All →
             </Link>
           </div>
@@ -217,13 +217,13 @@ export function ParentDashboard({ parentName, childrenList }: ParentDashboardPro
                 <div key={a.id} className="p-4 space-y-1 hover:bg-muted/40 transition-colors">
                   <div className="flex items-center justify-between">
                     <p className="text-xs font-bold text-foreground">{a.title}</p>
-                    <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded-md bg-muted border border-border text-foreground">
+                    <span className="text-[10px] font-medium px-2 py-0.5 rounded-md bg-muted border border-border text-foreground">
                       {a.status}
                     </span>
                   </div>
-                  <div className="flex items-center justify-between text-[11px] font-mono text-muted-foreground">
+                  <div className="flex items-center justify-between text-xs text-muted-foreground">
                     <span>{a.subjectName}</span>
-                    <span className="text-destructive font-bold">Due {formatDate(a.dueDate)}</span>
+                    <span className="text-destructive font-medium">Due {formatDate(a.dueDate)}</span>
                   </div>
                 </div>
               ))
@@ -235,12 +235,12 @@ export function ParentDashboard({ parentName, childrenList }: ParentDashboardPro
         <section className="space-y-3">
           <div className="flex items-center justify-between">
             <div>
-              <h2 className="text-sm font-extrabold uppercase tracking-wider text-foreground">
-                Fee Ledger & 3-Part Receipts
+              <h2 className="heading-section">
+                Fee Ledger &amp; 3-Part Receipts
               </h2>
               <p className="text-xs text-muted-foreground">Printable vouchers and digital payment receipts</p>
             </div>
-            <Link href="/finance/fees" className="text-[11px] font-mono font-bold text-primary hover:underline">
+            <Link href="/finance/fees" className="text-xs font-semibold text-primary hover:underline">
               Ledger →
             </Link>
           </div>
@@ -251,14 +251,14 @@ export function ParentDashboard({ parentName, childrenList }: ParentDashboardPro
                 <span className="text-xs font-bold text-foreground">Term 1 Tuition Fee Voucher</span>
                 <p className="text-[11px] font-mono text-muted-foreground">Receipt REC-2026-0891</p>
               </div>
-              <span className="text-xs font-extrabold text-success bg-success/15 px-2.5 py-1 rounded-md border border-success/30 font-mono">
+              <span className="text-xs font-bold text-success bg-success/15 px-2.5 py-1 rounded-md border border-success/30 font-mono">
                 PAID IN FULL
               </span>
             </div>
 
             <div className="space-y-2 text-xs font-mono">
               <div className="flex justify-between p-2.5 rounded-xl bg-muted/40 border border-border">
-                <span className="text-muted-foreground">Tuition & Academic Term 1:</span>
+                <span className="text-muted-foreground">Tuition &amp; Academic Term 1:</span>
                 <span className="font-bold text-foreground">{formatCurrency(38000)}</span>
               </div>
               <div className="flex justify-between p-2.5 rounded-xl bg-muted/40 border border-border">
@@ -269,7 +269,7 @@ export function ParentDashboard({ parentName, childrenList }: ParentDashboardPro
 
             <Link
               href="/finance/fees"
-              className="w-full inline-flex items-center justify-center gap-2 py-2.5 rounded-xl text-xs font-bold uppercase tracking-wider border border-border bg-card text-foreground hover:bg-muted transition-all shadow-2xs"
+              className="w-full inline-flex items-center justify-center gap-2 py-2.5 rounded-xl text-xs font-semibold border border-border bg-card text-foreground hover:bg-muted transition-all shadow-2xs"
             >
               <span>Download Official 3-Part Voucher</span>
               <Receipt className="w-3.5 h-3.5 text-primary" />

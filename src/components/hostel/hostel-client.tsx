@@ -122,26 +122,26 @@ export function HostelClient({ hostels }: { hostels: HostelItem[] }) {
       {/* Metrics Row */}
       <div className="grid grid-cols-1 gap-3 sm:grid-cols-4">
         <div className="rounded-xl border border-border bg-card p-4 shadow-xs">
-          <div className="text-[11px] font-mono uppercase tracking-wider text-muted-foreground">Residency Wings</div>
-          <div className="mt-1 text-2xl font-bold text-foreground">{hostels.length}</div>
-          <div className="mt-0.5 text-[11px] text-muted-foreground">Active campus blocks</div>
+          <div className="text-kpi-label">Residency Wings</div>
+          <div className="mt-1 text-kpi-value">{hostels.length}</div>
+          <div className="mt-0.5 text-caption">Active campus blocks</div>
         </div>
         <div className="rounded-xl border border-border bg-card p-4 shadow-xs">
-          <div className="text-[11px] font-mono uppercase tracking-wider text-muted-foreground">Configured Rooms</div>
-          <div className="mt-1 text-2xl font-bold text-foreground">{totalRooms}</div>
-          <div className="mt-0.5 text-[11px] text-muted-foreground">Across all floors</div>
+          <div className="text-kpi-label">Configured Rooms</div>
+          <div className="mt-1 text-kpi-value">{totalRooms}</div>
+          <div className="mt-0.5 text-caption">Across all floors</div>
         </div>
         <div className="rounded-xl border border-border bg-card p-4 shadow-xs">
-          <div className="text-[11px] font-mono uppercase tracking-wider text-muted-foreground">Total Bed Capacity</div>
-          <div className="mt-1 text-2xl font-bold text-foreground">{totalBeds}</div>
-          <div className="mt-0.5 text-[11px] text-muted-foreground">Total residential capacity</div>
+          <div className="text-kpi-label">Total Bed Capacity</div>
+          <div className="mt-1 text-kpi-value">{totalBeds}</div>
+          <div className="mt-0.5 text-caption">Total residential capacity</div>
         </div>
         <div className="rounded-xl border border-border bg-card p-4 shadow-xs">
-          <div className="text-[11px] font-mono uppercase tracking-wider text-muted-foreground">Occupancy Rate</div>
-          <div className="mt-1 text-2xl font-bold text-accent">
+          <div className="text-kpi-label">Occupancy Rate</div>
+          <div className="mt-1 text-kpi-value text-accent">
             {totalBeds > 0 ? Math.round((totalOccupied / totalBeds) * 100) : 0}%
           </div>
-          <div className="mt-0.5 text-[11px] text-muted-foreground">{totalOccupied} / {totalBeds} beds assigned</div>
+          <div className="mt-0.5 text-caption">{totalOccupied} / {totalBeds} beds assigned</div>
         </div>
       </div>
 

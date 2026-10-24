@@ -115,24 +115,24 @@ export function TransportClient({ routes }: { routes: RouteItem[] }) {
       {/* Metrics Row */}
       <div className="grid grid-cols-1 gap-3 sm:grid-cols-4">
         <div className="rounded-xl border border-border bg-card p-4 shadow-2xs">
-          <div className="text-[11px] font-mono uppercase tracking-wider text-muted-foreground font-semibold">Active Routes</div>
-          <div className="mt-1 text-2xl font-bold text-foreground">{routes.length}</div>
-          <div className="mt-0.5 text-[11px] text-muted-foreground">Scheduled transit corridors</div>
+          <div className="text-kpi-label">Active Routes</div>
+          <div className="mt-1 text-kpi-value">{routes.length}</div>
+          <div className="mt-0.5 text-caption">Scheduled transit corridors</div>
         </div>
         <div className="rounded-xl border border-border bg-card p-4 shadow-2xs">
-          <div className="text-[11px] font-mono uppercase tracking-wider text-muted-foreground font-semibold">Total Checkpoints</div>
-          <div className="mt-1 text-2xl font-bold text-foreground">{totalStops}</div>
-          <div className="mt-0.5 text-[11px] text-muted-foreground">Pick-up & drop locations</div>
+          <div className="text-kpi-label">Total Checkpoints</div>
+          <div className="mt-1 text-kpi-value">{totalStops}</div>
+          <div className="mt-0.5 text-caption">Pick-up &amp; drop locations</div>
         </div>
         <div className="rounded-xl border border-border bg-card p-4 shadow-2xs">
-          <div className="text-[11px] font-mono uppercase tracking-wider text-muted-foreground font-semibold">Fleet Capacity</div>
-          <div className="mt-1 text-2xl font-bold text-foreground">{totalFleetCapacity}</div>
-          <div className="mt-0.5 text-[11px] text-muted-foreground">Total bus seats</div>
+          <div className="text-kpi-label">Fleet Capacity</div>
+          <div className="mt-1 text-kpi-value">{totalFleetCapacity}</div>
+          <div className="mt-0.5 text-caption">Total bus seats</div>
         </div>
         <div className="rounded-xl border border-border bg-card p-4 shadow-2xs">
-          <div className="text-[11px] font-mono uppercase tracking-wider text-muted-foreground font-semibold">Fleet Status</div>
-          <div className="mt-1 text-2xl font-bold text-accent">100% Operational</div>
-          <div className="mt-0.5 text-[11px] text-muted-foreground">GPS & speed limiter active</div>
+          <div className="text-kpi-label">Fleet Status</div>
+          <div className="mt-1 text-kpi-value text-accent">100% Operational</div>
+          <div className="mt-0.5 text-caption">GPS &amp; speed limiter active</div>
         </div>
       </div>
 

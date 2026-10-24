@@ -120,26 +120,26 @@ export function LibraryClient({ books }: { books: BookItem[] }) {
       {/* Metrics Row */}
       <div className="grid grid-cols-1 gap-3 sm:grid-cols-4">
         <div className="rounded-xl border border-border bg-card p-4 shadow-2xs">
-          <div className="text-[11px] font-mono uppercase tracking-wider text-muted-foreground font-semibold">Total Titles</div>
-          <div className="mt-1 text-2xl font-bold text-foreground">{books.length}</div>
-          <div className="mt-0.5 text-[11px] text-muted-foreground">Unique cataloged works</div>
+          <div className="text-kpi-label">Total Titles</div>
+          <div className="mt-1 text-kpi-value">{books.length}</div>
+          <div className="mt-0.5 text-caption">Unique cataloged works</div>
         </div>
         <div className="rounded-xl border border-border bg-card p-4 shadow-2xs">
-          <div className="text-[11px] font-mono uppercase tracking-wider text-muted-foreground font-semibold">Total Volumes</div>
-          <div className="mt-1 text-2xl font-bold text-foreground">{totalVolumes}</div>
-          <div className="mt-0.5 text-[11px] text-muted-foreground">Copies in collection</div>
+          <div className="text-kpi-label">Total Volumes</div>
+          <div className="mt-1 text-kpi-value">{totalVolumes}</div>
+          <div className="mt-0.5 text-caption">Copies in collection</div>
         </div>
         <div className="rounded-xl border border-border bg-card p-4 shadow-2xs">
-          <div className="text-[11px] font-mono uppercase tracking-wider text-muted-foreground font-semibold">Currently Issued</div>
-          <div className="mt-1 text-2xl font-bold text-foreground">{totalIssued}</div>
-          <div className="mt-0.5 text-[11px] text-muted-foreground">Borrowed by scholars/faculty</div>
+          <div className="text-kpi-label">Currently Issued</div>
+          <div className="mt-1 text-kpi-value">{totalIssued}</div>
+          <div className="mt-0.5 text-caption">Borrowed by scholars/faculty</div>
         </div>
         <div className="rounded-xl border border-border bg-card p-4 shadow-2xs">
-          <div className="text-[11px] font-mono uppercase tracking-wider text-muted-foreground font-semibold">Shelf Availability</div>
-          <div className="mt-1 text-2xl font-bold text-accent">
+          <div className="text-kpi-label">Shelf Availability</div>
+          <div className="mt-1 text-kpi-value text-accent">
             {totalVolumes > 0 ? Math.round((totalAvailable / totalVolumes) * 100) : 0}%
           </div>
-          <div className="mt-0.5 text-[11px] text-muted-foreground">{totalAvailable} copies on racks</div>
+          <div className="mt-0.5 text-caption">{totalAvailable} copies on racks</div>
         </div>
       </div>
 

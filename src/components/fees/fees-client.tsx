@@ -154,51 +154,51 @@ export function FeesClient({
       {/* Key Financial Metrics Strip */}
       <section className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         <div className="p-5 rounded-xl border border-border bg-card space-y-1 shadow-xs">
-          <span className="text-[11px] font-mono uppercase tracking-wider text-accent font-bold block">
-            01 / TOTAL REALIZATION
+          <span className="text-kpi-label block">
+            Total Realization
           </span>
-          <div className="text-2xl sm:text-3xl font-bold text-foreground tracking-tight">
+          <div className="text-kpi-value">
             {formatCurrency(totalCollected)}
           </div>
-          <span className="text-[11px] text-muted-foreground block font-medium">
+          <span className="text-caption block font-medium">
             Term 1 settled collections
           </span>
         </div>
 
         <div className="p-5 rounded-xl border border-border bg-card space-y-1 shadow-xs">
-          <span className="text-[11px] font-mono uppercase tracking-wider text-accent font-bold block">
-            02 / PENDING RECEIVABLES
+          <span className="text-kpi-label block">
+            Pending Receivables
           </span>
-          <div className="text-2xl sm:text-3xl font-bold text-foreground tracking-tight">
+          <div className="text-kpi-value">
             {formatCurrency(totalPending)}
           </div>
-          <span className="text-[11px] text-muted-foreground block font-medium">
+          <span className="text-caption block font-medium">
             {overdueAccountsCount} Accounts past due date
           </span>
         </div>
 
         <div className="p-5 rounded-xl border border-border bg-card space-y-1 shadow-xs">
-          <span className="text-[11px] font-mono uppercase tracking-wider text-accent font-bold block">
-            03 / COLLECTION EFFICIENCY
+          <span className="text-kpi-label block">
+            Collection Efficiency
           </span>
-          <div className="text-2xl sm:text-3xl font-bold text-accent tracking-tight">
+          <div className="text-kpi-value text-accent">
             {totalCollected + totalPending > 0
               ? `${Math.round((totalCollected / (totalCollected + totalPending)) * 100)}%`
               : "100%"}
           </div>
-          <span className="text-[11px] text-muted-foreground block font-medium">
+          <span className="text-caption block font-medium">
             Bursar target: 85% by Term 1
           </span>
         </div>
 
         <div className="p-5 rounded-xl border border-border bg-card space-y-1 shadow-xs">
-          <span className="text-[11px] font-mono uppercase tracking-wider text-accent font-bold block">
-            04 / ACTIVE INVOICES
+          <span className="text-kpi-label block">
+            Active Invoices
           </span>
-          <div className="text-2xl sm:text-3xl font-bold text-foreground tracking-tight">
+          <div className="text-kpi-value">
             {fees.length} Total
           </div>
-          <span className="text-[11px] text-muted-foreground block font-medium">
+          <span className="text-caption block font-medium">
             Synchronized with student roster
           </span>
         </div>

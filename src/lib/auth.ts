@@ -1,4 +1,5 @@
 import { cookies } from "next/headers";
+import { cache } from "react";
 import { prisma } from "./prisma";
 import { ROLE_DEFAULT_PERMISSIONS, PermissionCode } from "./permissions";
 
@@ -20,7 +21,7 @@ export interface SessionUser {
 
 const SESSION_COOKIE_NAME = "nexora_session_user_id";
 
-export async function getCurrentUser(): Promise<SessionUser | null> {
+export const getCurrentUser = cache(async function getCurrentUser(): Promise<SessionUser | null> {
   try {
     const cookieStore = cookies();
     const sessionUserId = cookieStore.get(SESSION_COOKIE_NAME)?.value;
@@ -72,7 +73,7 @@ export async function getCurrentUser(): Promise<SessionUser | null> {
     console.error("getCurrentUser error:", error);
     return null;
   }
-}
+});
 
 export function hasPermission(
   user: SessionUser | null,

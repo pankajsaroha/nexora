@@ -71,50 +71,50 @@ export function PayrollClient({
       {/* Metrics Strip */}
       <section className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         <div className="p-5 rounded-xl border border-border bg-card space-y-1 shadow-2xs">
-          <span className="text-[11px] font-mono uppercase tracking-wider text-muted-foreground font-semibold block">
-            01 / TOTAL MONTHLY OUTFLOW
+          <span className="text-kpi-label block">
+            Total Monthly Outflow
           </span>
-          <div className="text-2xl sm:text-3xl font-bold text-foreground tracking-tight">
+          <div className="text-kpi-value">
             {formatCurrency(totalPayroll)}
           </div>
-          <span className="text-[11px] text-muted-foreground block font-medium">
-            35 Faculty & staff members
+          <span className="text-caption block font-medium">
+            35 Faculty &amp; staff members
           </span>
         </div>
 
         <div className="p-5 rounded-xl border border-border bg-card space-y-1 shadow-2xs">
-          <span className="text-[11px] font-mono uppercase tracking-wider text-muted-foreground font-semibold block">
-            02 / DISBURSED VOUCHERS
+          <span className="text-kpi-label block">
+            Disbursed Vouchers
           </span>
-          <div className="text-2xl sm:text-3xl font-bold text-accent tracking-tight">
+          <div className="text-kpi-value text-accent">
             {paidCount} / {payrolls.length}
           </div>
-          <span className="text-[11px] text-muted-foreground block font-medium">
+          <span className="text-caption block font-medium">
             Direct bank transfer settled
           </span>
         </div>
 
         <div className="p-5 rounded-xl border border-border bg-card space-y-1 shadow-2xs">
-          <span className="text-[11px] font-mono uppercase tracking-wider text-muted-foreground font-semibold block">
-            03 / CYCLE PERIOD
+          <span className="text-kpi-label block">
+            Cycle Period
           </span>
-          <div className="text-2xl sm:text-3xl font-bold text-foreground tracking-tight">
+          <div className="text-kpi-value">
             September 2026
           </div>
-          <span className="text-[11px] text-muted-foreground block font-medium">
+          <span className="text-caption block font-medium">
             AY 2026-27 · Term 1
           </span>
         </div>
 
         <div className="p-5 rounded-xl border border-border bg-card space-y-1 shadow-2xs">
-          <span className="text-[11px] font-mono uppercase tracking-wider text-muted-foreground font-semibold block">
-            04 / COMPLIANCE STATUS
+          <span className="text-kpi-label block">
+            Compliance Status
           </span>
-          <div className="text-2xl sm:text-3xl font-bold text-accent tracking-tight">
+          <div className="text-kpi-value text-accent">
             100%
           </div>
-          <span className="text-[11px] text-muted-foreground block font-medium">
-            Statutory PF & Tax verified
+          <span className="text-caption block font-medium">
+            Statutory PF &amp; Tax verified
           </span>
         </div>
       </section>

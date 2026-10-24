@@ -141,6 +141,29 @@ export function PrincipalDashboard({
   const [isAdmissionModalOpen, setIsAdmissionModalOpen] = useState(false);
   const [isMoreActionsOpen, setIsMoreActionsOpen] = useState(false);
 
+  const moreActionsRef = React.useRef<HTMLDivElement>(null);
+
+  // Outside click listener for More Actions dropdown
+  React.useEffect(() => {
+    if (!isMoreActionsOpen) return;
+    const handlePointerDown = (e: PointerEvent) => {
+      if (moreActionsRef.current && !moreActionsRef.current.contains(e.target as Node)) {
+        setIsMoreActionsOpen(false);
+      }
+    };
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        setIsMoreActionsOpen(false);
+      }
+    };
+    document.addEventListener("pointerdown", handlePointerDown);
+    window.addEventListener("keydown", handleKeyDown);
+    return () => {
+      document.removeEventListener("pointerdown", handlePointerDown);
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [isMoreActionsOpen]);
+
   // Current time greeting
   const currentHour = new Date().getHours();
   const greeting =
@@ -194,174 +217,191 @@ export function PrincipalDashboard({
       </div>
 
       {/* 2. TOP KPI METRIC CARDS */}
-      <section className="grid grid-cols-2 lg:grid-cols-4 gap-3.5">
+      <section className="grid grid-cols-2 lg:grid-cols-4 gap-2.5 sm:gap-3.5">
         {/* Metric 1: Total Students */}
-        <div className="p-4 sm:p-5 rounded-2xl border border-border bg-card space-y-1 shadow-2xs hover:border-primary/40 transition-all">
-          <span className="text-[11px] font-medium text-muted-foreground block">
+        <div className="p-3 sm:p-4 md:p-5 rounded-2xl border border-border bg-card space-y-1 shadow-2xs hover:border-primary/40 transition-all min-w-0">
+          <span className="text-[11px] sm:text-xs font-medium text-muted-foreground block truncate" title="Total Students">
             Total Students
           </span>
-          <div className="text-2xl sm:text-3xl font-bold text-foreground tracking-tight">
+          <div className="text-xl sm:text-2xl lg:text-3xl font-bold text-foreground tracking-tight tabular-nums truncate">
             {stats.totalStudents.toLocaleString()}
           </div>
-          <span className="text-[11px] text-muted-foreground block truncate">
+          <span
+            className="text-[10px] sm:text-[11px] text-muted-foreground block line-clamp-1 leading-snug"
+            title={stats.totalStudents > 0 ? "Enrolled scholars across active cohorts" : "No students enrolled yet"}
+          >
             {stats.totalStudents > 0
-              ? "Enrolled scholars across active cohorts"
+              ? "Enrolled scholars across cohorts"
               : "No students enrolled yet"}
           </span>
         </div>
 
         {/* Metric 2: Today's Attendance */}
-        <div className="p-4 sm:p-5 rounded-2xl border border-border bg-card space-y-1 shadow-2xs hover:border-primary/40 transition-all">
-          <span className="text-[11px] font-medium text-muted-foreground block">
+        <div className="p-3 sm:p-4 md:p-5 rounded-2xl border border-border bg-card space-y-1 shadow-2xs hover:border-primary/40 transition-all min-w-0">
+          <span className="text-[11px] sm:text-xs font-medium text-muted-foreground block truncate" title="Today's Attendance">
             Today&apos;s Attendance
           </span>
-          <div className="text-2xl sm:text-3xl font-bold text-foreground tracking-tight">
+          <div className="text-xl sm:text-2xl lg:text-3xl font-bold text-foreground tracking-tight tabular-nums truncate">
             {isAttendanceRecorded ? `${presentPct}%` : "—"}
           </div>
           <span
-            className={`text-[11px] block truncate ${
+            className={`text-[10px] sm:text-[11px] block line-clamp-1 leading-snug ${
               isAttendanceRecorded ? "text-success font-medium" : "text-muted-foreground"
             }`}
+            title={
+              isAttendanceRecorded
+                ? stats.attendancePresentCount !== undefined
+                  ? `${stats.attendancePresentCount} Present · ${stats.attendanceAbsentCount || 0} Absent`
+                  : "Daily register recorded"
+                : "No attendance recorded yet"
+            }
           >
             {isAttendanceRecorded
               ? stats.attendancePresentCount !== undefined
                 ? `${stats.attendancePresentCount} Present · ${stats.attendanceAbsentCount || 0} Absent`
                 : "Daily register recorded"
-              : "No attendance recorded yet"}
+              : "No attendance recorded"}
           </span>
         </div>
 
         {/* Metric 3: Pending Tasks */}
-        <div className="p-4 sm:p-5 rounded-2xl border border-border bg-card space-y-1 shadow-2xs hover:border-primary/40 transition-all">
-          <span className="text-[11px] font-medium text-muted-foreground block">
+        <div className="p-3 sm:p-4 md:p-5 rounded-2xl border border-border bg-card space-y-1 shadow-2xs hover:border-primary/40 transition-all min-w-0">
+          <span className="text-[11px] sm:text-xs font-medium text-muted-foreground block truncate" title="Pending Tasks">
             Pending Tasks
           </span>
-          <div className="text-2xl sm:text-3xl font-bold text-foreground tracking-tight">
+          <div className="text-xl sm:text-2xl lg:text-3xl font-bold text-foreground tracking-tight tabular-nums truncate">
             {stats.pendingTasksCount}
           </div>
           <span
-            className={`text-[11px] block truncate ${
+            className={`text-[10px] sm:text-[11px] block line-clamp-1 leading-snug ${
               stats.pendingTasksCount > 0 ? "text-warning font-medium" : "text-muted-foreground"
             }`}
+            title={stats.pendingTasksCount > 0 ? "Requiring administrative action" : "All workflows up to date"}
           >
             {stats.pendingTasksCount > 0
-              ? "Requiring administrative action"
-              : "All workflows up to date"}
+              ? "Action required"
+              : "All workflows current"}
           </span>
         </div>
 
         {/* Metric 4: Fee Collection */}
-        <div className="p-4 sm:p-5 rounded-2xl border border-border bg-card space-y-1 shadow-2xs hover:border-primary/40 transition-all">
-          <span className="text-[11px] font-medium text-muted-foreground block">
+        <div className="p-3 sm:p-4 md:p-5 rounded-2xl border border-border bg-card space-y-1 shadow-2xs hover:border-primary/40 transition-all min-w-0">
+          <span className="text-[11px] sm:text-xs font-medium text-muted-foreground block truncate" title="Fee Collection">
             Fee Collection
           </span>
-          <div className="text-2xl sm:text-3xl font-bold text-foreground tracking-tight">
+          <div className="text-xl sm:text-2xl lg:text-3xl font-bold text-foreground tracking-tight tabular-nums truncate">
             {formatCurrency(stats.totalFeeCollected)}
           </div>
           <span
-            className={`text-[11px] block truncate ${
+            className={`text-[10px] sm:text-[11px] block line-clamp-1 leading-snug ${
               stats.totalFeePending > 0 ? "text-muted-foreground" : "text-success font-medium"
             }`}
+            title={
+              stats.totalFeePending > 0
+                ? `${formatCurrency(stats.totalFeePending)} pending reconciliation`
+                : "All collections up to date"
+            }
           >
             {stats.totalFeePending > 0
-              ? `${formatCurrency(stats.totalFeePending)} pending reconciliation`
-              : "All collections up to date"}
+              ? `${formatCurrency(stats.totalFeePending)} pending`
+              : "Collections up to date"}
           </span>
         </div>
       </section>
 
       {/* 3. QUICK ACTIONS BAR */}
-      <div className="flex flex-wrap items-center justify-between gap-3 p-3.5 rounded-2xl border border-border bg-card/60 shadow-2xs">
+      <div className="p-3 sm:p-3.5 rounded-2xl border border-border bg-card/70 shadow-2xs space-y-2.5 sm:space-y-0 sm:flex sm:items-center sm:justify-between sm:gap-3">
         <div className="flex items-center gap-2">
-          <span className="text-xs font-semibold text-foreground">Quick Actions:</span>
+          <span className="text-[11px] sm:text-xs font-semibold uppercase tracking-wider text-muted-foreground font-mono">
+            Quick Actions
+          </span>
         </div>
 
-        <div className="flex flex-wrap items-center gap-2">
+        <div className="grid grid-cols-2 sm:flex sm:flex-wrap sm:items-center gap-2 w-full sm:w-auto">
           <button
             type="button"
             onClick={() => setIsAdmissionModalOpen(true)}
-            className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-semibold bg-primary text-primary-foreground hover:bg-primary-hover transition-all shadow-xs cursor-pointer"
+            className="inline-flex items-center justify-center gap-1.5 px-3 py-2 rounded-xl text-xs font-semibold bg-primary text-primary-foreground hover:bg-primary-hover active:scale-[0.98] transition-all shadow-xs cursor-pointer min-h-[38px]"
           >
-            <Plus className="w-3.5 h-3.5" />
-            <span>Add Student</span>
+            <Plus className="w-3.5 h-3.5 shrink-0" />
+            <span className="truncate">Add Student</span>
           </button>
 
           <button
             type="button"
             onClick={() => setIsTaskModalOpen(true)}
-            className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-medium border border-border bg-card hover:bg-muted text-foreground transition-all shadow-2xs cursor-pointer"
+            className="inline-flex items-center justify-center gap-1.5 px-3 py-2 rounded-xl text-xs font-medium border border-border bg-card hover:bg-muted text-foreground active:scale-[0.98] transition-all shadow-2xs cursor-pointer min-h-[38px]"
           >
-            <CheckSquare className="w-3.5 h-3.5 text-primary" />
-            <span>Assign Task</span>
+            <CheckSquare className="w-3.5 h-3.5 text-primary shrink-0" />
+            <span className="truncate">Assign Task</span>
           </button>
 
           <button
             type="button"
             onClick={() => setIsBroadcastModalOpen(true)}
-            className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-medium border border-border bg-card hover:bg-muted text-foreground transition-all shadow-2xs cursor-pointer"
+            className="inline-flex items-center justify-center gap-1.5 px-3 py-2 rounded-xl text-xs font-medium border border-border bg-card hover:bg-muted text-foreground active:scale-[0.98] transition-all shadow-2xs cursor-pointer min-h-[38px]"
           >
-            <Megaphone className="w-3.5 h-3.5 text-muted-foreground" />
-            <span>Broadcast</span>
+            <Megaphone className="w-3.5 h-3.5 text-muted-foreground shrink-0" />
+            <span className="truncate">Broadcast</span>
           </button>
 
           {/* More Actions Dropdown */}
-          <div className="relative">
+          <div ref={moreActionsRef} className="relative">
             <button
               type="button"
               onClick={() => setIsMoreActionsOpen(!isMoreActionsOpen)}
-              className="inline-flex items-center gap-1 px-3 py-2 rounded-xl text-xs font-medium border border-border bg-card hover:bg-muted text-foreground transition-all shadow-2xs cursor-pointer"
+              className="w-full sm:w-auto inline-flex items-center justify-center gap-1 px-3 py-2 rounded-xl text-xs font-medium border border-border bg-card hover:bg-muted text-foreground active:scale-[0.98] transition-all shadow-2xs cursor-pointer min-h-[38px]"
+              aria-expanded={isMoreActionsOpen}
             >
               <span>More</span>
-              <ChevronDown className="w-3.5 h-3.5 text-muted-foreground" />
+              <ChevronDown className={`w-3.5 h-3.5 text-muted-foreground shrink-0 transition-transform ${isMoreActionsOpen ? "rotate-180" : ""}`} />
             </button>
 
             {isMoreActionsOpen && (
-              <>
-                <div
-                  className="fixed inset-0 z-40"
+              <div
+                role="menu"
+                aria-label="Additional actions"
+                className="absolute right-0 top-full mt-2 w-52 max-w-[calc(100vw-2rem)] rounded-2xl border border-border bg-card p-1.5 shadow-2xl z-50 animate-in fade-in zoom-in-95 duration-100 space-y-0.5"
+              >
+                <button
+                  type="button"
+                  onClick={() => {
+                    setIsMoreActionsOpen(false);
+                    setIsPaymentModalOpen(true);
+                  }}
+                  className="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs text-left text-foreground hover:bg-muted transition-colors cursor-pointer"
+                >
+                  <CreditCard className="w-3.5 h-3.5 text-primary shrink-0" />
+                  <span>Record Payment</span>
+                </button>
+
+                <Link
+                  href="/attendance"
                   onClick={() => setIsMoreActionsOpen(false)}
-                />
-                <div className="absolute right-0 top-full mt-2 w-52 rounded-2xl border border-border bg-card p-1.5 shadow-2xl z-50 animate-in fade-in zoom-in-95 duration-100 space-y-0.5">
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setIsMoreActionsOpen(false);
-                      setIsPaymentModalOpen(true);
-                    }}
-                    className="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs text-left text-foreground hover:bg-muted transition-colors cursor-pointer"
-                  >
-                    <CreditCard className="w-3.5 h-3.5 text-primary" />
-                    <span>Record Payment</span>
-                  </button>
+                  className="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs text-left text-foreground hover:bg-muted transition-colors"
+                >
+                  <CalendarCheck className="w-3.5 h-3.5 text-muted-foreground shrink-0" />
+                  <span>Mark Attendance</span>
+                </Link>
 
-                  <Link
-                    href="/attendance"
-                    onClick={() => setIsMoreActionsOpen(false)}
-                    className="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs text-left text-foreground hover:bg-muted transition-colors"
-                  >
-                    <CalendarCheck className="w-3.5 h-3.5 text-muted-foreground" />
-                    <span>Mark Attendance</span>
-                  </Link>
+                <Link
+                  href="/teachers"
+                  onClick={() => setIsMoreActionsOpen(false)}
+                  className="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs text-left text-foreground hover:bg-muted transition-colors"
+                >
+                  <GraduationCap className="w-3.5 h-3.5 text-muted-foreground shrink-0" />
+                  <span>Add Faculty</span>
+                </Link>
 
-                  <Link
-                    href="/teachers"
-                    onClick={() => setIsMoreActionsOpen(false)}
-                    className="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs text-left text-foreground hover:bg-muted transition-colors"
-                  >
-                    <GraduationCap className="w-3.5 h-3.5 text-muted-foreground" />
-                    <span>Add Faculty</span>
-                  </Link>
-
-                  <Link
-                    href="/academics/timetable"
-                    onClick={() => setIsMoreActionsOpen(false)}
-                    className="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs text-left text-foreground hover:bg-muted transition-colors"
-                  >
-                    <Clock className="w-3.5 h-3.5 text-muted-foreground" />
-                    <span>Configure Timetable</span>
-                  </Link>
-                </div>
-              </>
+                <Link
+                  href="/academics/timetable"
+                  onClick={() => setIsMoreActionsOpen(false)}
+                  className="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs text-left text-foreground hover:bg-muted transition-colors"
+                >
+                  <Clock className="w-3.5 h-3.5 text-muted-foreground shrink-0" />
+                  <span>Configure Timetable</span>
+                </Link>
+              </div>
             )}
           </div>
         </div>
@@ -471,11 +511,11 @@ export function PrincipalDashboard({
               <Link
                 key={item.id}
                 href={item.linkUrl}
-                className="p-4 flex items-center justify-between hover:bg-muted/40 transition-all group"
+                className="p-3.5 sm:p-4 flex items-center justify-between hover:bg-muted/40 transition-all group min-w-0"
               >
-                <div className="flex items-center gap-3.5 min-w-0 mr-3">
+                <div className="flex items-center gap-3 min-w-0 mr-2 flex-1">
                   <span
-                    className={`w-2.5 h-2.5 rounded-full shrink-0 ${
+                    className={`w-2 h-2 sm:w-2.5 sm:h-2.5 rounded-full shrink-0 ${
                       item.severity === "HIGH"
                         ? "bg-destructive"
                         : item.severity === "MEDIUM"
@@ -483,16 +523,18 @@ export function PrincipalDashboard({
                         : "bg-success"
                     }`}
                   />
-                  <div className="min-w-0">
-                    <p className="text-xs font-semibold text-foreground group-hover:text-primary transition-colors truncate">
+                  <div className="min-w-0 flex-1">
+                    <p className="text-xs font-semibold text-foreground group-hover:text-primary transition-colors line-clamp-1">
                       {item.title}
                     </p>
-                    <p className="text-[11px] text-muted-foreground mt-0.5 truncate">{item.subtitle}</p>
+                    <p className="text-[11px] text-muted-foreground mt-0.5 line-clamp-2 leading-relaxed">
+                      {item.subtitle}
+                    </p>
                   </div>
                 </div>
 
-                <div className="flex items-center gap-1.5 text-xs font-medium text-muted-foreground group-hover:text-foreground shrink-0">
-                  <span className="text-[11px] font-mono">Review</span>
+                <div className="flex items-center gap-1 text-[11px] font-mono font-medium text-muted-foreground group-hover:text-foreground shrink-0 ml-1 py-1 px-2.5 rounded-lg bg-muted/60 group-hover:bg-muted transition-colors">
+                  <span>Review</span>
                   <ArrowRight className="w-3.5 h-3.5 transform group-hover:translate-x-0.5 transition-transform" />
                 </div>
               </Link>

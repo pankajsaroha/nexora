@@ -99,11 +99,13 @@ export async function GET(
 
     const { id } = params;
 
+    const whereClause: any = { id };
+    if (user.roleCode !== "SUPER_ADMIN") {
+      whereClause.institutionId = user.institutionId;
+    }
+
     const staff = await prisma.teacher.findFirst({
-      where: {
-        id,
-        institutionId: user.institutionId,
-      },
+      where: whereClause,
       include: {
         department: true,
         campus: true,
@@ -167,7 +169,7 @@ export async function GET(
       }),
       prisma.auditLog.findMany({
         where: {
-          institutionId: user.institutionId,
+          institutionId: staff.institutionId,
           entity: "Teacher",
           entityId: staff.id,
         },
@@ -208,7 +210,7 @@ export async function GET(
     let leaveSummary = null;
     try {
       leaveSummary = await getEmployeeLeaveSummary({
-        institutionId: user.institutionId,
+        institutionId: staff.institutionId,
         teacherId: staff.id,
       });
     } catch (e) {
@@ -289,8 +291,13 @@ export async function PUT(
     const json = await req.json();
     const parsed = updateStaffSchema.parse(json);
 
+    const whereClause: any = { id };
+    if (user.roleCode !== "SUPER_ADMIN") {
+      whereClause.institutionId = user.institutionId;
+    }
+
     const existingStaff = await prisma.teacher.findFirst({
-      where: { id, institutionId: user.institutionId },
+      where: whereClause,
       include: { user: true },
     });
 
@@ -302,7 +309,7 @@ export async function PUT(
     if (parsed.employeeId !== existingStaff.employeeId) {
       const duplicateEmp = await prisma.teacher.findFirst({
         where: {
-          institutionId: user.institutionId,
+          institutionId: existingStaff.institutionId,
           employeeId: parsed.employeeId.trim(),
           id: { not: id },
         },
@@ -397,7 +404,7 @@ export async function PUT(
       // 3. Audit Log
       await tx.auditLog.create({
         data: {
-          institutionId: user.institutionId,
+          institutionId: existingStaff.institutionId,
           userId: user.id,
           userName: user.fullName,
           userEmail: user.email,
@@ -439,8 +446,13 @@ export async function PATCH(
     const body = await req.json();
     const { action, reason, status } = body;
 
+    const whereClause: any = { id };
+    if (user.roleCode !== "SUPER_ADMIN") {
+      whereClause.institutionId = user.institutionId;
+    }
+
     const staff = await prisma.teacher.findFirst({
-      where: { id, institutionId: user.institutionId },
+      where: whereClause,
       include: { user: true },
     });
 
@@ -531,7 +543,7 @@ export async function PATCH(
 
         await tx.auditLog.create({
           data: {
-            institutionId: user.institutionId,
+            institutionId: staff.institutionId,
             userId: user.id,
             userName: user.fullName,
             userEmail: user.email,
@@ -625,8 +637,13 @@ export async function DELETE(
 
     const { id } = params;
 
+    const whereClause: any = { id };
+    if (user.roleCode !== "SUPER_ADMIN") {
+      whereClause.institutionId = user.institutionId;
+    }
+
     const staff = await prisma.teacher.findFirst({
-      where: { id, institutionId: user.institutionId },
+      where: whereClause,
       include: {
         payrolls: true,
         attendanceRecords: true,
@@ -676,7 +693,7 @@ export async function DELETE(
       // 5. Audit Log
       await tx.auditLog.create({
         data: {
-          institutionId: user.institutionId,
+          institutionId: staff.institutionId,
           userId: user.id,
           userName: user.fullName,
           userEmail: user.email,

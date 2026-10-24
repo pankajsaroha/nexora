@@ -25,11 +25,16 @@ export async function POST(
     }
 
     const { id } = params;
-    const body = await req.json();
-    const { roleCode, password } = body;
+    const body = await req.json().catch(() => ({}));
+    const { roleCode, role, password, email } = body;
+
+    const whereClause: any = { id };
+    if (user.roleCode !== "SUPER_ADMIN") {
+      whereClause.institutionId = user.institutionId;
+    }
 
     const staff = await prisma.teacher.findFirst({
-      where: { id, institutionId: user.institutionId },
+      where: whereClause,
       include: { user: true },
     });
 
@@ -37,7 +42,8 @@ export async function POST(
       return NextResponse.json({ error: "Staff member not found" }, { status: 404 });
     }
 
-    const assignedRole = roleCode || "TEACHER";
+    const assignedRole = roleCode || role || "TEACHER";
+    const targetEmail = (email || staff.email).trim().toLowerCase();
 
     const updatedStaff = await prisma.$transaction(async (tx) => {
       let userAccount = staff.user;
@@ -56,29 +62,54 @@ export async function POST(
           data: updateData,
         });
       } else {
-        // Create new user account
-        const passwordHash = await bcrypt.hash(password?.trim() || "Nexora@2026", 10);
-        userAccount = await tx.user.create({
-          data: {
-            institutionId: user.institutionId,
-            email: staff.email.trim().toLowerCase(),
-            fullName: staff.fullName,
-            passwordHash,
-            roleCode: assignedRole,
-            phone: staff.phone,
-            isActive: true,
-          },
+        // Check if a user with this email already exists in the database
+        const existingUser = await tx.user.findUnique({
+          where: { email: targetEmail },
         });
 
-        await tx.teacher.update({
-          where: { id: staff.id },
-          data: { userId: userAccount.id },
-        });
+        if (existingUser) {
+          // Link existing user to this staff member
+          const updateData: any = {
+            roleCode: assignedRole,
+            isActive: true,
+          };
+          if (password && password.trim()) {
+            updateData.passwordHash = await bcrypt.hash(password.trim(), 10);
+          }
+          userAccount = await tx.user.update({
+            where: { id: existingUser.id },
+            data: updateData,
+          });
+
+          await tx.teacher.update({
+            where: { id: staff.id },
+            data: { userId: existingUser.id },
+          });
+        } else {
+          // Create new user account
+          const passwordHash = await bcrypt.hash(password?.trim() || "Nexora@2026", 10);
+          userAccount = await tx.user.create({
+            data: {
+              institutionId: staff.institutionId,
+              email: targetEmail,
+              fullName: staff.fullName,
+              passwordHash,
+              roleCode: assignedRole,
+              phone: staff.phone,
+              isActive: true,
+            },
+          });
+
+          await tx.teacher.update({
+            where: { id: staff.id },
+            data: { userId: userAccount.id },
+          });
+        }
       }
 
       await tx.auditLog.create({
         data: {
-          institutionId: user.institutionId,
+          institutionId: staff.institutionId,
           userId: user.id,
           userName: user.fullName,
           userEmail: user.email,
@@ -125,8 +156,13 @@ export async function DELETE(
 
     const { id } = params;
 
+    const whereClause: any = { id };
+    if (user.roleCode !== "SUPER_ADMIN") {
+      whereClause.institutionId = user.institutionId;
+    }
+
     const staff = await prisma.teacher.findFirst({
-      where: { id, institutionId: user.institutionId },
+      where: whereClause,
       include: { user: true },
     });
 
@@ -150,7 +186,7 @@ export async function DELETE(
 
       await tx.auditLog.create({
         data: {
-          institutionId: user.institutionId,
+          institutionId: staff.institutionId,
           userId: user.id,
           userName: user.fullName,
           userEmail: user.email,

@@ -480,7 +480,13 @@ export default async function DashboardPage() {
       }),
       prisma.announcement.findMany({
         where: { institutionId: user.institutionId },
-        include: { authorUser: true },
+        select: {
+          id: true,
+          title: true,
+          targetAudience: true,
+          publishedAt: true,
+          authorUser: { select: { fullName: true } },
+        },
         orderBy: { publishedAt: "desc" },
         take: 3,
       }),
@@ -489,7 +495,13 @@ export default async function DashboardPage() {
           institutionId: user.institutionId,
           status: { in: ["TODO", "IN_PROGRESS", "BLOCKED"] },
         },
-        include: { assigneeUser: true },
+        select: {
+          id: true,
+          title: true,
+          dueDate: true,
+          priority: true,
+          assigneeUser: { select: { fullName: true } },
+        },
         orderBy: { createdAt: "desc" },
         take: 4,
       }),
@@ -504,16 +516,32 @@ export default async function DashboardPage() {
           dayOfWeek: timetableDay,
           section: { class: { institutionId: user.institutionId } },
         },
-        include: {
-          subject: true,
-          section: { include: { class: true } },
+        select: {
+          id: true,
+          periodNumber: true,
+          startTime: true,
+          endTime: true,
+          roomNumber: true,
+          subject: { select: { name: true } },
+          section: {
+            select: {
+              name: true,
+              class: { select: { name: true } },
+            },
+          },
         },
         orderBy: { periodNumber: "asc" },
         take: 4,
       }),
       prisma.feePayment.findMany({
         where: { student: { institutionId: user.institutionId } },
-        include: { student: true },
+        select: {
+          id: true,
+          amount: true,
+          receiptNumber: true,
+          paymentDate: true,
+          student: { select: { fullName: true } },
+        },
         orderBy: { paymentDate: "desc" },
         take: 4,
       }),
@@ -525,26 +553,53 @@ export default async function DashboardPage() {
             lte: endOfToday,
           },
         },
+        select: { status: true },
       }),
       prisma.class.findMany({
         where: { institutionId: user.institutionId },
-        include: {
-          department: true,
-          sections: true,
-          feeStructures: { include: { feeCategory: true } },
+        select: {
+          id: true,
+          name: true,
+          code: true,
+          level: true,
+          durationYears: true,
+          department: { select: { id: true, name: true, code: true } },
+          sections: { select: { id: true, name: true, capacity: true } },
+          feeStructures: {
+            select: {
+              id: true,
+              amount: true,
+              frequency: true,
+              dueDate: true,
+              feeCategory: { select: { id: true, name: true } },
+            },
+          },
         },
         orderBy: { orderIndex: "asc" },
       }),
       prisma.academicYear.findMany({
         where: { institutionId: user.institutionId },
+        select: {
+          id: true,
+          name: true,
+          isCurrent: true,
+        },
         orderBy: { startDate: "desc" },
       }),
       prisma.studentCustomField.findMany({
         where: { institutionId: user.institutionId },
+        select: {
+          id: true,
+          name: true,
+          key: true,
+          fieldType: true,
+          options: true,
+          placeholder: true,
+          helpText: true,
+          isRequired: true,
+          isVisibleToAdmin: true,
+        },
         orderBy: { orderIndex: "asc" },
-      }),
-      prisma.class.count({
-        where: { institutionId: user.institutionId },
       }),
     ]);
 
@@ -560,7 +615,7 @@ export default async function DashboardPage() {
     programs = results[9];
     academicYears = results[10];
     customFields = results[11];
-    classesCount = results[12];
+    classesCount = programs.length;
   } catch (err) {
     console.error("Principal Dashboard data fetch warning (intermittent DB connection issue):", err);
   }

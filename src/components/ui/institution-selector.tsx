@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import { Building2, ChevronDown, Check, Loader2, Search } from "lucide-react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
@@ -19,6 +19,7 @@ export interface InstitutionSelectorProps {
   currentInstitutionName?: string;
   institutions?: InstitutionItem[];
   isSuperAdmin?: boolean;
+  compactMobileTrigger?: boolean;
 }
 
 export function InstitutionSelector({
@@ -26,11 +27,72 @@ export function InstitutionSelector({
   currentInstitutionName = "Select Institution",
   institutions = [],
   isSuperAdmin = false,
+  compactMobileTrigger = false,
 }: InstitutionSelectorProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [search, setSearch] = useState("");
   const [isSwitching, setIsSwitching] = useState(false);
   const router = useRouter();
+
+  const containerRef = useRef<HTMLDivElement>(null);
+  const triggerRef = useRef<HTMLButtonElement>(null);
+  const searchInputRef = useRef<HTMLInputElement>(null);
+
+  // Close dropdown and optionally restore focus to the trigger button
+  const closeDropdown = useCallback((restoreFocus = false) => {
+    setIsOpen(false);
+    setSearch("");
+    if (restoreFocus) {
+      setTimeout(() => triggerRef.current?.focus(), 50);
+    }
+  }, []);
+
+  // Handle outside click / touch tap
+  useEffect(() => {
+    if (!isOpen) return;
+
+    const handlePointerDown = (event: PointerEvent) => {
+      if (
+        containerRef.current &&
+        !containerRef.current.contains(event.target as Node)
+      ) {
+        closeDropdown(false);
+      }
+    };
+
+    document.addEventListener("pointerdown", handlePointerDown);
+    return () => {
+      document.removeEventListener("pointerdown", handlePointerDown);
+    };
+  }, [isOpen, closeDropdown]);
+
+  // Handle Escape key
+  useEffect(() => {
+    if (!isOpen) return;
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        event.preventDefault();
+        event.stopPropagation();
+        closeDropdown(true);
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [isOpen, closeDropdown]);
+
+  // Autofocus search input when dropdown opens
+  useEffect(() => {
+    if (isOpen && institutions.length > 3) {
+      const timer = setTimeout(() => {
+        searchInputRef.current?.focus();
+      }, 60);
+      return () => clearTimeout(timer);
+    }
+  }, [isOpen, institutions.length]);
 
   if (!isSuperAdmin || institutions.length === 0) {
     return null;
@@ -44,7 +106,7 @@ export function InstitutionSelector({
 
   const handleSelectInstitution = async (instId: string) => {
     if (instId === currentInstitutionId) {
-      setIsOpen(false);
+      closeDropdown(true);
       return;
     }
 
@@ -57,72 +119,111 @@ export function InstitutionSelector({
       });
 
       if (res.ok) {
-        setIsOpen(false);
+        closeDropdown(false);
         router.refresh();
         window.location.reload();
       } else {
         const data = await res.json();
         alert(data.error || "Failed to switch institution context");
+        setIsSwitching(false);
       }
     } catch (err) {
       console.error("Institution switch error:", err);
-    } finally {
       setIsSwitching(false);
     }
   };
 
   return (
-    <div className="relative">
-      <button
-        type="button"
-        onClick={() => setIsOpen(!isOpen)}
-        disabled={isSwitching}
-        className="flex items-center gap-2 rounded-lg border border-border bg-card/90 hover:bg-card px-2.5 sm:px-3 py-1.5 text-xs text-foreground hover:border-accent/50 transition-all shadow-2xs group cursor-pointer"
-        aria-label="Select institution context"
-      >
-        <div className="w-5 h-5 rounded-md bg-accent/10 border border-accent/20 flex items-center justify-center text-accent shrink-0">
-          <Building2 className="h-3 w-3" />
-        </div>
-        <div className="flex items-center gap-1.5 overflow-hidden text-left">
-          <span className="text-[11px] text-muted-foreground hidden md:inline font-normal">
-            Viewing:
-          </span>
-          <span className="font-semibold text-foreground truncate max-w-[120px] sm:max-w-[180px] lg:max-w-[220px]">
-            {currentInstitutionName}
-          </span>
-        </div>
-        {isSwitching ? (
-          <Loader2 className="h-3.5 w-3.5 animate-spin text-accent shrink-0" />
-        ) : (
-          <ChevronDown className="h-3.5 w-3.5 text-muted-foreground group-hover:text-foreground shrink-0 transition-transform duration-150" />
-        )}
-      </button>
+    <div ref={containerRef} className="relative inline-block text-left">
+      {compactMobileTrigger ? (
+        <button
+          ref={triggerRef}
+          type="button"
+          onClick={() => setIsOpen((prev) => !prev)}
+          disabled={isSwitching}
+          aria-expanded={isOpen}
+          aria-haspopup="dialog"
+          className="flex items-center gap-1.5 rounded-lg border border-border bg-card px-2.5 py-1 text-xs text-foreground hover:bg-muted active:scale-[0.98] transition-all shadow-2xs group cursor-pointer shrink-0"
+          aria-label={`Switch institution context. Current: ${currentInstitutionName}`}
+        >
+          <Building2 className="h-3 w-3 text-accent shrink-0" />
+          <span className="font-semibold text-[11px] text-accent">Switch</span>
+          <ChevronDown
+            className={cn(
+              "h-3 w-3 text-muted-foreground group-hover:text-foreground shrink-0 transition-transform duration-150",
+              isOpen && "rotate-180"
+            )}
+          />
+        </button>
+      ) : (
+        <button
+          ref={triggerRef}
+          type="button"
+          onClick={() => setIsOpen((prev) => !prev)}
+          disabled={isSwitching}
+          aria-expanded={isOpen}
+          aria-haspopup="dialog"
+          className="flex items-center gap-2 rounded-lg border border-border bg-card/90 hover:bg-card px-2.5 sm:px-3 py-1.5 text-xs text-foreground hover:border-accent/50 active:scale-[0.99] transition-all shadow-2xs group cursor-pointer"
+          aria-label={`Select institution context. Current: ${currentInstitutionName}`}
+        >
+          <div className="w-5 h-5 rounded-md bg-accent/10 border border-accent/20 flex items-center justify-center text-accent shrink-0">
+            <Building2 className="h-3 w-3" />
+          </div>
+          <div className="flex items-center gap-1.5 overflow-hidden text-left">
+            <span className="text-[11px] text-muted-foreground hidden md:inline font-normal">
+              Viewing:
+            </span>
+            <span className="font-semibold text-foreground truncate max-w-[120px] sm:max-w-[180px] lg:max-w-[220px]">
+              {currentInstitutionName}
+            </span>
+          </div>
+          {isSwitching ? (
+            <Loader2 className="h-3.5 w-3.5 animate-spin text-accent shrink-0" />
+          ) : (
+            <ChevronDown
+              className={cn(
+                "h-3.5 w-3.5 text-muted-foreground group-hover:text-foreground shrink-0 transition-transform duration-150",
+                isOpen && "rotate-180"
+              )}
+            />
+          )}
+        </button>
+      )}
 
       {isOpen && (
-        <>
-          <div className="fixed inset-0 z-40" onClick={() => setIsOpen(false)} />
-          <div className="absolute right-0 top-full mt-2 w-72 sm:w-80 rounded-xl border border-border bg-card p-2.5 shadow-2xl z-50 animate-in fade-in zoom-in-95 duration-100 space-y-2">
-            <div className="px-2 py-1 flex items-center justify-between border-b border-border/70 pb-2">
-              <span className="text-[10px] font-medium uppercase tracking-wider text-muted-foreground">
-                Authorized Institutions
-              </span>
-              <span className="text-[10px] font-mono text-accent font-semibold">
-                {institutions.length} available
-              </span>
-            </div>
+        <div
+          role="dialog"
+          aria-label="Institution selection menu"
+          className="absolute right-0 top-full mt-2 w-[calc(100vw-2rem)] sm:w-80 max-w-sm rounded-xl border border-border bg-card p-2.5 shadow-2xl z-50 animate-in fade-in zoom-in-95 duration-100 space-y-2"
+        >
+          <div className="px-2 py-1 flex items-center justify-between border-b border-border/70 pb-2">
+            <span className="text-[10px] font-medium uppercase tracking-wider text-muted-foreground">
+              Authorized Institutions
+            </span>
+            <span className="text-[10px] font-mono text-accent font-semibold">
+              {institutions.length} available
+            </span>
+          </div>
 
-            {institutions.length > 3 && (
-              <div className="relative">
-                <Search className="absolute left-2.5 top-2.5 h-3.5 w-3.5 text-muted-foreground" />
-                <input
-                  type="text"
-                  placeholder="Filter institutions..."
-                  value={search}
-                  onChange={(e) => setSearch(e.target.value)}
-                  className="w-full pl-8 pr-3 py-1.5 rounded-lg text-xs bg-background border border-border text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent/20"
-                />
-              </div>
-            )}
+          {institutions.length > 3 && (
+            <div className="relative">
+              <Search className="absolute left-2.5 top-2.5 h-3.5 w-3.5 text-muted-foreground pointer-events-none" />
+              <input
+                ref={searchInputRef}
+                type="text"
+                placeholder="Filter institutions..."
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === "Escape") {
+                    e.stopPropagation();
+                    closeDropdown(true);
+                  }
+                }}
+                className="w-full pl-8 pr-3 py-1.5 rounded-lg text-xs bg-background border border-border text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent/20"
+              />
+            </div>
+          )}
 
             <div className="max-h-60 overflow-y-auto space-y-1">
               {filtered.map((inst) => {
@@ -182,8 +283,7 @@ export function InstitutionSelector({
               </Link>
             </div>
           </div>
-        </>
-      )}
+        )}
     </div>
   );
 }
