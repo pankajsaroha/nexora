@@ -51,33 +51,33 @@ export function DeleteExamModal({
             <p className="text-foreground leading-relaxed">
               Are you sure you want to permanently delete <strong>{exam.name}</strong>?
             </p>
-            <div className="p-3.5 rounded-xl bg-rose-50 text-rose-900 border border-rose-200 leading-relaxed flex items-start gap-2.5">
-              <AlertTriangle className="w-5 h-5 text-rose-600 shrink-0 mt-0.5" />
+            <div className="p-3.5 rounded-xl bg-destructive-subtle text-destructive border border-destructive-border leading-relaxed flex items-start gap-2.5">
+              <AlertTriangle className="w-5 h-5 text-destructive shrink-0 mt-0.5" />
               <div className="space-y-1">
-                <div className="font-bold text-rose-950">
+                <div className="font-bold text-destructive">
                   Warning: Permanent Database Deletion
                 </div>
-                <div className="text-rose-800 text-xs">
+                <div className="text-destructive/90 text-xs">
                   This permanently removes this examination and its configured paper timetable. This examination has no student marks recorded. This action cannot be undone.
                 </div>
               </div>
             </div>
           </div>
         ) : (
-          <div className="p-3.5 rounded-xl bg-amber-50 text-amber-950 border border-amber-200 leading-relaxed flex items-start gap-2.5">
-            <AlertCircle className="w-5 h-5 text-amber-600 shrink-0 mt-0.5" />
+          <div className="p-3.5 rounded-xl bg-warning-subtle text-warning border border-warning-border leading-relaxed flex items-start gap-2.5">
+            <AlertCircle className="w-5 h-5 text-warning shrink-0 mt-0.5" />
             <div className="space-y-1.5 flex-1">
-              <div className="font-bold text-amber-950">
+              <div className="font-bold text-warning">
                 Cannot permanently delete this examination
               </div>
-              <div className="text-amber-900 text-xs leading-relaxed">
+              <div className="text-foreground text-xs leading-relaxed">
                 {reasonUnsafe ||
                   "Academic records or evaluation ledgers are associated with this examination."}
               </div>
               {canCancel && exam.status !== "CANCELLED" && (
-                <div className="pt-2 text-xs font-medium text-amber-900 border-t border-amber-200/60 space-y-2">
+                <div className="pt-2 text-xs font-medium text-foreground border-t border-warning-border/60 space-y-2">
                   <div>
-                    Safe Alternative: You can <span className="font-bold">Cancel</span> this examination instead. Cancelling preserves historical audit trails and mark ledgers while withdrawing the assessment.
+                    Safe Alternative: You can <span className="font-bold text-warning">Cancel</span> this examination instead. Cancelling preserves historical audit trails and mark ledgers while withdrawing the assessment.
                   </div>
                 </div>
               )}

@@ -262,7 +262,7 @@ export function StudentAttendanceClient({
                           onClick={() => handleStatusChange(item.id, "PRESENT")}
                           className={`px-3 py-1 rounded-md text-[11px] font-mono uppercase font-bold transition-all ${
                             item.status === "PRESENT"
-                              ? "bg-accent text-white shadow-xs"
+                              ? "bg-accent text-accent-foreground shadow-xs"
                               : "bg-card border border-border text-foreground hover:bg-muted"
                           }`}
                         >
@@ -274,7 +274,7 @@ export function StudentAttendanceClient({
                           onClick={() => handleStatusChange(item.id, "ABSENT")}
                           className={`px-3 py-1 rounded-md text-[11px] font-mono uppercase font-bold transition-all ${
                             item.status === "ABSENT"
-                              ? "bg-destructive text-white shadow-xs"
+                              ? "bg-destructive text-destructive-foreground shadow-xs"
                               : "bg-card border border-border text-foreground hover:bg-muted"
                           }`}
                         >
@@ -286,7 +286,7 @@ export function StudentAttendanceClient({
                           onClick={() => handleStatusChange(item.id, "LATE")}
                           className={`px-3 py-1 rounded-md text-[11px] font-mono uppercase font-bold transition-all ${
                             item.status === "LATE"
-                              ? "bg-warning text-white shadow-xs"
+                              ? "bg-warning text-warning-foreground shadow-xs"
                               : "bg-card border border-border text-foreground hover:bg-muted"
                           }`}
                         >

@@ -4,172 +4,198 @@
 
 @layer base {
   :root {
-    /* Nordic Minimalist Slate: Light Theme */
-    --background: #FAFAFA; /* Porcelain off-white */
-    --foreground: #18181B; /* Zinc-900 */
-    --foreground-secondary: #52525B; /* Zinc-600 */
-    --foreground-muted: #71717A; /* Zinc-500 */
-    --subtle-foreground: #A1A1AA; /* Zinc-400 */
+    /* Royal Amethyst & Gold: Light Theme */
+    --background: #FAF8F5; /* Warm Alabaster */
+    --foreground: #25212A; /* Deep Ink */
+    --foreground-secondary: #4A4250; /* Deep Charcoal Lavender */
+    --foreground-muted: #716B75; /* Muted Graphite */
+    --subtle-foreground: #948D99;
 
     /* Surfaces */
-    --surface: #FFFFFF; /* Pure White */
-    --surface-subtle: #F4F4F5; /* Zinc-100 */
-    --surface-muted: #E4E4E7; /* Zinc-200 */
-    --card: #FFFFFF; /* Pure White */
-    --card-foreground: #18181B; /* Zinc-900 */
+    --surface: #FFFFFF; /* Pure White Primary Surface */
+    --surface-subtle: #F8F5F2; /* Warm stone tint */
+    --surface-muted: #F0EAE4;
+    --card: #FFFFFF;
+    --card-foreground: #25212A;
     --card-elevated: #FFFFFF;
     --popover: #FFFFFF;
-    --popover-foreground: #18181B;
+    --popover-foreground: #25212A;
 
-    /* Primary Actions */
-    --primary: #18181B; /* Dark Zinc */
-    --primary-foreground: #FAFAFA; /* Off-white */
-    --primary-hover: #27272A; /* Zinc-800 */
-    --primary-subtle: #F4F4F5;
-    --primary-muted: #71717A;
+    /* Primary Actions (Royal Amethyst) */
+    --primary: #2B1238; /* Royal Amethyst */
+    --primary-foreground: #FFFFFF;
+    --primary-hover: #3B1D4A; /* Deep Plum */
+    --primary-subtle: #F5EDF7;
+    --primary-muted: #563A65;
 
     /* Secondary & Muted Surfaces */
-    --secondary: #F4F4F5;
-    --secondary-foreground: #18181B;
-    --muted: #F4F4F5;
-    --muted-foreground: #71717A;
+    --secondary: #F8F5F2;
+    --secondary-foreground: #25212A;
+    --muted: #F8F5F2;
+    --muted-foreground: #716B75;
 
-    /* Restrained Indigo Accent */
-    --accent: #6366F1; /* Indigo-500 */
-    --accent-gold: #6366F1;
+    /* Accents (Royal Amethyst & Soft Plum) */
+    --accent: #2B1238;
     --accent-foreground: #FFFFFF;
-    --accent-hover: #4F46E5; /* Indigo-600 */
-    --accent-subtle: #EEF2FF; /* Indigo-50 */
-    --warm-accent: #6366F1;
-    --warm-subtle: #EEF2FF;
+    --accent-hover: #3B1D4A;
+    --accent-subtle: #F5EDF7;
+
+    /* Champagne Gold Accents */
+    --gold: #D4AF37; /* Champagne Gold */
+    --gold-foreground: #25212A;
+    --gold-hover: #C5A028;
+    --gold-subtle: #FAF6EA;
+    --gold-border: #EEDFA8; /* Pale Champagne */
+    --gold-text: #8C6F12; /* Accessible Gold on Light Surfaces (>4.5:1 AA) */
+    --accent-gold: #D4AF37;
+    --champagne-gold: #D4AF37;
+    --muted-gold: #B89545; /* Muted Gold */
+    --pale-champagne: #F5EAC8;
+
+    /* Supporting Light Accent */
+    --warm-accent: #D4AF37;
+    --warm-subtle: #FAF6EA;
 
     /* Brand Tokens */
-    --royal-amethyst: #18181B;
-    --deep-plum: #27272A;
-    --soft-plum: #52525B;
-    --champagne-gold: #6366F1;
-    --muted-gold: #6366F1;
-    --warm-alabaster: #FAFAFA;
-    --warm-stone: #E5E7EB;
-    --deep-ink: #18181B;
-    --muted-graphite: #71717A;
+    --royal-amethyst: #2B1238;
+    --deep-amethyst: #2B1238;
+    --deep-plum: #3B1D4A;
+    --soft-plum: #563A65;
+    --warm-alabaster: #FAF8F5;
+    --warm-stone: #E9E2D9;
+    --deep-ink: #25212A;
+    --muted-graphite: #716B75;
+    --muted-charcoal: #716B75;
 
     /* Borders & Form Inputs */
-    --border: #E5E7EB; /* Subtle neutral gray-200 / zinc-200 */
-    --border-strong: #D1D5DB;
-    --border-subtle: #F3F4F6;
-    --input: #E5E7EB;
-    --ring: #6366F1; /* Indigo focus ring */
-    --focus-ring: #6366F1;
+    --border: #E9E2D9; /* Warm Stone */
+    --border-strong: #D8CEBF;
+    --border-subtle: #F2ECE4;
+    --input: #E9E2D9;
+    --ring: #2B1238; /* Royal Amethyst focus ring */
+    --focus-ring: #2B1238;
 
     /* Semantic Status Tokens */
-    --success: #16A34A; /* Emerald-600 */
+    --success: #15803D; /* Forest Emerald */
     --success-foreground: #FFFFFF;
     --success-subtle: #F0FDF4;
     --success-border: #BBF7D0;
 
-    --warning: #D97706; /* Amber-600 */
+    --warning: #B45309; /* Deep Amber */
     --warning-foreground: #FFFFFF;
     --warning-subtle: #FFFBEB;
     --warning-border: #FDE68A;
 
-    --destructive: #DC2626; /* Red-600 */
+    --destructive: #B91C1C; /* Deep Red */
     --destructive-foreground: #FFFFFF;
     --destructive-subtle: #FEF2F2;
     --destructive-border: #FECACA;
 
-    --info: #2563EB; /* Blue-600 */
+    --info: #1D4ED8; /* Deep Blue */
     --info-foreground: #FFFFFF;
     --info-subtle: #EFF6FF;
     --info-border: #BFDBFE;
 
-    /* Sidebar Semantic Tokens (Clean Slate in Light Mode) */
-    --sidebar-background: #FFFFFF;
-    --sidebar-foreground: #18181B;
-    --sidebar-border: #E5E7EB;
-    --sidebar-muted: #71717A;
-    --sidebar-muted-foreground: #71717A;
-    --sidebar-active-background: #F4F4F5;
-    --sidebar-active-foreground: #18181B;
-    --sidebar-accent: #F4F4F5;
-    --sidebar-accent-foreground: #18181B;
-    --sidebar-gold: #6366F1;
+    /* Sidebar Semantic Tokens (Deep Royal Amethyst in Light Mode) */
+    --sidebar-background: #2B1238; /* Royal Amethyst */
+    --sidebar-foreground: #FAF8F5; /* Warm White */
+    --sidebar-border: #3B1D4A; /* Deep Plum */
+    --sidebar-muted: #B8AFBE; /* Muted Lavender-Gray */
+    --sidebar-muted-foreground: #B8AFBE;
+    --sidebar-active-background: #563A65; /* Soft Plum */
+    --sidebar-active-foreground: #FFFFFF;
+    --sidebar-accent: #563A65;
+    --sidebar-accent-foreground: #F7F2F8;
+    --sidebar-gold: #D4AF37; /* Champagne Gold */
 
     /* Charts */
-    --chart-1: #18181B;
-    --chart-2: #6366F1;
-    --chart-3: #71717A;
-    --chart-4: #D97706;
-    --chart-5: #16A34A;
+    --chart-1: #2B1238;
+    --chart-2: #D4AF37;
+    --chart-3: #563A65;
+    --chart-4: #B45309;
+    --chart-5: #15803D;
   }
 
   .dark {
-    /* Nordic Minimalist Slate: Dark Theme */
-    --background: #09090B; /* Deep Zinc / Charcoal */
-    --foreground: #F4F4F5; /* Near-white zinc-100 */
-    --foreground-secondary: #D4D4D8; /* Zinc-300 */
-    --foreground-muted: #A1A1AA; /* Zinc-400 */
-    --subtle-foreground: #71717A; /* Zinc-500 */
+    /* Royal Amethyst & Gold: Dark Theme */
+    --background: #17121B; /* Deep Aubergine-Charcoal */
+    --foreground: #F7F2F8; /* Warm Off-White */
+    --foreground-secondary: #DAD2DF;
+    --foreground-muted: #B8AFBE; /* Muted Lavender-Gray */
+    --subtle-foreground: #8A7E90;
 
     /* Surfaces */
-    --surface: #121214; /* Elevated surface */
-    --surface-subtle: #18181B; /* Zinc-900 */
-    --surface-muted: #27272A; /* Zinc-800 */
-    --card: #121214; /* Elevated dark card */
-    --card-foreground: #F4F4F5;
-    --card-elevated: #18181B;
-    --popover: #18181B;
-    --popover-foreground: #F4F4F5;
+    --surface: #241C29; /* Elevated Cards and Panels */
+    --surface-subtle: #2D2333; /* Subtly lighter aubergine */
+    --surface-muted: #362A3D;
+    --card: #241C29;
+    --card-foreground: #F7F2F8;
+    --card-elevated: #2D2333;
+    --popover: #2D2333;
+    --popover-foreground: #F7F2F8;
 
-    /* Primary Actions */
-    --primary: #F4F4F5; /* Near-white */
-    --primary-foreground: #09090B; /* Deep Charcoal */
-    --primary-hover: #E4E4E7;
-    --primary-subtle: #18181B;
-    --primary-muted: #A1A1AA;
+    /* Primary Actions (Soft Plum with high-contrast text) */
+    --primary: #563A65; /* Soft Plum */
+    --primary-foreground: #FFFFFF;
+    --primary-hover: #68487C;
+    --primary-subtle: #2C1E38;
+    --primary-muted: #422B50;
 
     /* Secondary & Muted Surfaces */
-    --secondary: #18181B;
-    --secondary-foreground: #F4F4F5;
-    --muted: #18181B;
-    --muted-foreground: #A1A1AA;
+    --secondary: #241C29;
+    --secondary-foreground: #F7F2F8;
+    --muted: #2D2333;
+    --muted-foreground: #B8AFBE;
 
-    /* Restrained Indigo Accent */
-    --accent: #818CF8; /* Indigo-400 */
-    --accent-gold: #818CF8;
-    --accent-foreground: #09090B;
-    --accent-hover: #6366F1;
-    --accent-subtle: #1E1B4B; /* Deep Indigo tint */
-    --warm-accent: #818CF8;
-    --warm-subtle: #1E1B4B;
+    /* Accents (Champagne Gold Highlights) */
+    --accent: #D4AF37;
+    --accent-foreground: #17121B;
+    --accent-hover: #E2BF4D;
+    --accent-subtle: #2B2313;
+
+    /* Champagne Gold Accents */
+    --gold: #D4AF37; /* Champagne Gold */
+    --gold-foreground: #17121B;
+    --gold-hover: #E2BF4D;
+    --gold-subtle: #2B2313;
+    --gold-border: #52431E;
+    --gold-text: #E8C862;
+    --accent-gold: #D4AF37;
+    --champagne-gold: #D4AF37;
+    --muted-gold: #B89545;
+    --pale-champagne: #F5EAC8;
+
+    /* Supporting Light Accent */
+    --warm-accent: #D4AF37;
+    --warm-subtle: #2B2313;
 
     /* Brand Tokens */
-    --royal-amethyst: #18181B;
-    --deep-plum: #27272A;
-    --soft-plum: #3F3F46;
-    --champagne-gold: #818CF8;
-    --muted-gold: #818CF8;
-    --warm-alabaster: #FAFAFA;
-    --warm-stone: #27272A;
-    --deep-ink: #F4F4F5;
-    --muted-graphite: #A1A1AA;
+    --royal-amethyst: #2B1238;
+    --deep-amethyst: #21132B;
+    --deep-plum: #3B1D4A;
+    --soft-plum: #563A65;
+    --warm-alabaster: #FAF8F5;
+    --warm-stone: #403447;
+    --deep-ink: #F7F2F8;
+    --muted-charcoal: #B8AFBE;
+    --muted-graphite: #B8AFBE;
 
     /* Borders & Form Inputs */
-    --border: #27272A; /* Subtle dark neutral border zinc-800 */
-    --border-strong: #3F3F46;
-    --border-subtle: #18181B;
-    --input: #27272A;
-    --ring: #818CF8; /* Indigo focus ring */
-    --focus-ring: #818CF8;
+    --border: #403447; /* Subtle Plum-Gray */
+    --border-strong: #55465F;
+    --border-subtle: #302536;
+    --input: #403447;
+    --ring: #D4AF37; /* Champagne Gold focus ring */
+    --focus-ring: #D4AF37;
 
     /* Semantic Status Tokens */
     --success: #22C55E;
-    --success-foreground: #09090B;
+    --success-foreground: #17121B;
     --success-subtle: #162B1D;
     --success-border: #1F422C;
 
     --warning: #F59E0B;
-    --warning-foreground: #09090B;
+    --warning-foreground: #17121B;
     --warning-subtle: #332410;
     --warning-border: #4D3716;
 
@@ -178,27 +204,27 @@
     --destructive-subtle: #331518;
     --destructive-border: #4D2024;
 
-    --info: #60A5FA;
-    --info-foreground: #09090B;
+    --info: #3B82F6;
+    --info-foreground: #17121B;
     --info-subtle: #17243B;
     --info-border: #223759;
 
-    /* Sidebar Semantic Tokens (Deep Slate in Dark Mode) */
-    --sidebar-background: #0D0D10;
-    --sidebar-foreground: #F4F4F5;
-    --sidebar-border: #27272A;
-    --sidebar-muted: #A1A1AA;
-    --sidebar-muted-foreground: #A1A1AA;
-    --sidebar-active-background: #18181B;
-    --sidebar-active-foreground: #F4F4F5;
-    --sidebar-accent: #18181B;
-    --sidebar-accent-foreground: #F4F4F5;
-    --sidebar-gold: #818CF8;
+    /* Sidebar Semantic Tokens (Deep Royal Amethyst in Dark Mode) */
+    --sidebar-background: #21132B; /* Deep Royal Amethyst */
+    --sidebar-foreground: #F7F2F8;
+    --sidebar-border: #351F45;
+    --sidebar-muted: #B8AFBE;
+    --sidebar-muted-foreground: #B8AFBE;
+    --sidebar-active-background: #563A65; /* Soft Plum */
+    --sidebar-active-foreground: #FFFFFF;
+    --sidebar-accent: #563A65;
+    --sidebar-accent-foreground: #F7F2F8;
+    --sidebar-gold: #D4AF37;
 
     /* Charts */
-    --chart-1: #818CF8;
-    --chart-2: #A1A1AA;
-    --chart-3: #52525B;
+    --chart-1: #68487C;
+    --chart-2: #D4AF37;
+    --chart-3: #9674AA;
     --chart-4: #F59E0B;
     --chart-5: #22C55E;
   }
@@ -231,16 +257,20 @@ aside.bg-sidebar,
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgba(161, 161, 170, 0.25);
+  background: rgba(86, 53, 107, 0.2);
   border-radius: 9999px;
 }
 
 .dark ::-webkit-scrollbar-thumb {
-  background: rgba(161, 161, 170, 0.25);
+  background: rgba(180, 154, 200, 0.2);
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(161, 161, 170, 0.45);
+  background: rgba(86, 53, 107, 0.35);
+}
+
+.dark ::-webkit-scrollbar-thumb:hover {
+  background: rgba(180, 154, 200, 0.35);
 }
 
 .no-scrollbar::-webkit-scrollbar {
@@ -265,15 +295,15 @@ aside.bg-sidebar,
 .academic-grid-pattern {
   background-size: 24px 24px;
   background-image: 
-    linear-gradient(to right, rgba(24, 24, 27, 0.03) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(24, 24, 27, 0.03) 1px, transparent 1px);
+    linear-gradient(to right, rgba(86, 53, 107, 0.03) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(86, 53, 107, 0.03) 1px, transparent 1px);
 }
 
 .dark .academic-grid-pattern {
   background-size: 24px 24px;
   background-image: 
-    linear-gradient(to right, rgba(244, 244, 245, 0.03) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(244, 244, 245, 0.03) 1px, transparent 1px);
+    linear-gradient(to right, rgba(180, 154, 200, 0.03) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(180, 154, 200, 0.03) 1px, transparent 1px);
 }
 
 /* Print stylesheets for Report Cards & Payslips */

@@ -674,8 +674,8 @@ export function StudentListClient({
                     </span>
                     <span className={`text-[10px] font-mono px-2 py-0.5 rounded-md border font-bold ${
                       selectedStudent.feesPending > 0
-                        ? "bg-amber-500/10 text-amber-500 border-amber-500/20"
-                        : "bg-emerald-500/10 text-emerald-500 border-emerald-500/20"
+                        ? "bg-warning-subtle text-warning border-warning-border"
+                        : "bg-success-subtle text-success border-success-border"
                     }`}>
                       {selectedStudent.feesPending > 0 ? "Pending" : "Settled"}
                     </span>

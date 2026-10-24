@@ -34,8 +34,8 @@ export async function sendPasswordResetEmail({
   <style>
     body {
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-      background-color: #FAFAFA;
-      color: #18181B;
+      background-color: #FAF8F5;
+      color: #211A24;
       margin: 0;
       padding: 40px 20px;
     }
@@ -43,7 +43,7 @@ export async function sendPasswordResetEmail({
       max-width: 560px;
       margin: 0 auto;
       background-color: #FFFFFF;
-      border: 1px solid #E5E7EB;
+      border: 1px solid #E8E1E8;
       border-radius: 12px;
       padding: 40px;
       box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
@@ -53,14 +53,14 @@ export async function sendPasswordResetEmail({
       align-items: center;
       gap: 12px;
       margin-bottom: 24px;
-      border-bottom: 1px solid #E5E7EB;
+      border-bottom: 1px solid #E8E1E8;
       padding-bottom: 20px;
     }
     .logo-box {
       width: 36px;
       height: 36px;
-      background-color: #18181B;
-      color: #FAFAFA;
+      background-color: #56356B;
+      color: #FFFFFF;
       font-weight: 800;
       font-size: 14px;
       border-radius: 8px;
@@ -71,7 +71,7 @@ export async function sendPasswordResetEmail({
     .brand-title {
       font-size: 16px;
       font-weight: 700;
-      color: #18181B;
+      color: #211A24;
       display: inline-block;
       vertical-align: middle;
       margin-left: 10px;
@@ -80,7 +80,7 @@ export async function sendPasswordResetEmail({
     h1 {
       font-size: 22px;
       font-weight: 700;
-      color: #18181B;
+      color: #211A24;
       margin: 0 0 12px 0;
       line-height: 1.25;
       letter-spacing: -0.02em;
@@ -88,7 +88,7 @@ export async function sendPasswordResetEmail({
     p {
       font-size: 14px;
       line-height: 1.6;
-      color: #71717A;
+      color: #68616D;
       margin: 0 0 20px 0;
     }
     .btn-container {
@@ -97,8 +97,8 @@ export async function sendPasswordResetEmail({
     }
     .btn {
       display: inline-block;
-      background-color: #18181B;
-      color: #FAFAFA !important;
+      background-color: #56356B;
+      color: #FFFFFF !important;
       text-decoration: none;
       padding: 12px 28px;
       border-radius: 8px;
@@ -108,15 +108,15 @@ export async function sendPasswordResetEmail({
     }
     .footer-note {
       font-size: 12px;
-      color: #A1A1AA;
-      border-top: 1px solid #E5E7EB;
+      color: #8E8693;
+      border-top: 1px solid #E8E1E8;
       padding-top: 20px;
       margin-top: 30px;
     }
     .link-alt {
       word-break: break-all;
       font-size: 11px;
-      color: #6366F1;
+      color: #56356B;
     }
   </style>
 </head>

@@ -1763,7 +1763,7 @@ export function TasksClient({
               <Button
                 type="button"
                 size="sm"
-                className="bg-destructive hover:bg-destructive/90 text-white"
+                variant="danger"
                 isLoading={isDeleting}
                 onClick={handleDeleteConfirm}
               >

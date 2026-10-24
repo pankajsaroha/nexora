@@ -40,6 +40,7 @@ export function DashboardShell({ user, institutions = [], notifications, childre
         roleCode={user.roleCode}
         userName={user.fullName}
         institutionName={user.institutionName}
+        institutionCode={(user as any).institutionCode}
         isOpenMobile={isMobileSidebarOpen}
         onCloseMobile={() => setIsMobileSidebarOpen(false)}
       />

@@ -71,7 +71,7 @@ export function RoleSwitcher({ currentRoleCode }: { currentRoleCode?: string }) 
         type="button"
         onClick={() => setIsOpen(!isOpen)}
         disabled={isSwitching}
-        className="flex items-center gap-2 rounded-xl border border-border bg-card px-3 py-1.5 text-xs text-foreground hover:border-primary hover:bg-muted transition-all shadow-2xs"
+        className="flex items-center gap-2 rounded-lg border border-border bg-card px-3 py-1.5 text-xs text-foreground hover:border-accent hover:bg-muted transition-all shadow-2xs"
       >
         <span className="text-[11px] text-muted-foreground">Viewing as:</span>
         <span className="font-bold text-foreground truncate max-w-[140px] sm:max-w-[180px]">
@@ -81,7 +81,7 @@ export function RoleSwitcher({ currentRoleCode }: { currentRoleCode?: string }) 
           · {activeRole.roleTitle}
         </span>
         {isSwitching ? (
-          <Loader2 className="h-3 w-3 animate-spin text-primary" />
+          <Loader2 className="h-3 w-3 animate-spin text-accent" />
         ) : (
           <ChevronDown className="h-3.5 w-3.5 text-muted-foreground" />
         )}
@@ -108,9 +108,9 @@ export function RoleSwitcher({ currentRoleCode }: { currentRoleCode?: string }) 
                     type="button"
                     onClick={() => handleSwitch()}
                     className={cn(
-                      "w-full flex items-center justify-between p-2.5 rounded-xl text-left text-xs transition-all",
+                      "w-full flex items-center justify-between p-2.5 rounded-lg text-left text-xs transition-all",
                       isSelected
-                        ? "bg-primary-subtle border border-primary/30 font-bold text-foreground"
+                        ? "bg-accent/10 border border-accent/20 font-semibold text-foreground"
                         : "hover:bg-muted text-muted-foreground hover:text-foreground border border-transparent"
                     )}
                   >
@@ -119,7 +119,7 @@ export function RoleSwitcher({ currentRoleCode }: { currentRoleCode?: string }) 
                       <p className="text-[11px] text-muted-foreground font-normal">{role.roleTitle}</p>
                     </div>
 
-                    {isSelected && <Check className="h-4 w-4 text-primary" />}
+                    {isSelected && <Check className="h-4 w-4 text-accent" />}
                   </button>
                 );
               })}

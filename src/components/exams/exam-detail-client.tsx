@@ -130,8 +130,8 @@ function formatAuditEventDetails(
         summary: details.papersUpdatedCount
           ? `${details.papersUpdatedCount} papers scheduled on academic timetable`
           : "Timetable scheduled and finalized",
-        badgeColor: "bg-blue-50 text-blue-800 border-blue-200",
-        dotColor: "bg-blue-500",
+        badgeColor: "bg-info-subtle text-info border-info-border",
+        dotColor: "bg-info",
         parsedFields: fields,
       };
 
@@ -139,8 +139,8 @@ function formatAuditEventDetails(
       return {
         title: "Examination Started",
         summary: "Assessment commenced across designated classrooms",
-        badgeColor: "bg-amber-50 text-amber-800 border-amber-200",
-        dotColor: "bg-amber-500",
+        badgeColor: "bg-warning-subtle text-warning border-warning-border",
+        dotColor: "bg-warning",
         parsedFields: fields,
       };
 
@@ -148,8 +148,8 @@ function formatAuditEventDetails(
       return {
         title: "Examination Completed",
         summary: "All assessment papers concluded",
-        badgeColor: "bg-emerald-50 text-emerald-800 border-emerald-200",
-        dotColor: "bg-emerald-500",
+        badgeColor: "bg-success-subtle text-success border-success-border",
+        dotColor: "bg-success",
         parsedFields: fields,
       };
 
@@ -810,19 +810,19 @@ export function ExamDetailClient({
             <span
               className={`inline-flex items-center gap-1.5 text-xs font-mono font-bold px-3 py-1 rounded-md border flex-shrink-0 ${
                 exam.status === "PUBLISHED"
-                  ? "bg-emerald-50 text-emerald-800 border-emerald-300"
+                  ? "bg-success-subtle text-success border-success-border"
                   : exam.status === "RESULTS_VERIFIED"
-                  ? "bg-teal-50 text-teal-800 border-teal-300"
+                  ? "bg-success-subtle text-success border-success-border"
                   : exam.status === "ONGOING"
-                  ? "bg-amber-50 text-amber-800 border-amber-300"
+                  ? "bg-warning-subtle text-warning border-warning-border"
                   : exam.status === "COMPLETED"
                   ? "bg-muted text-foreground border-border"
                   : exam.status === "SCHEDULED"
-                  ? "bg-blue-50 text-blue-800 border-blue-300"
+                  ? "bg-info-subtle text-info border-info-border"
                   : exam.status === "POSTPONED"
-                  ? "bg-purple-50 text-purple-800 border-purple-300"
+                  ? "bg-accent-subtle text-accent border-accent/20"
                   : exam.status === "CANCELLED"
-                  ? "bg-rose-50 text-rose-800 border-rose-300"
+                  ? "bg-destructive-subtle text-destructive border-destructive-border"
                   : "bg-muted/60 text-muted-foreground border-border"
               }`}
             >
@@ -1242,7 +1242,7 @@ export function ExamDetailClient({
                 }}
                 className={`inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-colors whitespace-nowrap cursor-pointer ${
                   isActive
-                    ? "bg-primary text-white shadow-2xs"
+                    ? "bg-primary text-primary-foreground shadow-2xs"
                     : "text-muted-foreground hover:text-foreground hover:bg-muted"
                 }`}
               >
@@ -2048,19 +2048,19 @@ export function ExamDetailClient({
                 <span
                   className={`px-3 py-1 rounded-md text-xs font-mono font-bold border ${
                     exam.status === "PUBLISHED"
-                      ? "bg-emerald-50 text-emerald-800 border-emerald-300"
+                      ? "bg-success-subtle text-success border-success-border"
                       : exam.status === "RESULTS_VERIFIED"
-                      ? "bg-teal-50 text-teal-800 border-teal-300"
+                      ? "bg-success-subtle text-success border-success-border"
                       : exam.status === "ONGOING"
-                      ? "bg-amber-50 text-amber-800 border-amber-300"
+                      ? "bg-warning-subtle text-warning border-warning-border"
                       : exam.status === "COMPLETED"
                       ? "bg-muted text-foreground border-border"
                       : exam.status === "SCHEDULED"
-                      ? "bg-blue-50 text-blue-800 border-blue-300"
+                      ? "bg-info-subtle text-info border-info-border"
                       : exam.status === "POSTPONED"
-                      ? "bg-purple-50 text-purple-800 border-purple-300"
+                      ? "bg-accent-subtle text-accent border-accent/20"
                       : exam.status === "CANCELLED"
-                      ? "bg-rose-50 text-rose-800 border-rose-300"
+                      ? "bg-destructive-subtle text-destructive border-destructive-border"
                       : "bg-muted/60 text-muted-foreground border-border"
                   }`}
                 >

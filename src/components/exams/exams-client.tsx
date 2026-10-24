@@ -1035,14 +1035,14 @@ export function ExamsClient({
               onClick={() => setIsFilterOpen(!isFilterOpen)}
               className={`inline-flex items-center gap-1.5 px-3 py-2 text-xs font-semibold rounded-lg border transition-all cursor-pointer shadow-2xs ${
                 selectedStatusFilter !== "ALL" || selectedTypeFilter !== "ALL"
-                  ? "bg-primary text-white border-primary"
+                  ? "bg-primary text-primary-foreground border-primary"
                   : "bg-card border-border text-foreground hover:bg-muted"
               }`}
             >
               <SlidersHorizontal className="w-3.5 h-3.5" />
               <span>Filters</span>
               {(selectedStatusFilter !== "ALL" || selectedTypeFilter !== "ALL") && (
-                <span className="w-1.5 h-1.5 rounded-full bg-white" />
+                <span className="w-1.5 h-1.5 rounded-full bg-primary-foreground" />
               )}
               <ChevronDown className={`w-3 h-3 transition-transform ${isFilterOpen ? "rotate-180" : ""}`} />
             </button>
@@ -1100,7 +1100,7 @@ export function ExamsClient({
                           onClick={() => setSelectedStatusFilter(item.code)}
                           className={`text-left px-2 py-1.5 rounded-md text-[11px] font-mono transition-colors cursor-pointer ${
                             selectedStatusFilter === item.code
-                              ? "bg-primary text-white font-bold"
+                              ? "bg-primary text-primary-foreground font-bold"
                               : "bg-muted/50 text-foreground hover:bg-muted"
                           }`}
                         >
@@ -1121,7 +1121,7 @@ export function ExamsClient({
                         onClick={() => setSelectedTypeFilter("ALL")}
                         className={`text-left px-2 py-1.5 rounded-md text-[11px] font-mono transition-colors cursor-pointer ${
                           selectedTypeFilter === "ALL"
-                            ? "bg-primary text-white font-bold"
+                            ? "bg-primary text-primary-foreground font-bold"
                             : "bg-muted/50 text-foreground hover:bg-muted"
                         }`}
                       >
@@ -1134,7 +1134,7 @@ export function ExamsClient({
                           onClick={() => setSelectedTypeFilter(t.code)}
                           className={`text-left px-2 py-1.5 rounded-md text-[11px] font-mono transition-colors truncate cursor-pointer ${
                             selectedTypeFilter === t.code
-                              ? "bg-primary text-white font-bold"
+                              ? "bg-primary text-primary-foreground font-bold"
                               : "bg-muted/50 text-foreground hover:bg-muted"
                           }`}
                           title={t.label}
@@ -1239,19 +1239,19 @@ export function ExamsClient({
                       <span
                         className={`inline-flex items-center gap-1.5 text-[10px] font-mono font-bold px-2 py-0.5 rounded-md border flex-shrink-0 ${
                           exam.status === "PUBLISHED"
-                            ? "bg-emerald-50 text-emerald-800 border-emerald-300"
+                            ? "bg-success-subtle text-success border-success-border"
                             : exam.status === "RESULTS_VERIFIED"
-                            ? "bg-teal-50 text-teal-800 border-teal-300"
+                            ? "bg-success-subtle text-success border-success-border"
                             : exam.status === "RESULTS_IN_PROGRESS"
-                            ? "bg-blue-50 text-blue-800 border-blue-300"
+                            ? "bg-info-subtle text-info border-info-border"
                             : exam.status === "ONGOING"
-                            ? "bg-amber-50 text-amber-800 border-amber-300"
+                            ? "bg-warning-subtle text-warning border-warning-border"
                             : exam.status === "COMPLETED"
                             ? "bg-muted text-foreground border-border"
                             : exam.status === "POSTPONED"
-                            ? "bg-purple-50 text-purple-800 border-purple-300"
+                            ? "bg-accent-subtle text-accent border-accent/20"
                             : exam.status === "CANCELLED"
-                            ? "bg-rose-50 text-rose-800 border-rose-300"
+                            ? "bg-destructive-subtle text-destructive border-destructive-border"
                             : "bg-muted/60 text-muted-foreground border-border"
                         }`}
                       >

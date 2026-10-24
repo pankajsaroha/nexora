@@ -476,12 +476,8 @@ export function ProgramManageDrawer({
                         </td>
                         <td className="p-3">
                           <Badge
-                            variant="outline"
-                            className={
-                              st.status === "ACTIVE"
-                                ? "bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 border-emerald-500/30 text-[10px]"
-                                : "bg-destructive/15 text-destructive border-destructive/30 text-[10px]"
-                            }
+                            variant={st.status === "ACTIVE" ? "success" : "danger"}
+                            size="sm"
                           >
                             {st.status}
                           </Badge>

@@ -5,8 +5,8 @@ import { PwaRegister } from "@/components/pwa/pwa-register";
 
 export const viewport: Viewport = {
   themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#FAFAFA" },
-    { media: "(prefers-color-scheme: dark)", color: "#09090B" },
+    { media: "(prefers-color-scheme: light)", color: "#FAF8F5" },
+    { media: "(prefers-color-scheme: dark)", color: "#17101C" },
   ],
   width: "device-width",
   initialScale: 1,

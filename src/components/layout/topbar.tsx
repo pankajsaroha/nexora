@@ -231,7 +231,7 @@ export function Topbar({
                   <Link
                     href="/settings"
                     onClick={() => setShowUserMenu(false)}
-                    className="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-medium text-muted-foreground hover:text-foreground hover:bg-muted transition-colors"
+                    className="w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-xs font-medium text-muted-foreground hover:text-foreground hover:bg-muted transition-colors"
                   >
                     <Settings className="h-3.5 w-3.5 text-muted-foreground" />
                     <span>Account Settings</span>
@@ -241,7 +241,7 @@ export function Topbar({
                     <Link
                       href="/audit-logs"
                       onClick={() => setShowUserMenu(false)}
-                      className="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-medium text-muted-foreground hover:text-foreground hover:bg-muted transition-colors"
+                      className="w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-xs font-medium text-muted-foreground hover:text-foreground hover:bg-muted transition-colors"
                     >
                       <ShieldAlert className="h-3.5 w-3.5 text-muted-foreground" />
                       <span>Security & Audit Logs</span>
@@ -251,7 +251,7 @@ export function Topbar({
                   <button
                     type="button"
                     onClick={handleLogout}
-                    className="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-medium text-destructive hover:bg-destructive/10 transition-colors cursor-pointer"
+                    className="w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-xs font-medium text-destructive hover:bg-destructive/10 transition-colors cursor-pointer"
                   >
                     <LogOut className="h-3.5 w-3.5" />
                     <span>Sign Out</span>

@@ -239,7 +239,7 @@ export function OnboardingWizard() {
                   <span
                     className={`w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-bold ${
                       isDone
-                        ? "bg-success text-white"
+                        ? "bg-success text-success-foreground"
                         : isCurrent
                         ? "bg-primary text-primary-foreground"
                         : "bg-muted text-muted-foreground"

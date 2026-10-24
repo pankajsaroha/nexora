@@ -360,7 +360,7 @@ export function StudentCustomFieldsClient({
                   <button
                     type="button"
                     onClick={() => handleDeleteField(field)}
-                    className="p-2 text-red-500 hover:text-red-700 hover:bg-red-50 rounded-xl transition-colors"
+                    className="p-2 text-destructive hover:bg-destructive/10 rounded-xl transition-colors"
                   >
                     <Trash2 className="h-4 w-4" />
                   </button>
@@ -382,7 +382,7 @@ export function StudentCustomFieldsClient({
         >
           <form onSubmit={handleSubmit} className="space-y-4 text-xs">
             {errorMessage && (
-              <div className="p-3 rounded-xl bg-red-50 border border-red-200 text-red-800 text-xs font-semibold">
+              <div className="p-3 rounded-xl bg-destructive-subtle border border-destructive-border text-destructive text-xs font-semibold">
                 {errorMessage}
               </div>
             )}

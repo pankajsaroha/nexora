@@ -217,10 +217,10 @@ export function StandaloneOnboarding() {
           {/* Logo & Top Link */}
           <div>
             <Link href="/" className="inline-flex items-center gap-3 group">
-              <div className="w-8 h-8 rounded-lg bg-primary text-primary-foreground flex items-center justify-center font-bold text-sm tracking-tighter shadow-2xs">
+              <div className="w-8 h-8 rounded-lg bg-sidebar-active text-sidebar-gold border border-sidebar-gold/30 flex items-center justify-center font-bold text-sm tracking-tighter shadow-2xs group-hover:border-sidebar-gold transition-colors">
                 NX
               </div>
-              <span className="font-extrabold text-base tracking-tight text-sidebar-foreground group-hover:text-accent transition-colors">
+              <span className="font-extrabold text-base tracking-tight text-sidebar-foreground group-hover:text-sidebar-gold transition-colors">
                 NEXORA
               </span>
             </Link>
@@ -243,10 +243,10 @@ export function StandaloneOnboarding() {
                     <div
                       className={`w-6 h-6 rounded-full flex items-center justify-center text-[10px] font-mono font-bold transition-all ${
                         isDone
-                          ? "bg-accent text-accent-foreground"
+                          ? "bg-sidebar-gold text-primary font-black"
                           : isCurrent
-                          ? "bg-accent/20 text-accent ring-2 ring-accent"
-                          : "bg-sidebar-accent/50 text-sidebar-muted border border-sidebar-border"
+                          ? "bg-sidebar-active text-sidebar-active-foreground ring-2 ring-sidebar-gold"
+                          : "bg-sidebar-active/50 text-sidebar-muted border border-sidebar-border"
                       }`}
                     >
                       {isDone ? "✓" : `0${s.id}`}
@@ -254,7 +254,7 @@ export function StandaloneOnboarding() {
                     {s.id !== 5 && (
                       <div
                         className={`w-px h-8 my-1 transition-colors ${
-                          isDone ? "bg-accent" : "bg-sidebar-border"
+                          isDone ? "bg-sidebar-gold" : "bg-sidebar-border"
                         }`}
                       />
                     )}

@@ -809,12 +809,12 @@ export function InstitutionLifecycleClient({ user }: { user: any }) {
                 onClick={handleSubmitStatusAction}
                 disabled={actionLoading}
                 className={cn(
-                  "px-5 py-2 rounded-xl text-xs font-bold text-white transition-all cursor-pointer shadow-sm flex items-center gap-2",
+                  "px-5 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer shadow-sm flex items-center gap-2",
                   statusActionType === "SUSPEND"
-                    ? "bg-amber-600 hover:bg-amber-700"
+                    ? "bg-warning text-warning-foreground hover:bg-warning/90"
                     : statusActionType === "ARCHIVE"
-                    ? "bg-primary hover:bg-primary-hover"
-                    : "bg-success hover:bg-success/90"
+                    ? "bg-primary text-primary-foreground hover:bg-primary-hover"
+                    : "bg-success text-success-foreground hover:bg-success/90"
                 )}
               >
                 {actionLoading && <Loader2 className="w-3.5 h-3.5 animate-spin" />}

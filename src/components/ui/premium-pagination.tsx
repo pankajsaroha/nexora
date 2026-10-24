@@ -52,7 +52,7 @@ export function PremiumPagination({
           type="button"
           onClick={() => onPageChange(currentPage - 1)}
           disabled={currentPage <= 1}
-          className="inline-flex items-center gap-1 px-3 py-1.5 rounded-xl border border-border bg-card text-foreground hover:bg-muted disabled:opacity-40 disabled:pointer-events-none transition-all font-bold text-xs"
+          className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg border border-border bg-card text-foreground hover:bg-muted disabled:opacity-40 disabled:pointer-events-none transition-all font-bold text-xs"
         >
           <ChevronLeft className="w-3.5 h-3.5" />
           <span>Previous</span>
@@ -76,7 +76,7 @@ export function PremiumPagination({
                   type="button"
                   onClick={() => onPageChange(page)}
                   className={cn(
-                    "w-8 h-8 rounded-xl font-bold text-xs transition-all",
+                    "w-8 h-8 rounded-lg font-bold text-xs transition-all",
                     currentPage === page
                       ? "bg-primary text-primary-foreground shadow-2xs font-semibold"
                       : "bg-card text-muted-foreground hover:bg-muted hover:text-foreground border border-border"
@@ -92,7 +92,7 @@ export function PremiumPagination({
           type="button"
           onClick={() => onPageChange(currentPage + 1)}
           disabled={currentPage >= totalPages}
-          className="inline-flex items-center gap-1 px-3 py-1.5 rounded-xl border border-border bg-card text-foreground hover:bg-muted disabled:opacity-40 disabled:pointer-events-none transition-all font-bold text-xs"
+          className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg border border-border bg-card text-foreground hover:bg-muted disabled:opacity-40 disabled:pointer-events-none transition-all font-bold text-xs"
         >
           <span>Next</span>
           <ChevronRight className="w-3.5 h-3.5" />

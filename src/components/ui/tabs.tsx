@@ -42,7 +42,7 @@ export function Tabs({ tabs, activeTab, onChange, className }: TabsProps) {
                   "rounded-md px-1.5 py-0.5 text-[10px] font-mono",
                   isActive
                     ? "bg-primary-foreground/20 text-primary-foreground font-semibold"
-                    : "bg-muted text-muted-foreground"
+                    : "bg-card border border-border text-foreground-secondary font-medium"
                 )}
               >
                 {tab.count}

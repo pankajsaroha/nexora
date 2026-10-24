@@ -77,10 +77,10 @@ export function InstitutionSelector({
         type="button"
         onClick={() => setIsOpen(!isOpen)}
         disabled={isSwitching}
-        className="flex items-center gap-2 rounded-xl border border-border bg-card/90 hover:bg-card px-2.5 sm:px-3 py-1.5 text-xs text-foreground hover:border-primary/50 transition-all shadow-2xs group cursor-pointer"
+        className="flex items-center gap-2 rounded-lg border border-border bg-card/90 hover:bg-card px-2.5 sm:px-3 py-1.5 text-xs text-foreground hover:border-accent/50 transition-all shadow-2xs group cursor-pointer"
         aria-label="Select institution context"
       >
-        <div className="w-5 h-5 rounded-lg bg-primary/10 border border-primary/20 flex items-center justify-center text-primary shrink-0">
+        <div className="w-5 h-5 rounded-md bg-accent/10 border border-accent/20 flex items-center justify-center text-accent shrink-0">
           <Building2 className="h-3 w-3" />
         </div>
         <div className="flex items-center gap-1.5 overflow-hidden text-left">
@@ -92,7 +92,7 @@ export function InstitutionSelector({
           </span>
         </div>
         {isSwitching ? (
-          <Loader2 className="h-3.5 w-3.5 animate-spin text-primary shrink-0" />
+          <Loader2 className="h-3.5 w-3.5 animate-spin text-accent shrink-0" />
         ) : (
           <ChevronDown className="h-3.5 w-3.5 text-muted-foreground group-hover:text-foreground shrink-0 transition-transform duration-150" />
         )}
@@ -106,7 +106,7 @@ export function InstitutionSelector({
               <span className="text-[10px] font-medium uppercase tracking-wider text-muted-foreground">
                 Authorized Institutions
               </span>
-              <span className="text-[10px] font-mono text-primary font-semibold">
+              <span className="text-[10px] font-mono text-accent font-semibold">
                 {institutions.length} available
               </span>
             </div>
@@ -119,7 +119,7 @@ export function InstitutionSelector({
                   placeholder="Filter institutions..."
                   value={search}
                   onChange={(e) => setSearch(e.target.value)}
-                  className="w-full pl-8 pr-3 py-1.5 rounded-lg text-xs bg-muted/50 border border-border text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-primary"
+                  className="w-full pl-8 pr-3 py-1.5 rounded-lg text-xs bg-background border border-border text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent/20"
                 />
               </div>
             )}
@@ -133,9 +133,9 @@ export function InstitutionSelector({
                     type="button"
                     onClick={() => handleSelectInstitution(inst.id)}
                     className={cn(
-                      "w-full flex items-center justify-between p-2 rounded-xl text-left text-xs transition-all",
+                      "w-full flex items-center justify-between p-2 rounded-lg text-left text-xs transition-all",
                       isSelected
-                        ? "bg-primary-subtle border border-primary/30 font-semibold text-foreground"
+                        ? "bg-accent/10 border border-accent/20 font-semibold text-foreground"
                         : "hover:bg-muted/70 text-muted-foreground hover:text-foreground border border-transparent"
                     )}
                   >
@@ -160,7 +160,7 @@ export function InstitutionSelector({
                       </p>
                     </div>
 
-                    {isSelected && <Check className="h-4 w-4 text-primary shrink-0" />}
+                    {isSelected && <Check className="h-4 w-4 text-accent shrink-0" />}
                   </button>
                 );
               })}
@@ -176,7 +176,7 @@ export function InstitutionSelector({
               <Link
                 href="/institutions"
                 onClick={() => setIsOpen(false)}
-                className="flex items-center justify-center gap-1 text-[11px] font-semibold text-primary hover:underline p-1"
+                className="flex items-center justify-center gap-1 text-[11px] font-semibold text-accent hover:underline p-1"
               >
                 Manage All Institutions &rarr;
               </Link>

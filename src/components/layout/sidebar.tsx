@@ -31,6 +31,7 @@ export interface SidebarProps {
   roleCode: string;
   userName: string;
   institutionName: string;
+  institutionCode?: string;
   isOpenMobile?: boolean;
   onCloseMobile?: () => void;
 }
@@ -82,6 +83,7 @@ export function Sidebar({
   roleCode,
   userName,
   institutionName,
+  institutionCode,
   isOpenMobile,
   onCloseMobile,
 }: SidebarProps) {
@@ -251,7 +253,7 @@ export function Sidebar({
         {/* Brand Header */}
         <div className="flex h-16 shrink-0 items-center justify-between px-5 border-b border-sidebar-border">
           <Link href="/dashboard" className="flex items-center gap-3 group">
-            <div className="w-8 h-8 rounded-lg bg-primary text-primary-foreground flex items-center justify-center font-bold text-xs tracking-wider shadow-2xs group-hover:opacity-90 transition-opacity">
+            <div className="w-8 h-8 rounded-lg bg-sidebar-active text-sidebar-gold flex items-center justify-center font-bold text-xs tracking-wider shadow-2xs border border-sidebar-gold/30 group-hover:border-sidebar-gold transition-colors">
               NX
             </div>
             <div className="overflow-hidden">
@@ -259,7 +261,7 @@ export function Sidebar({
                 NEXORA
               </span>
               <span className="text-[10px] text-sidebar-muted-foreground truncate block mt-1">
-                {institutionName || "Academic Portal"}
+                {institutionName || "Academic Portal"}{institutionCode ? ` · ${institutionCode}` : ""}
               </span>
             </div>
           </Link>
@@ -269,7 +271,7 @@ export function Sidebar({
         <div className="flex-1 overflow-y-auto px-3 py-5 space-y-5">
           {navGroups.map((group, gIdx) => (
             <div key={gIdx} className="space-y-0.5">
-              <span className="px-3 text-[10px] font-semibold uppercase tracking-wider text-sidebar-muted-foreground block mb-1.5">
+              <span className="px-3 text-[10px] font-bold uppercase tracking-wider text-sidebar-muted-foreground block mb-1.5">
                 {group.title}
               </span>
 
@@ -283,24 +285,24 @@ export function Sidebar({
                     href={item.href}
                     onClick={onCloseMobile}
                     className={cn(
-                      "flex items-center justify-between rounded-lg px-3 py-2 text-xs font-medium transition-all duration-150 group focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent",
+                      "flex items-center justify-between rounded-lg px-3 py-2 text-xs font-medium transition-all duration-150 group focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-sidebar-gold",
                       isActive
-                        ? "bg-sidebar-active text-sidebar-active-foreground font-semibold shadow-2xs border-l-2 border-accent"
-                        : "text-sidebar-muted-foreground hover:text-sidebar-foreground hover:bg-sidebar-accent/50"
+                        ? "bg-sidebar-active text-sidebar-active-foreground font-semibold shadow-2xs border-l-2 border-sidebar-gold"
+                        : "text-sidebar-muted-foreground hover:text-sidebar-foreground hover:bg-sidebar-active/60"
                     )}
                   >
                     <div className="flex items-center gap-3 min-w-0">
                       <Icon
                         className={cn(
                           "h-4 w-4 shrink-0 transition-colors",
-                          isActive ? "text-accent" : "text-sidebar-muted-foreground group-hover:text-sidebar-foreground"
+                          isActive ? "text-sidebar-gold" : "text-sidebar-muted-foreground group-hover:text-sidebar-foreground"
                         )}
                       />
                       <span className="truncate">{item.label}</span>
                     </div>
 
                     {item.badge && (
-                      <span className="rounded-md bg-sidebar-accent px-1.5 py-0.5 text-[9px] font-mono text-sidebar-foreground border border-sidebar-border">
+                      <span className="rounded-md bg-sidebar-active px-1.5 py-0.5 text-[9px] font-mono text-sidebar-foreground border border-sidebar-border">
                         {item.badge}
                       </span>
                     )}
@@ -314,12 +316,12 @@ export function Sidebar({
         {/* User Identity Footer */}
         <div className="p-3.5 border-t border-sidebar-border bg-sidebar flex items-center justify-between">
           <div className="flex items-center gap-2.5 overflow-hidden">
-            <div className="w-8 h-8 rounded-lg bg-surface-subtle border border-sidebar-border flex items-center justify-center text-xs font-semibold text-sidebar-foreground shrink-0 shadow-2xs">
+            <div className="w-8 h-8 rounded-lg bg-sidebar-active border border-sidebar-gold/30 flex items-center justify-center text-xs font-bold text-sidebar-gold shrink-0 shadow-2xs">
               {formattedName ? formattedName[0] : "U"}
             </div>
             <div className="overflow-hidden">
               <p className="text-xs font-semibold text-sidebar-foreground truncate leading-none">{formattedName}</p>
-              <p className="text-[10px] text-muted-foreground mt-0.5 truncate font-medium">{formattedRole}</p>
+              <p className="text-[10px] text-sidebar-muted-foreground mt-1 truncate font-medium">{formattedRole}</p>
             </div>
           </div>
         </div>

@@ -103,13 +103,13 @@ export function StudentAttendanceView({
         );
       case "HALF_DAY":
         return (
-          <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-bold bg-blue-500/15 text-blue-600 border border-blue-500/30 font-mono">
+          <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-bold bg-info-subtle text-info border border-info-border font-mono">
             HALF DAY
           </span>
         );
       case "EXCUSED":
         return (
-          <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-bold bg-purple-500/15 text-purple-600 border border-purple-500/30 font-mono">
+          <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-bold bg-accent-subtle text-accent border border-accent/20 font-mono">
             EXCUSED
           </span>
         );
@@ -124,7 +124,7 @@ export function StudentAttendanceView({
       <div className="flex flex-col sm:flex-row sm:items-baseline justify-between gap-4 border-b border-border/80 pb-5">
         <div>
           <div className="flex items-center gap-2 mb-1">
-            <span className="text-xs font-medium text-primary">
+            <span className="text-xs font-semibold text-accent">
               {className} ({sectionName}) · Roll #{rollNumber || "—"}
             </span>
           </div>
@@ -160,7 +160,7 @@ export function StudentAttendanceView({
 
       {/* Metrics Row */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-        <div className="p-4 rounded-2xl border border-border bg-card shadow-2xs space-y-1">
+        <div className="p-4 rounded-xl border border-border bg-card shadow-2xs space-y-1">
           <span className="text-[10px] font-mono uppercase tracking-wider text-muted-foreground font-bold block">
             Attendance Rate
           </span>
@@ -170,7 +170,7 @@ export function StudentAttendanceView({
           <span className="text-[10px] text-muted-foreground">Cumulative academic year</span>
         </div>
 
-        <div className="p-4 rounded-2xl border border-border bg-card shadow-2xs space-y-1">
+        <div className="p-4 rounded-xl border border-border bg-card shadow-2xs space-y-1">
           <span className="text-[10px] font-mono uppercase tracking-wider text-muted-foreground font-bold block">
             Present Days
           </span>
@@ -180,7 +180,7 @@ export function StudentAttendanceView({
           <span className="text-[10px] text-muted-foreground">Of {total} school sessions</span>
         </div>
 
-        <div className="p-4 rounded-2xl border border-border bg-card shadow-2xs space-y-1">
+        <div className="p-4 rounded-xl border border-border bg-card shadow-2xs space-y-1">
           <span className="text-[10px] font-mono uppercase tracking-wider text-muted-foreground font-bold block">
             Absent Days
           </span>
@@ -190,7 +190,7 @@ export function StudentAttendanceView({
           <span className="text-[10px] text-muted-foreground">Unexcused leaves</span>
         </div>
 
-        <div className="p-4 rounded-2xl border border-border bg-card shadow-2xs space-y-1">
+        <div className="p-4 rounded-xl border border-border bg-card shadow-2xs space-y-1">
           <span className="text-[10px] font-mono uppercase tracking-wider text-muted-foreground font-bold block">
             Late / Half Days
           </span>
@@ -202,7 +202,7 @@ export function StudentAttendanceView({
       </div>
 
       {/* Filter Toolbar */}
-      <div className="flex flex-wrap items-center justify-between gap-3 p-3.5 rounded-2xl border border-border bg-card shadow-2xs">
+      <div className="flex flex-wrap items-center justify-between gap-3 p-3.5 rounded-xl border border-border bg-card shadow-2xs">
         <div className="flex items-center gap-2">
           <Filter className="w-3.5 h-3.5 text-muted-foreground" />
           <span className="text-xs font-bold text-foreground">Filter Records:</span>
@@ -210,7 +210,7 @@ export function StudentAttendanceView({
           <select
             value={statusFilter}
             onChange={(e) => setStatusFilter(e.target.value)}
-            className="rounded-xl border border-border bg-background px-3 py-1.5 text-xs text-foreground focus:outline-none"
+            className="rounded-lg border border-border bg-background px-3 py-1.5 text-xs text-foreground focus:outline-none"
           >
             <option value="ALL">All Statuses</option>
             <option value="PRESENT">Present Only</option>
@@ -224,7 +224,7 @@ export function StudentAttendanceView({
             <select
               value={selectedMonth}
               onChange={(e) => setSelectedMonth(e.target.value)}
-              className="rounded-xl border border-border bg-background px-3 py-1.5 text-xs text-foreground focus:outline-none font-mono"
+              className="rounded-lg border border-border bg-background px-3 py-1.5 text-xs text-foreground focus:outline-none font-mono"
             >
               <option value="ALL">All Months</option>
               {months.map((m) => (
