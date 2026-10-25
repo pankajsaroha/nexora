@@ -86,7 +86,15 @@ export function canUserPerformExamAction(
   exam: { createdById?: string | null; status: string; institutionId: string },
   action: ExamLifecycleAction
 ): { allowed: boolean; reason?: string } {
-  // Institution boundary check
+  const role = user.roleCode || "";
+  const isSuperAdmin = role === "SUPER_ADMIN";
+
+  // Super Admin has system-wide administrative authority across institutions
+  if (isSuperAdmin) {
+    return { allowed: true };
+  }
+
+  // Institution boundary check for tenant isolation
   if (exam.institutionId !== user.institutionId) {
     return {
       allowed: false,
@@ -94,21 +102,13 @@ export function canUserPerformExamAction(
     };
   }
 
-  const role = user.roleCode || "";
-  const isSuperAdmin = role === "SUPER_ADMIN";
   const isInstAdmin =
-    isSuperAdmin ||
     ["ADMIN", "PRINCIPAL", "VICE_PRINCIPAL", "HOD", "EXAM_COORDINATOR"].includes(role);
   const isCreator = Boolean(
     exam.createdById &&
       (exam.createdById === user.id ||
         (user.teacherId && exam.createdById === user.teacherId))
   );
-
-  // Super Admin check
-  if (isSuperAdmin) {
-    return { allowed: true };
-  }
 
   // Action: DELETE (Super Admin, Institution Admin, or Exam Creator on their own exam)
   if (action === "DELETE") {
@@ -560,7 +560,7 @@ export async function getInstitutionExams(institutionId: string, user?: SessionU
 /**
  * Get single exam detail with full papers and audit logs
  */
-export async function getExamDetail(examId: string, institutionId: string) {
+export async function getExamDetail(examId: string, institutionId: string, user?: SessionUser) {
   const [exam, auditLogs] = await Promise.all([
     prisma.exam.findUnique({
       where: { id: examId },
@@ -630,7 +630,7 @@ export async function getExamDetail(examId: string, institutionId: string) {
     }),
   ]);
 
-  if (!exam || exam.institutionId !== institutionId) {
+  if (!exam || (user?.roleCode !== "SUPER_ADMIN" && exam.institutionId !== institutionId)) {
     return null;
   }
 
@@ -1013,7 +1013,7 @@ export async function updateExamStatus({
     where: { id: examId },
   });
 
-  if (!exam || exam.institutionId !== institutionId) {
+  if (!exam || (user.roleCode !== "SUPER_ADMIN" && exam.institutionId !== institutionId)) {
     throw new Error("Assessment not found.");
   }
 
@@ -1124,7 +1124,7 @@ export async function scheduleExamTimetable({
     },
   });
 
-  if (!exam || exam.institutionId !== institutionId) {
+  if (!exam || (user.roleCode !== "SUPER_ADMIN" && exam.institutionId !== institutionId)) {
     throw new Error("Assessment not found.");
   }
 
@@ -1294,8 +1294,14 @@ export async function safeDeleteExam({
     },
   });
 
-  if (!exam || exam.institutionId !== institutionId) {
+  if (!exam) {
     throw new Error("Assessment not found.");
+  }
+
+  const effectiveInstitutionId = exam.institutionId;
+
+  if (user.roleCode !== "SUPER_ADMIN" && exam.institutionId !== institutionId) {
+    throw new Error("Unauthorized: Assessment belongs to a different institution.");
   }
 
   // Ensure createdById is populated
@@ -1318,33 +1324,30 @@ export async function safeDeleteExam({
     throw new Error(authCheck.reason || "Forbidden: You are not authorized to delete this examination.");
   }
 
-  // 2. Dependency & Academic safety checks using real data
+  // 2. Lifecycle restriction: Only DRAFT examinations may be permanently deleted
+  if (exam.status !== "DRAFT") {
+    throw new Error(
+      `Cannot permanently delete an examination in "${exam.status}" status. Only DRAFT examinations with no student marks can be permanently deleted. For scheduled, ongoing, or completed examinations, please use "Cancel Examination" to safely withdraw it while preserving historical records and audit trails.`
+    );
+  }
+
+  // 3. Dependency & Academic safety checks using real data
   const totalMarksCount = exam.examSubjects.reduce((acc, es) => acc + es.marks.length, 0);
 
   if (totalMarksCount > 0) {
     throw new Error(
-      `Cannot delete this examination because marks have already been recorded for ${totalMarksCount} student(s).`
+      `Cannot delete this examination because marks have already been recorded for ${totalMarksCount} student(s). Cancel the examination instead to retain student marks.`
     );
   }
 
-  if (exam.status === "PUBLISHED") {
-    throw new Error(
-      "Cannot permanently delete this examination because official results have already been published."
-    );
-  }
-
-  if (exam.status === "RESULTS_VERIFIED") {
-    throw new Error(
-      "Cannot permanently delete this examination because academic results have been verified and sealed."
-    );
-  }
-
-  // Delete papers and exam safely
-  await prisma.examSubject.deleteMany({ where: { examId } });
-  const deleted = await prisma.exam.delete({ where: { id: examId } });
+  // 4. Atomic transaction deletion: delete subject papers and exam
+  const deleted = await prisma.$transaction(async (tx) => {
+    await tx.examSubject.deleteMany({ where: { examId } });
+    return tx.exam.delete({ where: { id: examId } });
+  });
 
   await logAuditEvent({
-    institutionId,
+    institutionId: effectiveInstitutionId,
     userId: user.id,
     userEmail: user.email,
     userName: user.fullName,

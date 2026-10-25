@@ -221,22 +221,34 @@ export async function POST(req: NextRequest) {
       });
       const instCode = (inst?.code || "NEX").toUpperCase();
       const currentYear = new Date().getFullYear();
-      finalAdmissionNumber = `${instCode}-${currentYear}-${String(count + 1).padStart(4, "0")}`;
-    }
+      let seq = count + 1;
+      finalAdmissionNumber = `${instCode}-${currentYear}-${String(seq).padStart(4, "0")}`;
+      while (
+        await prisma.student.findFirst({
+          where: {
+            institutionId: user.institutionId,
+            admissionNumber: finalAdmissionNumber,
+          },
+        })
+      ) {
+        seq++;
+        finalAdmissionNumber = `${instCode}-${currentYear}-${String(seq).padStart(4, "0")}`;
+      }
+    } else {
+      // Check user-specified admission number collision
+      const existingAdm = await prisma.student.findFirst({
+        where: {
+          institutionId: user.institutionId,
+          admissionNumber: finalAdmissionNumber,
+        },
+      });
 
-    // Check admission number collision
-    const existingAdm = await prisma.student.findFirst({
-      where: {
-        institutionId: user.institutionId,
-        admissionNumber: finalAdmissionNumber,
-      },
-    });
-
-    if (existingAdm) {
-      return NextResponse.json(
-        { error: `Admission Number '${finalAdmissionNumber}' is already in use by another student.` },
-        { status: 400 }
-      );
+      if (existingAdm) {
+        return NextResponse.json(
+          { error: `Admission Number '${finalAdmissionNumber}' is already in use by another student in this institution.` },
+          { status: 400 }
+        );
+      }
     }
 
     // Roll number: strictly user-entered or null (never auto-incremented or forced)

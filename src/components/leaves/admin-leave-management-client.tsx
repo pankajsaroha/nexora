@@ -372,110 +372,115 @@ export function AdminLeaveManagementClient({
           </div>
 
           <div className="overflow-hidden rounded-xl border border-border bg-card shadow-2xs">
-            <table className="w-full text-left text-xs">
-              <thead className="border-b border-border bg-muted/40 text-muted-foreground font-mono text-[11px] uppercase tracking-wider">
-                <tr>
-                  <th className="py-3 px-4">Faculty Member</th>
-                  <th className="py-3 px-4">Leave Category</th>
-                  <th className="py-3 px-4">Duration & Dates</th>
-                  <th className="py-3 px-4">Stated Purpose</th>
-                  <th className="py-3 px-4 text-center">Status</th>
-                  {canApprove && <th className="py-3 px-4 text-right">Decision</th>}
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-border">
-                {filteredRequests.length === 0 ? (
+            <div className="sm:hidden px-4 py-1.5 bg-muted/20 border-b border-border/50 text-[10px] font-mono text-muted-foreground flex items-center justify-between">
+              <span>← Swipe table horizontally to review actions →</span>
+            </div>
+            <div className="overflow-x-auto min-w-full">
+              <table className="w-full min-w-[720px] text-left text-xs">
+                <thead className="border-b border-border bg-muted/40 text-muted-foreground font-mono text-[11px] uppercase tracking-wider">
                   <tr>
-                    <td colSpan={6} className="py-8 text-center text-muted-foreground font-mono text-xs">
-                      No leave petitions found for the selected filter.
-                    </td>
+                    <th className="py-3 px-4">Faculty Member</th>
+                    <th className="py-3 px-4">Leave Category</th>
+                    <th className="py-3 px-4">Duration & Dates</th>
+                    <th className="py-3 px-4">Stated Purpose</th>
+                    <th className="py-3 px-4 text-center">Status</th>
+                    {canApprove && <th className="py-3 px-4 text-right w-36 whitespace-nowrap">Decision</th>}
                   </tr>
-                ) : (
-                  filteredRequests.map((lr) => (
-                    <tr key={lr.id} className="hover:bg-muted/30 transition-colors">
-                      <td className="py-3 px-4">
-                        <div className="font-semibold text-foreground">{lr.teacherName}</div>
-                        <div className="text-[11px] font-mono text-muted-foreground">
-                          {lr.teacherEmployeeId} · {lr.teacherDesignation}
-                        </div>
+                </thead>
+                <tbody className="divide-y divide-border">
+                  {filteredRequests.length === 0 ? (
+                    <tr>
+                      <td colSpan={6} className="py-8 text-center text-muted-foreground font-mono text-xs">
+                        No leave petitions found for the selected filter.
                       </td>
-                      <td className="py-3 px-4">
-                        <Badge variant="outline" size="sm">
-                          {lr.leaveType}
-                        </Badge>
-                      </td>
-                      <td className="py-3 px-4 font-mono font-medium text-foreground">
-                        {formatDate(lr.startDate)} to {formatDate(lr.endDate)}
-                        <span className="block text-[11px] text-muted-foreground font-normal">
-                          {lr.totalDays} Day{lr.totalDays > 1 ? "s" : ""}
-                        </span>
-                      </td>
-                      <td className="py-3 px-4 text-muted-foreground max-w-xs truncate text-[11px]">
-                        {lr.reason}
-                      </td>
-                      <td className="py-3 px-4 text-center">
-                        <Badge
-                          variant={
-                            lr.status === "APPROVED"
-                              ? "success"
-                              : lr.status === "PENDING"
-                              ? "warning"
-                              : "danger"
-                          }
-                          size="sm"
-                        >
-                          {lr.status}
-                        </Badge>
-                        {lr.status === "REJECTED" && lr.rejectionReason && (
-                          <div className="text-[10px] text-destructive mt-0.5 max-w-[150px] truncate">
-                            {lr.rejectionReason}
+                    </tr>
+                  ) : (
+                    filteredRequests.map((lr) => (
+                      <tr key={lr.id} className="hover:bg-muted/30 transition-colors">
+                        <td className="py-3 px-4">
+                          <div className="font-semibold text-foreground">{lr.teacherName}</div>
+                          <div className="text-[11px] font-mono text-muted-foreground">
+                            {lr.teacherEmployeeId} · {lr.teacherDesignation}
                           </div>
-                        )}
-                      </td>
-                      {canApprove && (
-                        <td className="py-3 px-4 text-right">
-                          {lr.status === "PENDING" ? (
-                            <div className="flex justify-end gap-1.5">
-                              <Button
-                                size="xs"
-                                variant="primary"
-                                onClick={() => handleReview(lr.id, "APPROVE")}
-                                disabled={processingId === lr.id}
-                              >
-                                {processingId === lr.id ? (
-                                  <Loader2 className="w-3 h-3 animate-spin" />
-                                ) : (
-                                  "Approve"
-                                )}
-                              </Button>
+                        </td>
+                        <td className="py-3 px-4">
+                          <Badge variant="outline" size="sm">
+                            {lr.leaveType}
+                          </Badge>
+                        </td>
+                        <td className="py-3 px-4 font-mono font-medium text-foreground">
+                          {formatDate(lr.startDate)} to {formatDate(lr.endDate)}
+                          <span className="block text-[11px] text-muted-foreground font-normal">
+                            {lr.totalDays} Day{lr.totalDays > 1 ? "s" : ""}
+                          </span>
+                        </td>
+                        <td className="py-3 px-4 text-muted-foreground max-w-xs truncate text-[11px]">
+                          {lr.reason}
+                        </td>
+                        <td className="py-3 px-4 text-center">
+                          <Badge
+                            variant={
+                              lr.status === "APPROVED"
+                                ? "success"
+                                : lr.status === "PENDING"
+                                ? "warning"
+                                : "danger"
+                            }
+                            size="sm"
+                          >
+                            {lr.status}
+                          </Badge>
+                          {lr.status === "REJECTED" && lr.rejectionReason && (
+                            <div className="text-[10px] text-destructive mt-0.5 max-w-[150px] truncate">
+                              {lr.rejectionReason}
+                            </div>
+                          )}
+                        </td>
+                        {canApprove && (
+                          <td className="py-3 px-4 text-right whitespace-nowrap">
+                            {lr.status === "PENDING" ? (
+                              <div className="flex justify-end gap-1.5">
+                                <Button
+                                  size="xs"
+                                  variant="primary"
+                                  onClick={() => handleReview(lr.id, "APPROVE")}
+                                  disabled={processingId === lr.id}
+                                >
+                                  {processingId === lr.id ? (
+                                    <Loader2 className="w-3 h-3 animate-spin" />
+                                  ) : (
+                                    "Approve"
+                                  )}
+                                </Button>
+                                <Button
+                                  size="xs"
+                                  variant="outline"
+                                  onClick={() => setRejectModalId(lr.id)}
+                                  disabled={processingId === lr.id}
+                                >
+                                  Reject
+                                </Button>
+                              </div>
+                            ) : lr.status === "APPROVED" ? (
                               <Button
                                 size="xs"
                                 variant="outline"
-                                onClick={() => setRejectModalId(lr.id)}
+                                onClick={() => handleReview(lr.id, "CANCEL", "Revoked by Administrator")}
                                 disabled={processingId === lr.id}
                               >
-                                Reject
+                                Revoke
                               </Button>
-                            </div>
-                          ) : lr.status === "APPROVED" ? (
-                            <Button
-                              size="xs"
-                              variant="outline"
-                              onClick={() => handleReview(lr.id, "CANCEL", "Revoked by Administrator")}
-                              disabled={processingId === lr.id}
-                            >
-                              Revoke
-                            </Button>
-                          ) : (
-                            <span className="text-[11px] font-mono text-muted-foreground">Processed</span>
-                          )}
-                        </td>
-                      )}
-                    </tr>
-                  ))
-                )}
-              </tbody>
-            </table>
+                            ) : (
+                              <span className="text-[11px] font-mono text-muted-foreground">Processed</span>
+                            )}
+                          </td>
+                        )}
+                      </tr>
+                    ))
+                  )}
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
       )}
@@ -484,66 +489,68 @@ export function AdminLeaveManagementClient({
       {activeTab === "balances" && (
         <div className="space-y-4">
           <div className="rounded-xl border border-border bg-card shadow-2xs overflow-hidden">
-            <table className="w-full text-left text-xs">
-              <thead className="border-b border-border bg-muted/40 text-muted-foreground font-mono text-[11px] uppercase tracking-wider">
-                <tr>
-                  <th className="py-3 px-4">Faculty ID & Name</th>
-                  <th className="py-3 px-4">Department</th>
-                  <th className="py-3 px-4">Category Breakdown (Available)</th>
-                  <th className="py-3 px-4 font-mono text-center">Accrued / Used</th>
-                  <th className="py-3 px-4 font-mono text-right">Net Available</th>
-                  <th className="py-3 px-4 text-right">Audited Adjustment</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-border">
-                {staffBalances.map((sb) => (
-                  <tr key={sb.teacherId} className="hover:bg-muted/30 transition-colors">
-                    <td className="py-3 px-4">
-                      <div className="font-semibold text-foreground">{sb.fullName}</div>
-                      <div className="text-[11px] font-mono text-muted-foreground">
-                        {sb.employeeId} · {sb.designation}
-                      </div>
-                    </td>
-                    <td className="py-3 px-4 text-muted-foreground">{sb.departmentName}</td>
-                    <td className="py-3 px-4">
-                      <div className="flex flex-wrap gap-1.5">
-                        {sb.categories.map((c) => (
-                          <span
-                            key={c.leaveTypeId}
-                            className="px-2 py-0.5 rounded-md bg-muted text-[11px] font-mono font-medium text-foreground"
-                          >
-                            {c.code}: <strong>{c.available}</strong>/{c.entitled}
-                          </span>
-                        ))}
-                      </div>
-                    </td>
-                    <td className="py-3 px-4 text-center font-mono">
-                      <span className="text-foreground">{sb.totalAccrued}</span> /{" "}
-                      <span className="text-muted-foreground">{sb.totalUsed}</span>
-                    </td>
-                    <td className="py-3 px-4 text-right font-mono font-bold text-sm text-foreground">
-                      {sb.totalAvailable} Days
-                    </td>
-                    <td className="py-3 px-4 text-right">
-                      <Button
-                        size="xs"
-                        variant="outline"
-                        onClick={() => {
-                          setAdjustModalTeacher(sb);
-                          if (sb.categories.length > 0) {
-                            setAdjustTypeId(sb.categories[0].leaveTypeId);
-                          }
-                          setAdjustDays(1);
-                        }}
-                      >
-                        <ArrowRightLeft className="w-3 h-3 mr-1" />
-                        Adjust
-                      </Button>
-                    </td>
+            <div className="overflow-x-auto min-w-full">
+              <table className="w-full min-w-[700px] text-left text-xs">
+                <thead className="border-b border-border bg-muted/40 text-muted-foreground font-mono text-[11px] uppercase tracking-wider">
+                  <tr>
+                    <th className="py-3 px-4">Faculty ID & Name</th>
+                    <th className="py-3 px-4">Department</th>
+                    <th className="py-3 px-4">Category Breakdown (Available)</th>
+                    <th className="py-3 px-4 font-mono text-center">Accrued / Used</th>
+                    <th className="py-3 px-4 font-mono text-right">Net Available</th>
+                    <th className="py-3 px-4 text-right">Audited Adjustment</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody className="divide-y divide-border">
+                  {staffBalances.map((sb) => (
+                    <tr key={sb.teacherId} className="hover:bg-muted/30 transition-colors">
+                      <td className="py-3 px-4">
+                        <div className="font-semibold text-foreground">{sb.fullName}</div>
+                        <div className="text-[11px] font-mono text-muted-foreground">
+                          {sb.employeeId} · {sb.designation}
+                        </div>
+                      </td>
+                      <td className="py-3 px-4 text-muted-foreground">{sb.departmentName}</td>
+                      <td className="py-3 px-4">
+                        <div className="flex flex-wrap gap-1.5">
+                          {sb.categories.map((c) => (
+                            <span
+                              key={c.leaveTypeId}
+                              className="px-2 py-0.5 rounded-md bg-muted text-[11px] font-mono font-medium text-foreground"
+                            >
+                              {c.code}: <strong>{c.available}</strong>/{c.entitled}
+                            </span>
+                          ))}
+                        </div>
+                      </td>
+                      <td className="py-3 px-4 text-center font-mono">
+                        <span className="text-foreground">{sb.totalAccrued}</span> /{" "}
+                        <span className="text-muted-foreground">{sb.totalUsed}</span>
+                      </td>
+                      <td className="py-3 px-4 text-right font-mono font-bold text-sm text-foreground">
+                        {sb.totalAvailable} Days
+                      </td>
+                      <td className="py-3 px-4 text-right">
+                        <Button
+                          size="xs"
+                          variant="outline"
+                          onClick={() => {
+                            setAdjustModalTeacher(sb);
+                            if (sb.categories.length > 0) {
+                              setAdjustTypeId(sb.categories[0].leaveTypeId);
+                            }
+                            setAdjustDays(1);
+                          }}
+                        >
+                          <ArrowRightLeft className="w-3 h-3 mr-1" />
+                          Adjust
+                        </Button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
       )}
@@ -570,56 +577,58 @@ export function AdminLeaveManagementClient({
           </div>
 
           <div className="rounded-xl border border-border bg-card shadow-2xs overflow-hidden">
-            <table className="w-full text-left text-xs">
-              <thead className="border-b border-border bg-muted/40 text-muted-foreground font-mono text-[11px] uppercase tracking-wider">
-                <tr>
-                  <th className="py-3 px-4">Leave Category</th>
-                  <th className="py-3 px-4 font-mono text-center">Annual Quota</th>
-                  <th className="py-3 px-4 text-center">Accrual Mode</th>
-                  <th className="py-3 px-4 text-center">Pro-Rata Joiners</th>
-                  <th className="py-3 px-4 text-center">Carry Forward</th>
-                  <th className="py-3 px-4 text-right">Proof Required</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-border">
-                {!policy || policy.rules.length === 0 ? (
+            <div className="overflow-x-auto min-w-full">
+              <table className="w-full min-w-[640px] text-left text-xs">
+                <thead className="border-b border-border bg-muted/40 text-muted-foreground font-mono text-[11px] uppercase tracking-wider">
                   <tr>
-                    <td colSpan={6} className="py-8 text-center text-muted-foreground font-mono text-xs">
-                      No policy rules configured yet.
-                    </td>
+                    <th className="py-3 px-4">Leave Category</th>
+                    <th className="py-3 px-4 font-mono text-center">Annual Quota</th>
+                    <th className="py-3 px-4 text-center">Accrual Mode</th>
+                    <th className="py-3 px-4 text-center">Pro-Rata Joiners</th>
+                    <th className="py-3 px-4 text-center">Carry Forward</th>
+                    <th className="py-3 px-4 text-right">Proof Required</th>
                   </tr>
-                ) : (
-                  policy.rules.map((rule) => (
-                    <tr key={rule.id} className="hover:bg-muted/30 transition-colors">
-                      <td className="py-3 px-4">
-                        <div className="font-semibold text-foreground">
-                          {rule.leaveTypeName} ({rule.leaveTypeCode})
-                        </div>
-                      </td>
-                      <td className="py-3 px-4 text-center font-mono font-bold text-foreground">
-                        {rule.annualEntitlement} Days
-                      </td>
-                      <td className="py-3 px-4 text-center font-mono text-muted-foreground uppercase">
-                        {rule.accrualFrequency}
-                      </td>
-                      <td className="py-3 px-4 text-center">
-                        <Badge variant={rule.proRataEnabled ? "outline" : "secondary"} size="sm">
-                          {rule.proRataEnabled ? `Yes (${rule.roundingRule.toLowerCase()})` : "No"}
-                        </Badge>
-                      </td>
-                      <td className="py-3 px-4 text-center font-mono text-muted-foreground">
-                        {rule.allowCarryForward ? `Max ${rule.maxCarryForwardDays}d` : "Lapses"}
-                      </td>
-                      <td className="py-3 px-4 text-right">
-                        <Badge variant={rule.requiresProof ? "warning" : "outline"} size="sm">
-                          {rule.requiresProof ? "Required" : "Optional"}
-                        </Badge>
+                </thead>
+                <tbody className="divide-y divide-border">
+                  {!policy || policy.rules.length === 0 ? (
+                    <tr>
+                      <td colSpan={6} className="py-8 text-center text-muted-foreground font-mono text-xs">
+                        No policy rules configured yet.
                       </td>
                     </tr>
-                  ))
-                )}
-              </tbody>
-            </table>
+                  ) : (
+                    policy.rules.map((rule) => (
+                      <tr key={rule.id} className="hover:bg-muted/30 transition-colors">
+                        <td className="py-3 px-4">
+                          <div className="font-semibold text-foreground">
+                            {rule.leaveTypeName} ({rule.leaveTypeCode})
+                          </div>
+                        </td>
+                        <td className="py-3 px-4 text-center font-mono font-bold text-foreground">
+                          {rule.annualEntitlement} Days
+                        </td>
+                        <td className="py-3 px-4 text-center font-mono text-muted-foreground uppercase">
+                          {rule.accrualFrequency}
+                        </td>
+                        <td className="py-3 px-4 text-center">
+                          <Badge variant={rule.proRataEnabled ? "outline" : "secondary"} size="sm">
+                            {rule.proRataEnabled ? `Yes (${rule.roundingRule.toLowerCase()})` : "No"}
+                          </Badge>
+                        </td>
+                        <td className="py-3 px-4 text-center font-mono text-muted-foreground">
+                          {rule.allowCarryForward ? `Max ${rule.maxCarryForwardDays}d` : "Lapses"}
+                        </td>
+                        <td className="py-3 px-4 text-right">
+                          <Badge variant={rule.requiresProof ? "warning" : "outline"} size="sm">
+                            {rule.requiresProof ? "Required" : "Optional"}
+                          </Badge>
+                        </td>
+                      </tr>
+                    ))
+                  )}
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
       )}
@@ -628,38 +637,40 @@ export function AdminLeaveManagementClient({
       {activeTab === "types" && (
         <div className="space-y-4">
           <div className="rounded-xl border border-border bg-card shadow-2xs overflow-hidden">
-            <table className="w-full text-left text-xs">
-              <thead className="border-b border-border bg-muted/40 text-muted-foreground font-mono text-[11px] uppercase tracking-wider">
-                <tr>
-                  <th className="py-3 px-4">Category Code</th>
-                  <th className="py-3 px-4">Name</th>
-                  <th className="py-3 px-4">Pay Status</th>
-                  <th className="py-3 px-4">Description</th>
-                  <th className="py-3 px-4 text-right">Status</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-border">
-                {leaveTypes.map((t) => (
-                  <tr key={t.id} className="hover:bg-muted/30 transition-colors">
-                    <td className="py-3 px-4 font-mono font-bold text-foreground">{t.code}</td>
-                    <td className="py-3 px-4 font-semibold text-foreground">{t.name}</td>
-                    <td className="py-3 px-4">
-                      <Badge variant={t.isPaid ? "outline" : "secondary"} size="sm">
-                        {t.isPaid ? "Paid Leave" : "Loss of Pay (Unpaid)"}
-                      </Badge>
-                    </td>
-                    <td className="py-3 px-4 text-muted-foreground text-[11px]">
-                      {t.description || "General leave quota"}
-                    </td>
-                    <td className="py-3 px-4 text-right">
-                      <Badge variant={t.isActive ? "success" : "secondary"} size="sm">
-                        {t.isActive ? "Active" : "Archived"}
-                      </Badge>
-                    </td>
+            <div className="overflow-x-auto min-w-full">
+              <table className="w-full min-w-[550px] text-left text-xs">
+                <thead className="border-b border-border bg-muted/40 text-muted-foreground font-mono text-[11px] uppercase tracking-wider">
+                  <tr>
+                    <th className="py-3 px-4">Category Code</th>
+                    <th className="py-3 px-4">Name</th>
+                    <th className="py-3 px-4">Pay Status</th>
+                    <th className="py-3 px-4">Description</th>
+                    <th className="py-3 px-4 text-right">Status</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody className="divide-y divide-border">
+                  {leaveTypes.map((t) => (
+                    <tr key={t.id} className="hover:bg-muted/30 transition-colors">
+                      <td className="py-3 px-4 font-mono font-bold text-foreground">{t.code}</td>
+                      <td className="py-3 px-4 font-semibold text-foreground">{t.name}</td>
+                      <td className="py-3 px-4">
+                        <Badge variant={t.isPaid ? "outline" : "secondary"} size="sm">
+                          {t.isPaid ? "Paid Leave" : "Loss of Pay (Unpaid)"}
+                        </Badge>
+                      </td>
+                      <td className="py-3 px-4 text-muted-foreground text-[11px]">
+                        {t.description || "General leave quota"}
+                      </td>
+                      <td className="py-3 px-4 text-right">
+                        <Badge variant={t.isActive ? "success" : "secondary"} size="sm">
+                          {t.isActive ? "Active" : "Archived"}
+                        </Badge>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
       )}

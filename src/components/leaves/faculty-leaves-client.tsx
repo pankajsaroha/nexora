@@ -248,83 +248,85 @@ export function FacultyLeavesClient({
           </span>
         </div>
         <div className="rounded-xl border border-border bg-card shadow-2xs overflow-hidden">
-          <table className="w-full text-left text-xs">
-            <thead className="bg-muted/40 text-muted-foreground font-mono text-[11px] uppercase tracking-wider border-b border-border">
-              <tr>
-                <th className="py-3 px-4">Leave Type</th>
-                <th className="py-3 px-4">Scheduled Dates</th>
-                <th className="py-3 px-4">Total Days</th>
-                <th className="py-3 px-4">Stated Reason</th>
-                <th className="py-3 px-4 text-center">Status</th>
-                <th className="py-3 px-4 text-right">Action</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-border">
-              {leaveRequests.length === 0 ? (
+          <div className="overflow-x-auto min-w-full">
+            <table className="w-full min-w-[650px] text-left text-xs">
+              <thead className="bg-muted/40 text-muted-foreground font-mono text-[11px] uppercase tracking-wider border-b border-border">
                 <tr>
-                  <td colSpan={6} className="py-8 text-center text-muted-foreground font-mono text-xs">
-                    No active or past leave applications on record.
-                  </td>
+                  <th className="py-3 px-4">Leave Type</th>
+                  <th className="py-3 px-4">Scheduled Dates</th>
+                  <th className="py-3 px-4">Total Days</th>
+                  <th className="py-3 px-4">Stated Reason</th>
+                  <th className="py-3 px-4 text-center">Status</th>
+                  <th className="py-3 px-4 text-right">Action</th>
                 </tr>
-              ) : (
-                leaveRequests.map((lr) => (
-                  <tr key={lr.id} className="hover:bg-muted/30 transition-colors">
-                    <td className="py-3 px-4 font-semibold text-foreground">
-                      <Badge variant="outline" size="sm">
-                        {lr.leaveType}
-                      </Badge>
-                    </td>
-                    <td className="py-3 px-4 text-foreground font-mono text-[11px]">
-                      {formatDate(lr.startDate)} to {formatDate(lr.endDate)}
-                    </td>
-                    <td className="py-3 px-4 font-mono font-medium text-foreground">
-                      {lr.totalDays} Day{lr.totalDays > 1 ? "s" : ""}
-                    </td>
-                    <td className="py-3 px-4 text-muted-foreground max-w-sm truncate text-[11px]">
-                      {lr.reason}
-                    </td>
-                    <td className="py-3 px-4 text-center">
-                      <Badge
-                        variant={
-                          lr.status === "APPROVED"
-                            ? "success"
-                            : lr.status === "PENDING"
-                            ? "warning"
-                            : "danger"
-                        }
-                        size="sm"
-                      >
-                        {lr.status}
-                      </Badge>
-                      {lr.status === "REJECTED" && lr.rejectionReason && (
-                        <p className="text-[10px] text-destructive mt-0.5 max-w-[140px] truncate">
-                          {lr.rejectionReason}
-                        </p>
-                      )}
-                    </td>
-                    <td className="py-3 px-4 text-right">
-                      {lr.status === "PENDING" ? (
-                        <Button
-                          size="xs"
-                          variant="outline"
-                          onClick={() => handleCancel(lr.id)}
-                          disabled={cancellingId === lr.id}
-                        >
-                          {cancellingId === lr.id ? (
-                            <Loader2 className="w-3 h-3 animate-spin" />
-                          ) : (
-                            "Cancel"
-                          )}
-                        </Button>
-                      ) : (
-                        <span className="text-[11px] font-mono text-muted-foreground">—</span>
-                      )}
+              </thead>
+              <tbody className="divide-y divide-border">
+                {leaveRequests.length === 0 ? (
+                  <tr>
+                    <td colSpan={6} className="py-8 text-center text-muted-foreground font-mono text-xs">
+                      No active or past leave applications on record.
                     </td>
                   </tr>
-                ))
-              )}
-            </tbody>
-          </table>
+                ) : (
+                  leaveRequests.map((lr) => (
+                    <tr key={lr.id} className="hover:bg-muted/30 transition-colors">
+                      <td className="py-3 px-4 font-semibold text-foreground">
+                        <Badge variant="outline" size="sm">
+                          {lr.leaveType}
+                        </Badge>
+                      </td>
+                      <td className="py-3 px-4 text-foreground font-mono text-[11px]">
+                        {formatDate(lr.startDate)} to {formatDate(lr.endDate)}
+                      </td>
+                      <td className="py-3 px-4 font-mono font-medium text-foreground">
+                        {lr.totalDays} Day{lr.totalDays > 1 ? "s" : ""}
+                      </td>
+                      <td className="py-3 px-4 text-muted-foreground max-w-sm truncate text-[11px]">
+                        {lr.reason}
+                      </td>
+                      <td className="py-3 px-4 text-center">
+                        <Badge
+                          variant={
+                            lr.status === "APPROVED"
+                              ? "success"
+                              : lr.status === "PENDING"
+                              ? "warning"
+                              : "danger"
+                          }
+                          size="sm"
+                        >
+                          {lr.status}
+                        </Badge>
+                        {lr.status === "REJECTED" && lr.rejectionReason && (
+                          <p className="text-[10px] text-destructive mt-0.5 max-w-[140px] truncate">
+                            {lr.rejectionReason}
+                          </p>
+                        )}
+                      </td>
+                      <td className="py-3 px-4 text-right">
+                        {lr.status === "PENDING" ? (
+                          <Button
+                            size="xs"
+                            variant="outline"
+                            onClick={() => handleCancel(lr.id)}
+                            disabled={cancellingId === lr.id}
+                          >
+                            {cancellingId === lr.id ? (
+                              <Loader2 className="w-3 h-3 animate-spin" />
+                            ) : (
+                              "Cancel"
+                            )}
+                          </Button>
+                        ) : (
+                          <span className="text-[11px] font-mono text-muted-foreground">—</span>
+                        )}
+                      </td>
+                    </tr>
+                  ))
+                )}
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
 

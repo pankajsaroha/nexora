@@ -290,9 +290,47 @@ export function StudentAdmissionDialog({
     }));
   };
 
+  const handleFormKeyDown = (e: React.KeyboardEvent<HTMLFormElement>) => {
+    if (e.key === "Enter") {
+      const target = e.target as HTMLElement;
+      // Prevent accidental Enter submission in text inputs
+      if (target.tagName === "INPUT") {
+        e.preventDefault();
+        if (activeStep < 5) {
+          handleNext();
+        }
+      }
+    }
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!validateStep(5)) return;
+
+    // Prevent duplicate in-flight requests
+    if (isSubmitting) return;
+
+    // Never submit unless user is on the final step (Step 5)
+    if (activeStep < 5) {
+      handleNext();
+      return;
+    }
+
+    // Validate all required steps in order
+    if (!validateStep(1)) {
+      setActiveStep(1);
+      return;
+    }
+    if (!validateStep(3)) {
+      setActiveStep(3);
+      return;
+    }
+    if (!validateStep(4)) {
+      setActiveStep(4);
+      return;
+    }
+    if (!validateStep(5)) {
+      return;
+    }
 
     setIsSubmitting(true);
     setErrorMessage(null);
@@ -358,6 +396,7 @@ export function StudentAdmissionDialog({
             </div>
           </div>
           <button
+            type="button"
             onClick={() => {
               resetForm();
               onClose();
@@ -439,15 +478,42 @@ export function StudentAdmissionDialog({
                 <h4 className="text-xl font-extrabold text-foreground mt-1">
                   {admittedStudent.fullName}
                 </h4>
-                <p className="text-xs text-muted-foreground mt-1">
-                  Official Admission ID:{" "}
-                  <span className="font-mono font-bold text-foreground">
-                    {admittedStudent.admissionNumber}
+                <div className="flex flex-col sm:flex-row items-center justify-center gap-2 text-xs text-muted-foreground mt-1.5">
+                  <span>
+                    Admission No:{" "}
+                    <span className="font-mono font-bold text-foreground">
+                      {admittedStudent.admissionNumber}
+                    </span>
                   </span>
-                </p>
+                  <span className="hidden sm:inline text-border">•</span>
+                  <span>
+                    Nexora ID:{" "}
+                    <span className="font-mono text-[11px] text-muted-foreground">
+                      {admittedStudent.id}
+                    </span>
+                  </span>
+                </div>
               </div>
 
               <div className="rounded-xl border border-border bg-card p-4 text-xs space-y-2.5 text-left shadow-2xs">
+                <div className="flex justify-between">
+                  <span className="text-muted-foreground">Nexora Student ID (Permanent):</span>
+                  <span className="font-mono font-bold text-foreground text-[11px]">{admittedStudent.id}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-muted-foreground">Institutional Admission No:</span>
+                  <span className="font-mono font-bold text-foreground">{admittedStudent.admissionNumber}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-muted-foreground">Official Roll Number (Cohort):</span>
+                  <span
+                    className={`font-mono font-bold ${
+                      admittedStudent.rollNumber ? "text-foreground" : "text-primary"
+                    }`}
+                  >
+                    {admittedStudent.rollNumber || "Not assigned (cohort-specific)"}
+                  </span>
+                </div>
                 <div className="flex justify-between">
                   <span className="text-muted-foreground">Program / Course:</span>
                   <span className="font-bold text-foreground">{selectedProgram?.name}</span>
@@ -455,16 +521,6 @@ export function StudentAdmissionDialog({
                 <div className="flex justify-between">
                   <span className="text-muted-foreground">Academic Year:</span>
                   <span className="font-mono font-bold text-foreground">{selectedYear?.name}</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-muted-foreground">Roll Number:</span>
-                  <span
-                    className={`font-mono font-bold ${
-                      admittedStudent.rollNumber ? "text-foreground" : "text-primary"
-                    }`}
-                  >
-                    {admittedStudent.rollNumber || "Not assigned"}
-                  </span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-muted-foreground">Assigned Fee:</span>
@@ -512,7 +568,7 @@ export function StudentAdmissionDialog({
             </div>
           ) : (
             /* FORM STEPS */
-            <form onSubmit={handleSubmit} className="space-y-6">
+            <form onSubmit={handleSubmit} onKeyDown={handleFormKeyDown} className="space-y-6">
               {/* STEP 1: CANDIDATE INFO */}
               {activeStep === 1 && (
                 <div className="space-y-4">
@@ -1009,35 +1065,19 @@ export function StudentAdmissionDialog({
                     </div>
                   </div>
 
-                  {/* ROLL NUMBER & ADMISSION NUMBER EXPLICIT FIELDS */}
+                  {/* STUDENT IDENTITY & ENROLLMENT IDENTIFIERS */}
                   <div className="rounded-xl border border-border bg-muted/20 p-4 space-y-3">
                     <div className="flex items-center gap-2">
                       <Sparkles className="h-4 w-4 text-primary" />
                       <span className="text-xs font-bold text-foreground">
-                        Institutional Identifiers (No Auto-Generation)
+                        Institutional & Cohort Identifiers
                       </span>
                     </div>
 
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
                       <div>
                         <label className="block font-bold text-foreground mb-1">
-                          Official Roll Number
-                        </label>
-                        <input
-                          type="text"
-                          value={formData.rollNumber}
-                          onChange={(e) => setFormData({ ...formData, rollNumber: e.target.value })}
-                          placeholder="e.g. BTECH-CSE-2026-041 or leave blank"
-                          className="w-full rounded-xl border border-border bg-card p-2.5 text-xs font-mono text-foreground focus:ring-1 focus:ring-primary outline-hidden"
-                        />
-                        <p className="text-[11px] text-muted-foreground mt-1">
-                          Leave empty to set as &quot;Not assigned&quot;. Nexora does not auto-force roll numbers.
-                        </p>
-                      </div>
-
-                      <div>
-                        <label className="block font-bold text-foreground mb-1">
-                          Admission Number
+                          Institutional Admission Number
                         </label>
                         <input
                           type="text"
@@ -1047,7 +1087,23 @@ export function StudentAdmissionDialog({
                           className="w-full rounded-xl border border-border bg-card p-2.5 text-xs font-mono text-foreground focus:ring-1 focus:ring-primary outline-hidden"
                         />
                         <p className="text-[11px] text-muted-foreground mt-1">
-                          Institution serial identifier.
+                          Official register identifier. Stable across class transfers. Auto-generated if blank.
+                        </p>
+                      </div>
+
+                      <div>
+                        <label className="block font-bold text-foreground mb-1">
+                          Official Roll Number (Optional)
+                        </label>
+                        <input
+                          type="text"
+                          value={formData.rollNumber}
+                          onChange={(e) => setFormData({ ...formData, rollNumber: e.target.value })}
+                          placeholder="e.g. 26-CS-041 or leave empty"
+                          className="w-full rounded-xl border border-border bg-card p-2.5 text-xs font-mono text-foreground focus:ring-1 focus:ring-primary outline-hidden"
+                        />
+                        <p className="text-[11px] text-muted-foreground mt-1">
+                          Cohort/section serial. Not permanent; re-assigned upon class transfers.
                         </p>
                       </div>
                     </div>

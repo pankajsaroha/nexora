@@ -22,7 +22,7 @@ export async function GET(
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const exam = await getExamDetail(params.id, user.institutionId);
+    const exam = await getExamDetail(params.id, user.institutionId, user);
     if (!exam) {
       return NextResponse.json({ error: "Exam not found" }, { status: 404 });
     }
@@ -91,8 +91,9 @@ export async function PATCH(
     }
 
     // Otherwise standard update for title/name/config
+    const isSuperAdmin = user.roleCode === "SUPER_ADMIN";
     const existingExam = await prisma.exam.findUnique({
-      where: { id: params.id, institutionId: user.institutionId },
+      where: isSuperAdmin ? { id: params.id } : { id: params.id, institutionId: user.institutionId },
     });
 
     if (!existingExam) {
@@ -110,10 +111,7 @@ export async function PATCH(
     if (body.endDate) updateData.endDate = new Date(body.endDate);
 
     const updated = await prisma.exam.update({
-      where: {
-        id: params.id,
-        institutionId: user.institutionId,
-      },
+      where: isSuperAdmin ? { id: params.id } : { id: params.id, institutionId: user.institutionId },
       data: updateData,
     });
 

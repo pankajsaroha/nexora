@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   CalendarCheck,
   CheckCircle2,
@@ -29,24 +29,53 @@ export interface StudentAttendanceItem {
 }
 
 export function StudentAttendanceClient({
+  classes,
   sections,
+  initialClassId,
   initialSectionId,
   students,
   selectedDateStr,
   canMark,
 }: {
+  classes?: Array<{
+    id: string;
+    name: string;
+    code: string;
+    sections: Array<{ id: string; name: string }>;
+  }>;
   sections: Array<{ id: string; className: string; sectionName: string }>;
+  initialClassId?: string;
   initialSectionId: string;
   students: StudentAttendanceItem[];
   selectedDateStr: string;
   canMark: boolean;
 }) {
+  const [currentClassId, setCurrentClassId] = useState(initialClassId || "");
   const [currentSectionId, setCurrentSectionId] = useState(initialSectionId);
   const [date, setDate] = useState(selectedDateStr);
   const [attendanceRecords, setAttendanceRecords] = useState<StudentAttendanceItem[]>(students);
   const [isSaving, setIsSaving] = useState(false);
   const [saveFeedback, setSaveFeedback] = useState<string | null>(null);
   const router = useRouter();
+
+  // Keep state synchronized with server props when navigation or URL filters update
+  useEffect(() => {
+    setAttendanceRecords(students);
+  }, [students]);
+
+  useEffect(() => {
+    if (initialClassId) {
+      setCurrentClassId(initialClassId);
+    }
+  }, [initialClassId]);
+
+  useEffect(() => {
+    setCurrentSectionId(initialSectionId);
+  }, [initialSectionId]);
+
+  useEffect(() => {
+    setDate(selectedDateStr);
+  }, [selectedDateStr]);
 
   const handleStatusChange = (
     studentId: string,
@@ -157,23 +186,66 @@ export function StudentAttendanceClient({
       {/* Class & Date Selector Bar */}
       <div className="flex flex-col sm:flex-row items-center justify-between gap-4 rounded-xl bg-card p-4 border border-border shadow-xs">
         <div className="flex flex-wrap items-center gap-3 w-full sm:w-auto">
+          {classes && classes.length > 0 && (
+            <div>
+              <label className="block text-[10px] font-mono uppercase tracking-wider text-muted-foreground font-bold mb-1">
+                Academic Class
+              </label>
+              <select
+                value={currentClassId}
+                onChange={(e) => {
+                  const newClassId = e.target.value;
+                  const targetClass = classes.find((c) => c.id === newClassId);
+                  const targetSectionId = targetClass?.sections[0]?.id || "";
+                  setCurrentClassId(newClassId);
+                  setCurrentSectionId(targetSectionId);
+                  router.push(
+                    `/attendance?classId=${newClassId}${
+                      targetSectionId ? `&sectionId=${targetSectionId}` : ""
+                    }&date=${date}`
+                  );
+                }}
+                className="rounded-lg border border-border bg-background px-3 py-2 text-xs font-semibold text-foreground focus:outline-none focus:ring-1 focus:ring-accent focus:border-accent"
+              >
+                {classes.map((cls) => (
+                  <option key={cls.id} value={cls.id}>
+                    {cls.name}
+                  </option>
+                ))}
+              </select>
+            </div>
+          )}
+
           <div>
             <label className="block text-[10px] font-mono uppercase tracking-wider text-muted-foreground font-bold mb-1">
-              Select Class / Section
+              {classes ? "Cohort Section" : "Select Class / Section"}
             </label>
             <select
               value={currentSectionId}
               onChange={(e) => {
-                setCurrentSectionId(e.target.value);
-                router.push(`/attendance?sectionId=${e.target.value}&date=${date}`);
+                const newSectionId = e.target.value;
+                setCurrentSectionId(newSectionId);
+                router.push(
+                  classes
+                    ? `/attendance?classId=${currentClassId}&sectionId=${newSectionId}&date=${date}`
+                    : `/attendance?sectionId=${newSectionId}&date=${date}`
+                );
               }}
               className="rounded-lg border border-border bg-background px-3 py-2 text-xs font-semibold text-foreground focus:outline-none focus:ring-1 focus:ring-accent focus:border-accent"
             >
-              {sections.map((sec) => (
-                <option key={sec.id} value={sec.id}>
-                  {sec.className} — Section {sec.sectionName}
-                </option>
-              ))}
+              {classes ? (
+                (classes.find((c) => c.id === currentClassId)?.sections || []).map((sec) => (
+                  <option key={sec.id} value={sec.id}>
+                    Section {sec.name}
+                  </option>
+                ))
+              ) : (
+                sections.map((sec) => (
+                  <option key={sec.id} value={sec.id}>
+                    {sec.className} — Section {sec.sectionName}
+                  </option>
+                ))
+              )}
             </select>
           </div>
 
@@ -185,8 +257,13 @@ export function StudentAttendanceClient({
               type="date"
               value={date}
               onChange={(e) => {
-                setDate(e.target.value);
-                router.push(`/attendance?sectionId=${currentSectionId}&date=${e.target.value}`);
+                const newDate = e.target.value;
+                setDate(newDate);
+                router.push(
+                  classes
+                    ? `/attendance?classId=${currentClassId}&sectionId=${currentSectionId}&date=${newDate}`
+                    : `/attendance?sectionId=${currentSectionId}&date=${newDate}`
+                );
               }}
               className="rounded-lg border border-border bg-background px-3 py-2 text-xs font-semibold text-foreground focus:outline-none focus:ring-1 focus:ring-accent focus:border-accent"
             />

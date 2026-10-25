@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getCurrentUser } from "@/lib/auth";
+import { getCurrentUser, hasPermission } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
+import { PERMISSIONS } from "@/lib/permissions";
 import { reviewLeaveRequest } from "@/lib/leave/service";
 import { z } from "zod";
 
@@ -42,11 +43,16 @@ export async function PATCH(
 
     const effectiveReason = parsed.reason || parsed.rejectionReason || "";
 
-    const canApprove = ["SUPER_ADMIN", "ADMIN", "PRINCIPAL", "HR_ADMIN"].includes(user.roleCode || "");
+    const canApprove =
+      ["SUPER_ADMIN", "ADMIN", "PRINCIPAL", "HR_ADMIN", "DIRECTOR", "DEAN"].includes(
+        user.roleCode || ""
+      ) || hasPermission(user, PERMISSIONS.LEAVE_APPROVE);
+
+    const isSuperAdmin = user.roleCode === "SUPER_ADMIN";
 
     // Fetch existing request to verify institution and ownership
     const existingReq = await prisma.leaveRequest.findFirst({
-      where: { id, institutionId: user.institutionId },
+      where: isSuperAdmin ? { id } : { id, institutionId: user.institutionId },
       include: { teacher: true },
     });
 
@@ -81,7 +87,7 @@ export async function PATCH(
     }
 
     const result = await reviewLeaveRequest({
-      institutionId: user.institutionId,
+      institutionId: existingReq.institutionId,
       requestId: id,
       reviewerUserId: user.id,
       reviewerName: user.fullName,

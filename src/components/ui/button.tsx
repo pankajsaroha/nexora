@@ -70,12 +70,15 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       link: "text-accent hover:text-accent-hover hover:underline p-0 h-auto focus:ring-0 font-medium",
     };
 
+    const { type = "button", ...restProps } = props;
+
     return (
       <button
         ref={ref}
+        type={type}
         disabled={disabled || isLoading}
         className={cn(baseStyles, sizeStyles[size], variantStyles[variant], className)}
-        {...props}
+        {...restProps}
       >
         {isLoading ? (
           <Loader2 className="w-3.5 h-3.5 animate-spin shrink-0 text-current" />

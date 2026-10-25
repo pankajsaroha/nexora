@@ -667,15 +667,12 @@ export function ExamsClient({
     let isSafe = true;
     let reasonUnsafe: string | undefined;
 
-    if (exam.totalEnteredMarks > 0) {
+    if (exam.status !== "DRAFT") {
+      isSafe = false;
+      reasonUnsafe = `This examination is in "${exam.status}" status. Only DRAFT examinations with no recorded student marks can be permanently deleted. For scheduled, ongoing, or completed assessments, please use "Cancel Examination" to safely withdraw it while preserving historical records.`;
+    } else if (exam.totalEnteredMarks > 0) {
       isSafe = false;
       reasonUnsafe = `Cannot delete this examination because marks have already been recorded for ${exam.totalEnteredMarks} student(s).`;
-    } else if (exam.status === "PUBLISHED") {
-      isSafe = false;
-      reasonUnsafe = "Cannot permanently delete this examination because official results have already been published.";
-    } else if (exam.status === "RESULTS_VERIFIED") {
-      isSafe = false;
-      reasonUnsafe = "Cannot permanently delete this examination because academic results have been verified and sealed.";
     }
 
     setDeleteModalState({

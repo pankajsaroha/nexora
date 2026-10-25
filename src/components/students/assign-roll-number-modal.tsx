@@ -58,8 +58,8 @@ export function AssignRollNumberModal({
     <Modal
       isOpen={isOpen}
       onClose={onClose}
-      title="Assign / Update Roll Number"
-      description={`Official academic roll number assigned by institution or university for ${studentName}.`}
+      title="Assign / Update Official Roll Number"
+      description={`Update cohort or section-specific roll number for ${studentName}. Permanent Nexora ID and Institutional Admission Number remain unchanged.`}
       size="md"
     >
       <form onSubmit={handleSubmit} className="space-y-4 text-xs">
@@ -72,7 +72,7 @@ export function AssignRollNumberModal({
 
         <div>
           <label className="block font-bold text-foreground mb-1.5">
-            Official Roll Number
+            Official Roll Number (Cohort / Section Specific)
           </label>
           <div className="relative">
             <Hash className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
@@ -80,12 +80,12 @@ export function AssignRollNumberModal({
               type="text"
               value={rollNumber}
               onChange={(e) => setRollNumber(e.target.value)}
-              placeholder="e.g. BTECH-CSE-2026-041 or 12"
+              placeholder="e.g. 26-CS-041 or leave empty"
               className="w-full rounded-xl border border-border bg-card py-2.5 pl-9 pr-3 text-xs font-mono font-bold text-foreground focus:outline-none focus:ring-2 focus:ring-primary/20"
             />
           </div>
           <p className="text-[11px] text-muted-foreground mt-1.5 leading-relaxed">
-            Enter the institution or university issued roll number. Leave blank if not yet assigned. Nexora does not auto-generate or increment roll numbers.
+            Cohort/section-specific serial number according to institution policy. Leave blank if not yet assigned. This does not alter the student's permanent Nexora system identity or admission register record.
           </p>
         </div>
 

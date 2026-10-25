@@ -18,9 +18,11 @@ import { Button } from "@/components/ui/button";
 import { Modal } from "@/components/ui/modal";
 import { PageHeader } from "@/components/ui/page-header";
 import { formatCurrency, formatDate } from "@/lib/utils";
+import { useRouter } from "next/navigation";
 
 export interface PayrollItemRecord {
   id: string;
+  teacherId?: string;
   teacherName: string;
   employeeId: string;
   designation: string;
@@ -35,16 +37,23 @@ export interface PayrollItemRecord {
   paymentDate?: Date | string | null;
   paymentMethod?: string | null;
   transactionRef?: string | null;
+  bankAccountNumber?: string | null;
+  bankIfsc?: string | null;
 }
 
 export function PayrollClient({
   payrolls,
   canManage,
+  selectedMonth: initialSelectedMonth = "9",
+  selectedYear: initialSelectedYear = "2026",
 }: {
   payrolls: PayrollItemRecord[];
   canManage: boolean;
+  selectedMonth?: string;
+  selectedYear?: string;
 }) {
-  const [selectedMonth, setSelectedMonth] = useState("9");
+  const router = useRouter();
+  const [selectedMonth, setSelectedMonth] = useState(initialSelectedMonth);
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedPayslip, setSelectedPayslip] = useState<PayrollItemRecord | null>(null);
 
@@ -78,7 +87,7 @@ export function PayrollClient({
             {formatCurrency(totalPayroll)}
           </div>
           <span className="text-caption block font-medium">
-            35 Faculty &amp; staff members
+            {filteredPayrolls.length} Faculty &amp; staff members
           </span>
         </div>
 
@@ -99,7 +108,13 @@ export function PayrollClient({
             Cycle Period
           </span>
           <div className="text-kpi-value">
-            September 2026
+            {selectedMonth === "9"
+              ? "September 2026"
+              : selectedMonth === "8"
+              ? "August 2026"
+              : selectedMonth === "7"
+              ? "July 2026"
+              : `Month ${selectedMonth}`}
           </div>
           <span className="text-caption block font-medium">
             AY 2026-27 · Term 1
@@ -134,7 +149,11 @@ export function PayrollClient({
 
         <select
           value={selectedMonth}
-          onChange={(e) => setSelectedMonth(e.target.value)}
+          onChange={(e) => {
+            const newMonth = e.target.value;
+            setSelectedMonth(newMonth);
+            router.push(`/finance/payroll?month=${newMonth}&year=${initialSelectedYear}`);
+          }}
           className="rounded-lg border border-border bg-background px-3 py-2 text-xs font-medium text-foreground focus:outline-none focus:ring-1 focus:ring-accent w-full sm:w-auto"
         >
           <option value="9">September 2026 (Current)</option>
@@ -160,50 +179,64 @@ export function PayrollClient({
               </tr>
             </thead>
             <tbody className="divide-y divide-border">
-              {filteredPayrolls.map((p) => (
-                <tr
-                  key={p.id}
-                  className="hover:bg-muted/30 transition-colors"
-                >
-                  <td className="py-3.5 px-4">
-                    <div className="font-semibold text-foreground">
-                      {p.teacherName}
-                    </div>
-                    <div className="text-[11px] text-muted-foreground font-mono mt-0.5">
-                      Emp ID: {p.employeeId}
-                    </div>
+              {filteredPayrolls.length === 0 ? (
+                <tr>
+                  <td colSpan={8} className="py-12 text-center text-muted-foreground font-mono text-xs">
+                    No faculty or staff payroll records found for this period.
                   </td>
-                  <td className="py-3.5 px-4">
-                    <div className="text-foreground font-medium">{p.designation}</div>
-                    <div className="text-[11px] text-muted-foreground font-mono">
-                      {p.departmentName || "General Faculty"}
-                    </div>
-                  </td>
-                  <td className="py-3.5 px-4 font-mono text-foreground">
-                    {formatCurrency(p.basicSalary)}
-                  </td>
-                  <td className="py-3.5 px-4 font-mono text-muted-foreground">
-                    +{formatCurrency(p.allowances)}
-                  </td>
-                  <td className="py-3.5 px-4 font-mono text-destructive">
-                    -{formatCurrency(p.deductions)}
-                  </td>
-                  <td className="py-3.5 px-4 font-mono font-bold text-foreground text-sm">
-                    {formatCurrency(p.netSalary)}
-                  </td>
-                  <td className="py-3.5 px-4">
-                    <span
-                      className={`text-[10px] font-mono uppercase tracking-wider px-2 py-0.5 rounded font-bold ${
-                        p.status === "PAID"
-                          ? "bg-success/10 text-success border border-success/20"
-                          : p.status === "APPROVED"
-                          ? "bg-accent/10 text-accent border border-accent/20"
-                          : "bg-surface-subtle text-muted-foreground border border-border"
-                      }`}
-                    >
-                      {p.status}
-                    </span>
-                  </td>
+                </tr>
+              ) : (
+                filteredPayrolls.map((p) => (
+                  <tr
+                    key={p.id}
+                    className="hover:bg-muted/30 transition-colors"
+                  >
+                    <td className="py-3.5 px-4">
+                      <div className="font-semibold text-foreground">
+                        {p.teacherName}
+                      </div>
+                      <div className="text-[11px] text-muted-foreground font-mono mt-0.5">
+                        Emp ID: {p.employeeId}
+                      </div>
+                    </td>
+                    <td className="py-3.5 px-4">
+                      <div className="text-foreground font-medium">{p.designation}</div>
+                      <div className="text-[11px] text-muted-foreground font-mono">
+                        {p.departmentName || "General Faculty"}
+                      </div>
+                    </td>
+                    <td className="py-3.5 px-4 font-mono text-foreground">
+                      {formatCurrency(p.basicSalary)}
+                    </td>
+                    <td className="py-3.5 px-4 font-mono text-muted-foreground">
+                      +{formatCurrency(p.allowances)}
+                    </td>
+                    <td className="py-3.5 px-4 font-mono text-destructive">
+                      -{formatCurrency(p.deductions)}
+                    </td>
+                    <td className="py-3.5 px-4 font-mono font-bold text-foreground text-sm">
+                      {formatCurrency(p.netSalary)}
+                    </td>
+                    <td className="py-3.5 px-4">
+                      <div className="flex flex-col gap-1 items-start">
+                        <span
+                          className={`text-[10px] font-mono uppercase tracking-wider px-2 py-0.5 rounded font-bold ${
+                            p.status === "PAID"
+                              ? "bg-success/10 text-success border border-success/20"
+                              : p.status === "APPROVED"
+                              ? "bg-accent/10 text-accent border border-accent/20"
+                              : "bg-surface-subtle text-muted-foreground border border-border"
+                          }`}
+                        >
+                          {p.status}
+                        </span>
+                        {p.status === "DRAFT" && !p.bankAccountNumber && (
+                          <span className="text-[9px] font-mono text-amber-600 font-semibold">
+                            Pending Bank Setup
+                          </span>
+                        )}
+                      </div>
+                    </td>
                   <td className="py-3.5 px-4 text-right">
                     <Button
                       size="xs"
@@ -215,7 +248,7 @@ export function PayrollClient({
                     </Button>
                   </td>
                 </tr>
-              ))}
+              )))}
             </tbody>
           </table>
         </div>

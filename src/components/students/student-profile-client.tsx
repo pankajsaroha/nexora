@@ -328,7 +328,7 @@ export function StudentProfileClient({
         </Link>
 
         <PageHeader
-          eyebrow={`ADMISSION ID: ${student.admissionNumber}`}
+          eyebrow={`ADMISSION NO: ${student.admissionNumber} • NEXORA ID: ${student.id.slice(0, 8)}...`}
           title={student.fullName}
           description={`Program: ${student.currentClass?.name || "General"} (${student.currentSection?.name || "A"}) • Academic Year: ${student.academicYear?.name || "Current"}`}
         >
@@ -423,7 +423,7 @@ export function StudentProfileClient({
               <span className="text-xs font-sans text-primary font-semibold">Unassigned</span>
             )}
           </div>
-          <span className="text-caption">Institution Roll Identifier</span>
+          <span className="text-caption">Cohort / Section Roll Number</span>
         </div>
 
         <div className="p-4 rounded-xl border border-border bg-card space-y-1 shadow-2xs">
@@ -696,14 +696,27 @@ export function StudentProfileClient({
               <span className="text-[11px] font-mono font-bold uppercase tracking-wider text-primary block">
                 Academic Registration Identifiers
               </span>
-              <div className="space-y-2 text-xs">
+              <div className="space-y-3 text-xs">
                 <div>
-                  <span className="text-muted-foreground block text-[11px]">Admission Number</span>
-                  <span className="font-mono font-bold text-foreground">{student.admissionNumber}</span>
+                  <span className="text-muted-foreground block text-[11px]">Nexora Student ID (Permanent System UUID)</span>
+                  <span className="font-mono text-[11px] font-semibold text-foreground select-all break-all">{student.id}</span>
                 </div>
                 <div>
-                  <span className="text-muted-foreground block text-[11px]">Institution Roll #</span>
+                  <span className="text-muted-foreground block text-[11px]">Institutional Admission Number</span>
+                  <span className="font-mono font-bold text-foreground">{student.admissionNumber}</span>
+                  <span className="text-[10px] text-muted-foreground block mt-0.5">Permanent register identity; stable across promotions</span>
+                </div>
+                <div>
+                  <span className="text-muted-foreground block text-[11px]">Official Roll Number (Cohort Specific)</span>
                   <span className="font-mono font-bold text-foreground">{student.rollNumber || "Not Assigned"}</span>
+                  <span className="text-[10px] text-muted-foreground block mt-0.5">Section/cohort serial; reassigned upon class transfer</span>
+                </div>
+                <div>
+                  <span className="text-muted-foreground block text-[11px]">Student Portal Login ID</span>
+                  <span className="font-mono font-semibold text-foreground">
+                    {student.loginId || (student.user?.email ? student.user.email : "Not Configured")}
+                  </span>
+                  <span className="text-[10px] text-muted-foreground block mt-0.5">Authentication identity for student self-service portal</span>
                 </div>
                 {student.universityRegNumber && (
                   <div>

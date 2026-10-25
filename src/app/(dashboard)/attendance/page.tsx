@@ -11,7 +11,7 @@ export const dynamic = "force-dynamic";
 export default async function AttendancePage({
   searchParams,
 }: {
-  searchParams: { sectionId?: string; date?: string; childId?: string };
+  searchParams: { sectionId?: string; classId?: string; date?: string; childId?: string };
 }) {
   const user = await getCurrentUser();
   if (!user) {
@@ -137,13 +137,16 @@ export default async function AttendancePage({
   }
 
   // 3. FACULTY / ADMIN ATTENDANCE (Roll-call Marking)
-  const sections = await prisma.section.findMany({
-    where: { class: { institutionId: user.institutionId } },
-    include: { class: true },
-    orderBy: [{ class: { orderIndex: "asc" } }, { name: "asc" }],
+  // 3. FACULTY / ADMIN ATTENDANCE (Roll-call Marking)
+  const classes = await prisma.class.findMany({
+    where: { institutionId: user.institutionId },
+    include: {
+      sections: { orderBy: { name: "asc" } },
+    },
+    orderBy: { orderIndex: "asc" },
   });
 
-  if (sections.length === 0) {
+  if (classes.length === 0) {
     return (
       <div className="p-8 text-center text-muted-foreground font-mono text-xs">
         No class sections found. Please seed or create classes first.
@@ -151,20 +154,55 @@ export default async function AttendancePage({
     );
   }
 
-  const activeSectionId = searchParams?.sectionId || sections[0].id;
+  // Flatten all sections for backward compatibility
+  const allSections: Array<{ id: string; className: string; sectionName: string }> = [];
+  classes.forEach((cls) => {
+    cls.sections.forEach((sec) => {
+      allSections.push({
+        id: sec.id,
+        className: cls.name,
+        sectionName: sec.name,
+      });
+    });
+  });
+
+  // Resolve target class and section from search parameters
+  const activeClass =
+    (searchParams?.classId ? classes.find((c) => c.id === searchParams.classId) : null) ||
+    (searchParams?.sectionId
+      ? classes.find((c) => c.sections.some((s) => s.id === searchParams.sectionId))
+      : null) ||
+    classes[0];
+
+  const activeClassId = activeClass.id;
+  const availableSections = activeClass.sections || [];
+  const activeSectionId =
+    (searchParams?.sectionId && availableSections.some((s) => s.id === searchParams.sectionId)
+      ? searchParams.sectionId
+      : availableSections[0]?.id) || "";
+
   const targetDate = searchParams?.date ? new Date(searchParams.date) : new Date();
   targetDate.setHours(0, 0, 0, 0);
 
   const dateStr = targetDate.toISOString().split("T")[0];
 
+  const studentWhere: any = {
+    institutionId: user.institutionId,
+    currentClassId: activeClassId,
+    status: "ACTIVE",
+  };
+  if (activeSectionId) {
+    studentWhere.currentSectionId = activeSectionId;
+  }
+
   const students = await prisma.student.findMany({
-    where: { currentSectionId: activeSectionId, status: "ACTIVE" },
+    where: studentWhere,
     include: {
       attendance: {
         where: { date: targetDate },
       },
     },
-    orderBy: { rollNumber: "asc" },
+    orderBy: [{ rollNumber: "asc" }, { fullName: "asc" }],
   });
 
   const canMark = hasPermission(user, PERMISSIONS.ATTENDANCE_MARK);
@@ -183,11 +221,14 @@ export default async function AttendancePage({
 
   return (
     <StudentAttendanceClient
-      sections={sections.map((s) => ({
-        id: s.id,
-        className: s.class.name,
-        sectionName: s.name,
+      classes={classes.map((c) => ({
+        id: c.id,
+        name: c.name,
+        code: c.code,
+        sections: c.sections.map((s) => ({ id: s.id, name: s.name })),
       }))}
+      sections={allSections}
+      initialClassId={activeClassId}
       initialSectionId={activeSectionId}
       students={attendanceItems}
       selectedDateStr={dateStr}

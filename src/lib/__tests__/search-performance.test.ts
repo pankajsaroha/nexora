@@ -13,9 +13,9 @@ test("NEXORA — Global Search & Performance Verification", async (t) => {
       ],
     };
 
-    assert.equal(studentWhere.OR[0].fullName.mode, "insensitive");
-    assert.equal(studentWhere.OR[1].admissionNumber.mode, "insensitive");
-    assert.equal(studentWhere.OR[2].rollNumber.mode, "insensitive");
+    assert.equal((studentWhere.OR[0] as any).fullName.mode, "insensitive");
+    assert.equal((studentWhere.OR[1] as any).admissionNumber.mode, "insensitive");
+    assert.equal((studentWhere.OR[2] as any).rollNumber.mode, "insensitive");
   });
 
   // Test 2: Role-based search scope isolation
